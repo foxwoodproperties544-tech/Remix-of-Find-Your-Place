@@ -1,22 +1,35 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { properties as mockProps, formatKsh } from "@/lib/mock-data";
-import { fetchPropertyById } from "@/lib/properties";
+import { fetchPropertyRowById, toProperty } from "@/lib/properties";
 import { coordsFor, osmEmbedUrl, osmLinkUrl } from "@/lib/kenya-locations";
-import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink, Calendar, User as UserIcon } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { useState } from "react";
+import { z } from "zod";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
     const mock = mockProps.find(x => x.id === params.id);
-    if (mock) return { p: mock };
-    const db = await fetchPropertyById(params.id);
-    if (!db) throw notFound();
-    return { p: db };
+    if (mock) return { p: mock, ownerId: null as string | null, propertyKey: params.id, ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null } };
+    const row = await fetchPropertyRowById(params.id);
+    if (!row) throw notFound();
+    const { data: profile } = await supabase.from("profiles").select("full_name, avatar_url, phone").eq("id", row.owner_id).maybeSingle();
+    return { p: toProperty(row), ownerId: row.owner_id, propertyKey: row.id, ownerProfile: profile ?? null };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
-      ? [{ title: `${loaderData.p.title} — Foxwood Properties` }, { name: "description", content: loaderData.p.description.slice(0, 155) }]
+      ? [
+          { title: `${loaderData.p.title} — Foxwood Properties` },
+          { name: "description", content: loaderData.p.description.slice(0, 155) },
+          { property: "og:title", content: loaderData.p.title },
+          { property: "og:description", content: loaderData.p.description.slice(0, 155) },
+          { property: "og:type", content: "article" },
+          { property: "og:image", content: loaderData.p.image },
+          { name: "twitter:card", content: "summary_large_image" },
+        ]
       : [{ title: "Property not found" }, { name: "robots", content: "noindex" }],
   }),
   errorComponent: () => (
@@ -34,8 +47,16 @@ export const Route = createFileRoute("/properties/$id")({
   component: Detail,
 });
 
+const inquirySchema = z.object({
+  name: z.string().trim().min(2, "Name is too short").max(100),
+  email: z.string().trim().email("Invalid email").max(255),
+  phone: z.string().trim().max(30).optional().or(z.literal("")),
+  preferred_date: z.string().optional().or(z.literal("")),
+  message: z.string().trim().min(5, "Message is too short").max(1000),
+});
+
 function Detail() {
-  const { p } = Route.useLoaderData();
+  const { p, ownerId, propertyKey, ownerProfile } = Route.useLoaderData();
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
   const [active, setActive] = useState(0);
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
@@ -131,27 +152,9 @@ function Detail() {
           </div>
         </div>
 
-        <aside className="lg:sticky lg:top-24 h-fit">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
-            <div className="flex items-center gap-3">
-              <div className="grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground font-bold">FA</div>
-              <div>
-                <div className="font-semibold text-sm">Foxwood Agent</div>
-                <div className="text-xs text-muted-foreground">Verified · Nairobi</div>
-              </div>
-            </div>
-            <div className="mt-5 space-y-2">
-              <a href="tel:+254700000000" className="btn-primary btn-primary-hover w-full"><Phone className="h-4 w-4" /> Call agent</a>
-              <a href="https://wa.me/254700000000" target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
-              <button className="btn-ghost w-full"><Share2 className="h-4 w-4" /> Share</button>
-            </div>
-            <form className="mt-5 space-y-2" onSubmit={e=>e.preventDefault()}>
-              <input placeholder="Your name" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
-              <input placeholder="Email" type="email" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
-              <textarea placeholder={`I'm interested in ${p.title}...`} rows={3} className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
-              <button className="btn-primary btn-primary-hover w-full">Send inquiry</button>
-            </form>
-          </div>
+        <aside className="lg:sticky lg:top-24 h-fit space-y-4">
+          <AgentCard ownerId={ownerId} profile={ownerProfile} title={p.title} />
+          <InquiryForm propertyKey={propertyKey} ownerId={ownerId} propertyTitle={p.title} />
         </aside>
       </section>
 
@@ -164,6 +167,95 @@ function Detail() {
         </section>
       )}
     </>
+  );
+}
+
+function AgentCard({ ownerId, profile, title }: { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null } | null; title: string }) {
+  const name = profile?.full_name ?? "Foxwood Agent";
+  const initials = name.split(" ").map((s: string) => s[0]).slice(0,2).join("").toUpperCase();
+  const phone = profile?.phone ?? "+254700000000";
+  const waNumber = phone.replace(/[^\d]/g, "");
+  const share = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    try {
+      if (navigator.share) await navigator.share({ title, url });
+      else { await navigator.clipboard.writeText(url); toast.success("Link copied"); }
+    } catch {}
+  };
+  return (
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+      <div className="flex items-center gap-3">
+        {profile?.avatar_url
+          ? <img src={profile.avatar_url} alt={name} className="h-12 w-12 rounded-full object-cover" />
+          : <div className="grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground font-bold">{initials || "FA"}</div>}
+        <div className="flex-1 min-w-0">
+          <div className="font-semibold text-sm truncate">{name}</div>
+          <div className="text-xs text-muted-foreground">Verified · Kenya</div>
+        </div>
+      </div>
+      <div className="mt-5 space-y-2">
+        <a href={`tel:${phone}`} className="btn-primary btn-primary-hover w-full"><Phone className="h-4 w-4" /> Call agent</a>
+        <a href={`https://wa.me/${waNumber}?text=${encodeURIComponent(`Hi, I'm interested in "${title}" on Foxwood Properties.`)}`} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+        <button type="button" onClick={share} className="btn-ghost w-full"><Share2 className="h-4 w-4" /> Share</button>
+        {ownerId && (
+          <Link to="/agents/$id" params={{ id: ownerId }} className="btn-ghost w-full"><UserIcon className="h-4 w-4" /> View profile</Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function InquiryForm({ propertyKey, ownerId, propertyTitle }: { propertyKey: string; ownerId: string | null; propertyTitle: string }) {
+  const { user } = useAuth();
+  const [form, setForm] = useState({
+    name: "",
+    email: user?.email ?? "",
+    phone: "",
+    preferred_date: "",
+    message: `I'd like to request a viewing for "${propertyTitle}".`,
+  });
+  const [busy, setBusy] = useState(false);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const parsed = inquirySchema.safeParse(form);
+    if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
+    setBusy(true);
+    try {
+      const { error } = await supabase.from("inquiries").insert({
+        property_key: propertyKey,
+        owner_id: ownerId,
+        sender_user_id: user?.id ?? null,
+        name: parsed.data.name,
+        email: parsed.data.email,
+        phone: parsed.data.phone || null,
+        preferred_date: parsed.data.preferred_date || null,
+        message: parsed.data.message,
+      });
+      if (error) throw error;
+      toast.success("Inquiry sent — the agent will be in touch.");
+      setForm({ ...form, message: "", phone: "", preferred_date: "" });
+    } catch (e: any) {
+      toast.error(e.message ?? "Failed to send");
+    } finally { setBusy(false); }
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-3">
+      <div>
+        <h3 className="font-bold text-sm flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" /> Request a viewing</h3>
+        <p className="text-xs text-muted-foreground mt-1">Send the agent an inquiry or schedule a visit.</p>
+      </div>
+      <input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your name" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+      <input required type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="Email" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+      <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Phone (optional)" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+      <div>
+        <label className="text-xs text-muted-foreground">Preferred viewing date</label>
+        <input type="date" value={form.preferred_date} onChange={e=>setForm({...form,preferred_date:e.target.value})} className="mt-1 w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+      </div>
+      <textarea required value={form.message} onChange={e=>setForm({...form,message:e.target.value})} rows={3} className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+      <button disabled={busy} className="btn-primary btn-primary-hover w-full">{busy ? "Sending…" : "Send inquiry"}</button>
+    </form>
   );
 }
 

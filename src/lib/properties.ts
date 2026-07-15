@@ -73,3 +73,20 @@ export async function fetchPropertyById(id: string): Promise<Property | null> {
   if (error || !data) return null;
   return toProperty(data as DbPropertyRow);
 }
+
+export async function fetchPropertyRowById(id: string): Promise<DbPropertyRow | null> {
+  const { data, error } = await supabase.from("properties").select("*").eq("id", id).maybeSingle();
+  if (error || !data) return null;
+  return data as DbPropertyRow;
+}
+
+export async function fetchPropertiesByOwner(ownerId: string): Promise<Property[]> {
+  const { data, error } = await supabase
+    .from("properties")
+    .select("*")
+    .eq("owner_id", ownerId)
+    .eq("status", "published")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data as DbPropertyRow[]).map(toProperty);
+}

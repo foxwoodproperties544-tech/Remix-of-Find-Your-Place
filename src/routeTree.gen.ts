@@ -19,10 +19,13 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
+import { Route as AgentsIdRouteImport } from './routes/agents.$id'
+import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authenticated/saved-searches'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
+import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 
 const PropertiesRoute = PropertiesRouteImport.update({
   id: '/properties',
@@ -73,6 +76,17 @@ const PropertiesIdRoute = PropertiesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => PropertiesRoute,
 } as any)
+const AgentsIdRoute = AgentsIdRouteImport.update({
+  id: '/agents/$id',
+  path: '/agents/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSavedSearchesRoute =
+  AuthenticatedSavedSearchesRouteImport.update({
+    id: '/saved-searches',
+    path: '/saved-searches',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
   id: '/favorites',
   path: '/favorites',
@@ -95,6 +109,12 @@ const AuthenticatedDashboardNewRoute =
     path: '/dashboard/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardInquiriesRoute =
+  AuthenticatedDashboardInquiriesRouteImport.update({
+    id: '/dashboard/inquiries',
+    path: '/dashboard/inquiries',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -107,7 +127,10 @@ export interface FileRoutesByFullPath {
   '/properties': typeof PropertiesRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
+  '/saved-searches': typeof AuthenticatedSavedSearchesRoute
+  '/agents/$id': typeof AgentsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -122,7 +145,10 @@ export interface FileRoutesByTo {
   '/properties': typeof PropertiesRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
+  '/saved-searches': typeof AuthenticatedSavedSearchesRoute
+  '/agents/$id': typeof AgentsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
@@ -139,7 +165,10 @@ export interface FileRoutesById {
   '/properties': typeof PropertiesRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
+  '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
+  '/agents/$id': typeof AgentsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
@@ -156,7 +185,10 @@ export interface FileRouteTypes {
     | '/properties'
     | '/admin'
     | '/favorites'
+    | '/saved-searches'
+    | '/agents/$id'
     | '/properties/$id'
+    | '/dashboard/inquiries'
     | '/dashboard/new'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -171,7 +203,10 @@ export interface FileRouteTypes {
     | '/properties'
     | '/admin'
     | '/favorites'
+    | '/saved-searches'
+    | '/agents/$id'
     | '/properties/$id'
+    | '/dashboard/inquiries'
     | '/dashboard/new'
     | '/dashboard'
   id:
@@ -187,7 +222,10 @@ export interface FileRouteTypes {
     | '/properties'
     | '/_authenticated/admin'
     | '/_authenticated/favorites'
+    | '/_authenticated/saved-searches'
+    | '/agents/$id'
     | '/properties/$id'
+    | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/new'
     | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
@@ -202,6 +240,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   MortgageRoute: typeof MortgageRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
+  AgentsIdRoute: typeof AgentsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -276,6 +315,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesIdRouteImport
       parentRoute: typeof PropertiesRoute
     }
+    '/agents/$id': {
+      id: '/agents/$id'
+      path: '/agents/$id'
+      fullPath: '/agents/$id'
+      preLoaderRoute: typeof AgentsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/saved-searches': {
+      id: '/_authenticated/saved-searches'
+      path: '/saved-searches'
+      fullPath: '/saved-searches'
+      preLoaderRoute: typeof AuthenticatedSavedSearchesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/favorites': {
       id: '/_authenticated/favorites'
       path: '/favorites'
@@ -304,12 +357,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/inquiries': {
+      id: '/_authenticated/dashboard/inquiries'
+      path: '/dashboard/inquiries'
+      fullPath: '/dashboard/inquiries'
+      preLoaderRoute: typeof AuthenticatedDashboardInquiriesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
+  AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
+  AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
@@ -317,6 +379,8 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
+  AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
+  AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
 }
@@ -346,6 +410,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   MortgageRoute: MortgageRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
+  AgentsIdRoute: AgentsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
