@@ -35,6 +35,51 @@ export type Database = {
         }
         Relationships: []
       }
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          owner_id: string | null
+          phone: string | null
+          preferred_date: string | null
+          property_key: string
+          sender_user_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          owner_id?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          property_key: string
+          sender_user_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          owner_id?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          property_key?: string
+          sender_user_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -137,6 +182,39 @@ export type Database = {
           title?: string
           town?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      saved_searches: {
+        Row: {
+          created_at: string
+          filters: Json
+          id: string
+          last_notified_at: string | null
+          name: string
+          notify_email: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_notified_at?: string | null
+          name: string
+          notify_email?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_notified_at?: string | null
+          name?: string
+          notify_email?: boolean
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
