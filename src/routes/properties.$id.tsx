@@ -36,7 +36,10 @@ export const Route = createFileRoute("/properties/$id")({
 
 function Detail() {
   const { p } = Route.useLoaderData();
+  const gallery = (p.images && p.images.length ? p.images : [p.image]);
+  const [active, setActive] = useState(0);
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
+  const { lat, lng } = coordsFor(p.town, p.county);
 
   return (
     <>
@@ -45,19 +48,23 @@ function Detail() {
       </section>
 
       <section className="container-page mt-4 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
-          <img src={p.image} alt={p.title} className="h-full w-full object-cover" />
+        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted">
+          <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
           <div className="absolute top-4 left-4 flex gap-2">
             <span className="rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1">{p.category}</span>
             <span className="rounded-full bg-background/95 text-primary text-xs font-semibold px-3 py-1">{p.type}</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          {[p.image, p.image, p.image, p.image].map((src, i) => (
-            <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-muted">
-              <img src={src} alt="" className="h-full w-full object-cover opacity-90 hover:opacity-100 transition" />
-            </div>
-          ))}
+          {Array.from({ length: 4 }).map((_, i) => {
+            const src = gallery[i % gallery.length];
+            return (
+              <button key={i} onClick={() => setActive(i % gallery.length)}
+                className={`aspect-square rounded-2xl overflow-hidden bg-muted ring-offset-2 transition ${active === i % gallery.length ? "ring-2 ring-primary" : ""}`}>
+                <img src={src} alt="" className="h-full w-full object-cover hover:opacity-90 transition" />
+              </button>
+            );
+          })}
         </div>
       </section>
 
