@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { properties as mockProps, formatKsh } from "@/lib/mock-data";
-import { fetchPropertyById, fetchPublishedProperties } from "@/lib/properties";
+import { fetchPropertyById } from "@/lib/properties";
 import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
 
@@ -35,7 +35,6 @@ export const Route = createFileRoute("/properties/$id")({
 function Detail() {
   const { p } = Route.useLoaderData();
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
-  void fetchPublishedProperties;
 
   return (
     <>
