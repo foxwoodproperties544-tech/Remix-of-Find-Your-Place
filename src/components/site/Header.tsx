@@ -22,6 +22,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
   const { user } = useAuth();
+  const { isAdmin } = useRoles();
   const navigate = useNavigate();
   const qc = useQueryClient();
 
