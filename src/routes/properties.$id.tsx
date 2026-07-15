@@ -1,8 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { properties as mockProps, formatKsh } from "@/lib/mock-data";
 import { fetchPropertyById } from "@/lib/properties";
-import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft } from "lucide-react";
+import { coordsFor, osmEmbedUrl, osmLinkUrl } from "@/lib/kenya-locations";
+import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
+import { useState } from "react";
 
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
