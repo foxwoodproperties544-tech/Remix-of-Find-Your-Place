@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
   const { user } = useAuth();
+  const { isAdmin } = useRoles();
   const navigate = useNavigate();
   const qc = useQueryClient();
 
@@ -58,6 +60,7 @@ export function Header() {
                   <Link to="/dashboard" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><LayoutDashboard className="h-4 w-4" /> My listings</Link>
                   <Link to="/dashboard/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PlusCircle className="h-4 w-4" /> Post listing</Link>
                   <Link to="/favorites" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Heart className="h-4 w-4" /> Favorites</Link>
+                  {isAdmin && <Link to="/admin" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted text-primary"><ShieldCheck className="h-4 w-4" /> Admin</Link>}
                   <button onClick={signOut} className="w-full flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted text-left"><LogOut className="h-4 w-4" /> Sign out</button>
                 </div>
               )}
@@ -82,6 +85,7 @@ export function Header() {
               <>
                 <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">My listings</Link>
                 <Link to="/favorites" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Favorites</Link>
+                {isAdmin && <Link to="/admin" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted text-primary">Admin</Link>}
                 <button onClick={() => { setOpen(false); signOut(); }} className="text-left rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Sign out</button>
               </>
             ) : (

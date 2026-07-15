@@ -1,8 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { properties as mockProps, formatKsh } from "@/lib/mock-data";
 import { fetchPropertyById } from "@/lib/properties";
-import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft } from "lucide-react";
+import { coordsFor, osmEmbedUrl, osmLinkUrl } from "@/lib/kenya-locations";
+import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
+import { useState } from "react";
 
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
@@ -34,7 +36,10 @@ export const Route = createFileRoute("/properties/$id")({
 
 function Detail() {
   const { p } = Route.useLoaderData();
+  const gallery = (p.images && p.images.length ? p.images : [p.image]);
+  const [active, setActive] = useState(0);
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
+  const { lat, lng } = coordsFor(p.town, p.county);
 
   return (
     <>
@@ -43,19 +48,23 @@ function Detail() {
       </section>
 
       <section className="container-page mt-4 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
-          <img src={p.image} alt={p.title} className="h-full w-full object-cover" />
+        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted">
+          <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
           <div className="absolute top-4 left-4 flex gap-2">
             <span className="rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1">{p.category}</span>
             <span className="rounded-full bg-background/95 text-primary text-xs font-semibold px-3 py-1">{p.type}</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          {[p.image, p.image, p.image, p.image].map((src, i) => (
-            <div key={i} className="aspect-square rounded-2xl overflow-hidden bg-muted">
-              <img src={src} alt="" className="h-full w-full object-cover opacity-90 hover:opacity-100 transition" />
-            </div>
-          ))}
+          {Array.from({ length: 4 }).map((_, i) => {
+            const src = gallery[i % gallery.length];
+            return (
+              <button key={i} onClick={() => setActive(i % gallery.length)}
+                className={`aspect-square rounded-2xl overflow-hidden bg-muted ring-offset-2 transition ${active === i % gallery.length ? "ring-2 ring-primary" : ""}`}>
+                <img src={src} alt="" className="h-full w-full object-cover hover:opacity-90 transition" />
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -102,11 +111,23 @@ function Detail() {
             </div>
           </div>
 
-          <div className="mt-8 aspect-[16/9] rounded-2xl overflow-hidden border border-border bg-muted grid place-items-center text-muted-foreground text-sm">
-            <div className="text-center">
-              <MapPin className="h-6 w-6 mx-auto text-primary mb-2" />
-              Map preview — {p.area}, {p.town}
+          <div className="mt-8">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-bold flex items-center gap-2"><MapPin className="h-5 w-5 text-primary" /> Location</h2>
+              <a href={osmLinkUrl(lat, lng)} target="_blank" rel="noreferrer" className="text-xs text-primary font-semibold inline-flex items-center gap-1 hover:underline">
+                Open in OpenStreetMap <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
+            <div className="aspect-[16/9] rounded-2xl overflow-hidden border border-border">
+              <iframe
+                title={`Map of ${p.town}`}
+                src={osmEmbedUrl(lat, lng)}
+                className="h-full w-full"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">Approximate location — {p.area ? `${p.area}, ` : ""}{p.town}, {p.county}. Contact the agent for the exact address.</p>
           </div>
         </div>
 

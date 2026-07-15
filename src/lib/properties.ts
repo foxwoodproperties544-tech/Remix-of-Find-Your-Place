@@ -43,6 +43,7 @@ export function toProperty(r: DbPropertyRow): Property {
     bathrooms: r.bathrooms,
     size: r.size ?? "",
     image: r.images[0] ?? PLACEHOLDER,
+    images: r.images.length ? r.images : undefined,
     featured: r.featured,
     description: r.description,
     features: r.features,
