@@ -1,21 +1,34 @@
 import { Link } from "@tanstack/react-router";
-import { Bed, Bath, Maximize, MapPin, Heart } from "lucide-react";
+import { Bed, Bath, Maximize, MapPin, Heart, GitCompare } from "lucide-react";
 import { formatKsh, type Property } from "@/lib/mock-data";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useCompare } from "@/hooks/use-compare";
 
 export function PropertyCard({ p }: { p: Property }) {
   const { isFavorite, toggle } = useFavorites();
+  const { has, toggle: toggleCompare } = useCompare();
   const fav = isFavorite(p.id);
+  const cmp = has(p.id);
   return (
     <div className="group relative rounded-2xl overflow-hidden bg-card border border-border shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all">
-      <button
-        type="button"
-        aria-label={fav ? "Remove from favorites" : "Save to favorites"}
-        onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(p.id); }}
-        className="absolute top-3 right-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-background/95 backdrop-blur shadow-soft hover:scale-110 transition-transform"
-      >
-        <Heart className={"h-4 w-4 " + (fav ? "fill-secondary text-secondary" : "text-foreground/70")} />
-      </button>
+      <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
+        <button
+          type="button"
+          aria-label={fav ? "Remove from favorites" : "Save to favorites"}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(p.id); }}
+          className="grid h-9 w-9 place-items-center rounded-full bg-background/95 backdrop-blur shadow-soft hover:scale-110 transition-transform"
+        >
+          <Heart className={"h-4 w-4 " + (fav ? "fill-secondary text-secondary" : "text-foreground/70")} />
+        </button>
+        <button
+          type="button"
+          aria-label={cmp ? "Remove from compare" : "Add to compare"}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleCompare(p.id); }}
+          className={"grid h-9 w-9 place-items-center rounded-full backdrop-blur shadow-soft hover:scale-110 transition-transform " + (cmp ? "bg-primary text-primary-foreground" : "bg-background/95")}
+        >
+          <GitCompare className="h-4 w-4" />
+        </button>
+      </div>
       <Link to="/properties/$id" params={{ id: p.id }} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img src={p.image} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />

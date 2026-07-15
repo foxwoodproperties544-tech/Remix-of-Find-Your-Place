@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PropertiesRouteImport } from './routes/properties'
+import { Route as MortgageRouteImport } from './routes/mortgage'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
@@ -27,9 +29,19 @@ const PropertiesRoute = PropertiesRouteImport.update({
   path: '/properties',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MortgageRoute = MortgageRouteImport.update({
+  id: '/mortgage',
+  path: '/mortgage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogRoute = BlogRouteImport.update({
@@ -89,7 +101,9 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
+  '/mortgage': typeof MortgageRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
@@ -102,7 +116,9 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
+  '/mortgage': typeof MortgageRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/admin': typeof AuthenticatedAdminRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
@@ -117,7 +133,9 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
+  '/mortgage': typeof MortgageRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
@@ -132,7 +150,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/blog'
+    | '/compare'
     | '/contact'
+    | '/mortgage'
     | '/properties'
     | '/admin'
     | '/favorites'
@@ -145,7 +165,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/blog'
+    | '/compare'
     | '/contact'
+    | '/mortgage'
     | '/properties'
     | '/admin'
     | '/favorites'
@@ -159,7 +181,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/blog'
+    | '/compare'
     | '/contact'
+    | '/mortgage'
     | '/properties'
     | '/_authenticated/admin'
     | '/_authenticated/favorites'
@@ -174,7 +198,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRoute
+  CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
+  MortgageRoute: typeof MortgageRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
 }
 
@@ -187,11 +213,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mortgage': {
+      id: '/mortgage'
+      path: '/mortgage'
+      fullPath: '/mortgage'
+      preLoaderRoute: typeof MortgageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -302,7 +342,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRoute,
+  CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
+  MortgageRoute: MortgageRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
 }
 export const routeTree = rootRouteImport
