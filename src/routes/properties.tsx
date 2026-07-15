@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { properties, counties } from "@/lib/mock-data";
+import { properties as mockProps, counties } from "@/lib/mock-data";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPublishedProperties } from "@/lib/properties";
 
 const searchSchema = z.object({
   category: z.string().optional(),
@@ -25,7 +27,9 @@ function List() {
   const [county, setCounty] = useState(params.county ?? "");
   const [category, setCategory] = useState(params.category ?? "");
 
-  const filtered = properties.filter(p => {
+  const { data: dbProps } = useQuery({ queryKey: ["properties"], queryFn: fetchPublishedProperties });
+  const all = [...(dbProps ?? []), ...mockProps];
+  const filtered = all.filter(p => {
     if (category && p.category !== category) return false;
     if (type && p.type !== type) return false;
     if (county && p.county !== county) return false;
