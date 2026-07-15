@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchMyProperties } from "@/lib/properties";
 import { formatKsh } from "@/lib/mock-data";
-import { PlusCircle, Pencil, Trash2, ExternalLink } from "lucide-react";
+import { PlusCircle, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
@@ -65,7 +65,6 @@ function Dashboard() {
                 </div>
                 <div className="flex items-center gap-1">
                   <Link to="/properties/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="View"><ExternalLink className="h-4 w-4" /></Link>
-                  <Link to="/dashboard/$id/edit" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Edit"><Pencil className="h-4 w-4" /></Link>
                   <button onClick={() => confirm("Delete this listing?") && del.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                 </div>
               </div>
