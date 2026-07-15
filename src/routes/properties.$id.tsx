@@ -1,19 +1,28 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { properties, formatKsh } from "@/lib/mock-data";
+import { properties as mockProps, formatKsh } from "@/lib/mock-data";
+import { fetchPropertyById } from "@/lib/properties";
 import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
 
 export const Route = createFileRoute("/properties/$id")({
-  loader: ({ params }) => {
-    const p = properties.find(x => x.id === params.id);
-    if (!p) throw notFound();
-    return { p };
+  loader: async ({ params }) => {
+    const mock = mockProps.find(x => x.id === params.id);
+    if (mock) return { p: mock };
+    const db = await fetchPropertyById(params.id);
+    if (!db) throw notFound();
+    return { p: db };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [{ title: `${loaderData.p.title} — Foxwood Properties` }, { name: "description", content: loaderData.p.description.slice(0, 155) }]
       : [{ title: "Property not found" }, { name: "robots", content: "noindex" }],
   }),
+  errorComponent: () => (
+    <div className="container-page py-24 text-center">
+      <h1 className="text-2xl font-bold">Something went wrong</h1>
+      <Link to="/properties" className="btn-primary btn-primary-hover mt-6">Back to listings</Link>
+    </div>
+  ),
   notFoundComponent: () => (
     <div className="container-page py-24 text-center">
       <h1 className="text-2xl font-bold">Property not found</h1>
@@ -25,7 +34,7 @@ export const Route = createFileRoute("/properties/$id")({
 
 function Detail() {
   const { p } = Route.useLoaderData();
-  const related = properties.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
+  const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
 
   return (
     <>
