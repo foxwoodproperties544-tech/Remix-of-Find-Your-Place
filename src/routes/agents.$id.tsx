@@ -39,7 +39,7 @@ export const Route = createFileRoute("/agents/$id")({
 function AgentPage() {
   const { profile, listings } = Route.useLoaderData();
   const name = profile.full_name ?? "Foxwood Agent";
-  const initials = name.split(" ").map(s => s[0]).slice(0,2).join("").toUpperCase();
+  const initials = name.split(" ").map((s: string) => s[0]).slice(0,2).join("").toUpperCase();
   const phone = profile.phone ?? "";
   const wa = phone.replace(/[^\d]/g, "");
   const since = new Date(profile.created_at).toLocaleDateString("en-KE", { year: "numeric", month: "long" });
@@ -77,7 +77,7 @@ function AgentPage() {
           </div>
         ) : (
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {listings.map(p => <PropertyCard key={p.id} p={p} />)}
+            {listings.map((p: any) => <PropertyCard key={p.id} p={p} />)}
           </div>
         )}
       </section>

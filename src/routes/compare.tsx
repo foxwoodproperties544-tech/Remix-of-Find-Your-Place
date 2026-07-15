@@ -30,7 +30,7 @@ function Compare() {
 
   const { data: dbProps } = useQuery({ queryKey: ["properties"], queryFn: fetchPublishedProperties });
   const all = [...(dbProps ?? []), ...mockProps];
-  const items = ids.map((id) => all.find((p) => p.id === id)).filter(Boolean) as Property[];
+  const items = ids.map((id: string) => all.find((p) => p.id === id)).filter(Boolean) as Property[];
 
   const allFeatures = Array.from(new Set(items.flatMap((p) => p.features)));
   const allAmenities = Array.from(new Set(items.flatMap((p) => p.amenities)));
