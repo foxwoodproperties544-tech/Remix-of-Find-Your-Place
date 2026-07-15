@@ -76,7 +76,7 @@ function Detail() {
           <div className="mt-8">
             <h2 className="text-xl font-bold">Features</h2>
             <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {p.features.map(f => (
+              {p.features.map((f: string) => (
                 <div key={f} className="flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm">
                   <Check className="h-4 w-4 text-primary" /> {f}
                 </div>
@@ -87,7 +87,7 @@ function Detail() {
           <div className="mt-8">
             <h2 className="text-xl font-bold">Amenities</h2>
             <div className="mt-3 flex flex-wrap gap-2">
-              {p.amenities.map(a => (
+              {p.amenities.map((a: string) => (
                 <span key={a} className="rounded-full bg-primary-soft text-primary px-3 py-1.5 text-xs font-semibold">{a}</span>
               ))}
             </div>
