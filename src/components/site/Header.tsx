@@ -39,7 +39,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="shrink-0"><Logo /></Link>
+        <Link to="/" className="min-w-0 flex-shrink" aria-label="Foxwood Properties — home"><Logo /></Link>
         <nav className="hidden lg:flex items-center gap-1">
           {nav.map((n, i) => (
             <Link key={i} to={n.to as any} search={(n as any).search}
