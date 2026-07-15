@@ -1,0 +1,37 @@
+import { Link } from "@tanstack/react-router";
+import { Bed, Bath, Maximize, MapPin } from "lucide-react";
+import { formatKsh, type Property } from "@/lib/mock-data";
+
+export function PropertyCard({ p }: { p: Property }) {
+  return (
+    <Link
+      to="/properties/$id"
+      params={{ id: p.id }}
+      className="group block rounded-2xl overflow-hidden bg-card border border-border shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img src={p.image} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        <div className="absolute top-3 left-3 flex gap-2">
+          <span className="rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1">{p.category}</span>
+          {p.featured && <span className="rounded-full bg-background/95 backdrop-blur text-primary text-xs font-semibold px-3 py-1">Featured</span>}
+        </div>
+      </div>
+      <div className="p-5">
+        <div className="flex items-baseline justify-between gap-3">
+          <h3 className="font-semibold text-[15px] leading-snug line-clamp-1">{p.title}</h3>
+        </div>
+        <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+          <MapPin className="h-3.5 w-3.5" /> {p.area}, {p.town}
+        </div>
+        <div className="mt-3 text-lg font-bold text-primary">
+          {formatKsh(p.price)}<span className="text-xs font-medium text-muted-foreground">{p.priceSuffix ?? ""}</span>
+        </div>
+        <div className="mt-3 pt-3 border-t border-border/70 flex items-center gap-4 text-xs text-muted-foreground">
+          {p.bedrooms > 0 && <span className="flex items-center gap-1"><Bed className="h-4 w-4" /> {p.bedrooms}</span>}
+          {p.bathrooms > 0 && <span className="flex items-center gap-1"><Bath className="h-4 w-4" /> {p.bathrooms}</span>}
+          <span className="flex items-center gap-1"><Maximize className="h-4 w-4" /> {p.size}</span>
+        </div>
+      </div>
+    </Link>
+  );
+}
