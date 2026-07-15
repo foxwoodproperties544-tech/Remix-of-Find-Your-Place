@@ -60,6 +60,7 @@ export function Header() {
                   <Link to="/dashboard" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><LayoutDashboard className="h-4 w-4" /> My listings</Link>
                   <Link to="/dashboard/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PlusCircle className="h-4 w-4" /> Post listing</Link>
                   <Link to="/favorites" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Heart className="h-4 w-4" /> Favorites</Link>
+                  {isAdmin && <Link to="/admin" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted text-primary"><ShieldCheck className="h-4 w-4" /> Admin</Link>}
                   <button onClick={signOut} className="w-full flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted text-left"><LogOut className="h-4 w-4" /> Sign out</button>
                 </div>
               )}
