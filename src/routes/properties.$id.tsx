@@ -172,7 +172,7 @@ function Detail() {
 
 function AgentCard({ ownerId, profile, title }: { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null } | null; title: string }) {
   const name = profile?.full_name ?? "Foxwood Agent";
-  const initials = name.split(" ").map(s => s[0]).slice(0,2).join("").toUpperCase();
+  const initials = name.split(" ").map((s: string) => s[0]).slice(0,2).join("").toUpperCase();
   const phone = profile?.phone ?? "+254700000000";
   const waNumber = phone.replace(/[^\d]/g, "");
   const share = async () => {
