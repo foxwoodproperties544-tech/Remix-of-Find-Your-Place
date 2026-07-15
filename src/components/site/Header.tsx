@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
