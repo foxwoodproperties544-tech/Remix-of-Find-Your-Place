@@ -111,11 +111,23 @@ function Detail() {
             </div>
           </div>
 
-          <div className="mt-8 aspect-[16/9] rounded-2xl overflow-hidden border border-border bg-muted grid place-items-center text-muted-foreground text-sm">
-            <div className="text-center">
-              <MapPin className="h-6 w-6 mx-auto text-primary mb-2" />
-              Map preview — {p.area}, {p.town}
+          <div className="mt-8">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xl font-bold flex items-center gap-2"><MapPin className="h-5 w-5 text-primary" /> Location</h2>
+              <a href={osmLinkUrl(lat, lng)} target="_blank" rel="noreferrer" className="text-xs text-primary font-semibold inline-flex items-center gap-1 hover:underline">
+                Open in OpenStreetMap <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
+            <div className="aspect-[16/9] rounded-2xl overflow-hidden border border-border">
+              <iframe
+                title={`Map of ${p.town}`}
+                src={osmEmbedUrl(lat, lng)}
+                className="h-full w-full"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">Approximate location — {p.area ? `${p.area}, ` : ""}{p.town}, {p.county}. Contact the agent for the exact address.</p>
           </div>
         </div>
 
