@@ -10,6 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useFavorites } from "@/hooks/use-favorites";
 import { toast } from "sonner";
+import { PageHero } from "@/components/site/PageHero";
+import heroAbout from "@/assets/hero-about.jpg";
+import { absoluteUrl } from "@/lib/site-url";
 
 const searchSchema = z.object({
   category: z.string().optional(),
@@ -25,8 +28,25 @@ const searchSchema = z.object({
 
 const PAGE_SIZE = 12;
 
+const OG_IMAGE = absoluteUrl(heroAbout);
+const TITLE = "Properties — Foxwood Properties";
+const DESC = "Browse verified properties for sale, rent, and lease across Kenya.";
+
 export const Route = createFileRoute("/properties")({
-  head: () => ({ meta: [{ title: "Properties — Foxwood Properties" }, { name: "description", content: "Browse verified properties for sale, rent, and lease across Kenya." }] }),
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+  }),
   validateSearch: searchSchema,
   component: List,
 });
@@ -138,59 +158,58 @@ function List() {
 
   return (
     <>
-      <section className="relative border-b border-border overflow-hidden" style={{ background: "linear-gradient(135deg, var(--color-primary-soft), color-mix(in oklab, var(--color-secondary) 8%, var(--color-background)))" }}>
-        <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
-        <div className="relative container-page py-10 md:py-14">
-          <span className="chip"><SlidersHorizontal className="h-3 w-3" /> Browse listings</span>
-          <h1 className="text-3xl md:text-4xl font-bold mt-3">Find your next property</h1>
-          <p className="mt-2 text-muted-foreground">Refine by category, type, location and price across Kenya.</p>
-          <div className="mt-6 rounded-2xl bg-background p-3 shadow-lift ring-1 ring-border/60 space-y-2">
-            <div className="grid gap-2 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_auto]">
-              <div className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 focus-within:border-primary/50 transition-colors">
-                <Search className="h-4 w-4 text-muted-foreground" />
-                <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search by title, area, town..." className="w-full bg-transparent text-sm outline-none" />
-              </div>
-              <select value={category} onChange={e=>setCategory(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
-                <option value="">All categories</option>
-                {["For Sale","For Rent","For Lease"].map(c => <option key={c}>{c}</option>)}
-              </select>
-              <select value={type} onChange={e=>setType(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
-                <option value="">All types</option>
-                {["Houses","Apartments","Land / Plots","Airbnbs","Commercial","Office Spaces","Shops","Warehouses","Farms","Holiday Homes"].map(t => <option key={t}>{t}</option>)}
-              </select>
-              <select value={county} onChange={e=>setCounty(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
-                <option value="">All counties</option>
-                {counties.map(c => <option key={c}>{c}</option>)}
-              </select>
-              <select value={town} onChange={e=>setTown(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
-                <option value="">{county ? `All towns in ${county}` : "All towns"}</option>
-                {townOptions.map(t => <option key={t}>{t}</option>)}
-              </select>
-              <button onClick={() => setShowAdvanced(!showAdvanced)} className="btn-primary btn-primary-hover"><SlidersHorizontal className="h-4 w-4" /> {showAdvanced ? "Hide" : "More"}</button>
+      <PageHero
+        image={heroAbout}
+        size="sm"
+        eyebrow={<><SlidersHorizontal className="h-3.5 w-3.5" /> Browse listings</>}
+        title="Find your next property"
+        subtitle="Refine by category, type, location and price across Kenya."
+      >
+        <div className="rounded-2xl bg-background text-foreground p-3 shadow-lift ring-1 ring-border/60 space-y-2">
+          <div className="grid gap-2 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_auto]">
+            <div className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 focus-within:border-primary/50 transition-colors">
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search by title, area, town..." className="w-full bg-transparent text-sm outline-none" />
             </div>
-            {showAdvanced && (
-              <div className="grid gap-2 sm:grid-cols-3 pt-2">
-                <div>
-                  <label className="text-xs text-muted-foreground">Min price (KSh)</label>
-                  <input type="number" min={0} value={minPrice} onChange={e=>setMinPrice(e.target.value)} placeholder="0" className="mt-1 w-full rounded-full border border-border px-4 py-2.5 text-sm bg-background" />
-                </div>
-                <div>
-                  <label className="text-xs text-muted-foreground">Max price (KSh)</label>
-                  <input type="number" min={0} value={maxPrice} onChange={e=>setMaxPrice(e.target.value)} placeholder="Any" className="mt-1 w-full rounded-full border border-border px-4 py-2.5 text-sm bg-background" />
-                </div>
-                <div>
-                  <label className="text-xs text-muted-foreground">Min bedrooms</label>
-                  <select value={minBeds} onChange={e=>setMinBeds(e.target.value)} className="mt-1 w-full rounded-full border border-border px-4 py-2.5 text-sm bg-background">
-                    <option value="">Any</option>
-                    {[1,2,3,4,5].map(n => <option key={n} value={n}>{n}+</option>)}
-                  </select>
-                </div>
-              </div>
-            )}
+            <select value={category} onChange={e=>setCategory(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
+              <option value="">All categories</option>
+              {["For Sale","For Rent","For Lease"].map(c => <option key={c}>{c}</option>)}
+            </select>
+            <select value={type} onChange={e=>setType(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
+              <option value="">All types</option>
+              {["Houses","Apartments","Land / Plots","Airbnbs","Commercial","Office Spaces","Shops","Warehouses","Farms","Holiday Homes"].map(t => <option key={t}>{t}</option>)}
+            </select>
+            <select value={county} onChange={e=>setCounty(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
+              <option value="">All counties</option>
+              {counties.map(c => <option key={c}>{c}</option>)}
+            </select>
+            <select value={town} onChange={e=>setTown(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
+              <option value="">{county ? `All towns in ${county}` : "All towns"}</option>
+              {townOptions.map(t => <option key={t}>{t}</option>)}
+            </select>
+            <button onClick={() => setShowAdvanced(!showAdvanced)} className="btn-primary btn-primary-hover"><SlidersHorizontal className="h-4 w-4" /> {showAdvanced ? "Hide" : "More"}</button>
           </div>
+          {showAdvanced && (
+            <div className="grid gap-2 sm:grid-cols-3 pt-2">
+              <div>
+                <label className="text-xs text-muted-foreground">Min price (KSh)</label>
+                <input type="number" min={0} value={minPrice} onChange={e=>setMinPrice(e.target.value)} placeholder="0" className="mt-1 w-full rounded-full border border-border px-4 py-2.5 text-sm bg-background" />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Max price (KSh)</label>
+                <input type="number" min={0} value={maxPrice} onChange={e=>setMaxPrice(e.target.value)} placeholder="Any" className="mt-1 w-full rounded-full border border-border px-4 py-2.5 text-sm bg-background" />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Min bedrooms</label>
+                <select value={minBeds} onChange={e=>setMinBeds(e.target.value)} className="mt-1 w-full rounded-full border border-border px-4 py-2.5 text-sm bg-background">
+                  <option value="">Any</option>
+                  {[1,2,3,4,5].map(n => <option key={n} value={n}>{n}+</option>)}
+                </select>
+              </div>
+            </div>
+          )}
         </div>
-      </section>
+      </PageHero>
 
       <section className="container-page py-10 md:py-14">
         <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">

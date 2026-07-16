@@ -4,9 +4,27 @@ import p3 from "@/assets/p3.jpg";
 import p5 from "@/assets/p5.jpg";
 import heroBlog from "@/assets/hero-blog.jpg";
 import { PageHero } from "@/components/site/PageHero";
+import { absoluteUrl } from "@/lib/site-url";
+
+const OG_IMAGE = absoluteUrl(heroBlog);
+const TITLE = "Blog — Foxwood Properties";
+const DESC = "Real estate news, investment tips, and land-buying guides from Foxwood Properties.";
 
 export const Route = createFileRoute("/blog")({
-  head: () => ({ meta: [{ title: "Blog — Foxwood Properties" }, { name: "description", content: "Real estate news, investment tips, and land-buying guides from Foxwood Properties." }] }),
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+  }),
   component: Blog,
 });
 

@@ -2,9 +2,27 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Target, Eye, Heart, ShieldCheck, Users, BadgeCheck } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import heroAbout from "@/assets/hero-about.jpg";
+import { absoluteUrl } from "@/lib/site-url";
+
+const OG_IMAGE = absoluteUrl(heroAbout);
+const TITLE = "About — Foxwood Properties";
+const DESC = "Foxwood Properties helps Kenyans buy, rent and lease properties with confidence.";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [{ title: "About — Foxwood Properties" }, { name: "description", content: "Foxwood Properties helps Kenyans buy, rent and lease properties with confidence." }] }),
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+  }),
   component: About,
 });
 
