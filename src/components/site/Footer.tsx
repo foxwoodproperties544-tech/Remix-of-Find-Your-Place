@@ -23,8 +23,8 @@ export function Footer() {
             "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 94%, black) 0%, color-mix(in oklab, var(--color-primary) 82%, transparent) 60%, color-mix(in oklab, var(--color-primary) 88%, black) 100%)",
         }}
       />
-      <div className="container-page py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
+      <div className="container-page py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
+        <div className="lg:col-span-2">
           <div className="rounded-xl bg-background/95 backdrop-blur inline-flex px-3 py-2">
             <Logo />
           </div>
@@ -38,16 +38,26 @@ export function Footer() {
               </a>
             ))}
           </div>
+          <ul className="mt-6 space-y-2 text-sm text-primary-foreground/85">
+            <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary" /> Nairobi, Kenya</li>
+            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-secondary" /> +254 700 000 000</li>
+            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-secondary" /> hello@foxwood.co.ke</li>
+          </ul>
         </div>
+
         <div>
-          <h4 className="font-semibold mb-3 text-sm">Quick Links</h4>
+          <h4 className="font-semibold mb-3 text-sm">Explore</h4>
           <ul className="space-y-2 text-sm text-primary-foreground/85">
-            <li><Link to="/properties" className="hover:text-secondary">Properties</Link></li>
-            <li><Link to="/about" className="hover:text-secondary">About Us</Link></li>
-            <li><Link to="/contact" className="hover:text-secondary">Contact</Link></li>
+            <li><Link to="/" className="hover:text-secondary">Home</Link></li>
+            <li><Link to="/properties" className="hover:text-secondary">All Properties</Link></li>
+            <li><Link to="/properties" search={{ category: "For Sale" } as any} className="hover:text-secondary">Buy</Link></li>
+            <li><Link to="/properties" search={{ category: "For Rent" } as any} className="hover:text-secondary">Rent</Link></li>
+            <li><Link to="/properties" search={{ category: "For Lease" } as any} className="hover:text-secondary">Lease</Link></li>
+            <li><Link to="/properties" search={{ type: "Airbnbs" } as any} className="hover:text-secondary">Airbnbs</Link></li>
             <li><Link to="/blog" className="hover:text-secondary">Blog</Link></li>
           </ul>
         </div>
+
         <div>
           <h4 className="font-semibold mb-3 text-sm">Services</h4>
           <ul className="space-y-2 text-sm text-primary-foreground/85">
@@ -62,15 +72,31 @@ export function Footer() {
             <li><Link to="/services/investment" className="hover:text-secondary">Investment Advice</Link></li>
           </ul>
         </div>
+
         <div>
-          <h4 className="font-semibold mb-3 text-sm">Get in Touch</h4>
+          <h4 className="font-semibold mb-3 text-sm">Tools</h4>
           <ul className="space-y-2 text-sm text-primary-foreground/85">
-            <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary" /> Nairobi, Kenya</li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-secondary" /> +254 700 000 000</li>
-            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-secondary" /> hello@foxwood.co.ke</li>
+            <li><Link to="/mortgage" className="hover:text-secondary">Mortgage Calculator</Link></li>
+            <li><Link to="/compare" className="hover:text-secondary">Compare Properties</Link></li>
+            <li><Link to="/favorites" className="hover:text-secondary">My Favorites</Link></li>
+            <li><Link to="/saved-searches" className="hover:text-secondary">Saved Searches</Link></li>
+            <li><Link to="/dashboard" className="hover:text-secondary">Dashboard</Link></li>
+            <li><Link to="/dashboard/new" className="hover:text-secondary">Add Listing</Link></li>
+            <li><Link to="/dashboard/inquiries" className="hover:text-secondary">Inquiries</Link></li>
+            <li><Link to="/auth" className="hover:text-secondary">Sign In</Link></li>
           </ul>
-          <form className="mt-4 flex gap-2" onSubmit={(e)=>e.preventDefault()}>
-            <input type="email" placeholder="Your email" className="flex-1 rounded-full border border-primary-foreground/30 bg-background/10 backdrop-blur px-4 py-2 text-sm text-primary-foreground placeholder:text-primary-foreground/60 outline-none focus:border-secondary" />
+        </div>
+
+        <div>
+          <h4 className="font-semibold mb-3 text-sm">Company</h4>
+          <ul className="space-y-2 text-sm text-primary-foreground/85">
+            <li><Link to="/about" className="hover:text-secondary">About Us</Link></li>
+            <li><Link to="/contact" className="hover:text-secondary">Contact Us</Link></li>
+            <li><Link to="/blog" className="hover:text-secondary">Blog & News</Link></li>
+          </ul>
+          <h4 className="font-semibold mb-3 mt-6 text-sm">Newsletter</h4>
+          <form className="flex gap-2" onSubmit={(e)=>e.preventDefault()}>
+            <input type="email" placeholder="Your email" className="flex-1 min-w-0 rounded-full border border-primary-foreground/30 bg-background/10 backdrop-blur px-4 py-2 text-sm text-primary-foreground placeholder:text-primary-foreground/60 outline-none focus:border-secondary" />
             <button className="btn-secondary !py-2 !px-4 text-sm">Join</button>
           </form>
         </div>
