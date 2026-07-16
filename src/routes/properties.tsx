@@ -143,6 +143,7 @@ function List() {
   const activeCount =
     (state.category ? 1 : 0) + (state.type ? 1 : 0) + (state.county ? 1 : 0) + (state.town ? 1 : 0) +
     (state.minPrice ? 1 : 0) + (state.maxPrice ? 1 : 0) + (state.minBeds ? 1 : 0) + (state.minBaths ? 1 : 0) +
+    (state.minSize ? 1 : 0) + (state.maxSize ? 1 : 0) +
     state.features.size + state.nearby.size +
     (state.status ? 1 : 0) + (state.listingType ? 1 : 0) + (state.purpose ? 1 : 0) +
     (favsOnly ? 1 : 0) + (q ? 1 : 0);
