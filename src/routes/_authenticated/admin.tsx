@@ -165,7 +165,7 @@ function Admin() {
                   <div className="text-sm font-bold text-primary mt-1">{formatKsh(Number(p.price))}{p.price_suffix ?? ""}</div>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.description}</p>
                 </div>
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex items-center gap-1 shrink-0 flex-wrap justify-end">
                   <Link to="/properties/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Preview"><ExternalLink className="h-4 w-4" /></Link>
                   {p.status !== "published" && (
                     <button onClick={() => setStatus.mutate({ id: p.id, status: "published" })}
@@ -179,6 +179,14 @@ function Admin() {
                     <button onClick={() => setStatus.mutate({ id: p.id, status: "pending" })}
                       className="btn-ghost !px-3 !py-2" title="Unpublish"><EyeOff className="h-4 w-4" /></button>
                   )}
+                  {p.status === "published" && (
+                    <button onClick={() => toggleFeatured.mutate({ id: p.id, on: !(p as any).is_featured })}
+                      className={`btn-ghost !px-3 !py-2 ${(p as any).is_featured ? "text-secondary" : ""}`}
+                      title={(p as any).is_featured ? "Unfeature" : "Feature"}><Star className={`h-4 w-4 ${(p as any).is_featured ? "fill-current" : ""}`} /></button>
+                  )}
+                  <button onClick={() => toggleVerified.mutate({ id: p.id, on: !(p as any).verified })}
+                    className={`btn-ghost !px-3 !py-2 ${(p as any).verified ? "text-primary" : ""}`}
+                    title={(p as any).verified ? "Unverify" : "Verify"}><ShieldCheck className="h-4 w-4" /></button>
                   <button onClick={() => confirm("Delete this listing permanently?") && del.mutate(p.id)}
                     className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                 </div>
