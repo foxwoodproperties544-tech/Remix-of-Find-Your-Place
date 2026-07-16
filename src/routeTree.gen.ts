@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PropertiesRouteImport } from './routes/properties'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MortgageRouteImport } from './routes/mortgage'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
@@ -34,13 +35,22 @@ import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
+import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
+import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
+import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
+import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 
 const PropertiesRoute = PropertiesRouteImport.update({
   id: '/properties',
   path: '/properties',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MortgageRoute = MortgageRouteImport.update({
@@ -164,6 +174,12 @@ const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
   path: '/api/public/mpesa-callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardUpgradeRoute =
+  AuthenticatedDashboardUpgradeRouteImport.update({
+    id: '/dashboard/upgrade',
+    path: '/dashboard/upgrade',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardNewRoute =
   AuthenticatedDashboardNewRouteImport.update({
     id: '/dashboard/new',
@@ -174,6 +190,24 @@ const AuthenticatedDashboardInquiriesRoute =
   AuthenticatedDashboardInquiriesRouteImport.update({
     id: '/dashboard/inquiries',
     path: '/dashboard/inquiries',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminVerificationsRoute =
+  AuthenticatedAdminVerificationsRouteImport.update({
+    id: '/verifications',
+    path: '/verifications',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedDashboardVerifyIdRoute =
+  AuthenticatedDashboardVerifyIdRouteImport.update({
+    id: '/dashboard/verify/$id',
+    path: '/dashboard/verify/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardFeatureIdRoute =
+  AuthenticatedDashboardFeatureIdRouteImport.update({
+    id: '/dashboard/feature/$id',
+    path: '/dashboard/feature/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardEditIdRoute =
@@ -191,8 +225,9 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/mortgage': typeof MortgageRoute
+  '/pricing': typeof PricingRoute
   '/properties': typeof PropertiesRouteWithChildren
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
@@ -206,11 +241,15 @@ export interface FileRoutesByFullPath {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
+  '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -220,8 +259,9 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/mortgage': typeof MortgageRoute
+  '/pricing': typeof PricingRoute
   '/properties': typeof PropertiesRouteWithChildren
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
@@ -235,11 +275,15 @@ export interface FileRoutesByTo {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
+  '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -251,8 +295,9 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/mortgage': typeof MortgageRoute
+  '/pricing': typeof PricingRoute
   '/properties': typeof PropertiesRouteWithChildren
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
@@ -266,11 +311,15 @@ export interface FileRoutesById {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
+  '/_authenticated/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -282,6 +331,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/mortgage'
+    | '/pricing'
     | '/properties'
     | '/admin'
     | '/favorites'
@@ -297,11 +347,15 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/admin/verifications'
     | '/dashboard/inquiries'
     | '/dashboard/new'
+    | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/dashboard/'
     | '/dashboard/edit/$id'
+    | '/dashboard/feature/$id'
+    | '/dashboard/verify/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -311,6 +365,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/mortgage'
+    | '/pricing'
     | '/properties'
     | '/admin'
     | '/favorites'
@@ -326,11 +381,15 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/admin/verifications'
     | '/dashboard/inquiries'
     | '/dashboard/new'
+    | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/dashboard'
     | '/dashboard/edit/$id'
+    | '/dashboard/feature/$id'
+    | '/dashboard/verify/$id'
   id:
     | '__root__'
     | '/'
@@ -341,6 +400,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/mortgage'
+    | '/pricing'
     | '/properties'
     | '/_authenticated/admin'
     | '/_authenticated/favorites'
@@ -356,11 +416,15 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/_authenticated/admin/verifications'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/new'
+    | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/edit/$id'
+    | '/_authenticated/dashboard/feature/$id'
+    | '/_authenticated/dashboard/verify/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -372,6 +436,7 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   MortgageRoute: typeof MortgageRoute
+  PricingRoute: typeof PricingRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
   AgentsIdRoute: typeof AgentsIdRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
@@ -393,6 +458,13 @@ declare module '@tanstack/react-router' {
       path: '/properties'
       fullPath: '/properties'
       preLoaderRoute: typeof PropertiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mortgage': {
@@ -563,6 +635,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/upgrade': {
+      id: '/_authenticated/dashboard/upgrade'
+      path: '/dashboard/upgrade'
+      fullPath: '/dashboard/upgrade'
+      preLoaderRoute: typeof AuthenticatedDashboardUpgradeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/new': {
       id: '/_authenticated/dashboard/new'
       path: '/dashboard/new'
@@ -577,6 +656,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardInquiriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/verifications': {
+      id: '/_authenticated/admin/verifications'
+      path: '/verifications'
+      fullPath: '/admin/verifications'
+      preLoaderRoute: typeof AuthenticatedAdminVerificationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/dashboard/verify/$id': {
+      id: '/_authenticated/dashboard/verify/$id'
+      path: '/dashboard/verify/$id'
+      fullPath: '/dashboard/verify/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardVerifyIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/feature/$id': {
+      id: '/_authenticated/dashboard/feature/$id'
+      path: '/dashboard/feature/$id'
+      fullPath: '/dashboard/feature/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardFeatureIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/edit/$id': {
       id: '/_authenticated/dashboard/edit/$id'
       path: '/dashboard/edit/$id'
@@ -587,24 +687,41 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
+  AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
+  AuthenticatedDashboardFeatureIdRoute: typeof AuthenticatedDashboardFeatureIdRoute
+  AuthenticatedDashboardVerifyIdRoute: typeof AuthenticatedDashboardVerifyIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
+  AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
+  AuthenticatedDashboardFeatureIdRoute: AuthenticatedDashboardFeatureIdRoute,
+  AuthenticatedDashboardVerifyIdRoute: AuthenticatedDashboardVerifyIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -631,6 +748,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   MortgageRoute: MortgageRoute,
+  PricingRoute: PricingRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
   AgentsIdRoute: AgentsIdRoute,
   ServicesBuyRoute: ServicesBuyRoute,
