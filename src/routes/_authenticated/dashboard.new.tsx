@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { X, UploadCloud, Loader2, ImageIcon, Info } from "lucide-react";
+import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin } from "lucide-react";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/dashboard/new")({
@@ -33,16 +33,22 @@ const schema = z.object({
   amenities: z.string().max(500).optional(),
   contact_phone: z.string().trim().max(30).optional(),
   contact_whatsapp: z.string().trim().max(30).optional(),
+  video_url: z.string().trim().max(500).optional(),
+  lat: z.string().trim().optional(),
+  lng: z.string().trim().optional(),
 });
 
 type Errors = Partial<Record<keyof z.infer<typeof schema> | "images", string>>;
+type DocEntry = { name: string; url: string };
 
 function NewListing() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState<false | "draft" | "submit">(false);
   const [uploading, setUploading] = useState(0);
   const [images, setImages] = useState<string[]>([]);
+  const [docs, setDocs] = useState<DocEntry[]>([]);
+  const [uploadingDocs, setUploadingDocs] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const dropRef = useRef<HTMLLabelElement>(null);
@@ -53,6 +59,7 @@ function NewListing() {
     bedrooms: "0", bathrooms: "0", size: "",
     features: "", amenities: "",
     contact_phone: "", contact_whatsapp: "",
+    video_url: "", lat: "", lng: "",
   });
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
