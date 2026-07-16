@@ -185,6 +185,27 @@ export type Database = {
         }
         Relationships: []
       }
+      property_views: {
+        Row: {
+          created_at: string
+          id: string
+          property_key: string
+          viewer_user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          property_key: string
+          viewer_user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          property_key?: string
+          viewer_user_id?: string | null
+        }
+        Relationships: []
+      }
       saved_searches: {
         Row: {
           created_at: string

@@ -1,24 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { properties as mockProps, counties, formatKsh } from "@/lib/mock-data";
+import { properties as mockProps, counties } from "@/lib/mock-data";
 import { PropertyCard } from "@/components/site/PropertyCard";
-import { Search, SlidersHorizontal, BookmarkPlus, X } from "lucide-react";
-import { useState } from "react";
+import { Search, SlidersHorizontal, BookmarkPlus, X, Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPublishedProperties } from "@/lib/properties";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useFavorites } from "@/hooks/use-favorites";
 import { toast } from "sonner";
 
 const searchSchema = z.object({
   category: z.string().optional(),
   type: z.string().optional(),
   county: z.string().optional(),
+  town: z.string().optional(),
   q: z.string().optional(),
   minPrice: z.coerce.number().optional(),
   maxPrice: z.coerce.number().optional(),
   minBeds: z.coerce.number().optional(),
+  favs: z.coerce.boolean().optional(),
 });
+
+const PAGE_SIZE = 12;
 
 export const Route = createFileRoute("/properties")({
   head: () => ({ meta: [{ title: "Properties — Foxwood Properties" }, { name: "description", content: "Browse verified properties for sale, rent, and lease across Kenya." }] }),
@@ -29,28 +34,46 @@ export const Route = createFileRoute("/properties")({
 function List() {
   const params = Route.useSearch();
   const { user } = useAuth();
+  const { favorites } = useFavorites();
   const [q, setQ] = useState(params.q ?? "");
   const [type, setType] = useState(params.type ?? "");
   const [county, setCounty] = useState(params.county ?? "");
+  const [town, setTown] = useState(params.town ?? "");
   const [category, setCategory] = useState(params.category ?? "");
   const [minPrice, setMinPrice] = useState<string>(params.minPrice?.toString() ?? "");
   const [maxPrice, setMaxPrice] = useState<string>(params.maxPrice?.toString() ?? "");
   const [minBeds, setMinBeds] = useState<string>(params.minBeds?.toString() ?? "");
+  const [favsOnly, setFavsOnly] = useState<boolean>(!!params.favs);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savingName, setSavingName] = useState("");
   const [showSave, setShowSave] = useState(false);
   const [sortBy, setSortBy] = useState<"newest" | "price-asc" | "price-desc" | "beds-desc">("newest");
+  const [page, setPage] = useState(1);
 
   const { data: dbProps } = useQuery({ queryKey: ["properties"], queryFn: fetchPublishedProperties });
-  const all = [...(dbProps ?? []), ...mockProps];
+  const all = useMemo(() => [...(dbProps ?? []), ...mockProps], [dbProps]);
+
+  // Towns available in the current county selection (or all).
+  const townOptions = useMemo(() => {
+    const pool = county ? all.filter(p => p.county === county) : all;
+    return Array.from(new Set(pool.map(p => p.town).filter(Boolean))).sort();
+  }, [all, county]);
+
+  // Reset town if it no longer belongs to the selected county.
+  useEffect(() => {
+    if (town && !townOptions.includes(town)) setTown("");
+  }, [town, townOptions]);
+
   const filtered = all.filter(p => {
     if (category && p.category !== category) return false;
     if (type && p.type !== type) return false;
     if (county && p.county !== county) return false;
+    if (town && p.town !== town) return false;
     if (minPrice && p.price < Number(minPrice)) return false;
     if (maxPrice && p.price > Number(maxPrice)) return false;
     if (minBeds && p.bedrooms < Number(minBeds)) return false;
+    if (favsOnly && !favorites.has(p.id)) return false;
     if (q && !(`${p.title} ${p.area} ${p.town}`).toLowerCase().includes(q.toLowerCase())) return false;
     return true;
   });
@@ -62,6 +85,12 @@ function List() {
     return 0;
   });
 
+  // Reset page when filters/sort change
+  useEffect(() => { setPage(1); }, [q, type, county, town, category, minPrice, maxPrice, minBeds, favsOnly, sortBy]);
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageItems = sorted.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   const currentFilters = () => {
     const f: Record<string, any> = {};
@@ -69,6 +98,7 @@ function List() {
     if (category) f.category = category;
     if (type) f.type = type;
     if (county) f.county = county;
+    if (town) f.town = town;
     if (minPrice) f.minPrice = Number(minPrice);
     if (maxPrice) f.maxPrice = Number(maxPrice);
     if (minBeds) f.minBeds = Number(minBeds);
@@ -76,7 +106,7 @@ function List() {
   };
 
   function clearAll() {
-    setQ(""); setCategory(""); setType(""); setCounty(""); setMinPrice(""); setMaxPrice(""); setMinBeds("");
+    setQ(""); setCategory(""); setType(""); setCounty(""); setTown(""); setMinPrice(""); setMaxPrice(""); setMinBeds(""); setFavsOnly(false);
   }
 
   async function saveSearch() {
@@ -96,7 +126,15 @@ function List() {
     finally { setSaving(false); }
   }
 
-  const hasFilters = q || category || type || county || minPrice || maxPrice || minBeds;
+  const hasFilters = q || category || type || county || town || minPrice || maxPrice || minBeds || favsOnly;
+
+  function toggleFavsOnly() {
+    if (!user && !favsOnly) {
+      toast("Sign in to filter by favorites", { action: { label: "Sign in", onClick: () => (window.location.href = "/auth") } });
+      return;
+    }
+    setFavsOnly(v => !v);
+  }
 
   return (
     <>
@@ -108,10 +146,10 @@ function List() {
           <h1 className="text-3xl md:text-4xl font-bold mt-3">Find your next property</h1>
           <p className="mt-2 text-muted-foreground">Refine by category, type, location and price across Kenya.</p>
           <div className="mt-6 rounded-2xl bg-background p-3 shadow-lift ring-1 ring-border/60 space-y-2">
-            <div className="grid gap-2 md:grid-cols-[1fr_1fr_1fr_1fr_auto]">
+            <div className="grid gap-2 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr_auto]">
               <div className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 focus-within:border-primary/50 transition-colors">
                 <Search className="h-4 w-4 text-muted-foreground" />
-                <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search location, title..." className="w-full bg-transparent text-sm outline-none" />
+                <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search by title, area, town..." className="w-full bg-transparent text-sm outline-none" />
               </div>
               <select value={category} onChange={e=>setCategory(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
                 <option value="">All categories</option>
@@ -124,6 +162,10 @@ function List() {
               <select value={county} onChange={e=>setCounty(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
                 <option value="">All counties</option>
                 {counties.map(c => <option key={c}>{c}</option>)}
+              </select>
+              <select value={town} onChange={e=>setTown(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
+                <option value="">{county ? `All towns in ${county}` : "All towns"}</option>
+                {townOptions.map(t => <option key={t}>{t}</option>)}
               </select>
               <button onClick={() => setShowAdvanced(!showAdvanced)} className="btn-primary btn-primary-hover"><SlidersHorizontal className="h-4 w-4" /> {showAdvanced ? "Hide" : "More"}</button>
             </div>
@@ -154,6 +196,11 @@ function List() {
         <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
           <p className="text-sm text-muted-foreground"><span className="font-semibold text-foreground">{sorted.length}</span> {sorted.length === 1 ? "property" : "properties"} found</p>
           <div className="flex items-center gap-2 flex-wrap">
+            <button onClick={toggleFavsOnly}
+              aria-pressed={favsOnly}
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold border transition ${favsOnly ? "bg-secondary text-secondary-foreground border-secondary" : "bg-background text-foreground border-border hover:border-primary/40"}`}>
+              <Heart className={"h-3.5 w-3.5 " + (favsOnly ? "fill-current" : "")} /> Favorites only
+            </button>
             <label className="text-xs text-muted-foreground hidden sm:inline">Sort</label>
             <select value={sortBy} onChange={e=>setSortBy(e.target.value as any)} className="rounded-full border border-border px-3 py-2 text-xs bg-background font-medium">
               <option value="newest">Newest</option>
@@ -173,22 +220,44 @@ function List() {
             {category && <FilterChip label={category} onRemove={() => setCategory("")} />}
             {type && <FilterChip label={type} onRemove={() => setType("")} />}
             {county && <FilterChip label={county} onRemove={() => setCounty("")} />}
+            {town && <FilterChip label={town} onRemove={() => setTown("")} />}
             {minPrice && <FilterChip label={`Min KSh ${minPrice}`} onRemove={() => setMinPrice("")} />}
             {maxPrice && <FilterChip label={`Max KSh ${maxPrice}`} onRemove={() => setMaxPrice("")} />}
             {minBeds && <FilterChip label={`${minBeds}+ bed`} onRemove={() => setMinBeds("")} />}
+            {favsOnly && <FilterChip label="Favorites" onRemove={() => setFavsOnly(false)} />}
           </div>
         )}
         {sorted.length === 0 ? (
           <div className="text-center py-24 border border-dashed border-border rounded-2xl bg-muted/30">
-            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary"><Search className="h-6 w-6" /></div>
-            <p className="mt-4 font-semibold">No properties match your filters</p>
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary">{favsOnly ? <Heart className="h-6 w-6" /> : <Search className="h-6 w-6" />}</div>
+            <p className="mt-4 font-semibold">{favsOnly ? "No favorites match these filters" : "No properties match your filters"}</p>
             <p className="text-sm text-muted-foreground mt-1">Try widening your search or clearing a filter.</p>
             {hasFilters && <button onClick={clearAll} className="btn-primary btn-primary-hover mt-5">Clear filters</button>}
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {sorted.map(p => <PropertyCard key={p.id} p={p} />)}
-          </div>
+          <>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {pageItems.map(p => <PropertyCard key={p.id} p={p} />)}
+            </div>
+            {totalPages > 1 && (
+              <div className="mt-10 flex items-center justify-center gap-2">
+                <button disabled={currentPage === 1} onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                  className="btn-ghost !py-2 !px-3 disabled:opacity-40"><ChevronLeft className="h-4 w-4" /> Prev</button>
+                <div className="flex items-center gap-1">
+                  {pageNumbers(currentPage, totalPages).map((n, i) => (
+                    n === "..." ? <span key={`e${i}`} className="px-2 text-muted-foreground">…</span>
+                      : <button key={n} onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                          className={`min-w-9 h-9 rounded-lg text-sm font-semibold transition ${currentPage === n ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}>{n}</button>
+                  ))}
+                </div>
+                <button disabled={currentPage === totalPages} onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                  className="btn-ghost !py-2 !px-3 disabled:opacity-40">Next <ChevronRight className="h-4 w-4" /></button>
+              </div>
+            )}
+            <p className="mt-4 text-center text-xs text-muted-foreground">
+              Showing {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, sorted.length)} of {sorted.length}
+            </p>
+          </>
         )}
       </section>
 
@@ -218,11 +287,24 @@ function List() {
   );
 }
 
+function pageNumbers(current: number, total: number): (number | "...")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const out: (number | "...")[] = [1];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  if (start > 2) out.push("...");
+  for (let i = start; i <= end; i++) out.push(i);
+  if (end < total - 1) out.push("...");
+  out.push(total);
+  return out;
+}
+
 function summarize(f: Record<string, any>) {
   const parts: string[] = [];
   if (f.category) parts.push(f.category);
   if (f.type) parts.push(f.type);
-  if (f.county) parts.push(`in ${f.county}`);
+  if (f.town) parts.push(`in ${f.town}`);
+  else if (f.county) parts.push(`in ${f.county}`);
   if (f.minBeds) parts.push(`${f.minBeds}+ bed`);
   return parts.join(" · ");
 }
@@ -237,4 +319,3 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
     </span>
   );
 }
-
