@@ -110,7 +110,7 @@ function Detail() {
   const contactPhone = (loaderData as any).contactPhone as string | null | undefined;
   const contactWhatsapp = (loaderData as any).contactWhatsapp as string | null | undefined;
   const videoUrl = loaderData.videoUrl;
-  const documents = loaderData.documents ?? [];
+  const documents = (loaderData.documents ?? []) as Array<{ name: string; url: string }>;
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
   const [active, setActive] = useState(0);
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
