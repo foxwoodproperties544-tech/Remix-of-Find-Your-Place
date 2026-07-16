@@ -7,10 +7,12 @@ import { formatKsh } from "@/lib/mock-data";
 import { PlusCircle, Trash2, ExternalLink, Home, CheckCircle2, Clock, XCircle, Eye, Heart, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
+import { PageHero } from "@/components/site/PageHero";
+import heroTools from "@/assets/hero-tools.jpg";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: Dashboard,
-  head: () => ({ meta: [{ title: "My listings — Foxwood Properties" }] }),
+  head: () => ({ meta: [{ title: "My listings — Foxwood Properties" }, { name: "robots", content: "noindex" }] }),
 });
 
 type RangeKey = "7" | "30" | "90" | "all";
