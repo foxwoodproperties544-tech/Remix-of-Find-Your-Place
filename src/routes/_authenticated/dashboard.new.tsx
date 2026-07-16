@@ -193,9 +193,12 @@ function NewListing() {
           <div>
             <label className={label}>Type *</label>
             <select value={form.property_type} onChange={(e) => upd("property_type", e.target.value)} className={input}>
-              {TYPES.map((c) => <option key={c}>{c}</option>)}
+              {TYPE_GROUPS.map((g) => (
+                <optgroup key={g.label} label={g.label}>
+                  {g.items.map((t) => <option key={t}>{t}</option>)}
+                </optgroup>
+              ))}
             </select>
-          </div>
           <div>
             <label className={label}>County *</label>
             <select value={form.county} onChange={(e) => upd("county", e.target.value)} className={input}>
