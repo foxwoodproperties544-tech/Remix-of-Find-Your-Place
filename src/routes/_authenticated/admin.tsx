@@ -106,6 +106,7 @@ function Admin() {
           <h1 className="text-3xl font-bold mt-2">Moderation dashboard</h1>
           <p className="text-sm text-muted-foreground mt-1">Approve, reject, or remove listings across the platform.</p>
         </div>
+        <Link to="/admin/verifications" className="btn-ghost text-sm"><ShieldCheck className="h-4 w-4" /> Verifications queue</Link>
       </div>
 
       <div className="mt-6 flex gap-2 border-b border-border">
