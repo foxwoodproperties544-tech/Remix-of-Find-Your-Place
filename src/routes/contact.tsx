@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { PageHero } from "@/components/site/PageHero";
+import heroContact from "@/assets/hero-contact.jpg";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [{ title: "Contact — Foxwood Properties" }, { name: "description", content: "Get in touch with Foxwood Properties. Call, email, or WhatsApp us." }] }),
@@ -11,13 +13,12 @@ function Contact() {
   const [sent, setSent] = useState(false);
   return (
     <>
-      <section className="bg-primary-soft border-b border-border">
-        <div className="container-page py-16">
-          <span className="text-xs font-semibold uppercase tracking-wider text-secondary">Contact</span>
-          <h1 className="text-4xl md:text-5xl font-extrabold mt-2">Let's talk property</h1>
-          <p className="mt-3 text-muted-foreground max-w-xl">We usually respond within a few hours. Prefer chat? WhatsApp works best.</p>
-        </div>
-      </section>
+      <PageHero
+        image={heroContact}
+        eyebrow="Contact"
+        title="Let's talk property"
+        subtitle="We usually respond within a few hours. Prefer chat? WhatsApp works best."
+      />
 
       <section className="container-page py-14 grid gap-10 lg:grid-cols-[1fr_1.2fr]">
         <div className="space-y-4">
