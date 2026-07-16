@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { X, UploadCloud, Loader2, ImageIcon, Info } from "lucide-react";
+import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin } from "lucide-react";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authenticated/dashboard/new")({
@@ -33,16 +33,22 @@ const schema = z.object({
   amenities: z.string().max(500).optional(),
   contact_phone: z.string().trim().max(30).optional(),
   contact_whatsapp: z.string().trim().max(30).optional(),
+  video_url: z.string().trim().max(500).optional(),
+  lat: z.string().trim().optional(),
+  lng: z.string().trim().optional(),
 });
 
 type Errors = Partial<Record<keyof z.infer<typeof schema> | "images", string>>;
+type DocEntry = { name: string; url: string };
 
 function NewListing() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState<false | "draft" | "submit">(false);
   const [uploading, setUploading] = useState(0);
   const [images, setImages] = useState<string[]>([]);
+  const [docs, setDocs] = useState<DocEntry[]>([]);
+  const [uploadingDocs, setUploadingDocs] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const dropRef = useRef<HTMLLabelElement>(null);
@@ -53,6 +59,7 @@ function NewListing() {
     bedrooms: "0", bathrooms: "0", size: "",
     features: "", amenities: "",
     contact_phone: "", contact_whatsapp: "",
+    video_url: "", lat: "", lng: "",
   });
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
@@ -102,18 +109,47 @@ function NewListing() {
     if (files.length) uploadFiles(files);
   }
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  async function uploadDocs(files: File[]) {
+    if (!user) return;
+    const valid = files.filter((f) => {
+      if (f.size > 20 * 1024 * 1024) { toast.error(`${f.name} exceeds 20 MB`); return false; }
+      return true;
+    });
+    if (!valid.length) return;
+    setUploadingDocs((n) => n + valid.length);
+    for (const file of valid) {
+      try {
+        const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+        const { error } = await supabase.storage.from("property-docs").upload(path, file);
+        if (error) throw error;
+        const { data: signed } = await supabase.storage.from("property-docs").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+        if (signed?.signedUrl) setDocs((d) => [...d, { name: file.name, url: signed.signedUrl }]);
+      } catch (err: any) {
+        toast.error(err?.message ?? `Failed to upload ${file.name}`);
+      } finally {
+        setUploadingDocs((n) => n - 1);
+      }
+    }
+  }
+
+
+  async function save(mode: "draft" | "submit", e?: React.FormEvent) {
+    e?.preventDefault();
     if (!user) return;
     const parsed = schema.safeParse(form);
     const newErrors: Errors = {};
-    if (!parsed.success) {
-      for (const issue of parsed.error.issues) {
-        const key = issue.path[0] as keyof Errors;
-        if (!newErrors[key]) newErrors[key] = issue.message;
+    if (mode === "submit") {
+      if (!parsed.success) {
+        for (const issue of parsed.error.issues) {
+          const key = issue.path[0] as keyof Errors;
+          if (!newErrors[key]) newErrors[key] = issue.message;
+        }
       }
+      if (images.length === 0) newErrors.images = "Please add at least one photo";
+    } else {
+      // draft: require only a title
+      if (!form.title || form.title.trim().length < 3) newErrors.title = "Give your draft a short title (3+ chars)";
     }
-    if (images.length === 0) newErrors.images = "Please add at least one photo";
     if (Object.keys(newErrors).length) {
       setErrors(newErrors);
       toast.error("Please fix the highlighted fields");
@@ -121,32 +157,38 @@ function NewListing() {
       first?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    setSaving(true);
+    setSaving(mode);
     try {
-      const v = parsed.data!;
-      const { data, error } = await supabase.from("properties").insert({
+      const v = (parsed.success ? parsed.data : (form as any));
+      const latNum = form.lat ? Number(form.lat) : null;
+      const lngNum = form.lng ? Number(form.lng) : null;
+      const { error } = await supabase.from("properties").insert({
         owner_id: user.id,
         title: v.title,
-        description: v.description,
-        price: v.price,
+        description: v.description || "",
+        price: Number(v.price) || 0,
         price_suffix: v.price_suffix || null,
         category: v.category,
         property_type: v.property_type,
         county: v.county,
-        town: v.town,
+        town: v.town || "",
         area: v.area || null,
-        bedrooms: v.bedrooms,
-        bathrooms: v.bathrooms,
+        bedrooms: Number(v.bedrooms) || 0,
+        bathrooms: Number(v.bathrooms) || 0,
         size: v.size || null,
         images,
-        features: (v.features ?? "").split(",").map((s) => s.trim()).filter(Boolean),
-        amenities: (v.amenities ?? "").split(",").map((s) => s.trim()).filter(Boolean),
+        features: (v.features ?? "").split(",").map((s: string) => s.trim()).filter(Boolean),
+        amenities: (v.amenities ?? "").split(",").map((s: string) => s.trim()).filter(Boolean),
         contact_phone: v.contact_phone || null,
         contact_whatsapp: v.contact_whatsapp || null,
-        status: "pending", // requires admin approval before appearing publicly
-      }).select("id").single();
+        video_url: form.video_url || null,
+        documents: docs,
+        lat: latNum,
+        lng: lngNum,
+        status: mode === "draft" ? "draft" : "pending",
+      });
       if (error) throw error;
-      toast.success("Listing submitted for review — an admin will approve it shortly.");
+      toast.success(mode === "draft" ? "Draft saved" : "Listing submitted for review");
       navigate({ to: "/dashboard" });
     } catch (err: any) {
       toast.error(err.message ?? "Failed to save");
@@ -154,6 +196,7 @@ function NewListing() {
       setSaving(false);
     }
   }
+
 
   const input = "w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary transition-colors";
   const label = "text-xs font-semibold text-foreground/80";
@@ -170,7 +213,7 @@ function NewListing() {
         <span>Add clear, high-quality photos to help your listing stand out. You can drag & drop multiple images at once.</span>
       </div>
 
-      <form onSubmit={submit} className="mt-8 space-y-6" noValidate>
+      <form onSubmit={(e) => save("submit", e)} className="mt-8 space-y-6" noValidate>
         <div>
           <label className={label}>Title *</label>
           <input value={form.title} onChange={(e) => upd("title", e.target.value)} className={`${input} ${errCls("title")}`} placeholder="Modern 3BR Apartment in Westlands" />
@@ -306,10 +349,58 @@ function NewListing() {
           <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1"><ImageIcon className="h-3 w-3" /> The first photo becomes the cover image.</div>
         </div>
 
-        <div className="pt-4 border-t border-border flex justify-end gap-2">
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="md:col-span-3">
+            <label className={label}>Video URL (YouTube, Vimeo, or MP4)</label>
+            <input value={form.video_url} onChange={(e) => upd("video_url", e.target.value)} className={input} placeholder="https://youtu.be/..." />
+          </div>
+          <div>
+            <label className={label}><MapPin className="inline h-3 w-3" /> Latitude</label>
+            <input value={form.lat} onChange={(e) => upd("lat", e.target.value)} className={input} placeholder="-1.2921" />
+          </div>
+          <div>
+            <label className={label}><MapPin className="inline h-3 w-3" /> Longitude</label>
+            <input value={form.lng} onChange={(e) => upd("lng", e.target.value)} className={input} placeholder="36.8219" />
+          </div>
+          <div className="flex items-end">
+            <p className="text-xs text-muted-foreground">Optional. Overrides the auto-map position for this listing.</p>
+          </div>
+        </div>
+
+        <div>
+          <label className={label}>Documents (PDF, floor plans, title deed scans)</label>
+          <label className="mt-2 flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border p-6 cursor-pointer text-center hover:bg-muted/50">
+            <input type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" className="hidden"
+              onChange={(e) => { const files = Array.from(e.target.files ?? []); if (files.length) uploadDocs(files); e.target.value = ""; }} />
+            <FileText className="h-6 w-6 text-primary" />
+            <div className="text-sm font-semibold">Attach documents</div>
+            <div className="text-xs text-muted-foreground">Up to 20 MB each</div>
+          </label>
+          {(docs.length > 0 || uploadingDocs > 0) && (
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {docs.map((d, i) => (
+                <div key={i} className="flex items-center gap-2 rounded-lg border border-border p-2 text-sm">
+                  <FileText className="h-4 w-4 text-primary shrink-0" />
+                  <span className="flex-1 truncate">{d.name}</span>
+                  <button type="button" onClick={() => setDocs(docs.filter((_, j) => j !== i))} className="text-muted-foreground hover:text-destructive"><X className="h-4 w-4" /></button>
+                </div>
+              ))}
+              {Array.from({ length: uploadingDocs }).map((_, i) => (
+                <div key={`ud-${i}`} className="flex items-center gap-2 rounded-lg border border-border p-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Uploading…
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="pt-4 border-t border-border flex flex-wrap justify-end gap-2">
           <button type="button" onClick={() => navigate({ to: "/dashboard" })} className="btn-ghost">Cancel</button>
-          <button disabled={saving || uploading > 0} className="btn-primary btn-primary-hover">
-            {saving ? "Submitting..." : uploading > 0 ? "Uploading photos..." : "Submit for review"}
+          <button type="button" disabled={!!saving || uploading > 0} onClick={() => save("draft")} className="btn-ghost border border-border">
+            {saving === "draft" ? "Saving draft…" : "Save as draft"}
+          </button>
+          <button type="submit" disabled={!!saving || uploading > 0} className="btn-primary btn-primary-hover">
+            {saving === "submit" ? "Submitting..." : uploading > 0 ? "Uploading photos..." : "Submit for review"}
           </button>
         </div>
       </form>

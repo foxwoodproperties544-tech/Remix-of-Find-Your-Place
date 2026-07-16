@@ -3,7 +3,7 @@ import { properties as mockProps, formatKsh } from "@/lib/mock-data";
 import { fetchPropertyRowById, toProperty } from "@/lib/properties";
 import { coordsFor, osmEmbedUrl, osmLinkUrl } from "@/lib/kenya-locations";
 import { supabase } from "@/integrations/supabase/client";
-import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink, Calendar, User as UserIcon, AlertCircle } from "lucide-react";
+import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink, Calendar, User as UserIcon, AlertCircle, PlayCircle, FileText, Download } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -15,10 +15,14 @@ import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
     const mock = mockProps.find(x => x.id === params.id);
-    if (mock) return { p: mock, ownerId: null as string | null, propertyKey: params.id, ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null } };
+    if (mock) return { p: mock, ownerId: null as string | null, propertyKey: params.id, ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null }, videoUrl: null as string | null, documents: [] as Array<{ name: string; url: string }>, latOverride: null as number | null, lngOverride: null as number | null };
     const row = await fetchPropertyRowById(params.id);
     if (!row) throw notFound();
     const { data: profile } = await supabase.from("profiles").select("full_name, avatar_url, phone").eq("id", row.owner_id).maybeSingle();
+    const docsRaw = Array.isArray(row.documents) ? row.documents : [];
+    const documents = docsRaw
+      .filter((d: any) => d && typeof d === "object" && typeof d.url === "string")
+      .map((d: any) => ({ name: String(d.name ?? "Document"), url: String(d.url) }));
     return {
       p: toProperty(row),
       ownerId: row.owner_id,
@@ -26,6 +30,10 @@ export const Route = createFileRoute("/properties/$id")({
       ownerProfile: profile ?? null,
       contactPhone: row.contact_phone,
       contactWhatsapp: row.contact_whatsapp,
+      videoUrl: row.video_url ?? null,
+      documents,
+      latOverride: row.lat != null ? Number(row.lat) : null,
+      lngOverride: row.lng != null ? Number(row.lng) : null,
     };
   },
   head: ({ loaderData }) => ({
@@ -76,15 +84,39 @@ function normalizePhone(raw?: string | null): string | null {
   return "+" + only;
 }
 
+function toEmbed(url: string): string | null {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      const id = u.searchParams.get("v");
+      if (id) return `https://www.youtube.com/embed/${id}`;
+    }
+    if (host === "youtu.be") {
+      const id = u.pathname.slice(1);
+      if (id) return `https://www.youtube.com/embed/${id}`;
+    }
+    if (host === "vimeo.com") {
+      const id = u.pathname.split("/").filter(Boolean)[0];
+      if (id) return `https://player.vimeo.com/video/${id}`;
+    }
+    return null;
+  } catch { return null; }
+}
+
 function Detail() {
   const loaderData = Route.useLoaderData();
   const { p, ownerId, propertyKey, ownerProfile } = loaderData;
   const contactPhone = (loaderData as any).contactPhone as string | null | undefined;
   const contactWhatsapp = (loaderData as any).contactWhatsapp as string | null | undefined;
+  const videoUrl = loaderData.videoUrl;
+  const documents = (loaderData.documents ?? []) as Array<{ name: string; url: string }>;
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
   const [active, setActive] = useState(0);
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
-  const { lat, lng } = coordsFor(p.town, p.county);
+  const fallback = coordsFor(p.town, p.county);
+  const lat = loaderData.latOverride ?? fallback.lat;
+  const lng = loaderData.lngOverride ?? fallback.lng;
 
   useEffect(() => {
     trackRecentlyViewed(p.id);
@@ -185,6 +217,36 @@ function Detail() {
               ))}
             </div>
           </div>
+
+          {videoUrl && (
+            <div className="mt-8">
+              <h2 className="text-xl font-bold flex items-center gap-2"><PlayCircle className="h-5 w-5 text-primary" /> Video tour</h2>
+              <div className="mt-3 aspect-video rounded-2xl overflow-hidden border border-border bg-black">
+                {toEmbed(videoUrl) ? (
+                  <iframe src={toEmbed(videoUrl)!} title="Property video" className="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                ) : (
+                  <video src={videoUrl} controls className="h-full w-full" />
+                )}
+              </div>
+            </div>
+          )}
+
+          {documents.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-xl font-bold flex items-center gap-2"><FileText className="h-5 w-5 text-primary" /> Documents</h2>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {documents.map((d, i) => (
+                  <a key={i} href={d.url} target="_blank" rel="noreferrer" download
+                    className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 hover:border-primary/40 transition">
+                    <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary-soft text-primary shrink-0"><FileText className="h-5 w-5" /></span>
+                    <span className="flex-1 min-w-0 text-sm font-medium truncate">{d.name}</span>
+                    <Download className="h-4 w-4 text-muted-foreground shrink-0" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
 
           <div className="mt-8">
             <div className="flex items-center justify-between mb-3">

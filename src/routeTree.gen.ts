@@ -35,6 +35,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
+import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 
 const PropertiesRoute = PropertiesRouteImport.update({
   id: '/properties',
@@ -169,6 +170,12 @@ const AuthenticatedDashboardInquiriesRoute =
     path: '/dashboard/inquiries',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardEditIdRoute =
+  AuthenticatedDashboardEditIdRouteImport.update({
+    id: '/dashboard/edit/$id',
+    path: '/dashboard/edit/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -196,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -223,6 +231,7 @@ export interface FileRoutesByTo {
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -252,6 +261,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
     | '/dashboard/inquiries'
     | '/dashboard/new'
     | '/dashboard/'
+    | '/dashboard/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '/dashboard/inquiries'
     | '/dashboard/new'
     | '/dashboard'
+    | '/dashboard/edit/$id'
   id:
     | '__root__'
     | '/'
@@ -336,6 +348,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/new'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/edit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -544,6 +557,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardInquiriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/edit/$id': {
+      id: '/_authenticated/dashboard/edit/$id'
+      path: '/dashboard/edit/$id'
+      fullPath: '/dashboard/edit/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardEditIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -554,6 +574,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -563,6 +584,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

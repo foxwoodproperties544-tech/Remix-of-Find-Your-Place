@@ -24,6 +24,11 @@ export interface DbPropertyRow {
   status: string;
   featured: boolean;
   created_at: string;
+  video_url?: string | null;
+  documents?: unknown;
+  lat?: number | null;
+  lng?: number | null;
+  expires_at?: string | null;
 }
 
 const PLACEHOLDER = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80";

@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchMyProperties } from "@/lib/properties";
 import { formatKsh } from "@/lib/mock-data";
-import { PlusCircle, Trash2, ExternalLink, Home, CheckCircle2, Clock, XCircle, Eye, Heart, TrendingUp } from "lucide-react";
+import { PlusCircle, Trash2, ExternalLink, Home, CheckCircle2, Clock, XCircle, Eye, Heart, TrendingUp, Pencil, RefreshCw, FileEdit } from "lucide-react";
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
@@ -68,6 +68,15 @@ function Dashboard() {
       if (error) throw error;
     },
     onSuccess: () => { toast.success("Listing deleted"); qc.invalidateQueries({ queryKey: ["my-properties"] }); qc.invalidateQueries({ queryKey: ["my-insights"] }); },
+    onError: (e: any) => toast.error(e.message),
+  });
+
+  const renew = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("properties").update({ status: "pending", published_at: null }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Listing sent for re-review"); qc.invalidateQueries({ queryKey: ["my-properties"] }); },
     onError: (e: any) => toast.error(e.message),
   });
 
@@ -180,6 +189,10 @@ function Dashboard() {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <Link to="/properties/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="View"><ExternalLink className="h-4 w-4" /></Link>
+                    <Link to="/dashboard/edit/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Edit"><Pencil className="h-4 w-4" /></Link>
+                    {(p.status === "rejected" || p.status === "draft") && (
+                      <button onClick={() => renew.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-primary" title="Submit for review"><RefreshCw className="h-4 w-4" /></button>
+                    )}
                     <button onClick={() => confirm("Delete this listing?") && del.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </div>
