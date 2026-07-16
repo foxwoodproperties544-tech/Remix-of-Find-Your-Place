@@ -35,6 +35,8 @@
   --color-ring: var(--ring);
   --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -8px rgb(15 23 42 / 0.08);
   --shadow-glow: 0 20px 60px -20px color-mix(in oklab, var(--primary) 45%, transparent);
+  --shadow-lift: 0 30px 60px -30px rgb(15 23 42 / 0.25), 0 12px 24px -12px rgb(15 23 42 / 0.1);
+  --gradient-hero: linear-gradient(135deg, color-mix(in oklab, var(--primary) 92%, black) 0%, color-mix(in oklab, var(--primary) 60%, black) 55%, color-mix(in oklab, var(--secondary) 55%, black) 100%);
 }
 
 :root {
