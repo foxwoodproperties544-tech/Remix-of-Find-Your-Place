@@ -75,29 +75,22 @@ function Compare() {
           table { page-break-inside: avoid; }
         }
       `}</style>
-      <section className="relative overflow-hidden border-b border-border no-print">
-        <div className="absolute inset-0">
-          <img src={heroTools} alt="" className="h-full w-full object-cover" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, color-mix(in oklab, var(--primary) 92%, black) 0%, color-mix(in oklab, var(--primary) 70%, black) 55%, color-mix(in oklab, var(--secondary) 55%, black) 100%)", opacity: 0.88 }} />
-          <div className="absolute inset-0 hero-grid-bg opacity-30" />
-        </div>
-        <div className="relative container-page py-14 md:py-20 flex items-start justify-between gap-4 flex-wrap text-white">
-          <div>
-            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider rounded-full bg-white/15 backdrop-blur ring-1 ring-white/25 px-3 py-1"><GitCompare className="h-3.5 w-3.5" /> Compare</div>
-            <h1 className="text-3xl md:text-5xl font-extrabold mt-4">Property Comparison</h1>
-            <p className="mt-3 text-white/85 max-w-2xl">
-              {isShared ? "Shared comparison — read only." : `Compare up to ${max} properties side-by-side. ${items.length}/${max} selected.`}
-            </p>
-          </div>
-          {items.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+      <div className="no-print">
+        <PageHero
+          image={heroTools}
+          size="sm"
+          eyebrow={<><GitCompare className="h-3.5 w-3.5" /> Compare</>}
+          title="Property Comparison"
+          subtitle={isShared ? "Shared comparison — read only." : `Compare up to ${max} properties side-by-side. ${items.length}/${max} selected.`}
+          actions={items.length > 0 ? (
+            <>
               <button onClick={copyShareLink} className="btn-ghost !py-2 !px-4 text-sm !bg-white/10 !border-white/30 !text-white hover:!bg-white/20 backdrop-blur"><Share2 className="h-4 w-4" /> Share link</button>
               <button onClick={printPdf} className="btn-secondary !py-2 !px-4 text-sm"><Printer className="h-4 w-4" /> Export as PDF</button>
               {!isShared && <button onClick={clear} className="btn-ghost !py-2 !px-4 text-sm !bg-white/10 !border-white/30 !text-white hover:!bg-white/20 backdrop-blur">Clear all</button>}
-            </div>
-          )}
-        </div>
-      </section>
+            </>
+          ) : undefined}
+        />
+      </div>
 
       <section className="container-page py-10 md:py-14 compare-shell">
         <div className="hidden print:block mb-6">
