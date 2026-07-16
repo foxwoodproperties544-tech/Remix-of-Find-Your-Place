@@ -40,6 +40,7 @@ function List() {
   const [saving, setSaving] = useState(false);
   const [savingName, setSavingName] = useState("");
   const [showSave, setShowSave] = useState(false);
+  const [sortBy, setSortBy] = useState<"newest" | "price-asc" | "price-desc" | "beds-desc">("newest");
 
   const { data: dbProps } = useQuery({ queryKey: ["properties"], queryFn: fetchPublishedProperties });
   const all = [...(dbProps ?? []), ...mockProps];
