@@ -4,6 +4,7 @@ import { useState } from "react";
 import hero from "@/assets/hero.jpg";
 import { properties, testimonials, categoryCards, locations, counties } from "@/lib/mock-data";
 import { PropertyCard } from "@/components/site/PropertyCard";
+import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -192,6 +193,10 @@ function Index() {
           </div>
         </div>
       </section>
+
+      <RecentlyViewedRail />
+
+
 
       {/* TESTIMONIALS */}
       <section className="container-page py-16 md:py-24">

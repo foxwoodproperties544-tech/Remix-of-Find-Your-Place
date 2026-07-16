@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
+import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
+import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
@@ -84,16 +86,16 @@ function Detail() {
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
   const { lat, lng } = coordsFor(p.town, p.county);
 
-  // Track view once per session per property (real DB rows only)
   useEffect(() => {
-    if (!ownerId) return; // skip for mock listings
+    trackRecentlyViewed(p.id);
+    if (!ownerId) return; // skip DB view tracking for mock listings
     const key = `viewed:${propertyKey}`;
     if (sessionStorage.getItem(key)) return;
     sessionStorage.setItem(key, "1");
     supabase.auth.getUser().then(({ data }) => {
       supabase.from("property_views").insert({ property_key: propertyKey, viewer_user_id: data.user?.id ?? null }).then(() => {});
     });
-  }, [propertyKey, ownerId]);
+  }, [p.id, propertyKey, ownerId]);
 
   return (
     <>
@@ -218,6 +220,8 @@ function Detail() {
           </div>
         </section>
       )}
+
+      <RecentlyViewedRail excludeId={p.id} />
 
       {/* Mobile sticky CTA */}
       <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} />

@@ -22,6 +22,8 @@ export interface FiltersState {
   maxPrice: string;
   minBeds: string;
   minBaths: string;
+  minSize: string;
+  maxSize: string;
   features: Set<string>;
   nearby: Set<string>;
   status: string;
@@ -120,6 +122,14 @@ export function FiltersSidebar({ state, townOptions, onChange, onClear }: Filter
             </select>
           </div>
         </div>
+      </Section>
+
+      <Section title="Size (sq ft or acre)">
+        <div className="grid grid-cols-2 gap-2">
+          <input type="number" min="0" value={state.minSize} onChange={(e) => onChange({ minSize: e.target.value })} placeholder="Min" className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+          <input type="number" min="0" value={state.maxSize} onChange={(e) => onChange({ maxSize: e.target.value })} placeholder="Max" className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+        </div>
+        <p className="mt-2 text-[11px] text-muted-foreground">Numeric match on the listing's size value (sqft; acres auto-converted).</p>
       </Section>
 
       {FEATURE_GROUPS.map((g) => (

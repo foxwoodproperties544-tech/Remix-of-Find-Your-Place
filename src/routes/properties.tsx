@@ -25,6 +25,8 @@ const searchSchema = z.object({
   minPrice: z.coerce.number().optional(),
   maxPrice: z.coerce.number().optional(),
   minBeds: z.coerce.number().optional(),
+  minSize: z.coerce.number().optional(),
+  maxSize: z.coerce.number().optional(),
   favs: z.coerce.boolean().optional(),
 });
 
@@ -66,6 +68,8 @@ function List() {
     maxPrice: params.maxPrice?.toString() ?? "",
     minBeds: params.minBeds?.toString() ?? "",
     minBaths: "",
+    minSize: params.minSize?.toString() ?? "",
+    maxSize: params.maxSize?.toString() ?? "",
     features: new Set<string>(),
     nearby: new Set<string>(),
     status: "",
@@ -83,7 +87,7 @@ function List() {
 
   function patch(p: Partial<FiltersState>) { setState((s) => ({ ...s, ...p })); }
   function clearAll() {
-    setState({ category: "", type: "", county: "", town: "", minPrice: "", maxPrice: "", minBeds: "", minBaths: "", features: new Set(), nearby: new Set(), status: "", listingType: "", purpose: "" });
+    setState({ category: "", type: "", county: "", town: "", minPrice: "", maxPrice: "", minBeds: "", minBaths: "", minSize: "", maxSize: "", features: new Set(), nearby: new Set(), status: "", listingType: "", purpose: "" });
     setQ(""); setFavsOnly(false);
   }
 
@@ -106,6 +110,12 @@ function List() {
     if (state.maxPrice && p.price > Number(state.maxPrice)) return false;
     if (state.minBeds && p.bedrooms < Number(state.minBeds)) return false;
     if (state.minBaths && p.bathrooms < Number(state.minBaths)) return false;
+    if (state.minSize || state.maxSize) {
+      const sqft = parseSizeToSqft(p.size);
+      if (sqft == null) return false;
+      if (state.minSize && sqft < Number(state.minSize)) return false;
+      if (state.maxSize && sqft > Number(state.maxSize)) return false;
+    }
     if (state.features.size) {
       for (const f of state.features) if (!p.features.includes(f)) return false;
     }
@@ -133,6 +143,7 @@ function List() {
   const activeCount =
     (state.category ? 1 : 0) + (state.type ? 1 : 0) + (state.county ? 1 : 0) + (state.town ? 1 : 0) +
     (state.minPrice ? 1 : 0) + (state.maxPrice ? 1 : 0) + (state.minBeds ? 1 : 0) + (state.minBaths ? 1 : 0) +
+    (state.minSize ? 1 : 0) + (state.maxSize ? 1 : 0) +
     state.features.size + state.nearby.size +
     (state.status ? 1 : 0) + (state.listingType ? 1 : 0) + (state.purpose ? 1 : 0) +
     (favsOnly ? 1 : 0) + (q ? 1 : 0);
@@ -147,6 +158,8 @@ function List() {
     if (state.minPrice) f.minPrice = Number(state.minPrice);
     if (state.maxPrice) f.maxPrice = Number(state.maxPrice);
     if (state.minBeds) f.minBeds = Number(state.minBeds);
+    if (state.minSize) f.minSize = Number(state.minSize);
+    if (state.maxSize) f.maxSize = Number(state.maxSize);
     if (state.features.size) f.features = [...state.features];
     if (state.nearby.size) f.nearby = [...state.nearby];
     if (state.status) f.status = state.status;
@@ -241,6 +254,8 @@ function List() {
                 {state.maxPrice && <Chip label={`Max KSh ${state.maxPrice}`} onRemove={() => patch({ maxPrice: "" })} />}
                 {state.minBeds && <Chip label={`${state.minBeds}+ bed`} onRemove={() => patch({ minBeds: "" })} />}
                 {state.minBaths && <Chip label={`${state.minBaths}+ bath`} onRemove={() => patch({ minBaths: "" })} />}
+                {state.minSize && <Chip label={`Min ${state.minSize} sqft`} onRemove={() => patch({ minSize: "" })} />}
+                {state.maxSize && <Chip label={`Max ${state.maxSize} sqft`} onRemove={() => patch({ maxSize: "" })} />}
                 {[...state.features].map((f) => <Chip key={f} label={f} onRemove={() => { const s = new Set(state.features); s.delete(f); patch({ features: s }); }} />)}
                 {[...state.nearby].map((a) => <Chip key={a} label={`Near: ${a}`} onRemove={() => { const s = new Set(state.nearby); s.delete(a); patch({ nearby: s }); }} />)}
                 {state.status && <Chip label={state.status} onRemove={() => patch({ status: "" })} />}
@@ -337,4 +352,18 @@ function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
       </button>
     </span>
   );
+}
+
+function parseSizeToSqft(size?: string): number | null {
+  if (!size) return null;
+  const s = size.toLowerCase().replace(/,/g, "");
+  const numMatch = s.match(/([\d.]+)(?:\s*\/\s*([\d.]+))?/);
+  if (!numMatch) return null;
+  let n = parseFloat(numMatch[1]);
+  if (numMatch[2]) n = n / parseFloat(numMatch[2]);
+  if (!isFinite(n)) return null;
+  if (s.includes("acre")) return Math.round(n * 43560);
+  if (s.includes("hectare") || s.includes("ha")) return Math.round(n * 107639);
+  if (s.includes("sqm") || s.includes("sq m") || s.includes("m²") || s.includes("m2")) return Math.round(n * 10.7639);
+  return Math.round(n);
 }
