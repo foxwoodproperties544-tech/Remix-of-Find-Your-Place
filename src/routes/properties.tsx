@@ -226,3 +226,15 @@ function summarize(f: Record<string, any>) {
   if (f.minBeds) parts.push(`${f.minBeds}+ bed`);
   return parts.join(" · ");
 }
+
+function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-primary-soft text-primary text-xs font-semibold pl-3 pr-1 py-1 border border-primary/20">
+      {label}
+      <button onClick={onRemove} aria-label={`Remove ${label}`} className="grid h-5 w-5 place-items-center rounded-full hover:bg-primary/20 transition-colors">
+        <X className="h-3 w-3" />
+      </button>
+    </span>
+  );
+}
+
