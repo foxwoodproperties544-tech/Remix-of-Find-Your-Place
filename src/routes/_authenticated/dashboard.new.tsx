@@ -199,6 +199,7 @@ function NewListing() {
                 </optgroup>
               ))}
             </select>
+          </div>
           <div>
             <label className={label}>County *</label>
             <select value={form.county} onChange={(e) => upd("county", e.target.value)} className={input}>
