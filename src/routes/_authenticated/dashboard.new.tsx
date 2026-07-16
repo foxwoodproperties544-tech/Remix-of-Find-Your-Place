@@ -349,10 +349,58 @@ function NewListing() {
           <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1"><ImageIcon className="h-3 w-3" /> The first photo becomes the cover image.</div>
         </div>
 
-        <div className="pt-4 border-t border-border flex justify-end gap-2">
+        <div className="grid md:grid-cols-3 gap-4">
+          <div className="md:col-span-3">
+            <label className={label}>Video URL (YouTube, Vimeo, or MP4)</label>
+            <input value={form.video_url} onChange={(e) => upd("video_url", e.target.value)} className={input} placeholder="https://youtu.be/..." />
+          </div>
+          <div>
+            <label className={label}><MapPin className="inline h-3 w-3" /> Latitude</label>
+            <input value={form.lat} onChange={(e) => upd("lat", e.target.value)} className={input} placeholder="-1.2921" />
+          </div>
+          <div>
+            <label className={label}><MapPin className="inline h-3 w-3" /> Longitude</label>
+            <input value={form.lng} onChange={(e) => upd("lng", e.target.value)} className={input} placeholder="36.8219" />
+          </div>
+          <div className="flex items-end">
+            <p className="text-xs text-muted-foreground">Optional. Overrides the auto-map position for this listing.</p>
+          </div>
+        </div>
+
+        <div>
+          <label className={label}>Documents (PDF, floor plans, title deed scans)</label>
+          <label className="mt-2 flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border p-6 cursor-pointer text-center hover:bg-muted/50">
+            <input type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" className="hidden"
+              onChange={(e) => { const files = Array.from(e.target.files ?? []); if (files.length) uploadDocs(files); e.target.value = ""; }} />
+            <FileText className="h-6 w-6 text-primary" />
+            <div className="text-sm font-semibold">Attach documents</div>
+            <div className="text-xs text-muted-foreground">Up to 20 MB each</div>
+          </label>
+          {(docs.length > 0 || uploadingDocs > 0) && (
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {docs.map((d, i) => (
+                <div key={i} className="flex items-center gap-2 rounded-lg border border-border p-2 text-sm">
+                  <FileText className="h-4 w-4 text-primary shrink-0" />
+                  <span className="flex-1 truncate">{d.name}</span>
+                  <button type="button" onClick={() => setDocs(docs.filter((_, j) => j !== i))} className="text-muted-foreground hover:text-destructive"><X className="h-4 w-4" /></button>
+                </div>
+              ))}
+              {Array.from({ length: uploadingDocs }).map((_, i) => (
+                <div key={`ud-${i}`} className="flex items-center gap-2 rounded-lg border border-border p-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Uploading…
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="pt-4 border-t border-border flex flex-wrap justify-end gap-2">
           <button type="button" onClick={() => navigate({ to: "/dashboard" })} className="btn-ghost">Cancel</button>
-          <button disabled={saving || uploading > 0} className="btn-primary btn-primary-hover">
-            {saving ? "Submitting..." : uploading > 0 ? "Uploading photos..." : "Submit for review"}
+          <button type="button" disabled={!!saving || uploading > 0} onClick={() => save("draft")} className="btn-ghost border border-border">
+            {saving === "draft" ? "Saving draft…" : "Save as draft"}
+          </button>
+          <button type="submit" disabled={!!saving || uploading > 0} className="btn-primary btn-primary-hover">
+            {saving === "submit" ? "Submitting..." : uploading > 0 ? "Uploading photos..." : "Submit for review"}
           </button>
         </div>
       </form>
