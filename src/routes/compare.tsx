@@ -7,6 +7,7 @@ import { GitCompare, X, Bed, Bath, Maximize, MapPin, Check, Minus, Share2, Print
 import { z } from "zod";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import heroTools from "@/assets/hero-tools.jpg";
 
 const searchSchema = z.object({ ids: z.string().optional() });
 
