@@ -15,10 +15,14 @@ import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
     const mock = mockProps.find(x => x.id === params.id);
-    if (mock) return { p: mock, ownerId: null as string | null, propertyKey: params.id, ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null } };
+    if (mock) return { p: mock, ownerId: null as string | null, propertyKey: params.id, ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null }, videoUrl: null as string | null, documents: [] as Array<{ name: string; url: string }>, latOverride: null as number | null, lngOverride: null as number | null };
     const row = await fetchPropertyRowById(params.id);
     if (!row) throw notFound();
     const { data: profile } = await supabase.from("profiles").select("full_name, avatar_url, phone").eq("id", row.owner_id).maybeSingle();
+    const docsRaw = Array.isArray(row.documents) ? row.documents : [];
+    const documents = docsRaw
+      .filter((d: any) => d && typeof d === "object" && typeof d.url === "string")
+      .map((d: any) => ({ name: String(d.name ?? "Document"), url: String(d.url) }));
     return {
       p: toProperty(row),
       ownerId: row.owner_id,
@@ -26,6 +30,10 @@ export const Route = createFileRoute("/properties/$id")({
       ownerProfile: profile ?? null,
       contactPhone: row.contact_phone,
       contactWhatsapp: row.contact_whatsapp,
+      videoUrl: row.video_url ?? null,
+      documents,
+      latOverride: row.lat != null ? Number(row.lat) : null,
+      lngOverride: row.lng != null ? Number(row.lng) : null,
     };
   },
   head: ({ loaderData }) => ({
