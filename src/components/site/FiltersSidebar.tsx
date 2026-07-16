@@ -22,6 +22,8 @@ export interface FiltersState {
   maxPrice: string;
   minBeds: string;
   minBaths: string;
+  minSize: string;
+  maxSize: string;
   features: Set<string>;
   nearby: Set<string>;
   status: string;
