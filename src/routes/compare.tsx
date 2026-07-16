@@ -8,15 +8,29 @@ import { z } from "zod";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import heroTools from "@/assets/hero-tools.jpg";
+import { PageHero } from "@/components/site/PageHero";
+import { absoluteUrl } from "@/lib/site-url";
 
 const searchSchema = z.object({ ids: z.string().optional() });
+
+const OG_IMAGE = absoluteUrl(heroTools);
+const TITLE = "Compare Properties — Foxwood Properties";
+const DESC = "Compare properties side-by-side: price, size, features and amenities.";
 
 export const Route = createFileRoute("/compare")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Compare Properties — Foxwood Properties" },
-      { name: "description", content: "Compare properties side-by-side: price, size, features and amenities." },
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
   component: Compare,

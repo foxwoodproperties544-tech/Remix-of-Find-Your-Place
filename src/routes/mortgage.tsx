@@ -3,16 +3,26 @@ import { useMemo, useState } from "react";
 import { Calculator, TrendingUp, Wallet, Percent } from "lucide-react";
 import { formatKsh } from "@/lib/mock-data";
 import heroTools from "@/assets/hero-tools.jpg";
+import { PageHero } from "@/components/site/PageHero";
+import { absoluteUrl } from "@/lib/site-url";
+
+const OG_IMAGE = absoluteUrl(heroTools);
+const TITLE = "Mortgage Calculator — Foxwood Properties";
+const DESC = "Estimate your monthly home loan repayments in Kenya. Free mortgage calculator by Foxwood Properties.";
 
 export const Route = createFileRoute("/mortgage")({
   head: () => ({
     meta: [
-      { title: "Mortgage Calculator — Foxwood Properties" },
-      { name: "description", content: "Estimate your monthly home loan repayments in Kenya. Free mortgage calculator by Foxwood Properties." },
-      { property: "og:title", content: "Mortgage Calculator — Foxwood Properties" },
-      { property: "og:description", content: "Estimate your monthly home loan repayments in Kenya." },
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
   component: Mortgage,
@@ -35,18 +45,13 @@ function Mortgage() {
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0">
-          <img src={heroTools} alt="" className="h-full w-full object-cover" />
-          <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, color-mix(in oklab, var(--primary) 92%, black) 0%, color-mix(in oklab, var(--primary) 70%, black) 55%, color-mix(in oklab, var(--secondary) 55%, black) 100%)", opacity: 0.88 }} />
-          <div className="absolute inset-0 hero-grid-bg opacity-30" />
-        </div>
-        <div className="relative container-page py-14 md:py-20 text-white">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider rounded-full bg-white/15 backdrop-blur ring-1 ring-white/25 px-3 py-1"><Calculator className="h-3.5 w-3.5" /> Financial Tools</div>
-          <h1 className="text-3xl md:text-5xl font-extrabold mt-4">Mortgage Calculator</h1>
-          <p className="mt-3 text-white/85 max-w-2xl">Estimate your monthly repayments and total cost. Adjust the sliders to see how price, deposit, interest rate and term affect your loan.</p>
-        </div>
-      </section>
+      <PageHero
+        image={heroTools}
+        size="sm"
+        eyebrow={<><Calculator className="h-3.5 w-3.5" /> Financial Tools</>}
+        title="Mortgage Calculator"
+        subtitle="Estimate your monthly repayments and total cost. Adjust the sliders to see how price, deposit, interest rate and term affect your loan."
+      />
 
       <section className="container-page py-10 md:py-14 grid gap-8 lg:grid-cols-[1fr_1fr]">
         <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-soft space-y-6">
