@@ -110,6 +110,12 @@ function List() {
     if (state.maxPrice && p.price > Number(state.maxPrice)) return false;
     if (state.minBeds && p.bedrooms < Number(state.minBeds)) return false;
     if (state.minBaths && p.bathrooms < Number(state.minBaths)) return false;
+    if (state.minSize || state.maxSize) {
+      const sqft = parseSizeToSqft(p.size);
+      if (sqft == null) return false;
+      if (state.minSize && sqft < Number(state.minSize)) return false;
+      if (state.maxSize && sqft > Number(state.maxSize)) return false;
+    }
     if (state.features.size) {
       for (const f of state.features) if (!p.features.includes(f)) return false;
     }
