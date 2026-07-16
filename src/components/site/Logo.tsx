@@ -1,4 +1,5 @@
-import logo from "@/assets/foxwood-logo.jpg";
+import logoAsset from "@/assets/foxwood-logo.png.asset.json";
+const logo = logoAsset.url;
 
 const ALT = "Foxwood Properties — Your gateway to prime deals";
 
