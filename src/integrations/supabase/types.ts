@@ -80,30 +80,78 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
+          company_name: string | null
           created_at: string
           full_name: string | null
           id: string
           phone: string | null
+          role_primary: string | null
           updated_at: string
+          verified: boolean
+          whatsapp: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
+          company_name?: string | null
           created_at?: string
           full_name?: string | null
           id: string
           phone?: string | null
+          role_primary?: string | null
           updated_at?: string
+          verified?: boolean
+          whatsapp?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
+          company_name?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
           phone?: string | null
+          role_primary?: string | null
           updated_at?: string
+          verified?: boolean
+          whatsapp?: string | null
         }
         Relationships: []
       }
@@ -111,6 +159,7 @@ export type Database = {
         Row: {
           amenities: string[]
           area: string | null
+          availability_status: string
           bathrooms: number
           bedrooms: number
           category: string
@@ -119,23 +168,34 @@ export type Database = {
           county: string
           created_at: string
           description: string
+          documents: Json
+          expires_at: string | null
           featured: boolean
           features: string[]
           id: string
           images: string[]
+          lat: number | null
+          listing_type: string | null
+          lng: number | null
           owner_id: string
           price: number
+          price_previous: number | null
           price_suffix: string | null
           property_type: string
+          published_at: string | null
+          purpose: string | null
           size: string | null
+          slug: string | null
           status: string
           title: string
           town: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
           amenities?: string[]
           area?: string | null
+          availability_status?: string
           bathrooms?: number
           bedrooms?: number
           category: string
@@ -144,23 +204,34 @@ export type Database = {
           county: string
           created_at?: string
           description?: string
+          documents?: Json
+          expires_at?: string | null
           featured?: boolean
           features?: string[]
           id?: string
           images?: string[]
+          lat?: number | null
+          listing_type?: string | null
+          lng?: number | null
           owner_id: string
           price: number
+          price_previous?: number | null
           price_suffix?: string | null
           property_type: string
+          published_at?: string | null
+          purpose?: string | null
           size?: string | null
+          slug?: string | null
           status?: string
           title: string
           town: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
           amenities?: string[]
           area?: string | null
+          availability_status?: string
           bathrooms?: number
           bedrooms?: number
           category?: string
@@ -169,19 +240,29 @@ export type Database = {
           county?: string
           created_at?: string
           description?: string
+          documents?: Json
+          expires_at?: string | null
           featured?: boolean
           features?: string[]
           id?: string
           images?: string[]
+          lat?: number | null
+          listing_type?: string | null
+          lng?: number | null
           owner_id?: string
           price?: number
+          price_previous?: number | null
           price_suffix?: string | null
           property_type?: string
+          published_at?: string | null
+          purpose?: string | null
           size?: string | null
+          slug?: string | null
           status?: string
           title?: string
           town?: string
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -203,6 +284,42 @@ export type Database = {
           id?: string
           property_key?: string
           viewer_user_id?: string | null
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+          status: string
+          target_id: string
+          target_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          status?: string
+          target_id: string
+          target_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          status?: string
+          target_id?: string
+          target_type?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -257,6 +374,56 @@ export type Database = {
         }
         Relationships: []
       }
+      viewings: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          property_id: string
+          requested_at: string
+          requester_email: string
+          requester_id: string | null
+          requester_name: string
+          requester_phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_id: string
+          requested_at: string
+          requester_email: string
+          requester_id?: string | null
+          requester_name: string
+          requester_phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_id?: string
+          requested_at?: string
+          requester_email?: string
+          requester_id?: string | null
+          requester_name?: string
+          requester_phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "viewings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -272,7 +439,14 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "agent" | "user"
+      app_role:
+        | "admin"
+        | "agent"
+        | "user"
+        | "owner"
+        | "buyer"
+        | "tenant"
+        | "developer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -400,7 +574,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "agent", "user"],
+      app_role: [
+        "admin",
+        "agent",
+        "user",
+        "owner",
+        "buyer",
+        "tenant",
+        "developer",
+      ],
     },
   },
 } as const
