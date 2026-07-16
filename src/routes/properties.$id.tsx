@@ -97,6 +97,20 @@ function Detail() {
 
   return (
     <>
+      <div
+        className="relative border-b border-border overflow-hidden"
+        aria-hidden="true"
+        style={{
+          background: `linear-gradient(120deg, color-mix(in oklab, var(--primary) 92%, black) 0%, color-mix(in oklab, var(--primary) 70%, black) 55%, color-mix(in oklab, var(--secondary) 55%, black) 100%)`,
+        }}
+      >
+        <div className="absolute inset-0 hero-grid-bg opacity-30" />
+        <div className="relative container-page py-6 md:py-8 text-white">
+          <div className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white/85">{p.category} · {p.type}</div>
+          <h1 className="mt-1 text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight max-w-4xl">{p.title}</h1>
+          <div className="mt-1 flex items-center gap-1 text-xs sm:text-sm text-white/85"><MapPin className="h-3.5 w-3.5" /> {p.area}, {p.town}, {p.county}</div>
+        </div>
+      </div>
       <section className="container-page pt-6">
         <Link to="/properties" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="h-4 w-4" /> All properties</Link>
       </section>
