@@ -221,6 +221,8 @@ function Detail() {
         </section>
       )}
 
+      <RecentlyViewedRail excludeId={p.id} />
+
       {/* Mobile sticky CTA */}
       <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} />
     </>
