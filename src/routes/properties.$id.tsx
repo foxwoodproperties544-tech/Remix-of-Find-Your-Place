@@ -3,7 +3,7 @@ import { properties as mockProps, formatKsh } from "@/lib/mock-data";
 import { fetchPropertyRowById, toProperty } from "@/lib/properties";
 import { coordsFor, osmEmbedUrl, osmLinkUrl } from "@/lib/kenya-locations";
 import { supabase } from "@/integrations/supabase/client";
-import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink, Calendar, User as UserIcon, AlertCircle } from "lucide-react";
+import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink, Calendar, User as UserIcon, AlertCircle, PlayCircle, FileText, Download } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { useEffect, useState } from "react";
 import { z } from "zod";
