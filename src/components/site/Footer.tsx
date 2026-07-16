@@ -29,9 +29,17 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="font-semibold mb-3 text-sm">Categories</h4>
+          <h4 className="font-semibold mb-3 text-sm">Services</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li>Land & Plots</li><li>Houses</li><li>Apartments</li><li>Commercial</li><li>Airbnbs</li>
+            <li><Link to="/services/buy" className="hover:text-primary">Buy Property</Link></li>
+            <li><Link to="/services/sell" className="hover:text-primary">Sell Property</Link></li>
+            <li><Link to="/services/rent" className="hover:text-primary">Rent Property</Link></li>
+            <li><Link to="/services/lease" className="hover:text-primary">Lease Property</Link></li>
+            <li><Link to="/services/list" className="hover:text-primary">List Your Property</Link></li>
+            <li><Link to="/services/valuation" className="hover:text-primary">Property Valuation</Link></li>
+            <li><Link to="/services/marketing" className="hover:text-primary">Property Marketing</Link></li>
+            <li><Link to="/services/management" className="hover:text-primary">Property Management</Link></li>
+            <li><Link to="/services/investment" className="hover:text-primary">Investment Advice</Link></li>
           </ul>
         </div>
         <div>
