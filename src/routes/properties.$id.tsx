@@ -3,9 +3,9 @@ import { properties as mockProps, formatKsh } from "@/lib/mock-data";
 import { fetchPropertyRowById, toProperty } from "@/lib/properties";
 import { coordsFor, osmEmbedUrl, osmLinkUrl } from "@/lib/kenya-locations";
 import { supabase } from "@/integrations/supabase/client";
-import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink, Calendar, User as UserIcon } from "lucide-react";
+import { Bed, Bath, Maximize, MapPin, Phone, MessageCircle, Share2, Check, ArrowLeft, ExternalLink, Calendar, User as UserIcon, AlertCircle } from "lucide-react";
 import { PropertyCard } from "@/components/site/PropertyCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
@@ -17,7 +17,14 @@ export const Route = createFileRoute("/properties/$id")({
     const row = await fetchPropertyRowById(params.id);
     if (!row) throw notFound();
     const { data: profile } = await supabase.from("profiles").select("full_name, avatar_url, phone").eq("id", row.owner_id).maybeSingle();
-    return { p: toProperty(row), ownerId: row.owner_id, propertyKey: row.id, ownerProfile: profile ?? null };
+    return {
+      p: toProperty(row),
+      ownerId: row.owner_id,
+      propertyKey: row.id,
+      ownerProfile: profile ?? null,
+      contactPhone: row.contact_phone,
+      contactWhatsapp: row.contact_whatsapp,
+    };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
@@ -55,12 +62,38 @@ const inquirySchema = z.object({
   message: z.string().trim().min(5, "Message is too short").max(1000),
 });
 
+// Kenyan phone: accepts +2547XXXXXXXX, 07XXXXXXXX, 01XXXXXXXX, or generic 9-15 digits.
+function normalizePhone(raw?: string | null): string | null {
+  if (!raw) return null;
+  const digits = raw.replace(/[^\d+]/g, "");
+  const only = digits.replace(/\D/g, "");
+  if (only.length < 9 || only.length > 15) return null;
+  if (digits.startsWith("+")) return digits;
+  if (only.startsWith("0")) return "+254" + only.slice(1);
+  if (only.startsWith("254")) return "+" + only;
+  return "+" + only;
+}
+
 function Detail() {
-  const { p, ownerId, propertyKey, ownerProfile } = Route.useLoaderData();
+  const loaderData = Route.useLoaderData();
+  const { p, ownerId, propertyKey, ownerProfile } = loaderData;
+  const contactPhone = (loaderData as any).contactPhone as string | null | undefined;
+  const contactWhatsapp = (loaderData as any).contactWhatsapp as string | null | undefined;
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
   const [active, setActive] = useState(0);
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
   const { lat, lng } = coordsFor(p.town, p.county);
+
+  // Track view once per session per property (real DB rows only)
+  useEffect(() => {
+    if (!ownerId) return; // skip for mock listings
+    const key = `viewed:${propertyKey}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    supabase.auth.getUser().then(({ data }) => {
+      supabase.from("property_views").insert({ property_key: propertyKey, viewer_user_id: data.user?.id ?? null }).then(() => {});
+    });
+  }, [propertyKey, ownerId]);
 
   return (
     <>
@@ -158,7 +191,7 @@ function Detail() {
         </div>
 
         <aside className="lg:sticky lg:top-24 h-fit space-y-4">
-          <AgentCard ownerId={ownerId} profile={ownerProfile} title={p.title} />
+          <AgentCard ownerId={ownerId} profile={ownerProfile} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} />
           <InquiryForm propertyKey={propertyKey} ownerId={ownerId} propertyTitle={p.title} />
         </aside>
       </section>
@@ -173,33 +206,57 @@ function Detail() {
       )}
 
       {/* Mobile sticky CTA */}
-      <div className="lg:hidden sticky bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-lift">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 min-w-0">
-            <div className="text-xs text-muted-foreground truncate">{p.area}, {p.town}</div>
-            <div className="text-base font-extrabold text-primary truncate">{formatKsh(p.price)}<span className="text-xs text-muted-foreground">{p.priceSuffix ?? ""}</span></div>
-          </div>
-          <a href="tel:+254700000000" aria-label="Call agent" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground shadow-soft"><Phone className="h-4 w-4" /></a>
-          <a href="https://wa.me/254700000000" target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !py-2.5 !px-4 text-sm"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
-        </div>
-      </div>
+      <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} />
     </>
   );
 }
 
+function MobileCta({ price, priceSuffix, town, area, title, contactPhone, contactWhatsapp, profilePhone }:
+  { price: number; priceSuffix?: string; town: string; area: string; title: string; contactPhone: string | null; contactWhatsapp: string | null; profilePhone: string | null }) {
+  const phone = normalizePhone(contactPhone) ?? normalizePhone(profilePhone);
+  const wa = normalizePhone(contactWhatsapp) ?? phone;
+  const scrollToInquiry = () => document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  return (
+    <div className="lg:hidden sticky bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-lift">
+      <div className="flex items-center gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="text-xs text-muted-foreground truncate">{area}, {town}</div>
+          <div className="text-base font-extrabold text-primary truncate">{formatKsh(price)}<span className="text-xs text-muted-foreground">{priceSuffix ?? ""}</span></div>
+        </div>
+        {phone ? (
+          <a href={`tel:${phone}`} aria-label="Call agent" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground shadow-soft"><Phone className="h-4 w-4" /></a>
+        ) : (
+          <button onClick={() => { toast("No phone on this listing", { description: "Use the inquiry form to reach the agent." }); scrollToInquiry(); }}
+            aria-label="No phone available" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-muted text-muted-foreground"><Phone className="h-4 w-4" /></button>
+        )}
+        {wa ? (
+          <a href={`https://wa.me/${wa.replace(/\D/g, "")}?text=${encodeURIComponent(`Hi, I'm interested in "${title}" on Foxwood Properties.`)}`}
+            target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !py-2.5 !px-4 text-sm"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+        ) : (
+          <button onClick={scrollToInquiry} className="btn-secondary shrink-0 !py-2.5 !px-4 text-sm opacity-70"><MessageCircle className="h-4 w-4" /> Inquire</button>
+        )}
+      </div>
+    </div>
+  );
+}
 
-function AgentCard({ ownerId, profile, title }: { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null } | null; title: string }) {
+
+function AgentCard({ ownerId, profile, title, contactPhone, contactWhatsapp }:
+  { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null } | null; title: string; contactPhone: string | null; contactWhatsapp: string | null }) {
   const name = profile?.full_name ?? "Foxwood Agent";
   const initials = name.split(" ").map((s: string) => s[0]).slice(0,2).join("").toUpperCase();
-  const phone = profile?.phone ?? "+254700000000";
-  const waNumber = phone.replace(/[^\d]/g, "");
+  const phone = normalizePhone(contactPhone) ?? normalizePhone(profile?.phone ?? null);
+  const wa = normalizePhone(contactWhatsapp) ?? phone;
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     try {
       if (navigator.share) await navigator.share({ title, url });
       else { await navigator.clipboard.writeText(url); toast.success("Link copied"); }
-    } catch {}
+    } catch (e: any) {
+      if (e?.name !== "AbortError") toast.error("Couldn't share — copy the URL manually.");
+    }
   };
+  const scrollToInquiry = () => document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
       <div className="flex items-center gap-3">
@@ -211,9 +268,23 @@ function AgentCard({ ownerId, profile, title }: { ownerId: string | null; profil
           <div className="text-xs text-muted-foreground">Verified · Kenya</div>
         </div>
       </div>
+      {!phone && !wa && (
+        <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/10 border border-secondary/20 p-3 text-xs text-foreground/80">
+          <AlertCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
+          <span>This agent hasn't added a phone number. Use the inquiry form below to get in touch.</span>
+        </div>
+      )}
       <div className="mt-5 space-y-2">
-        <a href={`tel:${phone}`} className="btn-primary btn-primary-hover w-full"><Phone className="h-4 w-4" /> Call agent</a>
-        <a href={`https://wa.me/${waNumber}?text=${encodeURIComponent(`Hi, I'm interested in "${title}" on Foxwood Properties.`)}`} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+        {phone ? (
+          <a href={`tel:${phone}`} className="btn-primary btn-primary-hover w-full"><Phone className="h-4 w-4" /> Call {phone}</a>
+        ) : (
+          <button type="button" onClick={scrollToInquiry} className="btn-primary btn-primary-hover w-full opacity-80"><Phone className="h-4 w-4" /> Request callback</button>
+        )}
+        {wa ? (
+          <a href={`https://wa.me/${wa.replace(/\D/g, "")}?text=${encodeURIComponent(`Hi, I'm interested in "${title}" on Foxwood Properties.`)}`} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+        ) : (
+          <button type="button" onClick={scrollToInquiry} className="btn-secondary w-full opacity-80"><MessageCircle className="h-4 w-4" /> Message via form</button>
+        )}
         <button type="button" onClick={share} className="btn-ghost w-full"><Share2 className="h-4 w-4" /> Share</button>
         {ownerId && (
           <Link to="/agents/$id" params={{ id: ownerId }} className="btn-ghost w-full"><UserIcon className="h-4 w-4" /> View profile</Link>
@@ -232,12 +303,20 @@ function InquiryForm({ propertyKey, ownerId, propertyTitle }: { propertyKey: str
     preferred_date: "",
     message: `I'd like to request a viewing for "${propertyTitle}".`,
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = inquirySchema.safeParse(form);
-    if (!parsed.success) { toast.error(parsed.error.issues[0].message); return; }
+    if (!parsed.success) {
+      const errs: Record<string, string> = {};
+      for (const iss of parsed.error.issues) errs[iss.path[0] as string] = iss.message;
+      setErrors(errs);
+      toast.error(parsed.error.issues[0].message);
+      return;
+    }
+    setErrors({});
     setBusy(true);
     try {
       const { error } = await supabase.from("inquiries").insert({
@@ -254,24 +333,35 @@ function InquiryForm({ propertyKey, ownerId, propertyTitle }: { propertyKey: str
       toast.success("Inquiry sent — the agent will be in touch.");
       setForm({ ...form, message: "", phone: "", preferred_date: "" });
     } catch (e: any) {
-      toast.error(e.message ?? "Failed to send");
+      toast.error(e.message ?? "Failed to send — please try again.");
     } finally { setBusy(false); }
   }
 
+  const inputCls = (field: string) => `w-full rounded-xl border px-4 py-2.5 text-sm outline-none focus:border-primary ${errors[field] ? "border-destructive" : "border-border"}`;
+
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-3">
+    <form id="inquiry-form" onSubmit={onSubmit} className="rounded-2xl border border-border bg-card p-6 shadow-soft space-y-3">
       <div>
         <h3 className="font-bold text-sm flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" /> Request a viewing</h3>
         <p className="text-xs text-muted-foreground mt-1">Send the agent an inquiry or schedule a visit.</p>
       </div>
-      <input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your name" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
-      <input required type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="Email" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
-      <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Phone (optional)" className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+      <div>
+        <input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your name" className={inputCls("name")} />
+        {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
+      </div>
+      <div>
+        <input required type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="Email" className={inputCls("email")} />
+        {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
+      </div>
+      <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="Phone (optional)" className={inputCls("phone")} />
       <div>
         <label className="text-xs text-muted-foreground">Preferred viewing date</label>
-        <input type="date" value={form.preferred_date} onChange={e=>setForm({...form,preferred_date:e.target.value})} className="mt-1 w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+        <input type="date" value={form.preferred_date} onChange={e=>setForm({...form,preferred_date:e.target.value})} className={"mt-1 " + inputCls("preferred_date")} />
       </div>
-      <textarea required value={form.message} onChange={e=>setForm({...form,message:e.target.value})} rows={3} className="w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
+      <div>
+        <textarea required value={form.message} onChange={e=>setForm({...form,message:e.target.value})} rows={3} className={inputCls("message")} />
+        {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
+      </div>
       <button disabled={busy} className="btn-primary btn-primary-hover w-full">{busy ? "Sending…" : "Send inquiry"}</button>
     </form>
   );
