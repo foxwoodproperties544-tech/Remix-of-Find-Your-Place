@@ -198,6 +198,36 @@ function Detail() {
             </div>
           </div>
 
+          {videoUrl && (
+            <div className="mt-8">
+              <h2 className="text-xl font-bold flex items-center gap-2"><PlayCircle className="h-5 w-5 text-primary" /> Video tour</h2>
+              <div className="mt-3 aspect-video rounded-2xl overflow-hidden border border-border bg-black">
+                {toEmbed(videoUrl) ? (
+                  <iframe src={toEmbed(videoUrl)!} title="Property video" className="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                ) : (
+                  <video src={videoUrl} controls className="h-full w-full" />
+                )}
+              </div>
+            </div>
+          )}
+
+          {documents.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-xl font-bold flex items-center gap-2"><FileText className="h-5 w-5 text-primary" /> Documents</h2>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {documents.map((d, i) => (
+                  <a key={i} href={d.url} target="_blank" rel="noreferrer" download
+                    className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 hover:border-primary/40 transition">
+                    <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary-soft text-primary shrink-0"><FileText className="h-5 w-5" /></span>
+                    <span className="flex-1 min-w-0 text-sm font-medium truncate">{d.name}</span>
+                    <Download className="h-4 w-4 text-muted-foreground shrink-0" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+
           <div className="mt-8">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-xl font-bold flex items-center gap-2"><MapPin className="h-5 w-5 text-primary" /> Location</h2>
