@@ -18,6 +18,15 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ServicesValuationRouteImport } from './routes/services.valuation'
+import { Route as ServicesSellRouteImport } from './routes/services.sell'
+import { Route as ServicesRentRouteImport } from './routes/services.rent'
+import { Route as ServicesMarketingRouteImport } from './routes/services.marketing'
+import { Route as ServicesManagementRouteImport } from './routes/services.management'
+import { Route as ServicesListRouteImport } from './routes/services.list'
+import { Route as ServicesLeaseRouteImport } from './routes/services.lease'
+import { Route as ServicesInvestmentRouteImport } from './routes/services.investment'
+import { Route as ServicesBuyRouteImport } from './routes/services.buy'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as AgentsIdRouteImport } from './routes/agents.$id'
 import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authenticated/saved-searches'
@@ -69,6 +78,51 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesValuationRoute = ServicesValuationRouteImport.update({
+  id: '/services/valuation',
+  path: '/services/valuation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesSellRoute = ServicesSellRouteImport.update({
+  id: '/services/sell',
+  path: '/services/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRentRoute = ServicesRentRouteImport.update({
+  id: '/services/rent',
+  path: '/services/rent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesMarketingRoute = ServicesMarketingRouteImport.update({
+  id: '/services/marketing',
+  path: '/services/marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesManagementRoute = ServicesManagementRouteImport.update({
+  id: '/services/management',
+  path: '/services/management',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesListRoute = ServicesListRouteImport.update({
+  id: '/services/list',
+  path: '/services/list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesLeaseRoute = ServicesLeaseRouteImport.update({
+  id: '/services/lease',
+  path: '/services/lease',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesInvestmentRoute = ServicesInvestmentRouteImport.update({
+  id: '/services/investment',
+  path: '/services/investment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesBuyRoute = ServicesBuyRouteImport.update({
+  id: '/services/buy',
+  path: '/services/buy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
@@ -130,6 +184,15 @@ export interface FileRoutesByFullPath {
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/services/buy': typeof ServicesBuyRoute
+  '/services/investment': typeof ServicesInvestmentRoute
+  '/services/lease': typeof ServicesLeaseRoute
+  '/services/list': typeof ServicesListRoute
+  '/services/management': typeof ServicesManagementRoute
+  '/services/marketing': typeof ServicesMarketingRoute
+  '/services/rent': typeof ServicesRentRoute
+  '/services/sell': typeof ServicesSellRoute
+  '/services/valuation': typeof ServicesValuationRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -148,6 +211,15 @@ export interface FileRoutesByTo {
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/services/buy': typeof ServicesBuyRoute
+  '/services/investment': typeof ServicesInvestmentRoute
+  '/services/lease': typeof ServicesLeaseRoute
+  '/services/list': typeof ServicesListRoute
+  '/services/management': typeof ServicesManagementRoute
+  '/services/marketing': typeof ServicesMarketingRoute
+  '/services/rent': typeof ServicesRentRoute
+  '/services/sell': typeof ServicesSellRoute
+  '/services/valuation': typeof ServicesValuationRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
@@ -168,6 +240,15 @@ export interface FileRoutesById {
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/services/buy': typeof ServicesBuyRoute
+  '/services/investment': typeof ServicesInvestmentRoute
+  '/services/lease': typeof ServicesLeaseRoute
+  '/services/list': typeof ServicesListRoute
+  '/services/management': typeof ServicesManagementRoute
+  '/services/marketing': typeof ServicesMarketingRoute
+  '/services/rent': typeof ServicesRentRoute
+  '/services/sell': typeof ServicesSellRoute
+  '/services/valuation': typeof ServicesValuationRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -188,6 +269,15 @@ export interface FileRouteTypes {
     | '/saved-searches'
     | '/agents/$id'
     | '/properties/$id'
+    | '/services/buy'
+    | '/services/investment'
+    | '/services/lease'
+    | '/services/list'
+    | '/services/management'
+    | '/services/marketing'
+    | '/services/rent'
+    | '/services/sell'
+    | '/services/valuation'
     | '/dashboard/inquiries'
     | '/dashboard/new'
     | '/dashboard/'
@@ -206,6 +296,15 @@ export interface FileRouteTypes {
     | '/saved-searches'
     | '/agents/$id'
     | '/properties/$id'
+    | '/services/buy'
+    | '/services/investment'
+    | '/services/lease'
+    | '/services/list'
+    | '/services/management'
+    | '/services/marketing'
+    | '/services/rent'
+    | '/services/sell'
+    | '/services/valuation'
     | '/dashboard/inquiries'
     | '/dashboard/new'
     | '/dashboard'
@@ -225,6 +324,15 @@ export interface FileRouteTypes {
     | '/_authenticated/saved-searches'
     | '/agents/$id'
     | '/properties/$id'
+    | '/services/buy'
+    | '/services/investment'
+    | '/services/lease'
+    | '/services/list'
+    | '/services/management'
+    | '/services/marketing'
+    | '/services/rent'
+    | '/services/sell'
+    | '/services/valuation'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/new'
     | '/_authenticated/dashboard/'
@@ -241,6 +349,15 @@ export interface RootRouteChildren {
   MortgageRoute: typeof MortgageRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
   AgentsIdRoute: typeof AgentsIdRoute
+  ServicesBuyRoute: typeof ServicesBuyRoute
+  ServicesInvestmentRoute: typeof ServicesInvestmentRoute
+  ServicesLeaseRoute: typeof ServicesLeaseRoute
+  ServicesListRoute: typeof ServicesListRoute
+  ServicesManagementRoute: typeof ServicesManagementRoute
+  ServicesMarketingRoute: typeof ServicesMarketingRoute
+  ServicesRentRoute: typeof ServicesRentRoute
+  ServicesSellRoute: typeof ServicesSellRoute
+  ServicesValuationRoute: typeof ServicesValuationRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -306,6 +423,69 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/valuation': {
+      id: '/services/valuation'
+      path: '/services/valuation'
+      fullPath: '/services/valuation'
+      preLoaderRoute: typeof ServicesValuationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/sell': {
+      id: '/services/sell'
+      path: '/services/sell'
+      fullPath: '/services/sell'
+      preLoaderRoute: typeof ServicesSellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/rent': {
+      id: '/services/rent'
+      path: '/services/rent'
+      fullPath: '/services/rent'
+      preLoaderRoute: typeof ServicesRentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/marketing': {
+      id: '/services/marketing'
+      path: '/services/marketing'
+      fullPath: '/services/marketing'
+      preLoaderRoute: typeof ServicesMarketingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/management': {
+      id: '/services/management'
+      path: '/services/management'
+      fullPath: '/services/management'
+      preLoaderRoute: typeof ServicesManagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/list': {
+      id: '/services/list'
+      path: '/services/list'
+      fullPath: '/services/list'
+      preLoaderRoute: typeof ServicesListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/lease': {
+      id: '/services/lease'
+      path: '/services/lease'
+      fullPath: '/services/lease'
+      preLoaderRoute: typeof ServicesLeaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/investment': {
+      id: '/services/investment'
+      path: '/services/investment'
+      fullPath: '/services/investment'
+      preLoaderRoute: typeof ServicesInvestmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/buy': {
+      id: '/services/buy'
+      path: '/services/buy'
+      fullPath: '/services/buy'
+      preLoaderRoute: typeof ServicesBuyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/properties/$id': {
@@ -411,6 +591,15 @@ const rootRouteChildren: RootRouteChildren = {
   MortgageRoute: MortgageRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
   AgentsIdRoute: AgentsIdRoute,
+  ServicesBuyRoute: ServicesBuyRoute,
+  ServicesInvestmentRoute: ServicesInvestmentRoute,
+  ServicesLeaseRoute: ServicesLeaseRoute,
+  ServicesListRoute: ServicesListRoute,
+  ServicesManagementRoute: ServicesManagementRoute,
+  ServicesMarketingRoute: ServicesMarketingRoute,
+  ServicesRentRoute: ServicesRentRoute,
+  ServicesSellRoute: ServicesSellRoute,
+  ServicesValuationRoute: ServicesValuationRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
