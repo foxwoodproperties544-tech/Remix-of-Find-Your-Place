@@ -23,7 +23,7 @@ export function Footer() {
             "linear-gradient(135deg, color-mix(in oklab, var(--color-primary) 94%, black) 0%, color-mix(in oklab, var(--color-primary) 82%, transparent) 60%, color-mix(in oklab, var(--color-primary) 88%, black) 100%)",
         }}
       />
-      <div className="container-page py-14 grid gap-10 md:grid-cols-4">
+      <div className="container-page py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="rounded-xl bg-background/95 backdrop-blur inline-flex px-3 py-2">
             <Logo />
