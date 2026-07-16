@@ -193,6 +193,10 @@ function Index() {
         </div>
       </section>
 
+      <RecentlyViewedRail />
+
+
+
       {/* TESTIMONIALS */}
       <section className="container-page py-16 md:py-24">
         <div className="text-center max-w-2xl mx-auto">
