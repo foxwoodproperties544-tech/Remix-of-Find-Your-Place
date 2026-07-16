@@ -10,6 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useFavorites } from "@/hooks/use-favorites";
 import { toast } from "sonner";
+import { PageHero } from "@/components/site/PageHero";
+import heroAbout from "@/assets/hero-about.jpg";
+import { absoluteUrl } from "@/lib/site-url";
 
 const searchSchema = z.object({
   category: z.string().optional(),
@@ -25,8 +28,25 @@ const searchSchema = z.object({
 
 const PAGE_SIZE = 12;
 
+const OG_IMAGE = absoluteUrl(heroAbout);
+const TITLE = "Properties — Foxwood Properties";
+const DESC = "Browse verified properties for sale, rent, and lease across Kenya.";
+
 export const Route = createFileRoute("/properties")({
-  head: () => ({ meta: [{ title: "Properties — Foxwood Properties" }, { name: "description", content: "Browse verified properties for sale, rent, and lease across Kenya." }] }),
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+  }),
   validateSearch: searchSchema,
   component: List,
 });
