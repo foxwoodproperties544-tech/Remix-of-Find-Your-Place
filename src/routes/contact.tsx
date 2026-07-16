@@ -3,9 +3,27 @@ import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import heroContact from "@/assets/hero-contact.jpg";
+import { absoluteUrl } from "@/lib/site-url";
+
+const OG_IMAGE = absoluteUrl(heroContact);
+const TITLE = "Contact — Foxwood Properties";
+const DESC = "Get in touch with Foxwood Properties. Call, email, or WhatsApp us.";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({ meta: [{ title: "Contact — Foxwood Properties" }, { name: "description", content: "Get in touch with Foxwood Properties. Call, email, or WhatsApp us." }] }),
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+  }),
   component: Contact,
 });
 
