@@ -33,6 +33,7 @@ import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authen
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
@@ -158,6 +159,11 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
+  id: '/api/public/mpesa-callback',
+  path: '/api/public/mpesa-callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDashboardNewRoute =
   AuthenticatedDashboardNewRouteImport.update({
     id: '/dashboard/new',
@@ -202,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/services/valuation': typeof ServicesValuationRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
 }
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/services/valuation': typeof ServicesValuationRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
 }
@@ -260,6 +268,7 @@ export interface FileRoutesById {
   '/services/valuation': typeof ServicesValuationRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
 }
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/dashboard/inquiries'
     | '/dashboard/new'
+    | '/api/public/mpesa-callback'
     | '/dashboard/'
     | '/dashboard/edit/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -318,6 +328,7 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/dashboard/inquiries'
     | '/dashboard/new'
+    | '/api/public/mpesa-callback'
     | '/dashboard'
     | '/dashboard/edit/$id'
   id:
@@ -347,6 +358,7 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/new'
+    | '/api/public/mpesa-callback'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/edit/$id'
   fileRoutesById: FileRoutesById
@@ -371,6 +383,7 @@ export interface RootRouteChildren {
   ServicesRentRoute: typeof ServicesRentRoute
   ServicesSellRoute: typeof ServicesSellRoute
   ServicesValuationRoute: typeof ServicesValuationRoute
+  ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -543,6 +556,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/mpesa-callback': {
+      id: '/api/public/mpesa-callback'
+      path: '/api/public/mpesa-callback'
+      fullPath: '/api/public/mpesa-callback'
+      preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/dashboard/new': {
       id: '/_authenticated/dashboard/new'
       path: '/dashboard/new'
@@ -622,6 +642,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRentRoute: ServicesRentRoute,
   ServicesSellRoute: ServicesSellRoute,
   ServicesValuationRoute: ServicesValuationRoute,
+  ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
