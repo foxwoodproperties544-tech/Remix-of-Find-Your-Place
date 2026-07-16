@@ -80,6 +80,74 @@ export type Database = {
         }
         Relationships: []
       }
+      mpesa_transactions: {
+        Row: {
+          amount: number
+          checkout_request_id: string | null
+          created_at: string
+          duration_days: number | null
+          id: string
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          phone_number: string
+          property_id: string | null
+          purpose: Database["public"]["Enums"]["mpesa_purpose"]
+          raw_callback: Json | null
+          result_code: number | null
+          result_desc: string | null
+          status: Database["public"]["Enums"]["mpesa_status"]
+          tier: Database["public"]["Enums"]["agent_tier"] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          checkout_request_id?: string | null
+          created_at?: string
+          duration_days?: number | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          phone_number: string
+          property_id?: string | null
+          purpose: Database["public"]["Enums"]["mpesa_purpose"]
+          raw_callback?: Json | null
+          result_code?: number | null
+          result_desc?: string | null
+          status?: Database["public"]["Enums"]["mpesa_status"]
+          tier?: Database["public"]["Enums"]["agent_tier"] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          checkout_request_id?: string | null
+          created_at?: string
+          duration_days?: number | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          phone_number?: string
+          property_id?: string | null
+          purpose?: Database["public"]["Enums"]["mpesa_purpose"]
+          raw_callback?: Json | null
+          result_code?: number | null
+          result_desc?: string | null
+          status?: Database["public"]["Enums"]["mpesa_status"]
+          tier?: Database["public"]["Enums"]["agent_tier"] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mpesa_transactions_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
@@ -121,8 +189,11 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          listing_quota: number
           phone: string | null
           role_primary: string | null
+          tier: Database["public"]["Enums"]["agent_tier"]
+          tier_expires_at: string | null
           updated_at: string
           verified: boolean
           whatsapp: string | null
@@ -134,8 +205,11 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          listing_quota?: number
           phone?: string | null
           role_primary?: string | null
+          tier?: Database["public"]["Enums"]["agent_tier"]
+          tier_expires_at?: string | null
           updated_at?: string
           verified?: boolean
           whatsapp?: string | null
@@ -147,8 +221,11 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          listing_quota?: number
           phone?: string | null
           role_primary?: string | null
+          tier?: Database["public"]["Enums"]["agent_tier"]
+          tier_expires_at?: string | null
           updated_at?: string
           verified?: boolean
           whatsapp?: string | null
@@ -171,15 +248,18 @@ export type Database = {
           documents: Json
           expires_at: string | null
           featured: boolean
+          featured_until: string | null
           features: string[]
           id: string
           images: string[]
+          is_featured: boolean
           lat: number | null
           listing_type: string | null
           lng: number | null
           owner_id: string
           price: number
           price_previous: number | null
+          price_reduced_from: number | null
           price_suffix: string | null
           property_type: string
           published_at: string | null
@@ -190,6 +270,9 @@ export type Database = {
           title: string
           town: string
           updated_at: string
+          verified: boolean
+          verified_at: string | null
+          verified_by: string | null
           video_url: string | null
         }
         Insert: {
@@ -207,15 +290,18 @@ export type Database = {
           documents?: Json
           expires_at?: string | null
           featured?: boolean
+          featured_until?: string | null
           features?: string[]
           id?: string
           images?: string[]
+          is_featured?: boolean
           lat?: number | null
           listing_type?: string | null
           lng?: number | null
           owner_id: string
           price: number
           price_previous?: number | null
+          price_reduced_from?: number | null
           price_suffix?: string | null
           property_type: string
           published_at?: string | null
@@ -226,6 +312,9 @@ export type Database = {
           title: string
           town: string
           updated_at?: string
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
           video_url?: string | null
         }
         Update: {
@@ -243,15 +332,18 @@ export type Database = {
           documents?: Json
           expires_at?: string | null
           featured?: boolean
+          featured_until?: string | null
           features?: string[]
           id?: string
           images?: string[]
+          is_featured?: boolean
           lat?: number | null
           listing_type?: string | null
           lng?: number | null
           owner_id?: string
           price?: number
           price_previous?: number | null
+          price_reduced_from?: number | null
           price_suffix?: string | null
           property_type?: string
           published_at?: string | null
@@ -262,6 +354,9 @@ export type Database = {
           title?: string
           town?: string
           updated_at?: string
+          verified?: boolean
+          verified_at?: string | null
+          verified_by?: string | null
           video_url?: string | null
         }
         Relationships: []
@@ -374,6 +469,62 @@ export type Database = {
         }
         Relationships: []
       }
+      verification_requests: {
+        Row: {
+          additional_docs: Json
+          created_at: string
+          id: string
+          id_document_url: string | null
+          notes: string | null
+          property_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          status: Database["public"]["Enums"]["verification_status"]
+          title_deed_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          additional_docs?: Json
+          created_at?: string
+          id?: string
+          id_document_url?: string | null
+          notes?: string | null
+          property_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          title_deed_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          additional_docs?: Json
+          created_at?: string
+          id?: string
+          id_document_url?: string | null
+          notes?: string | null
+          property_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          title_deed_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_requests_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       viewings: {
         Row: {
           created_at: string
@@ -439,6 +590,7 @@ export type Database = {
       }
     }
     Enums: {
+      agent_tier: "free" | "basic" | "pro" | "elite"
       app_role:
         | "admin"
         | "agent"
@@ -447,6 +599,13 @@ export type Database = {
         | "buyer"
         | "tenant"
         | "developer"
+      mpesa_purpose:
+        | "feature_listing"
+        | "upgrade_tier"
+        | "verification_fee"
+        | "other"
+      mpesa_status: "pending" | "success" | "failed" | "cancelled"
+      verification_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -574,6 +733,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      agent_tier: ["free", "basic", "pro", "elite"],
       app_role: [
         "admin",
         "agent",
@@ -583,6 +743,14 @@ export const Constants = {
         "tenant",
         "developer",
       ],
+      mpesa_purpose: [
+        "feature_listing",
+        "upgrade_tier",
+        "verification_fee",
+        "other",
+      ],
+      mpesa_status: ["pending", "success", "failed", "cancelled"],
+      verification_status: ["pending", "approved", "rejected"],
     },
   },
 } as const
