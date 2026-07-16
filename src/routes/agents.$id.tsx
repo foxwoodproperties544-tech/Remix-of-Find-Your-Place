@@ -9,7 +9,7 @@ export const Route = createFileRoute("/agents/$id")({
   loader: async ({ params }) => {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("id, full_name, avatar_url, phone, whatsapp, bio, company_name, verified, role_primary, created_at")
+      .select("id, full_name, avatar_url, bio, company_name, verified, role_primary, created_at")
       .eq("id", params.id)
       .maybeSingle();
     if (!profile) throw notFound();
@@ -41,8 +41,8 @@ function AgentPage() {
   const { profile, listings } = Route.useLoaderData();
   const name = profile.full_name ?? "Foxwood Agent";
   const initials = name.split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
-  const phone = profile.phone ?? "";
-  const waNumber = (profile.whatsapp ?? phone).replace(/[^\d]/g, "");
+  const phone = "";
+  const waNumber = "";
   const since = new Date(profile.created_at).toLocaleDateString("en-KE", { year: "numeric", month: "long" });
   const roleLabel = profile.role_primary === "developer" ? "Verified Developer" : profile.role_primary === "owner" ? "Property Owner" : "Verified Agent";
 

@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import type { DbPropertyRow } from "@/lib/properties";
 import { formatKsh } from "@/lib/mock-data";
+import { claimFirstAdmin } from "@/lib/admin.functions";
 import { CheckCircle2, XCircle, Trash2, ExternalLink, ShieldCheck, Clock, EyeOff, Eye, Star } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -88,11 +89,10 @@ function Admin() {
   async function claimAdmin() {
     setClaiming(true);
     try {
-      const { data, error } = await supabase.rpc("claim_first_admin");
-      if (error) throw error;
-      if (data) { toast.success("You are now an admin"); await refetchRoles(); }
+      const result = await claimFirstAdmin();
+      if (result?.claimed) { toast.success("You are now an admin"); await refetchRoles(); }
       else toast.error("An admin already exists — ask them to grant you access.");
-    } catch (e: any) { toast.error(e.message); }
+    } catch (e: any) { toast.error(e.message ?? "Failed to claim admin"); }
     finally { setClaiming(false); }
   }
 
