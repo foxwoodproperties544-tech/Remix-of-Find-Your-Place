@@ -71,6 +71,15 @@ function Dashboard() {
     onError: (e: any) => toast.error(e.message),
   });
 
+  const renew = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("properties").update({ status: "pending", published_at: null }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Listing sent for re-review"); qc.invalidateQueries({ queryKey: ["my-properties"] }); },
+    onError: (e: any) => toast.error(e.message),
+  });
+
   const total = data?.length ?? 0;
   const published = data?.filter((p) => p.status === "published").length ?? 0;
   const pending = data?.filter((p) => p.status === "pending").length ?? 0;
