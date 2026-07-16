@@ -213,7 +213,7 @@ function NewListing() {
         <span>Add clear, high-quality photos to help your listing stand out. You can drag & drop multiple images at once.</span>
       </div>
 
-      <form onSubmit={submit} className="mt-8 space-y-6" noValidate>
+      <form onSubmit={(e) => save("submit", e)} className="mt-8 space-y-6" noValidate>
         <div>
           <label className={label}>Title *</label>
           <input value={form.title} onChange={(e) => upd("title", e.target.value)} className={`${input} ${errCls("title")}`} placeholder="Modern 3BR Apartment in Westlands" />
