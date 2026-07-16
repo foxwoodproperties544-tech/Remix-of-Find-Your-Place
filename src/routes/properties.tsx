@@ -158,6 +158,8 @@ function List() {
     if (state.minPrice) f.minPrice = Number(state.minPrice);
     if (state.maxPrice) f.maxPrice = Number(state.maxPrice);
     if (state.minBeds) f.minBeds = Number(state.minBeds);
+    if (state.minSize) f.minSize = Number(state.minSize);
+    if (state.maxSize) f.maxSize = Number(state.maxSize);
     if (state.features.size) f.features = [...state.features];
     if (state.nearby.size) f.nearby = [...state.nearby];
     if (state.status) f.status = state.status;
