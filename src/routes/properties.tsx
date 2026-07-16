@@ -254,6 +254,8 @@ function List() {
                 {state.maxPrice && <Chip label={`Max KSh ${state.maxPrice}`} onRemove={() => patch({ maxPrice: "" })} />}
                 {state.minBeds && <Chip label={`${state.minBeds}+ bed`} onRemove={() => patch({ minBeds: "" })} />}
                 {state.minBaths && <Chip label={`${state.minBaths}+ bath`} onRemove={() => patch({ minBaths: "" })} />}
+                {state.minSize && <Chip label={`Min ${state.minSize} sqft`} onRemove={() => patch({ minSize: "" })} />}
+                {state.maxSize && <Chip label={`Max ${state.maxSize} sqft`} onRemove={() => patch({ maxSize: "" })} />}
                 {[...state.features].map((f) => <Chip key={f} label={f} onRemove={() => { const s = new Set(state.features); s.delete(f); patch({ features: s }); }} />)}
                 {[...state.nearby].map((a) => <Chip key={a} label={`Near: ${a}`} onRemove={() => { const s = new Set(state.nearby); s.delete(a); patch({ nearby: s }); }} />)}
                 {state.status && <Chip label={state.status} onRemove={() => patch({ status: "" })} />}
