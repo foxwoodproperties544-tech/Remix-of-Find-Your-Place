@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
+import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
+import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
