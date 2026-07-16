@@ -353,3 +353,17 @@ function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
     </span>
   );
 }
+
+function parseSizeToSqft(size?: string): number | null {
+  if (!size) return null;
+  const s = size.toLowerCase().replace(/,/g, "");
+  const numMatch = s.match(/([\d.]+)(?:\s*\/\s*([\d.]+))?/);
+  if (!numMatch) return null;
+  let n = parseFloat(numMatch[1]);
+  if (numMatch[2]) n = n / parseFloat(numMatch[2]);
+  if (!isFinite(n)) return null;
+  if (s.includes("acre")) return Math.round(n * 43560);
+  if (s.includes("hectare") || s.includes("ha")) return Math.round(n * 107639);
+  if (s.includes("sqm") || s.includes("sq m") || s.includes("m²") || s.includes("m2")) return Math.round(n * 10.7639);
+  return Math.round(n);
+}
