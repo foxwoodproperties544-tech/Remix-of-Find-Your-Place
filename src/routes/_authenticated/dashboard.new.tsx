@@ -109,6 +109,30 @@ function NewListing() {
     if (files.length) uploadFiles(files);
   }
 
+  async function uploadDocs(files: File[]) {
+    if (!user) return;
+    const valid = files.filter((f) => {
+      if (f.size > 20 * 1024 * 1024) { toast.error(`${f.name} exceeds 20 MB`); return false; }
+      return true;
+    });
+    if (!valid.length) return;
+    setUploadingDocs((n) => n + valid.length);
+    for (const file of valid) {
+      try {
+        const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+        const { error } = await supabase.storage.from("property-docs").upload(path, file);
+        if (error) throw error;
+        const { data: signed } = await supabase.storage.from("property-docs").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+        if (signed?.signedUrl) setDocs((d) => [...d, { name: file.name, url: signed.signedUrl }]);
+      } catch (err: any) {
+        toast.error(err?.message ?? `Failed to upload ${file.name}`);
+      } finally {
+        setUploadingDocs((n) => n - 1);
+      }
+    }
+  }
+
+
   async function save(mode: "draft" | "submit", e?: React.FormEvent) {
     e?.preventDefault();
     if (!user) return;
