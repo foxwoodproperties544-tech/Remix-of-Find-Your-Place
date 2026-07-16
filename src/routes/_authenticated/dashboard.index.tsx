@@ -91,17 +91,17 @@ function Dashboard() {
   }, [data, insights.data]);
 
   return (
-    <div className="container-page py-10">
-      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
-        <div className="min-w-0">
-          <span className="chip"><Home className="h-3 w-3" /> Owner dashboard</span>
-          <h1 className="text-3xl font-bold mt-3">My listings</h1>
-          <p className="text-sm text-muted-foreground mt-1">Manage the properties you've posted on Foxwood.</p>
-        </div>
-        <Link to="/dashboard/new" className="btn-primary btn-primary-hover justify-self-start md:justify-self-end"><PlusCircle className="h-4 w-4" /> Post a new listing</Link>
-      </div>
-
-      <div className="mt-8 flex items-center justify-between gap-3 flex-wrap">
+    <>
+      <PageHero
+        image={heroTools}
+        size="xs"
+        eyebrow={<><Home className="h-3.5 w-3.5" /> Owner dashboard</>}
+        title="My listings"
+        subtitle="Manage the properties you've posted on Foxwood."
+        actions={<Link to="/dashboard/new" className="btn-secondary !py-2 !px-4 text-sm"><PlusCircle className="h-4 w-4" /> Post a new listing</Link>}
+      />
+      <div className="container-page py-10">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className="text-lg font-bold flex items-center gap-2"><TrendingUp className="h-5 w-5 text-primary" /> Insights</h2>
         <div className="inline-flex rounded-full border border-border bg-background p-1">
           {(Object.keys(RANGE_LABELS) as RangeKey[]).map(k => (
