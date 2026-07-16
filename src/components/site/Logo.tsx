@@ -1,4 +1,4 @@
-import logo from "@/assets/foxwood-logo.png";
+import logo from "@/assets/foxwood-logo.jpg";
 
 const ALT = "Foxwood Properties — Your gateway to prime deals";
 
