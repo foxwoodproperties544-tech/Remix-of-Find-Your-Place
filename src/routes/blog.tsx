@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import p1 from "@/assets/p1.jpg";
 import p3 from "@/assets/p3.jpg";
 import p5 from "@/assets/p5.jpg";
+import heroBlog from "@/assets/hero-blog.jpg";
+import { PageHero } from "@/components/site/PageHero";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({ meta: [{ title: "Blog — Foxwood Properties" }, { name: "description", content: "Real estate news, investment tips, and land-buying guides from Foxwood Properties." }] }),
@@ -17,13 +19,12 @@ const posts = [
 function Blog() {
   return (
     <>
-      <section className="bg-primary-soft border-b border-border">
-        <div className="container-page py-16">
-          <span className="text-xs font-semibold uppercase tracking-wider text-secondary">Insights</span>
-          <h1 className="text-4xl md:text-5xl font-extrabold mt-2">The Foxwood Blog</h1>
-          <p className="mt-3 text-muted-foreground max-w-xl">News, guides and market updates from Kenya's real estate scene.</p>
-        </div>
-      </section>
+      <PageHero
+        image={heroBlog}
+        eyebrow="Insights"
+        title="The Foxwood Blog"
+        subtitle="News, guides and market updates from Kenya's real estate scene."
+      />
       <section className="container-page py-14 grid gap-8 md:grid-cols-3">
         {posts.map(p => (
           <article key={p.t} className="rounded-2xl overflow-hidden border border-border bg-card shadow-soft hover:shadow-glow transition">

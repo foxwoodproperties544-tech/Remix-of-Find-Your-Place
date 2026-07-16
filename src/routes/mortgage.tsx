@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Calculator, TrendingUp, Wallet, Percent } from "lucide-react";
 import { formatKsh } from "@/lib/mock-data";
+import heroTools from "@/assets/hero-tools.jpg";
 
 export const Route = createFileRoute("/mortgage")({
   head: () => ({
@@ -34,11 +35,16 @@ function Mortgage() {
 
   return (
     <>
-      <section className="bg-primary-soft border-b border-border">
-        <div className="container-page py-10 md:py-14">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-primary bg-background rounded-full px-3 py-1"><Calculator className="h-3.5 w-3.5" /> Financial Tools</div>
-          <h1 className="text-3xl md:text-4xl font-bold mt-3">Mortgage Calculator</h1>
-          <p className="mt-2 text-muted-foreground max-w-2xl">Estimate your monthly repayments and total cost. Adjust the sliders to see how price, deposit, interest rate and term affect your loan.</p>
+      <section className="relative overflow-hidden border-b border-border">
+        <div className="absolute inset-0">
+          <img src={heroTools} alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, color-mix(in oklab, var(--primary) 92%, black) 0%, color-mix(in oklab, var(--primary) 70%, black) 55%, color-mix(in oklab, var(--secondary) 55%, black) 100%)", opacity: 0.88 }} />
+          <div className="absolute inset-0 hero-grid-bg opacity-30" />
+        </div>
+        <div className="relative container-page py-14 md:py-20 text-white">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider rounded-full bg-white/15 backdrop-blur ring-1 ring-white/25 px-3 py-1"><Calculator className="h-3.5 w-3.5" /> Financial Tools</div>
+          <h1 className="text-3xl md:text-5xl font-extrabold mt-4">Mortgage Calculator</h1>
+          <p className="mt-3 text-white/85 max-w-2xl">Estimate your monthly repayments and total cost. Adjust the sliders to see how price, deposit, interest rate and term affect your loan.</p>
         </div>
       </section>
 

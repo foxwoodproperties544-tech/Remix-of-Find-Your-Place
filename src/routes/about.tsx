@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Target, Eye, Heart, ShieldCheck, Users, BadgeCheck } from "lucide-react";
+import { PageHero } from "@/components/site/PageHero";
+import heroAbout from "@/assets/hero-about.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({ meta: [{ title: "About — Foxwood Properties" }, { name: "description", content: "Foxwood Properties helps Kenyans buy, rent and lease properties with confidence." }] }),
@@ -9,13 +11,12 @@ export const Route = createFileRoute("/about")({
 function About() {
   return (
     <>
-      <section className="bg-primary-soft border-b border-border">
-        <div className="container-page py-16 md:py-24">
-          <span className="text-xs font-semibold uppercase tracking-wider text-secondary">About us</span>
-          <h1 className="text-4xl md:text-5xl font-extrabold mt-2 max-w-3xl">Helping Kenyans find prime property with confidence</h1>
-          <p className="mt-4 text-muted-foreground max-w-2xl">Foxwood Properties is a modern real-estate marketplace built for buyers, tenants and landlords across Kenya. We combine local expertise with verified listings and trusted agents.</p>
-        </div>
-      </section>
+      <PageHero
+        image={heroAbout}
+        eyebrow="About us"
+        title="Helping Kenyans find prime property with confidence"
+        subtitle="Foxwood Properties is a modern real-estate marketplace built for buyers, tenants and landlords across Kenya. We combine local expertise with verified listings and trusted agents."
+      />
 
       <section className="container-page py-16 grid gap-8 md:grid-cols-3">
         {[
