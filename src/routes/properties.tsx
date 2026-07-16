@@ -55,6 +55,14 @@ function List() {
     return true;
   });
 
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortBy === "price-asc") return a.price - b.price;
+    if (sortBy === "price-desc") return b.price - a.price;
+    if (sortBy === "beds-desc") return b.bedrooms - a.bedrooms;
+    return 0;
+  });
+
+
   const currentFilters = () => {
     const f: Record<string, any> = {};
     if (q) f.q = q;
