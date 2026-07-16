@@ -68,6 +68,8 @@ function List() {
     maxPrice: params.maxPrice?.toString() ?? "",
     minBeds: params.minBeds?.toString() ?? "",
     minBaths: "",
+    minSize: params.minSize?.toString() ?? "",
+    maxSize: params.maxSize?.toString() ?? "",
     features: new Set<string>(),
     nearby: new Set<string>(),
     status: "",
@@ -85,7 +87,7 @@ function List() {
 
   function patch(p: Partial<FiltersState>) { setState((s) => ({ ...s, ...p })); }
   function clearAll() {
-    setState({ category: "", type: "", county: "", town: "", minPrice: "", maxPrice: "", minBeds: "", minBaths: "", features: new Set(), nearby: new Set(), status: "", listingType: "", purpose: "" });
+    setState({ category: "", type: "", county: "", town: "", minPrice: "", maxPrice: "", minBeds: "", minBaths: "", minSize: "", maxSize: "", features: new Set(), nearby: new Set(), status: "", listingType: "", purpose: "" });
     setQ(""); setFavsOnly(false);
   }
 
