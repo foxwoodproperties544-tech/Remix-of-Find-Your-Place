@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Calculator, TrendingUp, Wallet, Percent } from "lucide-react";
 import { formatKsh } from "@/lib/mock-data";
+import heroTools from "@/assets/hero-tools.jpg";
 
 export const Route = createFileRoute("/mortgage")({
   head: () => ({
