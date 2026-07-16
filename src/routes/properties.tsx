@@ -100,25 +100,28 @@ function List() {
 
   return (
     <>
-      <section className="bg-primary-soft border-b border-border">
-        <div className="container-page py-10 md:py-14">
-          <h1 className="text-3xl md:text-4xl font-bold">Properties</h1>
-          <p className="mt-2 text-muted-foreground">Find your next home, plot or investment across Kenya.</p>
-          <div className="mt-6 rounded-2xl bg-background p-3 shadow-soft space-y-2">
+      <section className="relative border-b border-border overflow-hidden" style={{ background: "linear-gradient(135deg, var(--color-primary-soft), color-mix(in oklab, var(--color-secondary) 8%, var(--color-background)))" }}>
+        <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-secondary/10 blur-3xl" />
+        <div className="relative container-page py-10 md:py-14">
+          <span className="chip"><SlidersHorizontal className="h-3 w-3" /> Browse listings</span>
+          <h1 className="text-3xl md:text-4xl font-bold mt-3">Find your next property</h1>
+          <p className="mt-2 text-muted-foreground">Refine by category, type, location and price across Kenya.</p>
+          <div className="mt-6 rounded-2xl bg-background p-3 shadow-lift ring-1 ring-border/60 space-y-2">
             <div className="grid gap-2 md:grid-cols-[1fr_1fr_1fr_1fr_auto]">
-              <div className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5">
+              <div className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 focus-within:border-primary/50 transition-colors">
                 <Search className="h-4 w-4 text-muted-foreground" />
                 <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search location, title..." className="w-full bg-transparent text-sm outline-none" />
               </div>
-              <select value={category} onChange={e=>setCategory(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background">
+              <select value={category} onChange={e=>setCategory(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
                 <option value="">All categories</option>
                 {["For Sale","For Rent","For Lease"].map(c => <option key={c}>{c}</option>)}
               </select>
-              <select value={type} onChange={e=>setType(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background">
+              <select value={type} onChange={e=>setType(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
                 <option value="">All types</option>
                 {["Houses","Apartments","Land / Plots","Airbnbs","Commercial","Office Spaces","Shops","Warehouses","Farms","Holiday Homes"].map(t => <option key={t}>{t}</option>)}
               </select>
-              <select value={county} onChange={e=>setCounty(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background">
+              <select value={county} onChange={e=>setCounty(e.target.value)} className="rounded-full border border-border px-4 py-2.5 text-sm bg-background hover:border-primary/40 transition-colors">
                 <option value="">All counties</option>
                 {counties.map(c => <option key={c}>{c}</option>)}
               </select>
@@ -148,26 +151,47 @@ function List() {
       </section>
 
       <section className="container-page py-10 md:py-14">
-        <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-          <p className="text-sm text-muted-foreground">{filtered.length} {filtered.length === 1 ? "property" : "properties"} found</p>
-          <div className="flex items-center gap-2">
-            {hasFilters && <button onClick={clearAll} className="btn-ghost !py-2 !px-3 text-xs"><X className="h-3.5 w-3.5" /> Clear filters</button>}
+        <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
+          <p className="text-sm text-muted-foreground"><span className="font-semibold text-foreground">{sorted.length}</span> {sorted.length === 1 ? "property" : "properties"} found</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <label className="text-xs text-muted-foreground hidden sm:inline">Sort</label>
+            <select value={sortBy} onChange={e=>setSortBy(e.target.value as any)} className="rounded-full border border-border px-3 py-2 text-xs bg-background font-medium">
+              <option value="newest">Newest</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="beds-desc">Most bedrooms</option>
+            </select>
+            {hasFilters && <button onClick={clearAll} className="btn-ghost !py-2 !px-3 text-xs"><X className="h-3.5 w-3.5" /> Clear</button>}
             {hasFilters && (
-              <button onClick={() => setShowSave(true)} className="btn-secondary !py-2 !px-4 text-xs"><BookmarkPlus className="h-4 w-4" /> Save this search</button>
+              <button onClick={() => setShowSave(true)} className="btn-secondary !py-2 !px-4 text-xs"><BookmarkPlus className="h-4 w-4" /> Save search</button>
             )}
           </div>
         </div>
-        {filtered.length === 0 ? (
-          <div className="text-center py-24 border border-dashed border-border rounded-2xl">
-            <p className="font-semibold">No properties match your filters.</p>
-            <p className="text-sm text-muted-foreground mt-1">Try widening your search.</p>
+        {hasFilters && (
+          <div className="mb-6 flex flex-wrap gap-1.5">
+            {q && <FilterChip label={`"${q}"`} onRemove={() => setQ("")} />}
+            {category && <FilterChip label={category} onRemove={() => setCategory("")} />}
+            {type && <FilterChip label={type} onRemove={() => setType("")} />}
+            {county && <FilterChip label={county} onRemove={() => setCounty("")} />}
+            {minPrice && <FilterChip label={`Min KSh ${minPrice}`} onRemove={() => setMinPrice("")} />}
+            {maxPrice && <FilterChip label={`Max KSh ${maxPrice}`} onRemove={() => setMaxPrice("")} />}
+            {minBeds && <FilterChip label={`${minBeds}+ bed`} onRemove={() => setMinBeds("")} />}
+          </div>
+        )}
+        {sorted.length === 0 ? (
+          <div className="text-center py-24 border border-dashed border-border rounded-2xl bg-muted/30">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary"><Search className="h-6 w-6" /></div>
+            <p className="mt-4 font-semibold">No properties match your filters</p>
+            <p className="text-sm text-muted-foreground mt-1">Try widening your search or clearing a filter.</p>
+            {hasFilters && <button onClick={clearAll} className="btn-primary btn-primary-hover mt-5">Clear filters</button>}
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map(p => <PropertyCard key={p.id} p={p} />)}
+            {sorted.map(p => <PropertyCard key={p.id} p={p} />)}
           </div>
         )}
       </section>
+
 
       {showSave && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-background/60 backdrop-blur-sm p-4" onClick={() => setShowSave(false)}>
