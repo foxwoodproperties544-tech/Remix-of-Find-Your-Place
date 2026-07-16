@@ -11,8 +11,9 @@ export const Route = createFileRoute("/_authenticated/dashboard/new")({
   head: () => ({ meta: [{ title: "Post a listing — Foxwood Properties" }] }),
 });
 
-const CATEGORIES = ["For Sale", "For Rent", "For Lease"];
-const TYPES = ["Land / Plots", "Houses", "Apartments", "Airbnbs", "Commercial", "Office Spaces", "Shops", "Warehouses", "Farms", "Holiday Homes"];
+import { CATEGORIES as CATS, ALL_TYPES, TYPE_GROUPS } from "@/lib/taxonomy";
+const CATEGORIES = [...CATS];
+const TYPES = ALL_TYPES;
 const COUNTIES = ["Nairobi", "Kiambu", "Kajiado", "Machakos", "Mombasa", "Kisumu", "Nakuru", "Uasin Gishu"];
 
 const schema = z.object({
