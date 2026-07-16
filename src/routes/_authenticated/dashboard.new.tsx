@@ -109,18 +109,23 @@ function NewListing() {
     if (files.length) uploadFiles(files);
   }
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  async function save(mode: "draft" | "submit", e?: React.FormEvent) {
+    e?.preventDefault();
     if (!user) return;
     const parsed = schema.safeParse(form);
     const newErrors: Errors = {};
-    if (!parsed.success) {
-      for (const issue of parsed.error.issues) {
-        const key = issue.path[0] as keyof Errors;
-        if (!newErrors[key]) newErrors[key] = issue.message;
+    if (mode === "submit") {
+      if (!parsed.success) {
+        for (const issue of parsed.error.issues) {
+          const key = issue.path[0] as keyof Errors;
+          if (!newErrors[key]) newErrors[key] = issue.message;
+        }
       }
+      if (images.length === 0) newErrors.images = "Please add at least one photo";
+    } else {
+      // draft: require only a title
+      if (!form.title || form.title.trim().length < 3) newErrors.title = "Give your draft a short title (3+ chars)";
     }
-    if (images.length === 0) newErrors.images = "Please add at least one photo";
     if (Object.keys(newErrors).length) {
       setErrors(newErrors);
       toast.error("Please fix the highlighted fields");
@@ -128,32 +133,38 @@ function NewListing() {
       first?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    setSaving(true);
+    setSaving(mode);
     try {
-      const v = parsed.data!;
-      const { data, error } = await supabase.from("properties").insert({
+      const v = (parsed.success ? parsed.data : (form as any));
+      const latNum = form.lat ? Number(form.lat) : null;
+      const lngNum = form.lng ? Number(form.lng) : null;
+      const { error } = await supabase.from("properties").insert({
         owner_id: user.id,
         title: v.title,
-        description: v.description,
-        price: v.price,
+        description: v.description || "",
+        price: Number(v.price) || 0,
         price_suffix: v.price_suffix || null,
         category: v.category,
         property_type: v.property_type,
         county: v.county,
-        town: v.town,
+        town: v.town || "",
         area: v.area || null,
-        bedrooms: v.bedrooms,
-        bathrooms: v.bathrooms,
+        bedrooms: Number(v.bedrooms) || 0,
+        bathrooms: Number(v.bathrooms) || 0,
         size: v.size || null,
         images,
-        features: (v.features ?? "").split(",").map((s) => s.trim()).filter(Boolean),
-        amenities: (v.amenities ?? "").split(",").map((s) => s.trim()).filter(Boolean),
+        features: (v.features ?? "").split(",").map((s: string) => s.trim()).filter(Boolean),
+        amenities: (v.amenities ?? "").split(",").map((s: string) => s.trim()).filter(Boolean),
         contact_phone: v.contact_phone || null,
         contact_whatsapp: v.contact_whatsapp || null,
-        status: "pending", // requires admin approval before appearing publicly
-      }).select("id").single();
+        video_url: form.video_url || null,
+        documents: docs,
+        lat: latNum,
+        lng: lngNum,
+        status: mode === "draft" ? "draft" : "pending",
+      });
       if (error) throw error;
-      toast.success("Listing submitted for review — an admin will approve it shortly.");
+      toast.success(mode === "draft" ? "Draft saved" : "Listing submitted for review");
       navigate({ to: "/dashboard" });
     } catch (err: any) {
       toast.error(err.message ?? "Failed to save");
@@ -161,6 +172,7 @@ function NewListing() {
       setSaving(false);
     }
   }
+
 
   const input = "w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary transition-colors";
   const label = "text-xs font-semibold text-foreground/80";
