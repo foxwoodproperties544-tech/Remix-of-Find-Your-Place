@@ -89,10 +89,14 @@ function Detail() {
   const { p, ownerId, propertyKey, ownerProfile } = loaderData;
   const contactPhone = (loaderData as any).contactPhone as string | null | undefined;
   const contactWhatsapp = (loaderData as any).contactWhatsapp as string | null | undefined;
+  const videoUrl = loaderData.videoUrl;
+  const documents = loaderData.documents ?? [];
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
   const [active, setActive] = useState(0);
   const related = mockProps.filter(x => x.id !== p.id && (x.type === p.type || x.county === p.county)).slice(0,3);
-  const { lat, lng } = coordsFor(p.town, p.county);
+  const fallback = coordsFor(p.town, p.county);
+  const lat = loaderData.latOverride ?? fallback.lat;
+  const lng = loaderData.lngOverride ?? fallback.lng;
 
   useEffect(() => {
     trackRecentlyViewed(p.id);
