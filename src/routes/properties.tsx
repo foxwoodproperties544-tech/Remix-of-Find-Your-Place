@@ -25,6 +25,8 @@ const searchSchema = z.object({
   minPrice: z.coerce.number().optional(),
   maxPrice: z.coerce.number().optional(),
   minBeds: z.coerce.number().optional(),
+  minSize: z.coerce.number().optional(),
+  maxSize: z.coerce.number().optional(),
   favs: z.coerce.boolean().optional(),
 });
 
