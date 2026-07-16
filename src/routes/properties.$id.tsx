@@ -171,9 +171,22 @@ function Detail() {
           </div>
         </section>
       )}
+
+      {/* Mobile sticky CTA */}
+      <div className="lg:hidden sticky bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-lift">
+        <div className="flex items-center gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="text-xs text-muted-foreground truncate">{p.area}, {p.town}</div>
+            <div className="text-base font-extrabold text-primary truncate">{formatKsh(p.price)}<span className="text-xs text-muted-foreground">{p.priceSuffix ?? ""}</span></div>
+          </div>
+          <a href="tel:+254700000000" aria-label="Call agent" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground shadow-soft"><Phone className="h-4 w-4" /></a>
+          <a href="https://wa.me/254700000000" target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !py-2.5 !px-4 text-sm"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+        </div>
+      </div>
     </>
   );
 }
+
 
 function AgentCard({ ownerId, profile, title }: { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null } | null; title: string }) {
   const name = profile?.full_name ?? "Foxwood Agent";
