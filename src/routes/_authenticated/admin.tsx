@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import type { DbPropertyRow } from "@/lib/properties";
 import { formatKsh } from "@/lib/mock-data";
-import { CheckCircle2, XCircle, Trash2, ExternalLink, ShieldCheck, Clock, EyeOff, Eye } from "lucide-react";
+import { CheckCircle2, XCircle, Trash2, ExternalLink, ShieldCheck, Clock, EyeOff, Eye, Star } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 
@@ -46,6 +46,29 @@ function Admin() {
       qc.invalidateQueries({ queryKey: ["admin-properties"] });
       qc.invalidateQueries({ queryKey: ["published-properties"] });
     },
+    onError: (e: any) => toast.error(e.message),
+  });
+
+  const toggleFeatured = useMutation({
+    mutationFn: async ({ id, on }: { id: string; on: boolean }) => {
+      const patch: any = { is_featured: on, featured: on };
+      if (on) patch.featured_until = new Date(Date.now() + 30 * 86400_000).toISOString();
+      else patch.featured_until = null;
+      const { error } = await supabase.from("properties").update(patch).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Featured status updated"); qc.invalidateQueries({ queryKey: ["admin-properties"] }); qc.invalidateQueries({ queryKey: ["published-properties"] }); },
+    onError: (e: any) => toast.error(e.message),
+  });
+
+  const toggleVerified = useMutation({
+    mutationFn: async ({ id, on }: { id: string; on: boolean }) => {
+      const { error } = await supabase.from("properties").update({
+        verified: on, verified_at: on ? new Date().toISOString() : null, verified_by: on ? user!.id : null,
+      }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Verification updated"); qc.invalidateQueries({ queryKey: ["admin-properties"] }); },
     onError: (e: any) => toast.error(e.message),
   });
 
