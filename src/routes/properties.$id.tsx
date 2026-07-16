@@ -69,11 +69,15 @@ function Detail() {
       </section>
 
       <section className="container-page mt-4 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted">
-          <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover" />
+        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted shadow-soft group">
+          <img src={gallery[active]} alt={p.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-foreground/40 to-transparent pointer-events-none" />
           <div className="absolute top-4 left-4 flex gap-2">
-            <span className="rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1">{p.category}</span>
-            <span className="rounded-full bg-background/95 text-primary text-xs font-semibold px-3 py-1">{p.type}</span>
+            <span className="rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1 shadow-soft">{p.category}</span>
+            <span className="rounded-full bg-background/95 text-primary text-xs font-semibold px-3 py-1 shadow-soft">{p.type}</span>
+          </div>
+          <div className="absolute bottom-4 right-4 rounded-full bg-foreground/70 backdrop-blur text-white text-xs font-semibold px-3 py-1">
+            {active + 1} / {gallery.length}
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -81,13 +85,14 @@ function Detail() {
             const src = gallery[i % gallery.length];
             return (
               <button key={i} onClick={() => setActive(i % gallery.length)}
-                className={`aspect-square rounded-2xl overflow-hidden bg-muted ring-offset-2 transition ${active === i % gallery.length ? "ring-2 ring-primary" : ""}`}>
+                className={`aspect-square rounded-2xl overflow-hidden bg-muted ring-offset-2 transition ${active === i % gallery.length ? "ring-2 ring-primary" : "hover:ring-2 hover:ring-border"}`}>
                 <img src={src} alt="" className="h-full w-full object-cover hover:opacity-90 transition" />
               </button>
             );
           })}
         </div>
       </section>
+
 
       <section className="container-page py-10 grid gap-8 lg:grid-cols-[1fr_360px]">
         <div>
