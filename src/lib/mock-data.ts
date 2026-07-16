@@ -27,6 +27,7 @@ export interface Property {
   image: string;
   images?: string[];
   featured?: boolean;
+  verified?: boolean;
   description: string;
   features: string[];
   amenities: string[];

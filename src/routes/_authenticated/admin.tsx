@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import type { DbPropertyRow } from "@/lib/properties";
 import { formatKsh } from "@/lib/mock-data";
-import { CheckCircle2, XCircle, Trash2, ExternalLink, ShieldCheck, Clock, EyeOff, Eye } from "lucide-react";
+import { CheckCircle2, XCircle, Trash2, ExternalLink, ShieldCheck, Clock, EyeOff, Eye, Star } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 
@@ -46,6 +46,29 @@ function Admin() {
       qc.invalidateQueries({ queryKey: ["admin-properties"] });
       qc.invalidateQueries({ queryKey: ["published-properties"] });
     },
+    onError: (e: any) => toast.error(e.message),
+  });
+
+  const toggleFeatured = useMutation({
+    mutationFn: async ({ id, on }: { id: string; on: boolean }) => {
+      const patch: any = { is_featured: on, featured: on };
+      if (on) patch.featured_until = new Date(Date.now() + 30 * 86400_000).toISOString();
+      else patch.featured_until = null;
+      const { error } = await supabase.from("properties").update(patch).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Featured status updated"); qc.invalidateQueries({ queryKey: ["admin-properties"] }); qc.invalidateQueries({ queryKey: ["published-properties"] }); },
+    onError: (e: any) => toast.error(e.message),
+  });
+
+  const toggleVerified = useMutation({
+    mutationFn: async ({ id, on }: { id: string; on: boolean }) => {
+      const { error } = await supabase.from("properties").update({
+        verified: on, verified_at: on ? new Date().toISOString() : null, verified_by: on ? user!.id : null,
+      }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Verification updated"); qc.invalidateQueries({ queryKey: ["admin-properties"] }); },
     onError: (e: any) => toast.error(e.message),
   });
 
@@ -106,6 +129,7 @@ function Admin() {
           <h1 className="text-3xl font-bold mt-2">Moderation dashboard</h1>
           <p className="text-sm text-muted-foreground mt-1">Approve, reject, or remove listings across the platform.</p>
         </div>
+        <Link to="/admin/verifications" className="btn-ghost text-sm"><ShieldCheck className="h-4 w-4" /> Verifications queue</Link>
       </div>
 
       <div className="mt-6 flex gap-2 border-b border-border">
@@ -141,7 +165,7 @@ function Admin() {
                   <div className="text-sm font-bold text-primary mt-1">{formatKsh(Number(p.price))}{p.price_suffix ?? ""}</div>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.description}</p>
                 </div>
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex items-center gap-1 shrink-0 flex-wrap justify-end">
                   <Link to="/properties/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Preview"><ExternalLink className="h-4 w-4" /></Link>
                   {p.status !== "published" && (
                     <button onClick={() => setStatus.mutate({ id: p.id, status: "published" })}
@@ -155,6 +179,14 @@ function Admin() {
                     <button onClick={() => setStatus.mutate({ id: p.id, status: "pending" })}
                       className="btn-ghost !px-3 !py-2" title="Unpublish"><EyeOff className="h-4 w-4" /></button>
                   )}
+                  {p.status === "published" && (
+                    <button onClick={() => toggleFeatured.mutate({ id: p.id, on: !(p as any).is_featured })}
+                      className={`btn-ghost !px-3 !py-2 ${(p as any).is_featured ? "text-secondary" : ""}`}
+                      title={(p as any).is_featured ? "Unfeature" : "Feature"}><Star className={`h-4 w-4 ${(p as any).is_featured ? "fill-current" : ""}`} /></button>
+                  )}
+                  <button onClick={() => toggleVerified.mutate({ id: p.id, on: !(p as any).verified })}
+                    className={`btn-ghost !px-3 !py-2 ${(p as any).verified ? "text-primary" : ""}`}
+                    title={(p as any).verified ? "Unverify" : "Verify"}><ShieldCheck className="h-4 w-4" /></button>
                   <button onClick={() => confirm("Delete this listing permanently?") && del.mutate(p.id)}
                     className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                 </div>

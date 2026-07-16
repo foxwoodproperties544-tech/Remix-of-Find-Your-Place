@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { fetchMyProperties } from "@/lib/properties";
 import { formatKsh } from "@/lib/mock-data";
-import { PlusCircle, Trash2, ExternalLink, Home, CheckCircle2, Clock, XCircle, Eye, Heart, TrendingUp, Pencil, RefreshCw, FileEdit } from "lucide-react";
+import { PlusCircle, Trash2, ExternalLink, Home, CheckCircle2, Clock, XCircle, Eye, Heart, TrendingUp, Pencil, RefreshCw, Star, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
@@ -187,7 +187,19 @@ function Dashboard() {
                       <span className="inline-flex items-center gap-1 text-xs text-secondary"><Heart className="h-3.5 w-3.5" /> {f}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0 flex-wrap justify-end">
+                    {p.status === "published" && !p.is_featured && (
+                      <Link to="/dashboard/feature/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2 text-secondary" title="Feature this listing"><Star className="h-4 w-4" /></Link>
+                    )}
+                    {p.status === "published" && p.is_featured && (
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-secondary bg-secondary/10 rounded-full px-2 py-1"><Star className="h-3 w-3 fill-current" /> Featured</span>
+                    )}
+                    {!p.verified && p.status === "published" && (
+                      <Link to="/dashboard/verify/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2 text-primary" title="Verify listing"><ShieldCheck className="h-4 w-4" /></Link>
+                    )}
+                    {p.verified && (
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary bg-primary-soft rounded-full px-2 py-1"><ShieldCheck className="h-3 w-3" /> Verified</span>
+                    )}
                     <Link to="/properties/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="View"><ExternalLink className="h-4 w-4" /></Link>
                     <Link to="/dashboard/edit/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Edit"><Pencil className="h-4 w-4" /></Link>
                     {(p.status === "rejected" || p.status === "draft") && (

@@ -23,6 +23,9 @@ export interface DbPropertyRow {
   contact_whatsapp: string | null;
   status: string;
   featured: boolean;
+  is_featured?: boolean;
+  featured_until?: string | null;
+  verified?: boolean;
   created_at: string;
   video_url?: string | null;
   documents?: unknown;
@@ -49,7 +52,8 @@ export function toProperty(r: DbPropertyRow): Property {
     size: r.size ?? "",
     image: r.images[0] ?? PLACEHOLDER,
     images: r.images.length ? r.images : undefined,
-    featured: r.featured,
+    featured: r.is_featured ?? r.featured,
+    verified: r.verified ?? false,
     description: r.description,
     features: r.features,
     amenities: r.amenities,

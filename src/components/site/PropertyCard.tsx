@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Bed, Bath, Maximize, MapPin, Heart, GitCompare } from "lucide-react";
+import { Bed, Bath, Maximize, MapPin, Heart, GitCompare, ShieldCheck, Star } from "lucide-react";
 import { formatKsh, type Property } from "@/lib/mock-data";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useCompare } from "@/hooks/use-compare";
@@ -32,9 +32,10 @@ export function PropertyCard({ p }: { p: Property }) {
       <Link to="/properties/$id" params={{ id: p.id }} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img src={p.image} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          <div className="absolute top-3 left-3 flex gap-2">
+          <div className="absolute top-3 left-3 flex gap-2 flex-wrap max-w-[70%]">
             <span className="rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1">{p.category}</span>
-            {p.featured && <span className="rounded-full bg-background/95 backdrop-blur text-primary text-xs font-semibold px-3 py-1">Featured</span>}
+            {p.featured && <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold px-3 py-1 shadow-md"><Star className="h-3 w-3 fill-current" /> Featured</span>}
+            {p.verified && <span className="inline-flex items-center gap-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold px-3 py-1"><ShieldCheck className="h-3 w-3" /> Verified</span>}
           </div>
         </div>
         <div className="p-5">
