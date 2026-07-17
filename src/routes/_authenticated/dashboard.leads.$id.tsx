@@ -253,7 +253,7 @@ function LeadDetail() {
                   <img src={propQ.data.images[0]} alt="" className="w-full aspect-video object-cover rounded-lg" />
                 )}
                 <div className="mt-2 font-medium text-sm group-hover:text-primary line-clamp-2">{propQ.data.title}</div>
-                <div className="text-xs text-muted-foreground mt-1">{propQ.data.city} · KES {Number(propQ.data.price).toLocaleString()}</div>
+                <div className="text-xs text-muted-foreground mt-1">{propQ.data.town} · KES {Number(propQ.data.price).toLocaleString()}</div>
               </Link>
             </div>
           )}
