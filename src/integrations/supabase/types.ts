@@ -712,41 +712,56 @@ export type Database = {
       }
       viewings: {
         Row: {
+          agent_notes: string | null
+          cancel_reason: string | null
+          confirmed_at: string | null
           created_at: string
           id: string
           notes: string | null
           property_id: string
+          proposed_at: string | null
           requested_at: string
           requester_email: string
           requester_id: string | null
           requester_name: string
           requester_phone: string | null
+          rescheduled_by: string | null
           status: string
           updated_at: string
         }
         Insert: {
+          agent_notes?: string | null
+          cancel_reason?: string | null
+          confirmed_at?: string | null
           created_at?: string
           id?: string
           notes?: string | null
           property_id: string
+          proposed_at?: string | null
           requested_at: string
           requester_email: string
           requester_id?: string | null
           requester_name: string
           requester_phone?: string | null
+          rescheduled_by?: string | null
           status?: string
           updated_at?: string
         }
         Update: {
+          agent_notes?: string | null
+          cancel_reason?: string | null
+          confirmed_at?: string | null
           created_at?: string
           id?: string
           notes?: string | null
           property_id?: string
+          proposed_at?: string | null
           requested_at?: string
           requester_email?: string
           requester_id?: string | null
           requester_name?: string
           requester_phone?: string | null
+          rescheduled_by?: string | null
           status?: string
           updated_at?: string
         }
