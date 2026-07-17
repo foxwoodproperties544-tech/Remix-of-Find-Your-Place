@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { Inbox, Mail, Phone as PhoneIcon, Calendar, ExternalLink, Check, X } from "lucide-react";
+import { Inbox, Mail, Phone as PhoneIcon, Calendar, ExternalLink, Check, X, Users } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/inquiries")({
@@ -85,6 +85,7 @@ function Inquiries() {
                   </div>
                   <div className="flex items-center gap-1">
                     <Link to="/properties/$id" params={{ id: q.property_key }} className="btn-ghost !px-3 !py-2 text-xs" title="View listing"><ExternalLink className="h-4 w-4" /></Link>
+                    <LeadLink inquiryId={q.id} />
                     {q.status !== "contacted" && (
                       <button onClick={() => setStatus.mutate({ id: q.id, status: "contacted" })} className="btn-ghost !px-3 !py-2 text-xs text-primary" title="Mark contacted"><Check className="h-4 w-4" /></button>
                     )}
@@ -110,4 +111,16 @@ function StatusBadge({ status }: { status: string }) {
     closed: "bg-muted text-muted-foreground",
   };
   return <span className={`inline-flex items-center rounded-full text-xs px-2 py-0.5 font-semibold capitalize ${map[status] ?? "bg-muted"}`}>{status}</span>;
+}
+
+function LeadLink({ inquiryId }: { inquiryId: string }) {
+  const { data } = useQuery({
+    queryKey: ["inquiry-lead", inquiryId],
+    queryFn: async () => {
+      const { data } = await supabase.from("leads").select("id").eq("inquiry_id", inquiryId).maybeSingle();
+      return data;
+    },
+  });
+  if (!data) return null;
+  return <Link to="/dashboard/leads/$id" params={{ id: data.id }} className="btn-ghost !px-3 !py-2 text-xs text-primary" title="Open lead in CRM"><Users className="h-4 w-4" /></Link>;
 }

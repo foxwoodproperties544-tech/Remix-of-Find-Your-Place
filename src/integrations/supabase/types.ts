@@ -80,6 +80,191 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_activities: {
+        Row: {
+          actor_id: string | null
+          body: string | null
+          created_at: string
+          id: string
+          lead_id: string
+          metadata: Json
+          type: Database["public"]["Enums"]["lead_activity_type"]
+        }
+        Insert: {
+          actor_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          lead_id: string
+          metadata?: Json
+          type: Database["public"]["Enums"]["lead_activity_type"]
+        }
+        Update: {
+          actor_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          lead_id?: string
+          metadata?: Json
+          type?: Database["public"]["Enums"]["lead_activity_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_follow_ups: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          due_at: string
+          id: string
+          lead_id: string
+          notes: string | null
+          title: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_at: string
+          id?: string
+          lead_id: string
+          notes?: string | null
+          title: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_at?: string
+          id?: string
+          lead_id?: string
+          notes?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_follow_ups_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          assigned_to: string | null
+          budget_max: number | null
+          budget_min: number | null
+          contact_email: string | null
+          contact_name: string
+          contact_phone: string | null
+          contact_whatsapp: string | null
+          created_at: string
+          created_by: string | null
+          deal_value: number | null
+          id: string
+          inquiry_id: string | null
+          last_contacted_at: string | null
+          lost_reason: string | null
+          message: string | null
+          next_follow_up_at: string | null
+          owner_id: string | null
+          priority: Database["public"]["Enums"]["lead_priority"]
+          property_id: string | null
+          source: Database["public"]["Enums"]["lead_source"]
+          status: Database["public"]["Enums"]["lead_status"]
+          updated_at: string
+          viewing_id: string | null
+          won_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          contact_email?: string | null
+          contact_name: string
+          contact_phone?: string | null
+          contact_whatsapp?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_value?: number | null
+          id?: string
+          inquiry_id?: string | null
+          last_contacted_at?: string | null
+          lost_reason?: string | null
+          message?: string | null
+          next_follow_up_at?: string | null
+          owner_id?: string | null
+          priority?: Database["public"]["Enums"]["lead_priority"]
+          property_id?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+          viewing_id?: string | null
+          won_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          contact_email?: string | null
+          contact_name?: string
+          contact_phone?: string | null
+          contact_whatsapp?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_value?: number | null
+          id?: string
+          inquiry_id?: string | null
+          last_contacted_at?: string | null
+          lost_reason?: string | null
+          message?: string | null
+          next_follow_up_at?: string | null
+          owner_id?: string | null
+          priority?: Database["public"]["Enums"]["lead_priority"]
+          property_id?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+          viewing_id?: string | null
+          won_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_inquiry_id_fkey"
+            columns: ["inquiry_id"]
+            isOneToOne: true
+            referencedRelation: "inquiries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_viewing_id_fkey"
+            columns: ["viewing_id"]
+            isOneToOne: true
+            referencedRelation: "viewings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mpesa_transactions: {
         Row: {
           amount: number
@@ -598,6 +783,32 @@ export type Database = {
         | "buyer"
         | "tenant"
         | "developer"
+      lead_activity_type:
+        | "note"
+        | "call"
+        | "whatsapp"
+        | "email"
+        | "status_change"
+        | "assignment"
+        | "viewing"
+        | "follow_up"
+        | "created"
+      lead_priority: "low" | "medium" | "high"
+      lead_source:
+        | "inquiry"
+        | "viewing_request"
+        | "whatsapp"
+        | "phone"
+        | "manual"
+        | "other"
+      lead_status:
+        | "new"
+        | "contacted"
+        | "qualified"
+        | "viewing_scheduled"
+        | "negotiation"
+        | "won"
+        | "lost"
       mpesa_purpose:
         | "feature_listing"
         | "upgrade_tier"
@@ -741,6 +952,35 @@ export const Constants = {
         "buyer",
         "tenant",
         "developer",
+      ],
+      lead_activity_type: [
+        "note",
+        "call",
+        "whatsapp",
+        "email",
+        "status_change",
+        "assignment",
+        "viewing",
+        "follow_up",
+        "created",
+      ],
+      lead_priority: ["low", "medium", "high"],
+      lead_source: [
+        "inquiry",
+        "viewing_request",
+        "whatsapp",
+        "phone",
+        "manual",
+        "other",
+      ],
+      lead_status: [
+        "new",
+        "contacted",
+        "qualified",
+        "viewing_scheduled",
+        "negotiation",
+        "won",
+        "lost",
       ],
       mpesa_purpose: [
         "feature_listing",
