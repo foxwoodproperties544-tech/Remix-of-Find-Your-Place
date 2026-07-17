@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
 import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
+import { AppointmentBookingForm } from "@/components/site/AppointmentBookingForm";
 
 export const Route = createFileRoute("/properties/$id")({
   loader: async ({ params }) => {
@@ -270,6 +271,7 @@ function Detail() {
 
         <aside className="lg:sticky lg:top-24 h-fit space-y-4">
           <AgentCard ownerId={ownerId} profile={ownerProfile} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} />
+          <AppointmentBookingForm propertyId={propertyKey} propertyTitle={p.title} />
           <InquiryForm propertyKey={propertyKey} ownerId={ownerId} propertyTitle={p.title} />
         </aside>
       </section>
