@@ -112,3 +112,15 @@ function StatusBadge({ status }: { status: string }) {
   };
   return <span className={`inline-flex items-center rounded-full text-xs px-2 py-0.5 font-semibold capitalize ${map[status] ?? "bg-muted"}`}>{status}</span>;
 }
+
+function LeadLink({ inquiryId }: { inquiryId: string }) {
+  const { data } = useQuery({
+    queryKey: ["inquiry-lead", inquiryId],
+    queryFn: async () => {
+      const { data } = await supabase.from("leads").select("id").eq("inquiry_id", inquiryId).maybeSingle();
+      return data;
+    },
+  });
+  if (!data) return null;
+  return <Link to="/dashboard/leads/$id" params={{ id: data.id }} className="btn-ghost !px-3 !py-2 text-xs text-primary" title="Open lead in CRM"><Users className="h-4 w-4" /></Link>;
+}
