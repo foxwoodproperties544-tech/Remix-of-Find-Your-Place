@@ -47,21 +47,27 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const SITE_URL = "https://find-joy-list.lovable.app";
+const SITE_NAME = "Foxwood Properties";
+const SITE_DESC = "Browse trusted properties for sale, rent and lease across Kenya. Search homes, land, apartments, Airbnbs and commercial spaces.";
+const SITE_OG = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/354431d1-41e3-4865-b0bc-ba59288bf311/id-preview-678a380e--617adacd-c42c-4316-910d-675f77d3209f.lovable.app-1784143550437.png";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Foxwood Properties — Your gateway to prime deals in Kenya" },
-      { name: "description", content: "Browse trusted properties for sale, rent and lease across Kenya. Search homes, land, apartments, Airbnbs and commercial spaces." },
-      { property: "og:title", content: "Foxwood Properties — Your gateway to prime deals in Kenya" },
-      { property: "og:description", content: "Browse trusted properties for sale, rent and lease across Kenya. Search homes, land, apartments, Airbnbs and commercial spaces." },
+      { title: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
+      { name: "description", content: SITE_DESC },
+      { property: "og:title", content: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
+      { property: "og:description", content: SITE_DESC },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: SITE_NAME },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Foxwood Properties — Your gateway to prime deals in Kenya" },
-      { name: "twitter:description", content: "Browse trusted properties for sale, rent and lease across Kenya. Search homes, land, apartments, Airbnbs and commercial spaces." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/354431d1-41e3-4865-b0bc-ba59288bf311/id-preview-678a380e--617adacd-c42c-4316-910d-675f77d3209f.lovable.app-1784143550437.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/354431d1-41e3-4865-b0bc-ba59288bf311/id-preview-678a380e--617adacd-c42c-4316-910d-675f77d3209f.lovable.app-1784143550437.png" },
+      { name: "twitter:title", content: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
+      { name: "twitter:description", content: SITE_DESC },
+      { property: "og:image", content: SITE_OG },
+      { name: "twitter:image", content: SITE_OG },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -75,12 +81,42 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", type: "image/png", sizes: "512x512", href: "/favicon-512.png" },
       { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: SITE_NAME,
+          url: SITE_URL,
+          logo: `${SITE_URL}/favicon-512.png`,
+          description: SITE_DESC,
+          areaServed: "KE",
+          sameAs: [] as string[],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: SITE_NAME,
+          url: SITE_URL,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${SITE_URL}/properties?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
+
 
 function RootShell({ children }: { children: ReactNode }) {
   return (

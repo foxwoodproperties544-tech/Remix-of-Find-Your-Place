@@ -37,19 +37,62 @@ export const Route = createFileRoute("/properties/$id")({
       lngOverride: row.lng != null ? Number(row.lng) : null,
     };
   },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.p.title} — Foxwood Properties` },
-          { name: "description", content: loaderData.p.description.slice(0, 155) },
-          { property: "og:title", content: loaderData.p.title },
-          { property: "og:description", content: loaderData.p.description.slice(0, 155) },
-          { property: "og:type", content: "article" },
-          { property: "og:image", content: loaderData.p.image },
-          { name: "twitter:card", content: "summary_large_image" },
-        ]
-      : [{ title: "Property not found" }, { name: "robots", content: "noindex" }],
-  }),
+  head: ({ params, loaderData }) => {
+    if (!loaderData) {
+      return { meta: [{ title: "Property not found" }, { name: "robots", content: "noindex" }] };
+    }
+    const url = `https://find-joy-list.lovable.app/properties/${params.id}`;
+    const p = loaderData.p;
+    const desc = p.description.slice(0, 155);
+    return {
+      meta: [
+        { title: `${p.title} — Foxwood Properties` },
+        { name: "description", content: desc },
+        { property: "og:title", content: p.title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: p.image },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: p.image },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: p.title,
+            description: desc,
+            image: p.images ?? [p.image],
+            category: `${p.category} — ${p.type}`,
+            offers: {
+              "@type": "Offer",
+              price: p.price,
+              priceCurrency: "KES",
+              availability: "https://schema.org/InStock",
+              url,
+            },
+            brand: { "@type": "Organization", name: "Foxwood Properties" },
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://find-joy-list.lovable.app/" },
+              { "@type": "ListItem", position: 2, name: "Properties", item: "https://find-joy-list.lovable.app/properties" },
+              { "@type": "ListItem", position: 3, name: p.title, item: url },
+            ],
+          }),
+        },
+      ],
+    };
+  },
+
   errorComponent: () => (
     <div className="container-page py-24 text-center">
       <h1 className="text-2xl font-bold">Something went wrong</h1>

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MortgageRouteImport } from './routes/mortgage'
@@ -49,6 +50,11 @@ import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertiesRoute = PropertiesRouteImport.update({
   id: '/properties',
   path: '/properties',
@@ -269,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/mortgage': typeof MortgageRoute
   '/pricing': typeof PricingRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -309,6 +316,7 @@ export interface FileRoutesByTo {
   '/mortgage': typeof MortgageRoute
   '/pricing': typeof PricingRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -351,6 +359,7 @@ export interface FileRoutesById {
   '/mortgage': typeof MortgageRoute
   '/pricing': typeof PricingRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -393,6 +402,7 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/pricing'
     | '/properties'
+    | '/sitemap.xml'
     | '/admin'
     | '/favorites'
     | '/saved-searches'
@@ -433,6 +443,7 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/pricing'
     | '/properties'
+    | '/sitemap.xml'
     | '/admin'
     | '/favorites'
     | '/saved-searches'
@@ -474,6 +485,7 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/pricing'
     | '/properties'
+    | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/_authenticated/favorites'
     | '/_authenticated/saved-searches'
@@ -516,6 +528,7 @@ export interface RootRouteChildren {
   MortgageRoute: typeof MortgageRoute
   PricingRoute: typeof PricingRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AgentsIdRoute: typeof AgentsIdRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
   ServicesInvestmentRoute: typeof ServicesInvestmentRoute
@@ -531,6 +544,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/properties': {
       id: '/properties'
       path: '/properties'
@@ -897,6 +917,7 @@ const rootRouteChildren: RootRouteChildren = {
   MortgageRoute: MortgageRoute,
   PricingRoute: PricingRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   AgentsIdRoute: AgentsIdRoute,
   ServicesBuyRoute: ServicesBuyRoute,
   ServicesInvestmentRoute: ServicesInvestmentRoute,
@@ -912,13 +933,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
