@@ -66,6 +66,8 @@ export function Header() {
                   <Link to="/dashboard" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><LayoutDashboard className="h-4 w-4" /> My listings</Link>
                   <Link to="/dashboard/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PlusCircle className="h-4 w-4" /> Post listing</Link>
                   <Link to="/dashboard/inquiries" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Inbox className="h-4 w-4" /> Inquiries</Link>
+                  <Link to="/dashboard/appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><CalendarClock className="h-4 w-4" /> Appointments</Link>
+                  <Link to="/dashboard/my-appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><CalendarClock className="h-4 w-4" /> My viewings</Link>
                   <Link to="/dashboard/leads" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><UsersIcon className="h-4 w-4" /> Leads (CRM)</Link>
                   <Link to="/dashboard/crm" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><TrendingUp className="h-4 w-4" /> CRM Insights</Link>
                   <Link to="/favorites" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Heart className="h-4 w-4" /> Favorites</Link>
