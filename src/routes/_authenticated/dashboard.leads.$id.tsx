@@ -58,15 +58,15 @@ function LeadDetail() {
     enabled: !!leadQ.data?.property_id,
     queryFn: async () => {
       const { data } = await supabase.from("properties")
-        .select("id, title, city, price, images, category, type")
+        .select("id, title, town, price, images")
         .eq("id", leadQ.data!.property_id!).maybeSingle();
       return data;
     },
   });
 
   const updateLead = useMutation({
-    mutationFn: async (patch: Record<string, any>) => {
-      const { error } = await supabase.from("leads").update(patch).eq("id", id);
+    mutationFn: async (patch: Partial<Record<string, any>>) => {
+      const { error } = await supabase.from("leads").update(patch as any).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
