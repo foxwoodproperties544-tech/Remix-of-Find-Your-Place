@@ -37,9 +37,13 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
+import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authenticated/dashboard.leads'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
+import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
+import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
+import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
 import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 
@@ -186,10 +190,22 @@ const AuthenticatedDashboardNewRoute =
     path: '/dashboard/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardLeadsRoute =
+  AuthenticatedDashboardLeadsRouteImport.update({
+    id: '/dashboard/leads',
+    path: '/dashboard/leads',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardInquiriesRoute =
   AuthenticatedDashboardInquiriesRouteImport.update({
     id: '/dashboard/inquiries',
     path: '/dashboard/inquiries',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardCrmRoute =
+  AuthenticatedDashboardCrmRouteImport.update({
+    id: '/dashboard/crm',
+    path: '/dashboard/crm',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminVerificationsRoute =
@@ -203,6 +219,18 @@ const AuthenticatedDashboardVerifyIdRoute =
     id: '/dashboard/verify/$id',
     path: '/dashboard/verify/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardLeadsNewRoute =
+  AuthenticatedDashboardLeadsNewRouteImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AuthenticatedDashboardLeadsRoute,
+  } as any)
+const AuthenticatedDashboardLeadsIdRoute =
+  AuthenticatedDashboardLeadsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedDashboardLeadsRoute,
   } as any)
 const AuthenticatedDashboardFeatureIdRoute =
   AuthenticatedDashboardFeatureIdRouteImport.update({
@@ -242,13 +270,17 @@ export interface FileRoutesByFullPath {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
+  '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
+  '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRoutesByTo {
@@ -276,13 +308,17 @@ export interface FileRoutesByTo {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
+  '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
+  '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRoutesById {
@@ -312,13 +348,17 @@ export interface FileRoutesById {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
+  '/_authenticated/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/_authenticated/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
+  '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRouteTypes {
@@ -348,13 +388,17 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/admin/verifications'
+    | '/dashboard/crm'
     | '/dashboard/inquiries'
+    | '/dashboard/leads'
     | '/dashboard/new'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/dashboard/'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
+    | '/dashboard/leads/$id'
+    | '/dashboard/leads/new'
     | '/dashboard/verify/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -382,13 +426,17 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/admin/verifications'
+    | '/dashboard/crm'
     | '/dashboard/inquiries'
+    | '/dashboard/leads'
     | '/dashboard/new'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/dashboard'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
+    | '/dashboard/leads/$id'
+    | '/dashboard/leads/new'
     | '/dashboard/verify/$id'
   id:
     | '__root__'
@@ -417,13 +465,17 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/_authenticated/admin/verifications'
+    | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/inquiries'
+    | '/_authenticated/dashboard/leads'
     | '/_authenticated/dashboard/new'
     | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/edit/$id'
     | '/_authenticated/dashboard/feature/$id'
+    | '/_authenticated/dashboard/leads/$id'
+    | '/_authenticated/dashboard/leads/new'
     | '/_authenticated/dashboard/verify/$id'
   fileRoutesById: FileRoutesById
 }
@@ -649,11 +701,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/leads': {
+      id: '/_authenticated/dashboard/leads'
+      path: '/dashboard/leads'
+      fullPath: '/dashboard/leads'
+      preLoaderRoute: typeof AuthenticatedDashboardLeadsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/inquiries': {
       id: '/_authenticated/dashboard/inquiries'
       path: '/dashboard/inquiries'
       fullPath: '/dashboard/inquiries'
       preLoaderRoute: typeof AuthenticatedDashboardInquiriesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/crm': {
+      id: '/_authenticated/dashboard/crm'
+      path: '/dashboard/crm'
+      fullPath: '/dashboard/crm'
+      preLoaderRoute: typeof AuthenticatedDashboardCrmRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/verifications': {
@@ -669,6 +735,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/verify/$id'
       preLoaderRoute: typeof AuthenticatedDashboardVerifyIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/leads/new': {
+      id: '/_authenticated/dashboard/leads/new'
+      path: '/new'
+      fullPath: '/dashboard/leads/new'
+      preLoaderRoute: typeof AuthenticatedDashboardLeadsNewRouteImport
+      parentRoute: typeof AuthenticatedDashboardLeadsRoute
+    }
+    '/_authenticated/dashboard/leads/$id': {
+      id: '/_authenticated/dashboard/leads/$id'
+      path: '/$id'
+      fullPath: '/dashboard/leads/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardLeadsIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardLeadsRoute
     }
     '/_authenticated/dashboard/feature/$id': {
       id: '/_authenticated/dashboard/feature/$id'
@@ -698,11 +778,29 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
 const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
+interface AuthenticatedDashboardLeadsRouteChildren {
+  AuthenticatedDashboardLeadsIdRoute: typeof AuthenticatedDashboardLeadsIdRoute
+  AuthenticatedDashboardLeadsNewRoute: typeof AuthenticatedDashboardLeadsNewRoute
+}
+
+const AuthenticatedDashboardLeadsRouteChildren: AuthenticatedDashboardLeadsRouteChildren =
+  {
+    AuthenticatedDashboardLeadsIdRoute: AuthenticatedDashboardLeadsIdRoute,
+    AuthenticatedDashboardLeadsNewRoute: AuthenticatedDashboardLeadsNewRoute,
+  }
+
+const AuthenticatedDashboardLeadsRouteWithChildren =
+  AuthenticatedDashboardLeadsRoute._addFileChildren(
+    AuthenticatedDashboardLeadsRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
+  AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
+  AuthenticatedDashboardLeadsRoute: typeof AuthenticatedDashboardLeadsRouteWithChildren
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
@@ -715,7 +813,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
+  AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
+  AuthenticatedDashboardLeadsRoute:
+    AuthenticatedDashboardLeadsRouteWithChildren,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
