@@ -37,9 +37,11 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
+import { Route as AuthenticatedDashboardMyAppointmentsRouteImport } from './routes/_authenticated/dashboard.my-appointments'
 import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authenticated/dashboard.leads'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
+import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
@@ -190,6 +192,12 @@ const AuthenticatedDashboardNewRoute =
     path: '/dashboard/new',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardMyAppointmentsRoute =
+  AuthenticatedDashboardMyAppointmentsRouteImport.update({
+    id: '/dashboard/my-appointments',
+    path: '/dashboard/my-appointments',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardLeadsRoute =
   AuthenticatedDashboardLeadsRouteImport.update({
     id: '/dashboard/leads',
@@ -206,6 +214,12 @@ const AuthenticatedDashboardCrmRoute =
   AuthenticatedDashboardCrmRouteImport.update({
     id: '/dashboard/crm',
     path: '/dashboard/crm',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardAppointmentsRoute =
+  AuthenticatedDashboardAppointmentsRouteImport.update({
+    id: '/dashboard/appointments',
+    path: '/dashboard/appointments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminVerificationsRoute =
@@ -270,9 +284,11 @@ export interface FileRoutesByFullPath {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
@@ -308,9 +324,11 @@ export interface FileRoutesByTo {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
@@ -348,9 +366,11 @@ export interface FileRoutesById {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/_authenticated/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
@@ -388,9 +408,11 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/admin/verifications'
+    | '/dashboard/appointments'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/leads'
+    | '/dashboard/my-appointments'
     | '/dashboard/new'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
@@ -426,9 +448,11 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/admin/verifications'
+    | '/dashboard/appointments'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/leads'
+    | '/dashboard/my-appointments'
     | '/dashboard/new'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
@@ -465,9 +489,11 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/_authenticated/admin/verifications'
+    | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/leads'
+    | '/_authenticated/dashboard/my-appointments'
     | '/_authenticated/dashboard/new'
     | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
@@ -701,6 +727,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/my-appointments': {
+      id: '/_authenticated/dashboard/my-appointments'
+      path: '/dashboard/my-appointments'
+      fullPath: '/dashboard/my-appointments'
+      preLoaderRoute: typeof AuthenticatedDashboardMyAppointmentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/leads': {
       id: '/_authenticated/dashboard/leads'
       path: '/dashboard/leads'
@@ -720,6 +753,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/crm'
       fullPath: '/dashboard/crm'
       preLoaderRoute: typeof AuthenticatedDashboardCrmRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/appointments': {
+      id: '/_authenticated/dashboard/appointments'
+      path: '/dashboard/appointments'
+      fullPath: '/dashboard/appointments'
+      preLoaderRoute: typeof AuthenticatedDashboardAppointmentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/verifications': {
@@ -798,9 +838,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
+  AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardLeadsRoute: typeof AuthenticatedDashboardLeadsRouteWithChildren
+  AuthenticatedDashboardMyAppointmentsRoute: typeof AuthenticatedDashboardMyAppointmentsRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
@@ -813,10 +855,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
+  AuthenticatedDashboardAppointmentsRoute:
+    AuthenticatedDashboardAppointmentsRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardLeadsRoute:
     AuthenticatedDashboardLeadsRouteWithChildren,
+  AuthenticatedDashboardMyAppointmentsRoute:
+    AuthenticatedDashboardMyAppointmentsRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
