@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
