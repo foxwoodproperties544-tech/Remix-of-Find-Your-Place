@@ -36,14 +36,19 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/75">
       <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="min-w-0 flex-shrink" aria-label="Foxwood Properties — home"><Logo /></Link>
-        <nav className="hidden lg:flex items-center gap-1">
+        <Link
+          to="/"
+          onClick={() => setOpen(false)}
+          className="min-w-0 flex-shrink rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label="Foxwood Properties — go to homepage"
+        ><Logo /></Link>
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
           {nav.map((n, i) => (
             <Link key={i} to={n.to as any} search={(n as any).search}
               className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-              activeOptions={{ exact: n.to === "/" }}
+              activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
               activeProps={{ className: "text-primary bg-primary-soft" }}
             >{n.label}</Link>
           ))}
