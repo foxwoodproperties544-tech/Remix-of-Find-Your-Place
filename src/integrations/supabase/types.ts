@@ -780,31 +780,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_my_profile: {
-        Args: never
-        Returns: {
-          avatar_url: string | null
-          bio: string | null
-          company_name: string | null
-          created_at: string
-          full_name: string | null
-          id: string
-          listing_quota: number
-          phone: string | null
-          role_primary: string | null
-          tier: Database["public"]["Enums"]["agent_tier"]
-          tier_expires_at: string | null
-          updated_at: string
-          verified: boolean
-          whatsapp: string | null
-        }[]
-        SetofOptions: {
-          from: "*"
-          to: "profiles"
-          isOneToOne: false
-          isSetofReturn: true
-        }
-      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
