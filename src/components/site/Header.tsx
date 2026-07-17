@@ -9,7 +9,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const nav = [
-  { to: "/", label: "Home" },
   { to: "/properties", label: "Buy", search: { category: "For Sale" } as const },
   { to: "/properties", label: "Rent", search: { category: "For Rent" } as const },
   { to: "/properties", label: "Lease", search: { category: "For Lease" } as const },
