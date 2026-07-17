@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { Inbox, Mail, Phone as PhoneIcon, Calendar, ExternalLink, Check, X } from "lucide-react";
+import { Inbox, Mail, Phone as PhoneIcon, Calendar, ExternalLink, Check, X, Users } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/inquiries")({
@@ -85,6 +85,7 @@ function Inquiries() {
                   </div>
                   <div className="flex items-center gap-1">
                     <Link to="/properties/$id" params={{ id: q.property_key }} className="btn-ghost !px-3 !py-2 text-xs" title="View listing"><ExternalLink className="h-4 w-4" /></Link>
+                    <LeadLink inquiryId={q.id} />
                     {q.status !== "contacted" && (
                       <button onClick={() => setStatus.mutate({ id: q.id, status: "contacted" })} className="btn-ghost !px-3 !py-2 text-xs text-primary" title="Mark contacted"><Check className="h-4 w-4" /></button>
                     )}
