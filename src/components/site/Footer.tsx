@@ -93,6 +93,11 @@ export function Footer() {
             <li><Link to="/about" className="hover:text-secondary">About Us</Link></li>
             <li><Link to="/contact" className="hover:text-secondary">Contact Us</Link></li>
             <li><Link to="/blog" className="hover:text-secondary">Blog & News</Link></li>
+            <li><Link to="/faq" className="hover:text-secondary">FAQ</Link></li>
+            <li><Link to="/help" className="hover:text-secondary">Help Centre</Link></li>
+            <li><Link to="/privacy" className="hover:text-secondary">Privacy Policy</Link></li>
+            <li><Link to="/terms" className="hover:text-secondary">Terms & Conditions</Link></li>
+            <li><Link to="/cookies" className="hover:text-secondary">Cookie Policy</Link></li>
           </ul>
           <h4 className="font-semibold mb-3 mt-6 text-sm">Newsletter</h4>
           <form className="flex gap-2" onSubmit={(e)=>e.preventDefault()}>
