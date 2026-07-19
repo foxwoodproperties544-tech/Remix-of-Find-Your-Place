@@ -5,7 +5,7 @@ import { subscribeNewsletter } from "@/lib/blog";
 import type { Property } from "@/lib/mock-data";
 import { formatKsh } from "@/lib/mock-data";
 import { Search, Mail, Phone, MessageCircle, MapPin } from "lucide-react";
-import { PROPERTY_TYPES } from "@/lib/taxonomy";
+import { ALL_TYPES } from "@/lib/taxonomy";
 
 const LOCATIONS = ["Nairobi","Kiambu","Kitengela","Syokimau","Katani","Ngong","Isinya","Juja","Matuu","Machakos","Kajiado","Mombasa"];
 
