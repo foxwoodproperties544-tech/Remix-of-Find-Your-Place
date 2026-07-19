@@ -1,4 +1,5 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { getPostBySlug, listRelated, listRecentPosts, listPopularPosts, listCategoriesWithCounts, listAllTags, getAuthor } from "@/lib/blog";
 import { fetchPublishedProperties } from "@/lib/properties";
 import { renderMarkdown, extractHeadings } from "@/lib/markdown";
@@ -12,7 +13,8 @@ import { BackToTop } from "@/components/site/BackToTop";
 import { ShareBar } from "@/components/site/ShareBar";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
 import { BlogComments } from "@/components/site/BlogComments";
-import { Calendar, Clock, ArrowLeft, User, Building2, Phone, ListPlus } from "lucide-react";
+import { BlogPostSkeleton } from "@/components/site/BlogPostSkeleton";
+import { Calendar, Clock, ArrowLeft, User, Building2, Phone, ListPlus, Search, FileQuestion } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
@@ -101,14 +103,90 @@ export const Route = createFileRoute("/blog/$slug")({
     };
   },
   errorComponent: () => <div className="container-page py-24 text-center"><h1 className="text-2xl font-bold">Couldn't load post</h1></div>,
-  notFoundComponent: () => (
-    <div className="container-page py-24 text-center">
-      <h1 className="text-2xl font-bold">Post not found</h1>
-      <Link to="/blog" className="btn-primary btn-primary-hover mt-6 inline-flex">Back to blog</Link>
-    </div>
-  ),
+  pendingComponent: BlogPostSkeleton,
+  pendingMs: 200,
+  pendingMinMs: 400,
+  notFoundComponent: BlogNotFound,
   component: PostPage,
 });
+
+function BlogNotFound() {
+  const params = Route.useParams();
+  const nav = useNavigate();
+  const [q, setQ] = useState("");
+  const [popular, setPopular] = useState<import("@/lib/blog").BlogPost[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    listPopularPosts(5).then((p) => { if (!cancelled) setPopular(p); }).catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+  const onSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Blog index has no search state; navigate there and let the user browse.
+    nav({ to: "/blog" });
+  };
+  return (
+    <div className="container-page py-16 md:py-24 max-w-2xl">
+      <div className="text-center">
+        <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-primary-soft text-primary">
+          <FileQuestion className="h-8 w-8" />
+        </div>
+        <p className="text-sm font-semibold text-secondary uppercase tracking-wider">404 — Blog Not Found</p>
+        <h1 className="mt-2 text-3xl md:text-4xl font-black">We couldn't find that article</h1>
+        <p className="mt-3 text-muted-foreground">
+          The post <span className="font-mono text-foreground">/blog/{params.slug}</span> may have been moved, renamed, or unpublished.
+        </p>
+
+        <form onSubmit={onSearch} className="mt-8 flex gap-2" role="search" aria-label="Search the blog">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              autoFocus
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search articles…"
+              className="w-full rounded-full border border-border bg-background pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              aria-label="Search articles"
+            />
+          </div>
+          <button type="submit" className="btn-primary btn-primary-hover rounded-full px-5">Search</button>
+        </form>
+
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Link to="/blog" className="btn-primary btn-primary-hover inline-flex"><ArrowLeft className="h-4 w-4" /> Back to Blog</Link>
+          <Link to="/" className="btn-ghost inline-flex">Go home</Link>
+        </div>
+      </div>
+
+      {popular.length > 0 && (
+        <section className="mt-12 text-left" aria-labelledby="popular-heading">
+          <h2 id="popular-heading" className="text-lg font-bold">Popular articles</h2>
+          <ul className="mt-4 divide-y divide-border rounded-2xl border border-border bg-card">
+            {popular.map((p) => (
+              <li key={p.id}>
+                <Link
+                  to="/blog/$slug"
+                  params={{ slug: p.slug }}
+                  className="flex items-center gap-3 p-4 hover:bg-muted/50 transition"
+                >
+                  {p.cover_image ? (
+                    <img src={p.cover_image} alt="" loading="lazy" className="h-14 w-14 shrink-0 rounded-lg object-cover" />
+                  ) : (
+                    <div className="h-14 w-14 shrink-0 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20" />
+                  )}
+                  <div className="min-w-0">
+                    <div className="text-xs text-muted-foreground capitalize">{p.category.replace("-", " ")} · {p.reading_minutes} min</div>
+                    <div className="font-semibold leading-snug truncate">{p.title}</div>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
+  );
+}
 
 function PostPage() {
   const { post, related, recent, popular, categories, tags, author, relatedProps, featuredProps } = Route.useLoaderData();

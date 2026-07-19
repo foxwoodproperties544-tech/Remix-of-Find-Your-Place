@@ -7,3 +7,4 @@ Disallow: /favorites
 Disallow: /saved-searches
 
 Sitemap: https://find-joy-list.lovable.app/sitemap.xml
+Sitemap: https://find-joy-list.lovable.app/blog-sitemap.xml
