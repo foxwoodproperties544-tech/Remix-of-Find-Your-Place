@@ -398,7 +398,7 @@ function Detail() {
             <div>
               <h2 className="text-xl font-bold flex items-center gap-2"><FileText className="h-5 w-5 text-primary" /> Documents & floor plans</h2>
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                {documents.map((d, i) => (
+                {documents.map((d: { name: string; url: string }, i: number) => (
                   <a key={i} href={d.url} target="_blank" rel="noreferrer" download
                     className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 hover:border-primary/40 transition">
                     <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary-soft text-primary shrink-0"><FileText className="h-5 w-5" /></span>
