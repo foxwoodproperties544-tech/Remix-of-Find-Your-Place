@@ -554,7 +554,7 @@ function ReviewsSection({ propertyKey }: { propertyKey: string }) {
   const { data } = useQuery({
     queryKey: ["reviews", propertyKey],
     queryFn: async () => {
-      const { data } = await supabase.from("reviews").select("id, rating, body, created_at").eq("subject_id", propertyKey).eq("status", "approved").order("created_at", { ascending: false }).limit(5);
+      const { data } = await supabase.from("reviews").select("id, rating, comment, created_at").eq("target_type", "property").eq("target_id", propertyKey).eq("status", "approved").order("created_at", { ascending: false }).limit(5);
       return data ?? [];
     },
   });
