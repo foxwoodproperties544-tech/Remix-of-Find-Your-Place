@@ -1,4 +1,5 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { getPostBySlug, listRelated, listRecentPosts, listPopularPosts, listCategoriesWithCounts, listAllTags, getAuthor } from "@/lib/blog";
 import { fetchPublishedProperties } from "@/lib/properties";
 import { renderMarkdown, extractHeadings } from "@/lib/markdown";
@@ -12,7 +13,8 @@ import { BackToTop } from "@/components/site/BackToTop";
 import { ShareBar } from "@/components/site/ShareBar";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
 import { BlogComments } from "@/components/site/BlogComments";
-import { Calendar, Clock, ArrowLeft, User, Building2, Phone, ListPlus } from "lucide-react";
+import { BlogPostSkeleton } from "@/components/site/BlogPostSkeleton";
+import { Calendar, Clock, ArrowLeft, User, Building2, Phone, ListPlus, Search, FileQuestion } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
