@@ -16,10 +16,15 @@ const staticEntries: SitemapEntry[] = [
   { path: "/properties", changefreq: "hourly", priority: "0.9" },
   { path: "/about", changefreq: "monthly", priority: "0.6" },
   { path: "/contact", changefreq: "monthly", priority: "0.6" },
-  { path: "/blog", changefreq: "weekly", priority: "0.6" },
+  { path: "/blog", changefreq: "weekly", priority: "0.7" },
+  { path: "/faq", changefreq: "monthly", priority: "0.6" },
+  { path: "/help", changefreq: "monthly", priority: "0.5" },
   { path: "/pricing", changefreq: "monthly", priority: "0.5" },
   { path: "/mortgage", changefreq: "monthly", priority: "0.5" },
   { path: "/compare", changefreq: "monthly", priority: "0.4" },
+  { path: "/privacy", changefreq: "yearly", priority: "0.3" },
+  { path: "/terms", changefreq: "yearly", priority: "0.3" },
+  { path: "/cookies", changefreq: "yearly", priority: "0.3" },
   { path: "/services/buy", changefreq: "monthly", priority: "0.7" },
   { path: "/services/sell", changefreq: "monthly", priority: "0.7" },
   { path: "/services/rent", changefreq: "monthly", priority: "0.7" },
@@ -68,6 +73,25 @@ export const Route = createFileRoute("/sitemap.xml")({
               lastmod: a.updated_at ? new Date(a.updated_at).toISOString() : undefined,
               changefreq: "weekly",
               priority: "0.5",
+            });
+          }
+        } catch {
+          // ignore
+        }
+
+        try {
+          const { data: posts } = await supabase
+            .from("blog_posts")
+            .select("slug, updated_at")
+            .eq("status", "published")
+            .order("published_at", { ascending: false })
+            .limit(500);
+          for (const b of posts ?? []) {
+            entries.push({
+              path: `/blog/${b.slug}`,
+              lastmod: b.updated_at ? new Date(b.updated_at).toISOString() : undefined,
+              changefreq: "monthly",
+              priority: "0.6",
             });
           }
         } catch {
