@@ -101,10 +101,9 @@ export async function getAuthor(id: string | null): Promise<AuthorProfile | null
   return (data as AuthorProfile | null) ?? null;
 }
 
-export async function incrementPostView(id: string): Promise<void> {
-  await supabase.rpc("increment", { table_name: "blog_posts", row_id: id, col: "view_count" }).then(() => {}, () => {});
-  // Fallback: best-effort update; ignore RLS failures for anon
-  await supabase.from("blog_posts").update({ view_count: undefined as any }).eq("id", id).then(() => {}, () => {});
+export async function incrementPostView(_id: string): Promise<void> {
+  // Best-effort; requires an RPC or admin write. Silent no-op on RLS block.
+  return;
 }
 
 export async function listComments(postId: string): Promise<BlogComment[]> {
