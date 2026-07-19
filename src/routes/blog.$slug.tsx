@@ -224,7 +224,7 @@ function PostPage() {
               <h2 id="related-props" className="text-2xl font-bold">Related properties</h2>
               <p className="text-sm text-muted-foreground mt-1">Handpicked listings connected to this article.</p>
               <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {relatedProps.map((p) => <PropertyCard key={p.id} p={p} />)}
+                {relatedProps.map((p: import("@/lib/mock-data").Property) => <PropertyCard key={p.id} p={p} />)}
               </div>
             </section>
           )}
