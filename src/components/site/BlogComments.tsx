@@ -58,7 +58,7 @@ export function BlogComments({ postId }: { postId: string }) {
     setNotice(ok ? "Reported. Thank you." : "Could not report. Please try again.");
   };
 
-  const renderNode = (c: BlogComment, depth = 0): JSX.Element => (
+  const renderNode = (c: BlogComment, depth = 0): React.ReactElement => (
     <li key={c.id} className={depth > 0 ? "ml-6 pl-4 border-l border-border" : ""}>
       <article className="rounded-xl border border-border bg-card p-4">
         <header className="flex items-center justify-between gap-3">
