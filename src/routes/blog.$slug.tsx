@@ -234,7 +234,7 @@ function PostPage() {
             <section className="mt-12" aria-labelledby="related-posts">
               <h2 id="related-posts" className="text-2xl font-bold">Related articles</h2>
               <div className="mt-5 grid gap-6 sm:grid-cols-2">
-                {related.map((r) => (
+                {related.map((r: import("@/lib/blog").BlogPost) => (
                   <Link key={r.id} to="/blog/$slug" params={{ slug: r.slug }}
                     className="group rounded-2xl overflow-hidden border border-border bg-card shadow-soft hover:shadow-glow transition">
                     {r.cover_image ? (
