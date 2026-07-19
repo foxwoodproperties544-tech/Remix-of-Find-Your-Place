@@ -98,10 +98,10 @@ export function BlogSidebar({ currentPost, categories, popularPosts, recentPosts
       {/* Property categories */}
       <SidebarCard title="Property categories">
         <div className="flex flex-wrap gap-2">
-          {PROPERTY_TYPES.slice(0, 10).map((t) => (
-            <Link key={t.value} to="/properties" search={{ type: t.value } as any}
+          {ALL_TYPES.slice(0, 10).map((t: string) => (
+            <Link key={t} to="/properties" search={{ type: t } as any}
               className="rounded-full border border-border px-3 py-1 text-xs hover:border-primary hover:text-primary">
-              {t.label}
+              {t}
             </Link>
           ))}
         </div>
