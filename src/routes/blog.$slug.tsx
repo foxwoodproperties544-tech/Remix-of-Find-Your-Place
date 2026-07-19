@@ -114,11 +114,12 @@ function BlogNotFound() {
   const params = Route.useParams();
   const nav = useNavigate();
   const [q, setQ] = useState("");
-  // Best-effort popular posts — safe to call from client.
   const [popular, setPopular] = useState<import("@/lib/blog").BlogPost[]>([]);
-  if (popular.length === 0) {
-    listPopularPosts(5).then(setPopular).catch(() => {});
-  }
+  useEffect(() => {
+    let cancelled = false;
+    listPopularPosts(5).then((p) => { if (!cancelled) setPopular(p); }).catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Blog index has no search state; navigate there and let the user browse.
