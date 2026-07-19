@@ -484,7 +484,7 @@ function Detail() {
           </div>
           {gallery.length > 1 && (
             <div className="p-3 overflow-x-auto flex gap-2 justify-center">
-              {gallery.map((src, i) => (
+              {gallery.map((src: string, i: number) => (
                 <button key={i} onClick={() => setActive(i)} className={`h-16 w-24 rounded-lg overflow-hidden shrink-0 ring-offset-2 ring-offset-black ${i === active ? "ring-2 ring-primary" : "opacity-70 hover:opacity-100"}`}>
                   <img src={src} alt="" className="h-full w-full object-cover" />
                 </button>
