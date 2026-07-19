@@ -33,7 +33,7 @@ function Index() {
             </span>
           </h1>
           <p className="mt-5 max-w-xl text-white/90 text-base md:text-lg leading-relaxed">
-            Browse trusted properties for sale, rent, and lease. Search by location, price, and property type — verified by our team.
+            Find trusted properties for sale, rent, or lease across Kenya. Search by location, price, and property type to find the right property for your needs.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link to="/properties" className="btn-primary btn-primary-hover">Browse Properties <ArrowRight className="h-4 w-4" /></Link>
