@@ -123,7 +123,7 @@ function PostPage() {
 
           {post.tags.length > 0 && (
             <div className="mt-10 flex flex-wrap gap-2">
-              {post.tags.map((t) => (
+              {post.tags.map((t: string) => (
                 <span key={t} className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">#{t}</span>
               ))}
             </div>
@@ -140,7 +140,7 @@ function PostPage() {
             <div className="rounded-2xl border border-border bg-card p-5">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Related reads</h3>
               <ul className="mt-3 space-y-4">
-                {related.map((r) => (
+                {related.map((r: import("@/lib/blog").BlogPost) => (
                   <li key={r.id}>
                     <Link to="/blog/$slug" params={{ slug: r.slug }} className="group block">
                       <div className="font-semibold text-sm group-hover:text-primary leading-snug">{r.title}</div>
