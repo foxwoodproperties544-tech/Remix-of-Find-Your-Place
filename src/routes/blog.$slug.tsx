@@ -121,8 +121,8 @@ function BlogNotFound() {
   }
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const term = q.trim();
-    nav({ to: "/blog", search: term ? { q: term } as never : undefined });
+    // Blog index has no search state; navigate there and let the user browse.
+    nav({ to: "/blog" });
   };
   return (
     <div className="container-page py-16 md:py-24 max-w-2xl">

@@ -51,6 +51,7 @@ import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
+import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
@@ -276,6 +277,11 @@ const AuthenticatedAdminVerificationsRoute =
     path: '/verifications',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedDashboardVerifyIdRoute =
   AuthenticatedDashboardVerifyIdRouteImport.update({
     id: '/dashboard/verify/$id',
@@ -339,6 +345,7 @@ export interface FileRoutesByFullPath {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
+  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -387,6 +394,7 @@ export interface FileRoutesByTo {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog': typeof BlogIndexRoute
+  '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
+  '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -487,6 +496,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog/'
+    | '/admin/blog'
     | '/admin/verifications'
     | '/dashboard/appointments'
     | '/dashboard/crm'
@@ -535,6 +545,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog'
+    | '/admin/blog'
     | '/admin/verifications'
     | '/dashboard/appointments'
     | '/dashboard/crm'
@@ -584,6 +595,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog/'
+    | '/_authenticated/admin/blog'
     | '/_authenticated/admin/verifications'
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/crm'
@@ -929,6 +941,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminVerificationsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/blog': {
+      id: '/_authenticated/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AuthenticatedAdminBlogRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/dashboard/verify/$id': {
       id: '/_authenticated/dashboard/verify/$id'
       path: '/dashboard/verify/$id'
@@ -968,10 +987,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
 }
 
