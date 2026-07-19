@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { listComments, postComment, toggleCommentLike, reportComment, type BlogComment } from "@/lib/blog";
 import { Heart, Flag, MessageSquare, Reply } from "lucide-react";
