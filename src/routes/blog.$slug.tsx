@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getPostBySlug, listRelated, listRecentPosts, listPopularPosts, listCategoriesWithCounts, listAllTags, getAuthor } from "@/lib/blog";
 import { fetchPublishedProperties } from "@/lib/properties";
 import { renderMarkdown, extractHeadings } from "@/lib/markdown";
