@@ -209,3 +209,16 @@ export const broadcastNotification = createServerFn({ method: "POST" })
     }
     return { ok: true, sent: userIds.length };
   });
+
+/* ============ Claim first admin (bootstrap) ============ */
+
+export const claimFirstAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { count } = await supabaseAdmin.from("user_roles").select("user_id", { count: "exact", head: true }).eq("role", "admin");
+    if ((count ?? 0) > 0) return { claimed: false };
+    const { error } = await supabaseAdmin.from("user_roles").upsert({ user_id: context.userId, role: "admin" as any }, { onConflict: "user_id,role" });
+    if (error) throw error;
+    return { claimed: true };
+  });
