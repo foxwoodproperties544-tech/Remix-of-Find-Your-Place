@@ -494,6 +494,84 @@ export type Database = {
           },
         ]
       }
+      listing_packages: {
+        Row: {
+          active: boolean
+          analytics_enabled: boolean
+          auto_expiry: boolean
+          badge_color: string | null
+          category_highlight: boolean
+          created_at: string
+          description: string | null
+          duration_days: number
+          homepage_placement: boolean
+          id: string
+          is_featured: boolean
+          lead_management: boolean
+          max_listings: number
+          max_photos: number
+          max_videos: number
+          name: string
+          price: number
+          priority_search: boolean
+          renewal_enabled: boolean
+          slug: string
+          sort_order: number
+          updated_at: string
+          whatsapp_button: boolean
+        }
+        Insert: {
+          active?: boolean
+          analytics_enabled?: boolean
+          auto_expiry?: boolean
+          badge_color?: string | null
+          category_highlight?: boolean
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          homepage_placement?: boolean
+          id?: string
+          is_featured?: boolean
+          lead_management?: boolean
+          max_listings?: number
+          max_photos?: number
+          max_videos?: number
+          name: string
+          price?: number
+          priority_search?: boolean
+          renewal_enabled?: boolean
+          slug: string
+          sort_order?: number
+          updated_at?: string
+          whatsapp_button?: boolean
+        }
+        Update: {
+          active?: boolean
+          analytics_enabled?: boolean
+          auto_expiry?: boolean
+          badge_color?: string | null
+          category_highlight?: boolean
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          homepage_placement?: boolean
+          id?: string
+          is_featured?: boolean
+          lead_management?: boolean
+          max_listings?: number
+          max_photos?: number
+          max_videos?: number
+          name?: string
+          price?: number
+          priority_search?: boolean
+          renewal_enabled?: boolean
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+          whatsapp_button?: boolean
+        }
+        Relationships: []
+      }
       mpesa_transactions: {
         Row: {
           amount: number
@@ -774,6 +852,70 @@ export type Database = {
           video_url?: string | null
         }
         Relationships: []
+      }
+      property_package_purchases: {
+        Row: {
+          activated_at: string | null
+          amount_paid: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          mpesa_transaction_id: string | null
+          owner_id: string
+          package_id: string
+          property_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string | null
+          amount_paid?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          mpesa_transaction_id?: string | null
+          owner_id: string
+          package_id: string
+          property_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string | null
+          amount_paid?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          mpesa_transaction_id?: string | null
+          owner_id?: string
+          package_id?: string
+          property_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_package_purchases_mpesa_transaction_id_fkey"
+            columns: ["mpesa_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "mpesa_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_package_purchases_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "listing_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_package_purchases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_views: {
         Row: {
