@@ -89,6 +89,12 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
               is_featured: pkg?.is_featured ?? false,
               featured_until: pkg?.is_featured ? expires : null,
             }).eq("id", txn.property_id);
+          } else if (txn.purpose === "advertisement" && (txn as any).ad_campaign_id) {
+            const campaignId = (txn as any).ad_campaign_id as string;
+            // Move campaign into admin review; days start when admin approves.
+            await supabaseAdmin.from("ad_campaigns").update({
+              status: "pending_review",
+            }).eq("id", campaignId);
           }
 
           await supabaseAdmin.from("notifications").insert({

@@ -5,6 +5,7 @@ import hero from "@/assets/hero.jpg";
 import { properties, testimonials, categoryCards, locations, counties } from "@/lib/mock-data";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
+import { AdSlot } from "@/components/site/AdSlot";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -119,6 +120,13 @@ function Index() {
           {featured.map(p => <PropertyCard key={p.id} p={p} />)}
         </div>
       </section>
+
+      {/* SPONSORED */}
+      <section className="container-page">
+        <AdSlot placement="homepage_banner" className="aspect-[1200/300]" />
+      </section>
+
+
 
       {/* WHY */}
       <section className="bg-muted/50 py-16 md:py-24">
