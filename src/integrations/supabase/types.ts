@@ -494,6 +494,84 @@ export type Database = {
           },
         ]
       }
+      listing_packages: {
+        Row: {
+          active: boolean
+          analytics_enabled: boolean
+          auto_expiry: boolean
+          badge_color: string | null
+          category_highlight: boolean
+          created_at: string
+          description: string | null
+          duration_days: number
+          homepage_placement: boolean
+          id: string
+          is_featured: boolean
+          lead_management: boolean
+          max_listings: number
+          max_photos: number
+          max_videos: number
+          name: string
+          price: number
+          priority_search: boolean
+          renewal_enabled: boolean
+          slug: string
+          sort_order: number
+          updated_at: string
+          whatsapp_button: boolean
+        }
+        Insert: {
+          active?: boolean
+          analytics_enabled?: boolean
+          auto_expiry?: boolean
+          badge_color?: string | null
+          category_highlight?: boolean
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          homepage_placement?: boolean
+          id?: string
+          is_featured?: boolean
+          lead_management?: boolean
+          max_listings?: number
+          max_photos?: number
+          max_videos?: number
+          name: string
+          price?: number
+          priority_search?: boolean
+          renewal_enabled?: boolean
+          slug: string
+          sort_order?: number
+          updated_at?: string
+          whatsapp_button?: boolean
+        }
+        Update: {
+          active?: boolean
+          analytics_enabled?: boolean
+          auto_expiry?: boolean
+          badge_color?: string | null
+          category_highlight?: boolean
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          homepage_placement?: boolean
+          id?: string
+          is_featured?: boolean
+          lead_management?: boolean
+          max_listings?: number
+          max_photos?: number
+          max_videos?: number
+          name?: string
+          price?: number
+          priority_search?: boolean
+          renewal_enabled?: boolean
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+          whatsapp_button?: boolean
+        }
+        Relationships: []
+      }
       mpesa_transactions: {
         Row: {
           amount: number
@@ -503,6 +581,7 @@ export type Database = {
           id: string
           merchant_request_id: string | null
           mpesa_receipt: string | null
+          package_id: string | null
           phone_number: string
           property_id: string | null
           purpose: Database["public"]["Enums"]["mpesa_purpose"]
@@ -522,6 +601,7 @@ export type Database = {
           id?: string
           merchant_request_id?: string | null
           mpesa_receipt?: string | null
+          package_id?: string | null
           phone_number: string
           property_id?: string | null
           purpose: Database["public"]["Enums"]["mpesa_purpose"]
@@ -541,6 +621,7 @@ export type Database = {
           id?: string
           merchant_request_id?: string | null
           mpesa_receipt?: string | null
+          package_id?: string | null
           phone_number?: string
           property_id?: string | null
           purpose?: Database["public"]["Enums"]["mpesa_purpose"]
@@ -553,6 +634,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "mpesa_transactions_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "listing_packages"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "mpesa_transactions_property_id_fkey"
             columns: ["property_id"]
@@ -774,6 +862,70 @@ export type Database = {
           video_url?: string | null
         }
         Relationships: []
+      }
+      property_package_purchases: {
+        Row: {
+          activated_at: string | null
+          amount_paid: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          mpesa_transaction_id: string | null
+          owner_id: string
+          package_id: string
+          property_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string | null
+          amount_paid?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          mpesa_transaction_id?: string | null
+          owner_id: string
+          package_id: string
+          property_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string | null
+          amount_paid?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          mpesa_transaction_id?: string | null
+          owner_id?: string
+          package_id?: string
+          property_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_package_purchases_mpesa_transaction_id_fkey"
+            columns: ["mpesa_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "mpesa_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_package_purchases_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "listing_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_package_purchases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_views: {
         Row: {
@@ -1009,6 +1161,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      expire_listing_packages: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1058,6 +1211,8 @@ export type Database = {
         | "upgrade_tier"
         | "verification_fee"
         | "other"
+        | "listing_package"
+        | "advertisement"
       mpesa_status: "pending" | "success" | "failed" | "cancelled"
       verification_status: "pending" | "approved" | "rejected"
     }
@@ -1231,6 +1386,8 @@ export const Constants = {
         "upgrade_tier",
         "verification_fee",
         "other",
+        "listing_package",
+        "advertisement",
       ],
       mpesa_status: ["pending", "success", "failed", "cancelled"],
       verification_status: ["pending", "approved", "rejected"],

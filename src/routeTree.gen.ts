@@ -56,10 +56,12 @@ import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
+import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authenticated/admin.packages'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
+import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
 import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
@@ -312,6 +314,12 @@ const AuthenticatedAdminSubscriptionsRoute =
     path: '/subscriptions',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminPackagesRoute =
+  AuthenticatedAdminPackagesRouteImport.update({
+    id: '/packages',
+    path: '/packages',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminNotificationsRoute =
   AuthenticatedAdminNotificationsRouteImport.update({
     id: '/notifications',
@@ -333,6 +341,12 @@ const AuthenticatedDashboardVerifyIdRoute =
   AuthenticatedDashboardVerifyIdRouteImport.update({
     id: '/dashboard/verify/$id',
     path: '/dashboard/verify/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardPayIdRoute =
+  AuthenticatedDashboardPayIdRouteImport.update({
+    id: '/dashboard/pay/$id',
+    path: '/dashboard/pay/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardLeadsNewRoute =
@@ -396,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/packages': typeof AuthenticatedAdminPackagesRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -414,6 +429,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRoutesByTo {
@@ -452,6 +468,7 @@ export interface FileRoutesByTo {
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/packages': typeof AuthenticatedAdminPackagesRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -470,6 +487,7 @@ export interface FileRoutesByTo {
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRoutesById {
@@ -510,6 +528,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -528,6 +547,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
 }
 export interface FileRouteTypes {
@@ -568,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/blog'
     | '/admin/notifications'
+    | '/admin/packages'
     | '/admin/subscriptions'
     | '/admin/users'
     | '/admin/verifications'
@@ -586,6 +607,7 @@ export interface FileRouteTypes {
     | '/dashboard/feature/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
+    | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -624,6 +646,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/blog'
     | '/admin/notifications'
+    | '/admin/packages'
     | '/admin/subscriptions'
     | '/admin/users'
     | '/admin/verifications'
@@ -642,6 +665,7 @@ export interface FileRouteTypes {
     | '/dashboard/feature/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
+    | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
   id:
     | '__root__'
@@ -681,6 +705,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/blog'
     | '/_authenticated/admin/notifications'
+    | '/_authenticated/admin/packages'
     | '/_authenticated/admin/subscriptions'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
@@ -699,6 +724,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/feature/$id'
     | '/_authenticated/dashboard/leads/$id'
     | '/_authenticated/dashboard/leads/new'
+    | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/verify/$id'
   fileRoutesById: FileRoutesById
 }
@@ -1067,6 +1093,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSubscriptionsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/packages': {
+      id: '/_authenticated/admin/packages'
+      path: '/packages'
+      fullPath: '/admin/packages'
+      preLoaderRoute: typeof AuthenticatedAdminPackagesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/notifications': {
       id: '/_authenticated/admin/notifications'
       path: '/notifications'
@@ -1093,6 +1126,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/verify/$id'
       fullPath: '/dashboard/verify/$id'
       preLoaderRoute: typeof AuthenticatedDashboardVerifyIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/pay/$id': {
+      id: '/_authenticated/dashboard/pay/$id'
+      path: '/dashboard/pay/$id'
+      fullPath: '/dashboard/pay/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardPayIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/leads/new': {
@@ -1130,6 +1170,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
+  AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
@@ -1139,6 +1180,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
+  AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
@@ -1179,6 +1221,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
   AuthenticatedDashboardFeatureIdRoute: typeof AuthenticatedDashboardFeatureIdRoute
+  AuthenticatedDashboardPayIdRoute: typeof AuthenticatedDashboardPayIdRoute
   AuthenticatedDashboardVerifyIdRoute: typeof AuthenticatedDashboardVerifyIdRoute
 }
 
@@ -1201,6 +1244,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
   AuthenticatedDashboardFeatureIdRoute: AuthenticatedDashboardFeatureIdRoute,
+  AuthenticatedDashboardPayIdRoute: AuthenticatedDashboardPayIdRoute,
   AuthenticatedDashboardVerifyIdRoute: AuthenticatedDashboardVerifyIdRoute,
 }
 
@@ -1243,13 +1287,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

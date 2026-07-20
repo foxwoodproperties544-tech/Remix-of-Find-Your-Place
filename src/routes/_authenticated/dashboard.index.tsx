@@ -211,6 +211,9 @@ function Dashboard() {
                     )}
                     <Link to="/properties/$id" params={{ id: p.slug ?? p.id }} className="btn-ghost !px-3 !py-2" title="View"><ExternalLink className="h-4 w-4" /></Link>
                     <Link to="/dashboard/edit/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Edit"><Pencil className="h-4 w-4" /></Link>
+                    {p.status === "pending_payment" && (
+                      <Link to="/dashboard/pay/$id" params={{ id: p.id }} className="btn-primary btn-primary-hover !px-3 !py-2 text-xs" title="Pay to publish">Pay to publish</Link>
+                    )}
                     {(p.status === "rejected" || p.status === "draft") && (
                       <button onClick={() => renew.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-primary" title="Submit for review"><RefreshCw className="h-4 w-4" /></button>
                     )}

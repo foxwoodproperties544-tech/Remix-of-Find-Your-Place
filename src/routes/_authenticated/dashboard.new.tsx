@@ -162,7 +162,7 @@ function NewListing() {
       const v = (parsed.success ? parsed.data : (form as any));
       const latNum = form.lat ? Number(form.lat) : null;
       const lngNum = form.lng ? Number(form.lng) : null;
-      const { error } = await supabase.from("properties").insert({
+      const { data: inserted, error } = await supabase.from("properties").insert({
         owner_id: user.id,
         title: v.title,
         description: v.description || "",
@@ -185,11 +185,16 @@ function NewListing() {
         documents: docs,
         lat: latNum,
         lng: lngNum,
-        status: mode === "draft" ? "draft" : "pending",
-      });
+        status: mode === "draft" ? "draft" : "pending_payment",
+      }).select("id").single();
       if (error) throw error;
-      toast.success(mode === "draft" ? "Draft saved" : "Listing submitted for review");
-      navigate({ to: "/dashboard" });
+      if (mode === "draft") {
+        toast.success("Draft saved");
+        navigate({ to: "/dashboard" });
+      } else {
+        toast.success("Listing created — choose a package to publish");
+        navigate({ to: "/dashboard/pay/$id", params: { id: inserted!.id } });
+      }
     } catch (err: any) {
       toast.error(err.message ?? "Failed to save");
     } finally {
