@@ -14,6 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_campaigns: {
+        Row: {
+          admin_notes: string | null
+          amount_paid: number
+          clicks: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          image_url: string
+          impressions: number
+          mpesa_transaction_id: string | null
+          owner_id: string
+          package_id: string
+          placement: string
+          starts_at: string | null
+          status: string
+          target_url: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount_paid?: number
+          clicks?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          image_url: string
+          impressions?: number
+          mpesa_transaction_id?: string | null
+          owner_id: string
+          package_id: string
+          placement: string
+          starts_at?: string | null
+          status?: string
+          target_url: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          amount_paid?: number
+          clicks?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          image_url?: string
+          impressions?: number
+          mpesa_transaction_id?: string | null
+          owner_id?: string
+          package_id?: string
+          placement?: string
+          starts_at?: string | null
+          status?: string
+          target_url?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_campaigns_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "ad_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ad_packages: {
+        Row: {
+          active: boolean
+          badge_color: string | null
+          created_at: string
+          description: string | null
+          duration_days: number
+          height_px: number
+          id: string
+          max_active: number
+          name: string
+          placement: string
+          price: number
+          slug: string
+          sort_order: number
+          updated_at: string
+          width_px: number
+        }
+        Insert: {
+          active?: boolean
+          badge_color?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          height_px?: number
+          id?: string
+          max_active?: number
+          name: string
+          placement: string
+          price?: number
+          slug: string
+          sort_order?: number
+          updated_at?: string
+          width_px?: number
+        }
+        Update: {
+          active?: boolean
+          badge_color?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          height_px?: number
+          id?: string
+          max_active?: number
+          name?: string
+          placement?: string
+          price?: number
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+          width_px?: number
+        }
+        Relationships: []
+      }
       blog_comment_likes: {
         Row: {
           comment_id: string
@@ -574,6 +696,7 @@ export type Database = {
       }
       mpesa_transactions: {
         Row: {
+          ad_campaign_id: string | null
           amount: number
           checkout_request_id: string | null
           created_at: string
@@ -594,6 +717,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          ad_campaign_id?: string | null
           amount: number
           checkout_request_id?: string | null
           created_at?: string
@@ -614,6 +738,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          ad_campaign_id?: string | null
           amount?: number
           checkout_request_id?: string | null
           created_at?: string
@@ -634,6 +759,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "mpesa_transactions_ad_campaign_id_fkey"
+            columns: ["ad_campaign_id"]
+            isOneToOne: false
+            referencedRelation: "ad_campaigns"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "mpesa_transactions_package_id_fkey"
             columns: ["package_id"]
