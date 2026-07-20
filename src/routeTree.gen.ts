@@ -55,6 +55,8 @@ import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes
 import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
+import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
+import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
@@ -304,6 +306,18 @@ const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminSubscriptionsRoute =
+  AuthenticatedAdminSubscriptionsRouteImport.update({
+    id: '/subscriptions',
+    path: '/subscriptions',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminNotificationsRoute =
+  AuthenticatedAdminNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -381,6 +395,8 @@ export interface FileRoutesByFullPath {
   '/properties/': typeof PropertiesIndexRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
@@ -435,6 +451,8 @@ export interface FileRoutesByTo {
   '/properties': typeof PropertiesIndexRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
@@ -491,6 +509,8 @@ export interface FileRoutesById {
   '/properties/': typeof PropertiesIndexRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
@@ -547,6 +567,8 @@ export interface FileRouteTypes {
     | '/properties/'
     | '/admin/analytics'
     | '/admin/blog'
+    | '/admin/notifications'
+    | '/admin/subscriptions'
     | '/admin/users'
     | '/admin/verifications'
     | '/dashboard/account'
@@ -601,6 +623,8 @@ export interface FileRouteTypes {
     | '/properties'
     | '/admin/analytics'
     | '/admin/blog'
+    | '/admin/notifications'
+    | '/admin/subscriptions'
     | '/admin/users'
     | '/admin/verifications'
     | '/dashboard/account'
@@ -656,6 +680,8 @@ export interface FileRouteTypes {
     | '/properties/'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/blog'
+    | '/_authenticated/admin/notifications'
+    | '/_authenticated/admin/subscriptions'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
     | '/_authenticated/dashboard/account'
@@ -1034,6 +1060,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/subscriptions': {
+      id: '/_authenticated/admin/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/admin/subscriptions'
+      preLoaderRoute: typeof AuthenticatedAdminSubscriptionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/notifications': {
+      id: '/_authenticated/admin/notifications'
+      path: '/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AuthenticatedAdminNotificationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/blog': {
       id: '/_authenticated/admin/blog'
       path: '/blog'
@@ -1089,6 +1129,8 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
+  AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
+  AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
 }
@@ -1096,6 +1138,8 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
+  AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
+  AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
 }

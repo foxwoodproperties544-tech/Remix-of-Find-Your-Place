@@ -50,6 +50,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
         { to: "/admin/verifications", label: "Verifications", icon: ShieldCheck },
+        { to: "/admin/subscriptions", label: "Subscriptions", icon: Star },
+        { to: "/admin/notifications", label: "Notifications", icon: Bell },
         { to: "/admin/blog", label: "Blog", icon: FileText },
       ],
     });
