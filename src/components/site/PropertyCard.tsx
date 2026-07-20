@@ -29,7 +29,7 @@ export function PropertyCard({ p }: { p: Property }) {
           <GitCompare className="h-4 w-4" />
         </button>
       </div>
-      <Link to="/properties/$id" params={{ id: p.id }} className="block">
+      <Link to="/properties/$id" params={{ id: p.slug ?? p.id }} aria-label={`View details for ${p.title}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <img src={p.image} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
           <div className="absolute top-3 left-3 flex gap-2 flex-wrap max-w-[70%]">
