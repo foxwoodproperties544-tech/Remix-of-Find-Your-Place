@@ -1,8 +1,24 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search, MapPin, Home, ShieldCheck, Users, BadgeCheck, Headphones, Wallet, ArrowRight, Star, Quote } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import hero from "@/assets/hero.jpg";
+import p1 from "@/assets/p1.jpg";
+import p2 from "@/assets/p2.jpg";
+import p3 from "@/assets/p3.jpg";
+import p4 from "@/assets/p4.jpg";
+import p5 from "@/assets/p5.jpg";
+import p6 from "@/assets/p6.jpg";
 import { properties, testimonials, categoryCards, locations, counties } from "@/lib/mock-data";
+
+const HERO_SLIDES = [
+  { src: hero, alt: "Modern Kenyan homes at golden hour" },
+  { src: p1, alt: "Prime land and plots in Kenya" },
+  { src: p2, alt: "Contemporary houses in Nairobi" },
+  { src: p3, alt: "Stylish apartments for rent" },
+  { src: p4, alt: "Airbnb getaways across Kenya" },
+  { src: p5, alt: "Commercial properties and office spaces" },
+  { src: p6, alt: "Coastal holiday homes in Mombasa" },
+];
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 import { AdSlot } from "@/components/site/AdSlot";
