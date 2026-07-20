@@ -35,7 +35,7 @@ const OG_IMAGE = absoluteUrl(heroAbout);
 const TITLE = "Properties — Foxwood Properties";
 const DESC = "Browse verified properties for sale, rent, and lease across Kenya.";
 
-export const Route = createFileRoute("/properties")({
+export const Route = createFileRoute("/properties/")({
   head: () => ({
     meta: [
       { title: TITLE },
