@@ -308,13 +308,14 @@ export const updateCampaignSchedule = createServerFn({ method: "POST" })
     if (data.starts_at && data.expires_at && new Date(data.starts_at) >= new Date(data.expires_at)) {
       throw new Error("Start must be before end");
     }
-    const patch: Record<string, any> = {};
+    const patch: { starts_at?: string | null; expires_at?: string | null } = {};
     if (data.starts_at !== undefined) patch.starts_at = data.starts_at;
     if (data.expires_at !== undefined) patch.expires_at = data.expires_at;
     const { error } = await context.supabase.from("ad_campaigns").update(patch).eq("id", data.id);
     if (error) throw error;
     return { ok: true };
   });
+
 
 /* ============= ANALYTICS ============= */
 
