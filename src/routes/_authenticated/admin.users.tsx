@@ -3,8 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
-import { listUsers, setUserRole, setUserVerified } from "@/lib/users.functions";
-import { ShieldCheck, Search, BadgeCheck, X, Plus } from "lucide-react";
+import { listUsers, setUserRole } from "@/lib/users.functions";
+import { decideAccountVerification } from "@/lib/admin.functions";
+import { ShieldCheck, Search, BadgeCheck, X, ThumbsUp, ThumbsDown } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
@@ -21,7 +22,9 @@ function AdminUsers() {
   const [q, setQ] = useState("");
   const listFn = useServerFn(listUsers);
   const roleFn = useServerFn(setUserRole);
-  const verifyFn = useServerFn(setUserVerified);
+  const decideFn = useServerFn(decideAccountVerification);
+  const [rejectFor, setRejectFor] = useState<string | null>(null);
+  const [reason, setReason] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-users", q],
@@ -36,9 +39,13 @@ function AdminUsers() {
     onError: (e: any) => toast.error(e.message ?? "Failed"),
   });
 
-  const verifyMut = useMutation({
-    mutationFn: (v: { userId: string; verified: boolean }) => verifyFn({ data: v }),
-    onSuccess: () => { toast.success("Verification updated"); qc.invalidateQueries({ queryKey: ["admin-users"] }); },
+  const decideMut = useMutation({
+    mutationFn: (v: { userId: string; decision: "approve" | "reject"; reason?: string }) => decideFn({ data: v }),
+    onSuccess: (_r, v) => {
+      toast.success(v.decision === "approve" ? "Account verified" : "Account rejected");
+      setRejectFor(null); setReason("");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
     onError: (e: any) => toast.error(e.message ?? "Failed"),
   });
 
@@ -141,13 +148,32 @@ function AdminUsers() {
                           <option key={r} value={r}>{r}</option>
                         ))}
                       </select>
-                      <button
-                        onClick={() => verifyMut.mutate({ userId: u.id, verified: !u.verified })}
-                        className="btn-ghost !px-2 !py-1 text-xs"
-                        title="Toggle verification"
-                      >
-                        <BadgeCheck className="h-4 w-4" /> {u.verified ? "Unverify" : "Verify"}
-                      </button>
+                      {u.verified ? (
+                        <button
+                          onClick={() => decideMut.mutate({ userId: u.id, decision: "reject" })}
+                          className="btn-ghost !px-2 !py-1 text-xs text-destructive"
+                          title="Revoke verification"
+                        >
+                          <ThumbsDown className="h-4 w-4" /> Unverify
+                        </button>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => decideMut.mutate({ userId: u.id, decision: "approve" })}
+                            className="btn-ghost !px-2 !py-1 text-xs text-primary"
+                            title="Verify account"
+                          >
+                            <ThumbsUp className="h-4 w-4" /> Verify
+                          </button>
+                          <button
+                            onClick={() => { setRejectFor(u.id); setReason(""); }}
+                            className="btn-ghost !px-2 !py-1 text-xs text-destructive"
+                            title="Reject request"
+                          >
+                            <ThumbsDown className="h-4 w-4" /> Reject
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -156,6 +182,31 @@ function AdminUsers() {
           </table>
         </div>
       </div>
+
+      {rejectFor && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" onClick={() => setRejectFor(null)}>
+          <div className="bg-card rounded-2xl border border-border p-5 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            <h3 className="font-semibold">Reject verification</h3>
+            <p className="text-xs text-muted-foreground mt-1">The user will be notified with your reason.</p>
+            <textarea
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              rows={4}
+              placeholder="Reason (optional but recommended)"
+              className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+            />
+            <div className="mt-3 flex justify-end gap-2">
+              <button onClick={() => setRejectFor(null)} className="btn-ghost text-sm">Cancel</button>
+              <button
+                onClick={() => decideMut.mutate({ userId: rejectFor!, decision: "reject", reason: reason.trim() || undefined })}
+                className="btn-primary btn-primary-hover text-sm"
+              >
+                Confirm reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
