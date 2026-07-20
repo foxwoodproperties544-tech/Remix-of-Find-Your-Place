@@ -3,6 +3,7 @@ import type { Property } from "./mock-data";
 
 export interface DbPropertyRow {
   id: string;
+  slug?: string | null;
   owner_id: string;
   title: string;
   description: string;
@@ -39,6 +40,7 @@ const PLACEHOLDER = "https://images.unsplash.com/photo-1600585154340-be6161a56a0
 export function toProperty(r: DbPropertyRow): Property {
   return {
     id: r.id,
+    slug: r.slug ?? undefined,
     title: r.title,
     price: Number(r.price),
     priceSuffix: r.price_suffix ?? undefined,
