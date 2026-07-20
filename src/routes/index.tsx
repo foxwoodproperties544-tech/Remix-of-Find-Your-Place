@@ -9,6 +9,10 @@ import p4 from "@/assets/p4.jpg";
 import p5 from "@/assets/p5.jpg";
 import p6 from "@/assets/p6.jpg";
 import { properties, testimonials, categoryCards, locations, counties } from "@/lib/mock-data";
+import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
+import { PropertyCard } from "@/components/site/PropertyCard";
+import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
+import { AdSlot } from "@/components/site/AdSlot";
 
 const HERO_SLIDES = [
   { src: hero, alt: "Modern Kenyan homes at golden hour" },
@@ -19,9 +23,9 @@ const HERO_SLIDES = [
   { src: p5, alt: "Commercial properties and office spaces" },
   { src: p6, alt: "Coastal holiday homes in Mombasa" },
 ];
-import { PropertyCard } from "@/components/site/PropertyCard";
-import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
-import { AdSlot } from "@/components/site/AdSlot";
+
+// Toggle: "video" plays the premium animated hero, "slider" uses the image slider.
+const HERO_MODE: "video" | "slider" = "video";
 
 export const Route = createFileRoute("/")({ component: Index });
 
@@ -32,6 +36,7 @@ function Index() {
   const featured = properties.filter(p => p.featured).slice(0, 6);
 
   useEffect(() => {
+    if (HERO_MODE !== "slider") return;
     const id = setInterval(() => setSlide(s => (s + 1) % HERO_SLIDES.length), 5000);
     return () => clearInterval(id);
   }, []);
@@ -41,17 +46,31 @@ function Index() {
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          {HERO_SLIDES.map((s, i) => (
-            <img
-              key={s.src}
-              src={s.src}
-              alt={s.alt}
-              width={1920}
-              height={1200}
-              loading={i === 0 ? "eager" : "lazy"}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out ${i === slide ? "opacity-100" : "opacity-0"}`}
+          {HERO_MODE === "video" ? (
+            <video
+              src={heroVideoAsset.url}
+              poster={hero}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-label="Premium showcase of Kenyan properties"
+              className="absolute inset-0 h-full w-full object-cover"
             />
-          ))}
+          ) : (
+            HERO_SLIDES.map((s, i) => (
+              <img
+                key={s.src}
+                src={s.src}
+                alt={s.alt}
+                width={1920}
+                height={1200}
+                loading={i === 0 ? "eager" : "lazy"}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out ${i === slide ? "opacity-100" : "opacity-0"}`}
+              />
+            ))
+          )}
           <div className="absolute inset-0" style={{ background: "var(--gradient-hero)", opacity: 0.82 }} />
           <div className="absolute inset-0 hero-grid-bg opacity-40" />
         </div>
