@@ -194,9 +194,9 @@ const ServicesBuyRoute = ServicesBuyRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
-  id: '/properties/$id',
-  path: '/properties/$id',
-  getParentRoute: () => rootRouteImport,
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PropertiesRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
@@ -644,7 +644,6 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   AgentsIdRoute: typeof AgentsIdRoute
   BlogSlugRoute: typeof BlogSlugRoute
-  PropertiesIdRoute: typeof PropertiesIdRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
   ServicesInvestmentRoute: typeof ServicesInvestmentRoute
   ServicesLeaseRoute: typeof ServicesLeaseRoute
@@ -852,10 +851,10 @@ declare module '@tanstack/react-router' {
     }
     '/properties/$id': {
       id: '/properties/$id'
-      path: '/properties/$id'
+      path: '/$id'
       fullPath: '/properties/$id'
       preLoaderRoute: typeof PropertiesIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PropertiesRoute
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -1095,7 +1094,6 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   AgentsIdRoute: AgentsIdRoute,
   BlogSlugRoute: BlogSlugRoute,
-  PropertiesIdRoute: PropertiesIdRoute,
   ServicesBuyRoute: ServicesBuyRoute,
   ServicesInvestmentRoute: ServicesInvestmentRoute,
   ServicesLeaseRoute: ServicesLeaseRoute,
@@ -1112,3 +1110,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
