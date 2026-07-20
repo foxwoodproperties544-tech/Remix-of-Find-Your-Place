@@ -54,7 +54,11 @@ function AdminPackages() {
     queryFn: () => listFn(),
   });
 
-  const invalidate = () => qc.invalidateQueries({ queryKey: ["admin-packages"] });
+  const invalidate = () => {
+    qc.invalidateQueries({ queryKey: ["admin-packages"] });
+    // Also refresh the public pricing page cache so toggles/edits show immediately.
+    qc.invalidateQueries({ queryKey: ["active-packages"] });
+  };
 
   const save = useMutation({
     mutationFn: async () => {
@@ -108,6 +112,7 @@ function AdminPackages() {
         </div>
         <div className="flex gap-2">
           <Link to="/admin/subscriptions" className="btn-ghost text-sm">Subscriptions</Link>
+          <Link to="/admin/packages/preview" className="btn-ghost text-sm">Preview pricing page</Link>
           <button onClick={() => setEditing({ ...empty })} className="btn-primary btn-primary-hover text-sm inline-flex items-center gap-2"><Plus className="h-4 w-4" /> New package</button>
         </div>
       </div>

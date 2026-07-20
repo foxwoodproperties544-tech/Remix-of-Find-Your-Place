@@ -71,6 +71,7 @@ import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_au
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
 import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
+import { Route as AuthenticatedAdminPackagesPreviewRouteImport } from './routes/_authenticated/admin.packages.preview'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -407,6 +408,12 @@ const AuthenticatedDashboardEditIdRoute =
     path: '/dashboard/edit/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminPackagesPreviewRoute =
+  AuthenticatedAdminPackagesPreviewRouteImport.update({
+    id: '/preview',
+    path: '/preview',
+    getParentRoute: () => AuthenticatedAdminPackagesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -446,7 +453,7 @@ export interface FileRoutesByFullPath {
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
-  '/admin/packages': typeof AuthenticatedAdminPackagesRoute
+  '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -464,6 +471,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
@@ -509,7 +517,7 @@ export interface FileRoutesByTo {
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
-  '/admin/packages': typeof AuthenticatedAdminPackagesRoute
+  '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -527,6 +535,7 @@ export interface FileRoutesByTo {
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
@@ -574,7 +583,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
-  '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRoute
+  '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -592,6 +601,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/_authenticated/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
@@ -657,6 +667,7 @@ export interface FileRouteTypes {
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/dashboard/'
+    | '/admin/packages/preview'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
     | '/dashboard/leads/$id'
@@ -720,6 +731,7 @@ export interface FileRouteTypes {
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/dashboard'
+    | '/admin/packages/preview'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
     | '/dashboard/leads/$id'
@@ -784,6 +796,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/admin/packages/preview'
     | '/_authenticated/dashboard/edit/$id'
     | '/_authenticated/dashboard/feature/$id'
     | '/_authenticated/dashboard/leads/$id'
@@ -1262,8 +1275,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardEditIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/packages/preview': {
+      id: '/_authenticated/admin/packages/preview'
+      path: '/preview'
+      fullPath: '/admin/packages/preview'
+      preLoaderRoute: typeof AuthenticatedAdminPackagesPreviewRouteImport
+      parentRoute: typeof AuthenticatedAdminPackagesRoute
+    }
   }
 }
+
+interface AuthenticatedAdminPackagesRouteChildren {
+  AuthenticatedAdminPackagesPreviewRoute: typeof AuthenticatedAdminPackagesPreviewRoute
+}
+
+const AuthenticatedAdminPackagesRouteChildren: AuthenticatedAdminPackagesRouteChildren =
+  {
+    AuthenticatedAdminPackagesPreviewRoute:
+      AuthenticatedAdminPackagesPreviewRoute,
+  }
+
+const AuthenticatedAdminPackagesRouteWithChildren =
+  AuthenticatedAdminPackagesRoute._addFileChildren(
+    AuthenticatedAdminPackagesRouteChildren,
+  )
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAdCampaignsRoute: typeof AuthenticatedAdminAdCampaignsRoute
@@ -1271,7 +1306,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
-  AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRoute
+  AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRouteWithChildren
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
@@ -1283,7 +1318,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
-  AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRoute,
+  AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRouteWithChildren,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
