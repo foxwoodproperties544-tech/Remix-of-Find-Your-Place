@@ -82,6 +82,38 @@ export type Database = {
           },
         ]
       }
+      ad_daily_stats: {
+        Row: {
+          campaign_id: string
+          clicks: number
+          day: string
+          impressions: number
+          updated_at: string
+        }
+        Insert: {
+          campaign_id: string
+          clicks?: number
+          day: string
+          impressions?: number
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string
+          clicks?: number
+          day?: string
+          impressions?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ad_daily_stats_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "ad_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ad_packages: {
         Row: {
           active: boolean
@@ -1293,6 +1325,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bump_ad_daily_stat: {
+        Args: { _campaign: string; _kind: string }
+        Returns: undefined
+      }
       expire_listing_packages: { Args: never; Returns: undefined }
       has_role: {
         Args: {
