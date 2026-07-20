@@ -54,6 +54,7 @@ import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
 import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
+import { Route as AuthenticatedDashboardAdAnalyticsRouteImport } from './routes/_authenticated/dashboard.ad-analytics'
 import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
@@ -307,6 +308,12 @@ const AuthenticatedDashboardAdvertiseRoute =
     path: '/dashboard/advertise',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardAdAnalyticsRoute =
+  AuthenticatedDashboardAdAnalyticsRouteImport.update({
+    id: '/dashboard/ad-analytics',
+    path: '/dashboard/ad-analytics',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardAccountRoute =
   AuthenticatedDashboardAccountRouteImport.update({
     id: '/dashboard/account',
@@ -444,6 +451,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
+  '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -506,6 +514,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
+  '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -570,6 +579,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
+  '/_authenticated/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -634,6 +644,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/dashboard/account'
+    | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
     | '/dashboard/crm'
@@ -696,6 +707,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/dashboard/account'
+    | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
     | '/dashboard/crm'
@@ -759,6 +771,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
     | '/_authenticated/dashboard/account'
+    | '/_authenticated/dashboard/ad-analytics'
     | '/_authenticated/dashboard/advertise'
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/crm'
@@ -1130,6 +1143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAdvertiseRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/ad-analytics': {
+      id: '/_authenticated/dashboard/ad-analytics'
+      path: '/dashboard/ad-analytics'
+      fullPath: '/dashboard/ad-analytics'
+      preLoaderRoute: typeof AuthenticatedDashboardAdAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/account': {
       id: '/_authenticated/dashboard/account'
       path: '/dashboard/account'
@@ -1293,6 +1313,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
   AuthenticatedDashboardAccountRoute: typeof AuthenticatedDashboardAccountRoute
+  AuthenticatedDashboardAdAnalyticsRoute: typeof AuthenticatedDashboardAdAnalyticsRoute
   AuthenticatedDashboardAdvertiseRoute: typeof AuthenticatedDashboardAdvertiseRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
@@ -1315,6 +1336,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
   AuthenticatedDashboardAccountRoute: AuthenticatedDashboardAccountRoute,
+  AuthenticatedDashboardAdAnalyticsRoute:
+    AuthenticatedDashboardAdAnalyticsRoute,
   AuthenticatedDashboardAdvertiseRoute: AuthenticatedDashboardAdvertiseRoute,
   AuthenticatedDashboardAppointmentsRoute:
     AuthenticatedDashboardAppointmentsRoute,

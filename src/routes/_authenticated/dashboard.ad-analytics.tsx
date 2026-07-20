@@ -56,15 +56,16 @@ function AdAnalytics() {
   // Fill missing days with zeros for a continuous chart
   const filled = useMemo(() => {
     if (!from || !to) return daily;
-    const map = new Map(daily.map((d) => [d.day, d]));
+    const map = new Map(daily.map((d) => [d.day, { impressions: d.impressions, clicks: d.clicks }]));
     const out: { day: string; impressions: number; clicks: number; ctr: number }[] = [];
     const start = new Date(from + "T00:00:00Z");
     const end = new Date(to + "T00:00:00Z");
     for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
       const key = d.toISOString().slice(0, 10);
-      const row = map.get(key) ?? { day: key, impressions: 0, clicks: 0 };
+      const row = map.get(key) ?? { impressions: 0, clicks: 0 };
       const ctr = row.impressions > 0 ? Number(((row.clicks / row.impressions) * 100).toFixed(2)) : 0;
-      out.push({ ...row, ctr });
+      out.push({ day: key, impressions: row.impressions, clicks: row.clicks, ctr });
+
     }
     return out;
   }, [daily, from, to]);
