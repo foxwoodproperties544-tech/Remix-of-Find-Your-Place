@@ -111,21 +111,21 @@ function ProfilePage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Full name">
-            <input className="input" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} required />
+            <input className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} required />
           </Field>
           <Field label="Company">
-            <input className="input" value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} />
+            <input className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} />
           </Field>
           <Field label="Phone">
-            <input className="input" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+254…" />
+            <input className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+254…" />
           </Field>
           <Field label="WhatsApp">
-            <input className="input" value={form.whatsapp} onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} placeholder="+254…" />
+            <input className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" value={form.whatsapp} onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} placeholder="+254…" />
           </Field>
         </div>
 
         <Field label="Short bio">
-          <textarea className="input min-h-[120px]" value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} maxLength={600} />
+          <textarea className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm min-h-[120px]" value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} maxLength={600} />
           <div className="text-xs text-muted-foreground mt-1">{form.bio.length}/600</div>
         </Field>
 
