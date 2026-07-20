@@ -175,7 +175,48 @@ function groupFeatures(features: string[]): Record<string, string[]> {
   return out;
 }
 
-function Detail() {
+function PropertyNotFound() {
+  return (
+    <>
+      <div
+        className="relative border-b border-border overflow-hidden"
+        style={{ background: `linear-gradient(120deg, color-mix(in oklab, var(--primary) 92%, black) 0%, color-mix(in oklab, var(--primary) 70%, black) 55%, color-mix(in oklab, var(--secondary) 55%, black) 100%)` }}
+      >
+        <div className="absolute inset-0 hero-grid-bg opacity-30" />
+        <div className="relative container-page py-10 md:py-14 text-white">
+          <nav aria-label="Breadcrumb" className="text-xs text-white/80 mb-2 flex items-center gap-1.5">
+            <Link to="/" className="hover:underline">Home</Link>
+            <span>/</span>
+            <Link to="/properties" className="hover:underline">Properties</Link>
+            <span>/</span>
+            <span>Not found</span>
+          </nav>
+          <h1 className="text-3xl md:text-4xl font-extrabold">Property not found</h1>
+          <p className="mt-2 text-white/85 max-w-2xl">
+            The listing you're looking for may have been removed, renamed, or is no longer available.
+          </p>
+        </div>
+      </div>
+
+      <section className="container-page py-14">
+        <div className="max-w-2xl mx-auto text-center">
+          <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-primary-soft text-primary">
+            <AlertCircle className="h-8 w-8" />
+          </div>
+          <p className="mt-6 text-muted-foreground">
+            Try browsing all listings, or head back home to start a fresh search.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+            <Link to="/properties" className="btn-primary btn-primary-hover">Browse all properties</Link>
+            <Link to="/" className="btn-ghost">Back to home</Link>
+            <Link to="/contact" className="btn-ghost">Contact us</Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
   const loaderData = Route.useLoaderData();
   const { p, ownerId, propertyKey, ownerProfile, contactPhone, contactWhatsapp, videoUrl, documents, createdAt, verified, featured } = loaderData;
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
