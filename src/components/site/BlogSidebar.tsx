@@ -81,7 +81,7 @@ export function BlogSidebar({ currentPost, categories, popularPosts, recentPosts
           <ul className="space-y-3">
             {featuredProperties.map((p) => (
               <li key={p.id}>
-                <Link to="/properties/$id" params={{ id: p.id }} className="group flex gap-3">
+                <Link to="/properties/$id" params={{ id: p.slug ?? p.id }} className="group flex gap-3">
                   <img src={p.image} alt="" loading="lazy" className="h-16 w-20 shrink-0 rounded-lg object-cover" />
                   <div className="min-w-0">
                     <div className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary">{p.title}</div>

@@ -45,13 +45,13 @@ export const Route = createFileRoute("/sitemap.xml")({
         try {
           const { data: props } = await supabase
             .from("properties")
-            .select("id, updated_at")
+            .select("id, slug, updated_at")
             .eq("status", "published")
             .order("updated_at", { ascending: false })
             .limit(2000);
           for (const p of props ?? []) {
             entries.push({
-              path: `/properties/${p.id}`,
+              path: `/properties/${(p as any).slug ?? p.id}`,
               lastmod: p.updated_at ? new Date(p.updated_at).toISOString() : undefined,
               changefreq: "weekly",
               priority: "0.8",

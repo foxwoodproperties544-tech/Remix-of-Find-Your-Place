@@ -200,7 +200,7 @@ function Dashboard() {
                     {p.verified && (
                       <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary bg-primary-soft rounded-full px-2 py-1"><ShieldCheck className="h-3 w-3" /> Verified</span>
                     )}
-                    <Link to="/properties/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="View"><ExternalLink className="h-4 w-4" /></Link>
+                    <Link to="/properties/$id" params={{ id: p.slug ?? p.id }} className="btn-ghost !px-3 !py-2" title="View"><ExternalLink className="h-4 w-4" /></Link>
                     <Link to="/dashboard/edit/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Edit"><Pencil className="h-4 w-4" /></Link>
                     {(p.status === "rejected" || p.status === "draft") && (
                       <button onClick={() => renew.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-primary" title="Submit for review"><RefreshCw className="h-4 w-4" /></button>
