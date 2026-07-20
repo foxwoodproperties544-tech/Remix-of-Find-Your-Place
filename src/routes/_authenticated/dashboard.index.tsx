@@ -1,7 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { useRoles } from "@/hooks/use-role";
 import { fetchMyProperties } from "@/lib/properties";
 import { formatKsh } from "@/lib/mock-data";
 import { PlusCircle, Trash2, ExternalLink, Home, CheckCircle2, Clock, XCircle, Eye, Heart, TrendingUp, Pencil, RefreshCw, Star, ShieldCheck } from "lucide-react";
@@ -9,6 +10,7 @@ import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import heroTools from "@/assets/hero-tools.jpg";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: Dashboard,
@@ -27,8 +29,15 @@ function sinceIso(range: RangeKey): string | null {
 
 function Dashboard() {
   const { user } = useAuth();
+  const { isAgent, isAdmin, loading: rolesLoading } = useRoles();
   const qc = useQueryClient();
   const [range, setRange] = useState<RangeKey>("30");
+
+  if (!rolesLoading && !isAgent && !isAdmin) {
+    return <Navigate to="/dashboard/account" replace />;
+  }
+
+
 
   const { data, isLoading } = useQuery({
     queryKey: ["my-properties", user?.id],
