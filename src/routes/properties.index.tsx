@@ -15,6 +15,7 @@ import heroAbout from "@/assets/hero-about.jpg";
 import { absoluteUrl } from "@/lib/site-url";
 import { FiltersSidebar, type FiltersState } from "@/components/site/FiltersSidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { AdSlot } from "@/components/site/AdSlot";
 
 const searchSchema = z.object({
   category: z.string().optional(),
@@ -206,7 +207,12 @@ function List() {
         </div>
       </PageHero>
 
+      <section className="container-page pt-6">
+        <AdSlot placement="properties_top" className="aspect-[1200/250]" />
+      </section>
+
       <section className="container-page py-8 md:py-12">
+
         <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
           <div className="hidden lg:block">
             {sidebar}
