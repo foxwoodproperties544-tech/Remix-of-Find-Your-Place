@@ -80,11 +80,39 @@ export const Route = createFileRoute("/properties/$id")({
           brand: { "@type": "Organization", name: "Foxwood Properties" },
         }) },
         { type: "application/ld+json", children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": p.category === "For Rent" || p.category === "For Lease" ? "RentAction" : "RealEstateListing",
+          name: p.title,
+          description: desc,
+          url,
+          image: p.images ?? [p.image],
+          datePosted: loaderData.createdAt ?? undefined,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: p.area || undefined,
+            addressLocality: p.town,
+            addressRegion: p.county,
+            addressCountry: "KE",
+          },
+          numberOfRooms: p.bedrooms || undefined,
+          numberOfBathroomsTotal: p.bathrooms || undefined,
+          floorSize: p.size ? { "@type": "QuantitativeValue", name: p.size } : undefined,
+          offers: {
+            "@type": "Offer",
+            price: p.price,
+            priceCurrency: "KES",
+            availability: "https://schema.org/InStock",
+            url,
+          },
+          amenityFeature: (p.amenities ?? []).map((a) => ({ "@type": "LocationFeatureSpecification", name: a })),
+        }) },
+        { type: "application/ld+json", children: JSON.stringify({
           "@context": "https://schema.org", "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: "https://find-joy-list.lovable.app/" },
             { "@type": "ListItem", position: 2, name: "Properties", item: "https://find-joy-list.lovable.app/properties" },
-            { "@type": "ListItem", position: 3, name: p.title, item: url },
+            { "@type": "ListItem", position: 3, name: p.category, item: `https://find-joy-list.lovable.app/properties?category=${encodeURIComponent(p.category)}` },
+            { "@type": "ListItem", position: 4, name: p.title, item: url },
           ],
         }) },
       ],
@@ -96,12 +124,8 @@ export const Route = createFileRoute("/properties/$id")({
       <Link to="/properties" className="btn-primary btn-primary-hover mt-6">Back to listings</Link>
     </div>
   ),
-  notFoundComponent: () => (
-    <div className="container-page py-24 text-center">
-      <h1 className="text-2xl font-bold">Property not found</h1>
-      <Link to="/properties" className="btn-primary btn-primary-hover mt-6">Back to listings</Link>
-    </div>
-  ),
+  notFoundComponent: PropertyNotFound,
+
   component: Detail,
 });
 
