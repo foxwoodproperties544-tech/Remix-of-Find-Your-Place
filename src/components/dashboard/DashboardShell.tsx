@@ -20,6 +20,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
     section: "Account",
     items: [
       { to: "/dashboard/account", label: "Overview", icon: LayoutDashboard },
+      { to: "/dashboard/profile", label: "My profile", icon: UserCog },
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
@@ -46,6 +47,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
       section: "Admin",
       items: [
         { to: "/admin", label: "Moderation", icon: ShieldCheck, end: true },
+        { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
         { to: "/admin/verifications", label: "Verifications", icon: ShieldCheck },
         { to: "/admin/blog", label: "Blog", icon: FileText },
