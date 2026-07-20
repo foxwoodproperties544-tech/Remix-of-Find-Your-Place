@@ -167,13 +167,13 @@ export const startAdPayment = createServerFn({ method: "POST" })
       user_id: context.userId,
       phone_number: normalizeKePhone(data.phone),
       amount: Number(pkg.price),
-      purpose: "ad_campaign",
+      purpose: "advertisement",
       ad_campaign_id: campaign.id,
       duration_days: pkg.duration_days,
       merchant_request_id: stk.MerchantRequestID,
       checkout_request_id: stk.CheckoutRequestID,
       status: "pending",
-    }).select().single();
+    } as any).select().single();
     if (tErr) throw tErr;
 
     await context.supabase.from("ad_campaigns")
@@ -283,12 +283,10 @@ export const trackAdImpression = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    await supabaseAdmin.rpc("increment_ad_impression", { _id: data.id }).then(() => null).catch(async () => {
-      // Fallback if RPC not present: raw update
-      await supabaseAdmin.from("ad_campaigns").update({
-        impressions: (await supabaseAdmin.from("ad_campaigns").select("impressions").eq("id", data.id).single()).data?.impressions + 1 || 1,
-      }).eq("id", data.id);
-    });
+    const { data: row } = await supabaseAdmin
+      .from("ad_campaigns").select("impressions").eq("id", data.id).maybeSingle();
+    const next = (row?.impressions ?? 0) + 1;
+    await supabaseAdmin.from("ad_campaigns").update({ impressions: next }).eq("id", data.id);
     return { ok: true };
   });
 
