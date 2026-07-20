@@ -40,6 +40,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/upgrade", label: "Upgrade", icon: Star },
         { to: "/dashboard/advertise", label: "Advertise", icon: PlusCircle },
         { to: "/dashboard/my-ads", label: "My ads", icon: Star },
+        { to: "/dashboard/ad-analytics", label: "Ad analytics", icon: LayoutDashboard },
+
       ],
     });
   }
