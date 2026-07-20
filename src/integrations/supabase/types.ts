@@ -581,6 +581,7 @@ export type Database = {
           id: string
           merchant_request_id: string | null
           mpesa_receipt: string | null
+          package_id: string | null
           phone_number: string
           property_id: string | null
           purpose: Database["public"]["Enums"]["mpesa_purpose"]
@@ -600,6 +601,7 @@ export type Database = {
           id?: string
           merchant_request_id?: string | null
           mpesa_receipt?: string | null
+          package_id?: string | null
           phone_number: string
           property_id?: string | null
           purpose: Database["public"]["Enums"]["mpesa_purpose"]
@@ -619,6 +621,7 @@ export type Database = {
           id?: string
           merchant_request_id?: string | null
           mpesa_receipt?: string | null
+          package_id?: string | null
           phone_number?: string
           property_id?: string | null
           purpose?: Database["public"]["Enums"]["mpesa_purpose"]
@@ -631,6 +634,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "mpesa_transactions_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "listing_packages"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "mpesa_transactions_property_id_fkey"
             columns: ["property_id"]
@@ -1200,6 +1210,8 @@ export type Database = {
         | "upgrade_tier"
         | "verification_fee"
         | "other"
+        | "listing_package"
+        | "advertisement"
       mpesa_status: "pending" | "success" | "failed" | "cancelled"
       verification_status: "pending" | "approved" | "rejected"
     }
@@ -1373,6 +1385,8 @@ export const Constants = {
         "upgrade_tier",
         "verification_fee",
         "other",
+        "listing_package",
+        "advertisement",
       ],
       mpesa_status: ["pending", "success", "failed", "cancelled"],
       verification_status: ["pending", "approved", "rejected"],
