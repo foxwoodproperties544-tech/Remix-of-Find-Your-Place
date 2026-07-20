@@ -71,6 +71,24 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
               user_id: txn.user_id,
               notes: `Verification fee paid (${receipt ?? "unknown"})`,
             });
+          } else if (txn.purpose === "listing_package" && txn.property_id && txn.package_id) {
+            const { data: pkg } = await supabaseAdmin
+              .from("listing_packages").select("*").eq("id", txn.package_id).maybeSingle();
+            const days = pkg?.duration_days ?? txn.duration_days ?? 30;
+            const expires = new Date(Date.now() + days * 86400_000).toISOString();
+            // Activate the pending purchase
+            await supabaseAdmin.from("property_package_purchases").update({
+              status: "active",
+              activated_at: new Date().toISOString(),
+              expires_at: expires,
+            }).eq("mpesa_transaction_id", txn.id);
+            // Push property to admin review with the package's perks applied
+            await supabaseAdmin.from("properties").update({
+              status: "pending",
+              featured: pkg?.is_featured ?? false,
+              is_featured: pkg?.is_featured ?? false,
+              featured_until: pkg?.is_featured ? expires : null,
+            }).eq("id", txn.property_id);
           }
 
           await supabaseAdmin.from("notifications").insert({
