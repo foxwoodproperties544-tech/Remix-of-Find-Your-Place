@@ -51,7 +51,9 @@ import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
+import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
@@ -277,12 +279,23 @@ const AuthenticatedDashboardAppointmentsRoute =
     path: '/dashboard/appointments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardAccountRoute =
+  AuthenticatedDashboardAccountRouteImport.update({
+    id: '/dashboard/account',
+    path: '/dashboard/account',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminVerificationsRoute =
   AuthenticatedAdminVerificationsRouteImport.update({
     id: '/verifications',
     path: '/verifications',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -353,7 +366,9 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
@@ -403,7 +418,9 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
@@ -455,7 +472,9 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
@@ -507,7 +526,9 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/properties/'
     | '/admin/blog'
+    | '/admin/users'
     | '/admin/verifications'
+    | '/dashboard/account'
     | '/dashboard/appointments'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
@@ -557,7 +578,9 @@ export interface FileRouteTypes {
     | '/blog'
     | '/properties'
     | '/admin/blog'
+    | '/admin/users'
     | '/admin/verifications'
+    | '/dashboard/account'
     | '/dashboard/appointments'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
@@ -608,7 +631,9 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/properties/'
     | '/_authenticated/admin/blog'
+    | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
+    | '/_authenticated/dashboard/account'
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/inquiries'
@@ -955,11 +980,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAppointmentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/account': {
+      id: '/_authenticated/dashboard/account'
+      path: '/dashboard/account'
+      fullPath: '/dashboard/account'
+      preLoaderRoute: typeof AuthenticatedDashboardAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/verifications': {
       id: '/_authenticated/admin/verifications'
       path: '/verifications'
       fullPath: '/admin/verifications'
       preLoaderRoute: typeof AuthenticatedAdminVerificationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/blog': {
@@ -1009,11 +1048,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
 }
 
@@ -1040,6 +1081,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
+  AuthenticatedDashboardAccountRoute: typeof AuthenticatedDashboardAccountRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
@@ -1057,6 +1099,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
+  AuthenticatedDashboardAccountRoute: AuthenticatedDashboardAccountRoute,
   AuthenticatedDashboardAppointmentsRoute:
     AuthenticatedDashboardAppointmentsRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
@@ -1112,13 +1155,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
