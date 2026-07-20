@@ -25,7 +25,7 @@ function Verifications() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("verification_requests")
-        .select("*, properties(id,title,county,town), profiles(full_name)")
+        .select("*, properties(id,slug,title,county,town), profiles(full_name)")
         .eq("status", tab)
         .order("created_at", { ascending: false });
       if (error) throw error;
