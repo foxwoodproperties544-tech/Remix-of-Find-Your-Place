@@ -55,7 +55,7 @@ function AdAnalytics() {
 
   // Fill missing days with zeros for a continuous chart
   const filled = useMemo(() => {
-    if (!from || !to) return daily;
+
     const map = new Map(daily.map((d) => [d.day, { impressions: d.impressions, clicks: d.clicks }]));
     const out: { day: string; impressions: number; clicks: number; ctr: number }[] = [];
     const start = new Date(from + "T00:00:00Z");
