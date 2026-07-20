@@ -21,7 +21,7 @@ export const getPlatformAnalytics = createServerFn({ method: "GET" })
       inquiries30,
       views30,
       usersAll, agents, verifiedProfiles,
-      recentProps, topProps,
+      recentProps,
     ] = await Promise.all([
       supabaseAdmin.from("properties").select("id", { count: "exact", head: true }),
       supabaseAdmin.from("properties").select("id", { count: "exact", head: true }).eq("status", "published"),
@@ -40,7 +40,6 @@ export const getPlatformAnalytics = createServerFn({ method: "GET" })
       supabaseAdmin.from("user_roles").select("user_id", { count: "exact", head: true }).eq("role", "agent"),
       supabaseAdmin.from("profiles").select("id", { count: "exact", head: true }).eq("verified", true),
       supabaseAdmin.from("properties").select("id,title,slug,status,created_at,owner_id").order("created_at", { ascending: false }).limit(8),
-      supabaseAdmin.from("properties").select("id,title,slug,view_count").order("view_count", { ascending: false }).limit(8),
     ]);
 
     return {
@@ -71,6 +70,5 @@ export const getPlatformAnalytics = createServerFn({ method: "GET" })
         verified: verifiedProfiles.count ?? 0,
       },
       recentListings: recentProps.data ?? [],
-      topListings: topProps.data ?? [],
     };
   });
