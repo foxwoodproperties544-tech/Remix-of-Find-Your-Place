@@ -166,7 +166,7 @@ function Admin() {
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.description}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0 flex-wrap justify-end">
-                  <Link to="/properties/$id" params={{ id: p.id }} className="btn-ghost !px-3 !py-2" title="Preview"><ExternalLink className="h-4 w-4" /></Link>
+                  <Link to="/properties/$id" params={{ id: p.slug ?? p.id }} className="btn-ghost !px-3 !py-2" title="Preview"><ExternalLink className="h-4 w-4" /></Link>
                   {p.status !== "published" && (
                     <button onClick={() => setStatus.mutate({ id: p.id, status: "published" })}
                       className="btn-ghost !px-3 !py-2 text-primary" title="Approve"><CheckCircle2 className="h-4 w-4" /></button>

@@ -55,7 +55,8 @@ export const Route = createFileRoute("/properties/$id")({
   },
   head: ({ params, loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Property not found" }, { name: "robots", content: "noindex" }] };
-    const url = `https://find-joy-list.lovable.app/properties/${params.id}`;
+    const slugOrId = loaderData.p.slug ?? params.id;
+    const url = `https://find-joy-list.lovable.app/properties/${slugOrId}`;
     const p = loaderData.p;
     const desc = p.description.slice(0, 155);
     return {

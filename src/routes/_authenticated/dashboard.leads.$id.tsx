@@ -58,7 +58,7 @@ function LeadDetail() {
     enabled: !!leadQ.data?.property_id,
     queryFn: async () => {
       const { data } = await supabase.from("properties")
-        .select("id, title, town, price, images")
+        .select("id, slug, title, town, price, images")
         .eq("id", leadQ.data!.property_id!).maybeSingle();
       return data;
     },
@@ -248,7 +248,7 @@ function LeadDetail() {
           {propQ.data && (
             <div className="rounded-2xl border border-border bg-card p-5">
               <h3 className="text-sm font-semibold mb-3 inline-flex items-center gap-1.5"><Home className="h-4 w-4" /> Property</h3>
-              <Link to="/properties/$id" params={{ id: propQ.data.id }} className="block group">
+              <Link to="/properties/$id" params={{ id: (propQ.data as any).slug ?? propQ.data.id }} className="block group">
                 {propQ.data.images?.[0] && (
                   <img src={propQ.data.images[0]} alt="" className="w-full aspect-video object-cover rounded-lg" />
                 )}

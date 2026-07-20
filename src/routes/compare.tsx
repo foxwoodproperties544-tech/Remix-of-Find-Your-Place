@@ -125,7 +125,7 @@ function Compare() {
                           <span className="absolute top-2 left-2 rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-2.5 py-0.5">{p.category}</span>
                         </div>
                         <div className="p-4">
-                          <Link to="/properties/$id" params={{ id: p.id }} className="font-semibold text-sm line-clamp-1 hover:text-primary">{p.title}</Link>
+                          <Link to="/properties/$id" params={{ id: p.slug ?? p.id }} className="font-semibold text-sm line-clamp-1 hover:text-primary">{p.title}</Link>
                           <div className="mt-1 text-xs text-muted-foreground flex items-center gap-1"><MapPin className="h-3 w-3" /> {p.area}, {p.town}</div>
                           <div className="mt-2 text-lg font-bold text-primary">{formatKsh(p.price)}<span className="text-xs font-medium text-muted-foreground">{p.priceSuffix ?? ""}</span></div>
                         </div>

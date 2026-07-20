@@ -25,7 +25,7 @@ function Verifications() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("verification_requests")
-        .select("*, properties(id,title,county,town), profiles(full_name)")
+        .select("*, properties(id,slug,title,county,town), profiles(full_name)")
         .eq("status", tab)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -74,7 +74,7 @@ function Verifications() {
                 <div className="mt-3 flex gap-3 flex-wrap">
                   {r.id_document_url && <a href={r.id_document_url} target="_blank" rel="noopener" className="text-xs inline-flex items-center gap-1 text-primary hover:underline"><FileText className="h-3.5 w-3.5" /> ID document</a>}
                   {r.title_deed_url && <a href={r.title_deed_url} target="_blank" rel="noopener" className="text-xs inline-flex items-center gap-1 text-primary hover:underline"><FileText className="h-3.5 w-3.5" /> Title deed</a>}
-                  <a href={`/properties/${r.property_id}`} target="_blank" rel="noopener" className="text-xs inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"><ExternalLink className="h-3.5 w-3.5" /> View listing</a>
+                  <a href={`/properties/${(r.properties as any)?.slug ?? r.property_id}`} target="_blank" rel="noopener" className="text-xs inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"><ExternalLink className="h-3.5 w-3.5" /> View listing</a>
                 </div>
                 {r.reviewer_notes && <p className="text-xs mt-2 text-muted-foreground italic">Reviewer: {r.reviewer_notes}</p>}
               </div>
