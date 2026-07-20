@@ -48,10 +48,12 @@ import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardMyAppointmentsRouteImport } from './routes/_authenticated/dashboard.my-appointments'
+import { Route as AuthenticatedDashboardMyAdsRouteImport } from './routes/_authenticated/dashboard.my-ads'
 import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authenticated/dashboard.leads'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
+import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
 import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
@@ -60,6 +62,8 @@ import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
+import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
+import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
@@ -267,6 +271,12 @@ const AuthenticatedDashboardMyAppointmentsRoute =
     path: '/dashboard/my-appointments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardMyAdsRoute =
+  AuthenticatedDashboardMyAdsRouteImport.update({
+    id: '/dashboard/my-ads',
+    path: '/dashboard/my-ads',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardLeadsRoute =
   AuthenticatedDashboardLeadsRouteImport.update({
     id: '/dashboard/leads',
@@ -289,6 +299,12 @@ const AuthenticatedDashboardAppointmentsRoute =
   AuthenticatedDashboardAppointmentsRouteImport.update({
     id: '/dashboard/appointments',
     path: '/dashboard/appointments',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardAdvertiseRoute =
+  AuthenticatedDashboardAdvertiseRouteImport.update({
+    id: '/dashboard/advertise',
+    path: '/dashboard/advertise',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardAccountRoute =
@@ -335,6 +351,17 @@ const AuthenticatedAdminAnalyticsRoute =
   AuthenticatedAdminAnalyticsRouteImport.update({
     id: '/analytics',
     path: '/analytics',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAdsRoute = AuthenticatedAdminAdsRouteImport.update({
+  id: '/ads',
+  path: '/ads',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAdCampaignsRoute =
+  AuthenticatedAdminAdCampaignsRouteImport.update({
+    id: '/ad-campaigns',
+    path: '/ad-campaigns',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedDashboardVerifyIdRoute =
@@ -407,6 +434,8 @@ export interface FileRoutesByFullPath {
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
+  '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -415,10 +444,12 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
+  '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
@@ -465,6 +496,8 @@ export interface FileRoutesByTo {
   '/services/valuation': typeof ServicesValuationRoute
   '/blog': typeof BlogIndexRoute
   '/properties': typeof PropertiesIndexRoute
+  '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
+  '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -473,10 +506,12 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
+  '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
@@ -525,6 +560,8 @@ export interface FileRoutesById {
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/_authenticated/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
+  '/_authenticated/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -533,10 +570,12 @@ export interface FileRoutesById {
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
+  '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/_authenticated/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/_authenticated/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
@@ -585,6 +624,8 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/blog/'
     | '/properties/'
+    | '/admin/ad-campaigns'
+    | '/admin/ads'
     | '/admin/analytics'
     | '/admin/blog'
     | '/admin/notifications'
@@ -593,10 +634,12 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/dashboard/account'
+    | '/dashboard/advertise'
     | '/dashboard/appointments'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/leads'
+    | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
     | '/dashboard/profile'
@@ -643,6 +686,8 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/blog'
     | '/properties'
+    | '/admin/ad-campaigns'
+    | '/admin/ads'
     | '/admin/analytics'
     | '/admin/blog'
     | '/admin/notifications'
@@ -651,10 +696,12 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/admin/verifications'
     | '/dashboard/account'
+    | '/dashboard/advertise'
     | '/dashboard/appointments'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/leads'
+    | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
     | '/dashboard/profile'
@@ -702,6 +749,8 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/blog/'
     | '/properties/'
+    | '/_authenticated/admin/ad-campaigns'
+    | '/_authenticated/admin/ads'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/blog'
     | '/_authenticated/admin/notifications'
@@ -710,10 +759,12 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
     | '/_authenticated/dashboard/account'
+    | '/_authenticated/dashboard/advertise'
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/leads'
+    | '/_authenticated/dashboard/my-ads'
     | '/_authenticated/dashboard/my-appointments'
     | '/_authenticated/dashboard/new'
     | '/_authenticated/dashboard/profile'
@@ -1037,6 +1088,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardMyAppointmentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/my-ads': {
+      id: '/_authenticated/dashboard/my-ads'
+      path: '/dashboard/my-ads'
+      fullPath: '/dashboard/my-ads'
+      preLoaderRoute: typeof AuthenticatedDashboardMyAdsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/leads': {
       id: '/_authenticated/dashboard/leads'
       path: '/dashboard/leads'
@@ -1063,6 +1121,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/appointments'
       fullPath: '/dashboard/appointments'
       preLoaderRoute: typeof AuthenticatedDashboardAppointmentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/advertise': {
+      id: '/_authenticated/dashboard/advertise'
+      path: '/dashboard/advertise'
+      fullPath: '/dashboard/advertise'
+      preLoaderRoute: typeof AuthenticatedDashboardAdvertiseRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/account': {
@@ -1121,6 +1186,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAnalyticsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/ads': {
+      id: '/_authenticated/admin/ads'
+      path: '/ads'
+      fullPath: '/admin/ads'
+      preLoaderRoute: typeof AuthenticatedAdminAdsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ad-campaigns': {
+      id: '/_authenticated/admin/ad-campaigns'
+      path: '/ad-campaigns'
+      fullPath: '/admin/ad-campaigns'
+      preLoaderRoute: typeof AuthenticatedAdminAdCampaignsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/dashboard/verify/$id': {
       id: '/_authenticated/dashboard/verify/$id'
       path: '/dashboard/verify/$id'
@@ -1167,6 +1246,8 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAdCampaignsRoute: typeof AuthenticatedAdminAdCampaignsRoute
+  AuthenticatedAdminAdsRoute: typeof AuthenticatedAdminAdsRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
@@ -1177,6 +1258,8 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAdCampaignsRoute: AuthenticatedAdminAdCampaignsRoute,
+  AuthenticatedAdminAdsRoute: AuthenticatedAdminAdsRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
@@ -1210,10 +1293,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
   AuthenticatedDashboardAccountRoute: typeof AuthenticatedDashboardAccountRoute
+  AuthenticatedDashboardAdvertiseRoute: typeof AuthenticatedDashboardAdvertiseRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardLeadsRoute: typeof AuthenticatedDashboardLeadsRouteWithChildren
+  AuthenticatedDashboardMyAdsRoute: typeof AuthenticatedDashboardMyAdsRoute
   AuthenticatedDashboardMyAppointmentsRoute: typeof AuthenticatedDashboardMyAppointmentsRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
@@ -1230,12 +1315,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
   AuthenticatedDashboardAccountRoute: AuthenticatedDashboardAccountRoute,
+  AuthenticatedDashboardAdvertiseRoute: AuthenticatedDashboardAdvertiseRoute,
   AuthenticatedDashboardAppointmentsRoute:
     AuthenticatedDashboardAppointmentsRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardLeadsRoute:
     AuthenticatedDashboardLeadsRouteWithChildren,
+  AuthenticatedDashboardMyAdsRoute: AuthenticatedDashboardMyAdsRoute,
   AuthenticatedDashboardMyAppointmentsRoute:
     AuthenticatedDashboardMyAppointmentsRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,

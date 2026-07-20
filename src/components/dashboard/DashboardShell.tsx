@@ -38,6 +38,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/crm", label: "CRM board", icon: LayoutDashboard },
         { to: "/dashboard/appointments", label: "Appointments", icon: CalendarCheck },
         { to: "/dashboard/upgrade", label: "Upgrade", icon: Star },
+        { to: "/dashboard/advertise", label: "Advertise", icon: PlusCircle },
+        { to: "/dashboard/my-ads", label: "My ads", icon: Star },
       ],
     });
   }
@@ -51,6 +53,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
         { to: "/admin/verifications", label: "Verifications", icon: ShieldCheck },
         { to: "/admin/packages", label: "Listing packages", icon: PlusCircle },
+        { to: "/admin/ads", label: "Ad packages", icon: PlusCircle },
+        { to: "/admin/ad-campaigns", label: "Ad campaigns", icon: ShieldCheck },
         { to: "/admin/subscriptions", label: "Subscriptions", icon: Star },
         { to: "/admin/notifications", label: "Notifications", icon: Bell },
         { to: "/admin/blog", label: "Blog", icon: FileText },
