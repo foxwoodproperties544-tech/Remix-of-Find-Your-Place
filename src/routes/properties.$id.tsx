@@ -217,7 +217,9 @@ function PropertyNotFound() {
   );
 }
 
+function Detail() {
   const loaderData = Route.useLoaderData();
+
   const { p, ownerId, propertyKey, ownerProfile, contactPhone, contactWhatsapp, videoUrl, documents, createdAt, verified, featured } = loaderData;
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
   const [active, setActive] = useState(0);
