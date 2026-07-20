@@ -9,7 +9,7 @@ import { PricingGrid, type PricingPackage } from "@/components/site/PricingGrid"
 import { ShieldCheck, Crown, Eye, ArrowLeft } from "lucide-react";
 import heroTools from "@/assets/hero-tools.jpg";
 
-export const Route = createFileRoute("/_authenticated/admin/packages.preview")({
+export const Route = createFileRoute("/_authenticated/admin/packages/preview")({
   component: AdminPricingPreview,
   head: () => ({ meta: [{ title: "Pricing page preview — Foxwood Admin" }, { name: "robots", content: "noindex" }] }),
 });
