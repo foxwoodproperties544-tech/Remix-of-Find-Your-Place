@@ -1,8 +1,24 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Search, MapPin, Home, ShieldCheck, Users, BadgeCheck, Headphones, Wallet, ArrowRight, Star, Quote } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import hero from "@/assets/hero.jpg";
+import p1 from "@/assets/p1.jpg";
+import p2 from "@/assets/p2.jpg";
+import p3 from "@/assets/p3.jpg";
+import p4 from "@/assets/p4.jpg";
+import p5 from "@/assets/p5.jpg";
+import p6 from "@/assets/p6.jpg";
 import { properties, testimonials, categoryCards, locations, counties } from "@/lib/mock-data";
+
+const HERO_SLIDES = [
+  { src: hero, alt: "Modern Kenyan homes at golden hour" },
+  { src: p1, alt: "Prime land and plots in Kenya" },
+  { src: p2, alt: "Contemporary houses in Nairobi" },
+  { src: p3, alt: "Stylish apartments for rent" },
+  { src: p4, alt: "Airbnb getaways across Kenya" },
+  { src: p5, alt: "Commercial properties and office spaces" },
+  { src: p6, alt: "Coastal holiday homes in Mombasa" },
+];
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 import { AdSlot } from "@/components/site/AdSlot";
@@ -12,32 +28,48 @@ export const Route = createFileRoute("/")({ component: Index });
 function Index() {
   const navigate = useNavigate();
   const [q, setQ] = useState({ category: "For Sale", type: "", county: "" });
+  const [slide, setSlide] = useState(0);
   const featured = properties.filter(p => p.featured).slice(0, 6);
+
+  useEffect(() => {
+    const id = setInterval(() => setSlide(s => (s + 1) % HERO_SLIDES.length), 5000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <>
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={hero} alt="Modern Kenyan homes at golden hour" width={1920} height={1200} className="h-full w-full object-cover" />
+          {HERO_SLIDES.map((s, i) => (
+            <img
+              key={s.src}
+              src={s.src}
+              alt={s.alt}
+              width={1920}
+              height={1200}
+              loading={i === 0 ? "eager" : "lazy"}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out ${i === slide ? "opacity-100" : "opacity-0"}`}
+            />
+          ))}
           <div className="absolute inset-0" style={{ background: "var(--gradient-hero)", opacity: 0.82 }} />
           <div className="absolute inset-0 hero-grid-bg opacity-40" />
         </div>
         <div className="relative container-page py-20 md:py-32 text-white">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur px-3 py-1 text-xs font-medium ring-1 ring-white/25">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur px-3 py-1 text-xs font-medium ring-1 ring-white/25 animate-fade-in">
             <span className="h-1.5 w-1.5 rounded-full bg-secondary animate-pulse" /> Your gateway to prime deals
           </span>
-          <h1 className="mt-5 max-w-3xl text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.02] tracking-tight">
+          <h1 className="mt-5 max-w-3xl text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.02] tracking-tight animate-fade-in" style={{ animationDuration: "900ms" }}>
             Find your perfect <br className="hidden sm:block" />property in <span className="relative inline-block">
               <span className="relative z-10 text-secondary">Kenya</span>
               <span className="absolute inset-x-0 bottom-1 h-3 bg-secondary/25 -skew-x-6 z-0" />
             </span>
           </h1>
-          <p className="mt-5 max-w-xl text-white/90 text-base md:text-lg leading-relaxed">
+          <p className="mt-5 max-w-xl text-white/90 text-base md:text-lg leading-relaxed animate-fade-in" style={{ animationDuration: "1100ms" }}>
             Find trusted properties for sale, rent, or lease across Kenya. Search by location, price, and property type to find the right property for your needs.
           </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Link to="/properties" className="btn-primary btn-primary-hover">Browse Properties <ArrowRight className="h-4 w-4" /></Link>
+          <div className="mt-7 flex flex-wrap gap-3 animate-fade-in" style={{ animationDuration: "1300ms" }}>
+            <Link to="/properties" className="btn-primary btn-primary-hover">Find Properties <ArrowRight className="h-4 w-4" /></Link>
             <Link to="/contact" className="btn-ghost !bg-white/10 !border-white/30 !text-white hover:!bg-white/20 backdrop-blur">List Your Property</Link>
           </div>
 
