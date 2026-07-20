@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -66,6 +67,11 @@ const TermsRoute = TermsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertySitemapDotxmlRoute = PropertySitemapDotxmlRouteImport.update({
+  id: '/property-sitemap.xml',
+  path: '/property-sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesRoute = PropertiesRouteImport.update({
@@ -327,6 +333,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -376,6 +383,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -427,6 +435,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -478,6 +487,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/properties'
+    | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
     | '/admin'
@@ -527,6 +537,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/properties'
+    | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
     | '/admin'
@@ -577,6 +588,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/properties'
+    | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
     | '/_authenticated/admin'
@@ -628,6 +640,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
+  PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   AgentsIdRoute: typeof AgentsIdRoute
@@ -659,6 +672,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/property-sitemap.xml': {
+      id: '/property-sitemap.xml'
+      path: '/property-sitemap.xml'
+      fullPath: '/property-sitemap.xml'
+      preLoaderRoute: typeof PropertySitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/properties': {
@@ -1082,6 +1102,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
+  PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   AgentsIdRoute: AgentsIdRoute,
