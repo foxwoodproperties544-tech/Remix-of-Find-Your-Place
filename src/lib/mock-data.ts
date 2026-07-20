@@ -13,6 +13,7 @@ export type PropertyType =
 
 export interface Property {
   id: string;
+  slug?: string;
   title: string;
   price: number;
   priceSuffix?: string;

@@ -3,6 +3,7 @@ import type { Property } from "./mock-data";
 
 export interface DbPropertyRow {
   id: string;
+  slug?: string | null;
   owner_id: string;
   title: string;
   description: string;
@@ -39,6 +40,7 @@ const PLACEHOLDER = "https://images.unsplash.com/photo-1600585154340-be6161a56a0
 export function toProperty(r: DbPropertyRow): Property {
   return {
     id: r.id,
+    slug: r.slug ?? undefined,
     title: r.title,
     price: Number(r.price),
     priceSuffix: r.price_suffix ?? undefined,
@@ -83,9 +85,17 @@ export async function fetchPropertyById(id: string): Promise<Property | null> {
   return toProperty(data as DbPropertyRow);
 }
 
-export async function fetchPropertyRowById(id: string): Promise<DbPropertyRow | null> {
-  const { data, error } = await supabase.from("properties").select("*").eq("id", id).maybeSingle();
-  if (error || !data) return null;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export async function fetchPropertyRowById(idOrSlug: string): Promise<DbPropertyRow | null> {
+  const column = UUID_RE.test(idOrSlug) ? "id" : "slug";
+  const { data, error } = await supabase.from("properties").select("*").eq(column, idOrSlug).maybeSingle();
+  if (error || !data) {
+    // Fallback: try the other column in case a slug happens to be UUID-shaped or vice versa
+    const other = column === "id" ? "slug" : "id";
+    const { data: alt } = await supabase.from("properties").select("*").eq(other, idOrSlug).maybeSingle();
+    return (alt as DbPropertyRow) ?? null;
+  }
   return data as DbPropertyRow;
 }
 
