@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
-import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MortgageRouteImport } from './routes/mortgage'
@@ -26,6 +25,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ServicesValuationRouteImport } from './routes/services.valuation'
 import { Route as ServicesSellRouteImport } from './routes/services.sell'
@@ -72,11 +72,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const PropertySitemapDotxmlRoute = PropertySitemapDotxmlRouteImport.update({
   id: '/property-sitemap.xml',
   path: '/property-sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PropertiesRoute = PropertiesRouteImport.update({
-  id: '/properties',
-  path: '/properties',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -143,6 +138,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
+  id: '/properties/',
+  path: '/properties/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -194,9 +194,9 @@ const ServicesBuyRoute = ServicesBuyRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => PropertiesRoute,
+  id: '/properties/$id',
+  path: '/properties/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
@@ -332,7 +332,6 @@ export interface FileRoutesByFullPath {
   '/mortgage': typeof MortgageRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/properties': typeof PropertiesRouteWithChildren
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -352,6 +351,7 @@ export interface FileRoutesByFullPath {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
+  '/properties/': typeof PropertiesIndexRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
@@ -382,7 +382,6 @@ export interface FileRoutesByTo {
   '/mortgage': typeof MortgageRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/properties': typeof PropertiesRouteWithChildren
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -402,6 +401,7 @@ export interface FileRoutesByTo {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog': typeof BlogIndexRoute
+  '/properties': typeof PropertiesIndexRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
@@ -434,7 +434,6 @@ export interface FileRoutesById {
   '/mortgage': typeof MortgageRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/properties': typeof PropertiesRouteWithChildren
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -454,6 +453,7 @@ export interface FileRoutesById {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
+  '/properties/': typeof PropertiesIndexRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
@@ -486,7 +486,6 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/pricing'
     | '/privacy'
-    | '/properties'
     | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
@@ -506,6 +505,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog/'
+    | '/properties/'
     | '/admin/blog'
     | '/admin/verifications'
     | '/dashboard/appointments'
@@ -536,7 +536,6 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/pricing'
     | '/privacy'
-    | '/properties'
     | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
@@ -556,6 +555,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog'
+    | '/properties'
     | '/admin/blog'
     | '/admin/verifications'
     | '/dashboard/appointments'
@@ -587,7 +587,6 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/pricing'
     | '/privacy'
-    | '/properties'
     | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
@@ -607,6 +606,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog/'
+    | '/properties/'
     | '/_authenticated/admin/blog'
     | '/_authenticated/admin/verifications'
     | '/_authenticated/dashboard/appointments'
@@ -639,12 +639,12 @@ export interface RootRouteChildren {
   MortgageRoute: typeof MortgageRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
-  PropertiesRoute: typeof PropertiesRouteWithChildren
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   AgentsIdRoute: typeof AgentsIdRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  PropertiesIdRoute: typeof PropertiesIdRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
   ServicesInvestmentRoute: typeof ServicesInvestmentRoute
   ServicesLeaseRoute: typeof ServicesLeaseRoute
@@ -655,6 +655,7 @@ export interface RootRouteChildren {
   ServicesSellRoute: typeof ServicesSellRoute
   ServicesValuationRoute: typeof ServicesValuationRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
 }
 
@@ -679,13 +680,6 @@ declare module '@tanstack/react-router' {
       path: '/property-sitemap.xml'
       fullPath: '/property-sitemap.xml'
       preLoaderRoute: typeof PropertySitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/properties': {
-      id: '/properties'
-      path: '/properties'
-      fullPath: '/properties'
-      preLoaderRoute: typeof PropertiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -779,6 +773,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/properties/': {
+      id: '/properties/'
+      path: '/properties'
+      fullPath: '/properties/'
+      preLoaderRoute: typeof PropertiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -851,10 +852,10 @@ declare module '@tanstack/react-router' {
     }
     '/properties/$id': {
       id: '/properties/$id'
-      path: '/$id'
+      path: '/properties/$id'
       fullPath: '/properties/$id'
       preLoaderRoute: typeof PropertiesIdRouteImport
-      parentRoute: typeof PropertiesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -1075,18 +1076,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface PropertiesRouteChildren {
-  PropertiesIdRoute: typeof PropertiesIdRoute
-}
-
-const PropertiesRouteChildren: PropertiesRouteChildren = {
-  PropertiesIdRoute: PropertiesIdRoute,
-}
-
-const PropertiesRouteWithChildren = PropertiesRoute._addFileChildren(
-  PropertiesRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1101,12 +1090,12 @@ const rootRouteChildren: RootRouteChildren = {
   MortgageRoute: MortgageRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
-  PropertiesRoute: PropertiesRouteWithChildren,
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   AgentsIdRoute: AgentsIdRoute,
   BlogSlugRoute: BlogSlugRoute,
+  PropertiesIdRoute: PropertiesIdRoute,
   ServicesBuyRoute: ServicesBuyRoute,
   ServicesInvestmentRoute: ServicesInvestmentRoute,
   ServicesLeaseRoute: ServicesLeaseRoute,
@@ -1117,18 +1106,9 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesSellRoute: ServicesSellRoute,
   ServicesValuationRoute: ServicesValuationRoute,
   BlogIndexRoute: BlogIndexRoute,
+  PropertiesIndexRoute: PropertiesIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
