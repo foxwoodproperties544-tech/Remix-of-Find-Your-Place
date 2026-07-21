@@ -197,6 +197,75 @@ function AdminPackages() {
         </div>
       </div>
 
+      {/* Recent package purchases + manual mark-paid */}
+      <div className="mt-10">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="text-xl font-bold">Recent purchases</h2>
+            <p className="text-xs text-muted-foreground mt-1">Manually mark a purchase as paid if an M-Pesa callback failed to reach us.</p>
+          </div>
+          <div className="inline-flex rounded-full bg-muted p-1 text-xs">
+            {(["pending", "active", "expired", "all"] as const).map((s) => (
+              <button
+                key={s}
+                onClick={() => setPurchaseFilter(s)}
+                className={`px-3 py-1.5 rounded-full font-semibold capitalize ${purchaseFilter === s ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >{s}</button>
+            ))}
+          </div>
+        </div>
+        <div className="mt-4 rounded-2xl border border-border bg-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50 text-xs uppercase tracking-wide text-muted-foreground">
+                <tr>
+                  <th className="text-left px-4 py-3">Property</th>
+                  <th className="text-left px-4 py-3">Package</th>
+                  <th className="text-left px-4 py-3">Amount</th>
+                  <th className="text-left px-4 py-3">Status</th>
+                  <th className="text-left px-4 py-3">Created</th>
+                  <th className="text-right px-4 py-3">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {loadingPurchases && <tr><td colSpan={6} className="text-center py-6 text-muted-foreground">Loading…</td></tr>}
+                {!loadingPurchases && (purchases?.length ?? 0) === 0 && (
+                  <tr><td colSpan={6} className="text-center py-6 text-muted-foreground">No purchases in this view.</td></tr>
+                )}
+                {purchases?.map((row: any) => (
+                  <tr key={row.id} className="hover:bg-muted/30">
+                    <td className="px-4 py-3">
+                      <div className="font-medium">{row.properties?.title ?? "—"}</div>
+                      <div className="text-xs text-muted-foreground">Prop status: {row.properties?.status ?? "—"}</div>
+                    </td>
+                    <td className="px-4 py-3">{row.listing_packages?.name ?? "—"}</td>
+                    <td className="px-4 py-3">KSh {Number(row.amount_paid).toLocaleString()}</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex text-xs font-semibold px-2 py-0.5 rounded-full ${row.status === "active" ? "bg-primary-soft text-primary" : row.status === "pending" ? "bg-amber-100 text-amber-700" : "bg-muted text-muted-foreground"}`}>
+                        {row.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(row.created_at).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-right">
+                      {row.status === "pending" ? (
+                        <button
+                          onClick={() => confirm("Mark this purchase as paid and push property to review?") && markPaid.mutate(row.id)}
+                          disabled={markPaid.isPending}
+                          className="btn-primary btn-primary-hover text-xs inline-flex items-center gap-1.5 !py-1.5"
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5" /> Mark paid
+                        </button>
+                      ) : <span className="text-xs text-muted-foreground">—</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
       {editing && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6">
           <div className="w-full max-w-3xl bg-card rounded-t-2xl sm:rounded-2xl border border-border shadow-xl max-h-[90vh] overflow-y-auto">
