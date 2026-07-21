@@ -26,12 +26,30 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        // Look up the pending transaction
+        // Look up the pending transaction by checkout id
         const { data: txn } = await supabaseAdmin
           .from("mpesa_transactions")
           .select("*")
           .eq("checkout_request_id", stk.CheckoutRequestID)
           .maybeSingle();
+
+        // Unknown callback — accept but do nothing (never create purchases from
+        // an unverified callback).
+        if (!txn) return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
+
+        // Cross-check MerchantRequestID matches the one we recorded when we
+        // initiated the STK push. Rejects spoofed callbacks that guess a
+        // CheckoutRequestID but not the paired MerchantRequestID.
+        if (txn.merchant_request_id && txn.merchant_request_id !== stk.MerchantRequestID) {
+          return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
+        }
+
+        // Idempotency: if this txn is already in a terminal state, ack and skip
+        // side-effects. Safaricom retries callbacks; without this we would
+        // re-activate purchases and re-send notifications on every retry.
+        if (txn.status === "success" || txn.status === "failed" || txn.status === "cancelled") {
+          return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
+        }
 
         const success = stk.ResultCode === 0;
         let receipt: string | undefined;
@@ -41,13 +59,17 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
           }
         }
 
-        await supabaseAdmin.from("mpesa_transactions").update({
+        // Guarded update: only flip from `pending` → terminal. If a concurrent
+        // callback beat us to it, `updated` will be null and we skip effects.
+        const { data: updated } = await supabaseAdmin.from("mpesa_transactions").update({
           status: success ? "success" : stk.ResultCode === 1032 ? "cancelled" : "failed",
           result_code: stk.ResultCode,
           result_desc: stk.ResultDesc,
           mpesa_receipt: receipt,
           raw_callback: JSON.parse(JSON.stringify(payload)),
-        }).eq("checkout_request_id", stk.CheckoutRequestID);
+        }).eq("id", txn.id).eq("status", "pending").select("id").maybeSingle();
+
+        if (!updated) return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
 
         if (success && txn) {
           // Apply the purchase effect
