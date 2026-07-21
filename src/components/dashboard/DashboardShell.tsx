@@ -21,9 +21,11 @@ function useNav(): { section: string; items: NavItem[] }[] {
     items: [
       { to: "/dashboard/account", label: "Overview", icon: LayoutDashboard },
       { to: "/dashboard/profile", label: "My profile", icon: UserCog },
+      { to: "/dashboard/kyc", label: "Verify identity", icon: ShieldCheck },
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
+
     ],
   });
 
@@ -53,7 +55,9 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin", label: "Moderation", icon: ShieldCheck, end: true },
         { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
-        { to: "/admin/verifications", label: "Verifications", icon: ShieldCheck },
+        { to: "/admin/verifications", label: "Listing verifications", icon: ShieldCheck },
+        { to: "/admin/kyc", label: "Agent KYC", icon: UserCog },
+
         { to: "/admin/packages", label: "Listing packages", icon: PlusCircle },
         { to: "/admin/ads", label: "Ad packages", icon: PlusCircle },
         { to: "/admin/ad-campaigns", label: "Ad campaigns", icon: ShieldCheck },
