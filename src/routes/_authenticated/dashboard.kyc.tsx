@@ -122,18 +122,18 @@ function KycPage() {
         <form onSubmit={(e) => { e.preventDefault(); submit.mutate(); }} className="mt-6 space-y-6">
           <Section title="Identity">
             <Field label="Full legal name *">
-              <input required value={fullName} onChange={(e) => setFullName(e.target.value)} className="input" placeholder="As shown on your ID" />
+              <input required value={fullName} onChange={(e) => setFullName(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background text-sm" placeholder="As shown on your ID" />
             </Field>
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="ID type *">
-                <select value={idType} onChange={(e) => setIdType(e.target.value as any)} className="input">
+                <select value={idType} onChange={(e) => setIdType(e.target.value as any)} className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background text-sm">
                   <option value="national_id">Kenyan National ID</option>
                   <option value="passport">Passport</option>
                   <option value="alien_id">Alien ID</option>
                 </select>
               </Field>
               <Field label="ID number *">
-                <input required value={idNumber} onChange={(e) => setIdNumber(e.target.value)} className="input" />
+                <input required value={idNumber} onChange={(e) => setIdNumber(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background text-sm" />
               </Field>
             </div>
             <FileField label="ID document (photo or PDF) *" file={idFile} onChange={setIdFile} accept="image/*,.pdf" />
@@ -143,10 +143,10 @@ function KycPage() {
           <Section title="Tax & business (optional but recommended)">
             <div className="grid sm:grid-cols-2 gap-4">
               <Field label="KRA PIN">
-                <input value={kraPin} onChange={(e) => setKraPin(e.target.value)} className="input" placeholder="A012345678B" />
+                <input value={kraPin} onChange={(e) => setKraPin(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background text-sm" placeholder="A012345678B" />
               </Field>
               <Field label="Company name">
-                <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="input" placeholder="Your agency" />
+                <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background text-sm" placeholder="Your agency" />
               </Field>
             </div>
             <FileField label="KRA PIN certificate" file={kraFile} onChange={setKraFile} accept="image/*,.pdf" />
@@ -155,13 +155,13 @@ function KycPage() {
 
           <Section title="Real estate agents (EARB)" hint="Estate Agents Registration Board licence — required for licensed agents.">
             <Field label="EARB licence number">
-              <input value={earbNo} onChange={(e) => setEarbNo(e.target.value)} className="input" />
+              <input value={earbNo} onChange={(e) => setEarbNo(e.target.value)} className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background text-sm" />
             </Field>
             <FileField label="EARB licence certificate" file={earbFile} onChange={setEarbFile} accept="image/*,.pdf" />
           </Section>
 
           <Field label="Notes for reviewer (optional)">
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="input" />
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background text-sm" />
           </Field>
 
           <div className="flex gap-3 pt-2">
