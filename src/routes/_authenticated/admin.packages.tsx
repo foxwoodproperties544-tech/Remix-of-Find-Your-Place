@@ -90,6 +90,25 @@ function AdminPackages() {
     onError: (e: any) => toast.error(e.message),
   });
 
+  // Recent purchases + manual mark-paid ------------------------------
+  const listPurchasesFn = useServerFn(adminListRecentPurchases);
+  const markPaidFn = useServerFn(adminMarkPurchasePaid);
+  const [purchaseFilter, setPurchaseFilter] = useState<"all" | "pending" | "active" | "expired">("pending");
+  const { data: purchases, isLoading: loadingPurchases } = useQuery({
+    queryKey: ["admin-purchases", purchaseFilter],
+    enabled: isAdmin,
+    queryFn: () => listPurchasesFn({ data: { status: purchaseFilter } }),
+  });
+  const markPaid = useMutation({
+    mutationFn: (purchaseId: string) => markPaidFn({ data: { purchaseId, note: "Admin manual activation" } }),
+    onSuccess: (res: any) => {
+      toast.success(res?.alreadyActive ? "Already active" : `Marked paid · ${res?.receipt ?? ""}`);
+      qc.invalidateQueries({ queryKey: ["admin-purchases"] });
+    },
+    onError: (e: any) => toast.error(e.message),
+  });
+
+
   if (loading) return <div className="text-sm text-muted-foreground">Loading…</div>;
   if (!isAdmin) {
     return (
