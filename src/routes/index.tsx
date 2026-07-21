@@ -98,8 +98,7 @@ function Index() {
                 muted
                 loop
                 playsInline
-                // @ts-expect-error non-standard attribute for older iOS
-                webkit-playsinline="true"
+                {...({ "webkit-playsinline": "true", "x5-playsinline": "true" } as Record<string, string>)}
                 preload="auto"
                 aria-label="Premium showcase of Kenyan properties"
                 onCanPlay={() => setVideoReady(true)}
