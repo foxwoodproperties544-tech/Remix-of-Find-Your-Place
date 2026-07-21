@@ -26,36 +26,94 @@ const HERO_SLIDES = [
 
 // Toggle: "video" plays the premium animated hero, "slider" uses the image slider.
 const HERO_MODE: "video" | "slider" = "video";
+const HERO_VIDEO_URL = heroVideoAsset.url;
+const HERO_POSTER_URL = hero;
 
-export const Route = createFileRoute("/")({ component: Index });
+export const Route = createFileRoute("/")({
+  component: Index,
+  head: () => ({
+    links: [
+      // Warm up the poster so the first hero frame paints immediately.
+      { rel: "preload", as: "image", href: HERO_POSTER_URL, fetchpriority: "high" },
+    ],
+    meta: [
+      { property: "og:video", content: HERO_VIDEO_URL },
+      { property: "og:video:type", content: "video/mp4" },
+      { property: "og:image", content: HERO_POSTER_URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: HERO_POSTER_URL },
+    ],
+  }),
+});
 
 function Index() {
   const navigate = useNavigate();
   const [q, setQ] = useState({ category: "For Sale", type: "", county: "" });
   const [slide, setSlide] = useState(0);
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const featured = properties.filter(p => p.featured).slice(0, 6);
 
+  // Respect reduced-motion preference — fall back to static/slider hero.
   useEffect(() => {
-    if (HERO_MODE !== "slider") return;
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener?.("change", onChange);
+    return () => mq.removeEventListener?.("change", onChange);
+  }, []);
+
+  const useVideo = HERO_MODE === "video" && !prefersReducedMotion && !videoFailed;
+  const useSlider = !useVideo && !prefersReducedMotion;
+
+  useEffect(() => {
+    if (!useSlider) return;
     const id = setInterval(() => setSlide(s => (s + 1) % HERO_SLIDES.length), 5000);
     return () => clearInterval(id);
-  }, []);
+  }, [useSlider]);
 
   return (
     <>
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
-          {HERO_MODE === "video" ? (
-            <video
-              src={heroVideoAsset.url}
-              poster={hero}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-label="Premium showcase of Kenyan properties"
+          {useVideo ? (
+            <>
+              {/* Poster paints instantly; video fades in once it can play. */}
+              <img
+                src={HERO_POSTER_URL}
+                alt="Premium Kenyan properties"
+                width={1920}
+                height={1200}
+                fetchPriority="high"
+                decoding="async"
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${videoReady ? "opacity-0" : "opacity-100"}`}
+              />
+              <video
+                src={HERO_VIDEO_URL}
+                poster={HERO_POSTER_URL}
+                autoPlay
+                muted
+                loop
+                playsInline
+                {...({ "webkit-playsinline": "true", "x5-playsinline": "true" } as Record<string, string>)}
+                preload="auto"
+                aria-label="Premium showcase of Kenyan properties"
+                onCanPlay={() => setVideoReady(true)}
+                onError={() => setVideoFailed(true)}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
+              />
+            </>
+          ) : prefersReducedMotion ? (
+            <img
+              src={HERO_POSTER_URL}
+              alt="Premium Kenyan properties"
+              width={1920}
+              height={1200}
+              fetchPriority="high"
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
