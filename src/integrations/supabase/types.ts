@@ -463,6 +463,75 @@ export type Database = {
         }
         Relationships: []
       }
+      kyc_submissions: {
+        Row: {
+          business_permit_url: string | null
+          company_name: string | null
+          created_at: string
+          earb_license_number: string | null
+          earb_license_url: string | null
+          full_legal_name: string
+          id: string
+          id_document_url: string
+          id_number: string
+          id_type: string
+          kra_pin: string | null
+          kra_pin_certificate_url: string | null
+          notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          selfie_url: string
+          status: Database["public"]["Enums"]["kyc_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_permit_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          earb_license_number?: string | null
+          earb_license_url?: string | null
+          full_legal_name: string
+          id?: string
+          id_document_url: string
+          id_number: string
+          id_type?: string
+          kra_pin?: string | null
+          kra_pin_certificate_url?: string | null
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          selfie_url: string
+          status?: Database["public"]["Enums"]["kyc_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_permit_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          earb_license_number?: string | null
+          earb_license_url?: string | null
+          full_legal_name?: string
+          id?: string
+          id_document_url?: string
+          id_number?: string
+          id_type?: string
+          kra_pin?: string | null
+          kra_pin_certificate_url?: string | null
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          selfie_url?: string
+          status?: Database["public"]["Enums"]["kyc_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       lead_activities: {
         Row: {
           actor_id: string | null
@@ -855,6 +924,8 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          kyc_status: Database["public"]["Enums"]["kyc_status"]
+          kyc_verified_at: string | null
           listing_quota: number
           phone: string | null
           role_primary: string | null
@@ -871,6 +942,8 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          kyc_status?: Database["public"]["Enums"]["kyc_status"]
+          kyc_verified_at?: string | null
           listing_quota?: number
           phone?: string | null
           role_primary?: string | null
@@ -887,6 +960,8 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          kyc_status?: Database["public"]["Enums"]["kyc_status"]
+          kyc_verified_at?: string | null
           listing_quota?: number
           phone?: string | null
           role_primary?: string | null
@@ -1348,6 +1423,7 @@ export type Database = {
         | "buyer"
         | "tenant"
         | "developer"
+      kyc_status: "none" | "pending" | "approved" | "rejected"
       lead_activity_type:
         | "note"
         | "call"
@@ -1520,6 +1596,7 @@ export const Constants = {
         "tenant",
         "developer",
       ],
+      kyc_status: ["none", "pending", "approved", "rejected"],
       lead_activity_type: [
         "note",
         "call",
