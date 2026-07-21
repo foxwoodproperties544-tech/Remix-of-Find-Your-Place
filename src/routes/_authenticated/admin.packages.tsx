@@ -6,9 +6,10 @@ import { useRoles } from "@/hooks/use-role";
 import {
   adminListPackages, adminCreatePackage, adminUpdatePackage,
   adminDeletePackage, adminTogglePackageActive, adminDuplicatePackage,
+  adminListRecentPurchases, adminMarkPurchasePaid,
 } from "@/lib/packages.functions";
 import { toast } from "sonner";
-import { ShieldCheck, Plus, Copy, Trash2, Pencil, Power, X, Package } from "lucide-react";
+import { ShieldCheck, Plus, Copy, Trash2, Pencil, Power, X, Package, CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/packages")({
   component: AdminPackages,
