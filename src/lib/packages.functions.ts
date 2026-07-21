@@ -220,3 +220,87 @@ export const listPropertyPackages = createServerFn({ method: "GET" })
     if (error) throw error;
     return rows ?? [];
   });
+
+/** Admin: list recent package purchases (for review / recovery). */
+export const adminListRecentPurchases = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z.object({ status: z.enum(["all", "pending", "active", "expired"]).default("all") }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    let q = context.supabase
+      .from("property_package_purchases")
+      .select("*, listing_packages(name, price, duration_days), properties(title, status)")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (data.status !== "all") q = q.eq("status", data.status);
+    const { data: rows, error } = await q;
+    if (error) throw error;
+    return rows ?? [];
+  });
+
+/**
+ * Admin: manually mark a pending purchase as paid.
+ * Activates the purchase, moves the property to admin review, records a
+ * synthetic M-Pesa receipt, and notifies the owner. Idempotent — a purchase
+ * that is already active is left alone.
+ */
+export const adminMarkPurchasePaid = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z.object({ purchaseId: z.string().uuid(), note: z.string().max(200).optional() }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: purchase, error: pErr } = await supabaseAdmin
+      .from("property_package_purchases")
+      .select("*, listing_packages(*)")
+      .eq("id", data.purchaseId)
+      .maybeSingle();
+    if (pErr || !purchase) throw new Error("Purchase not found");
+    if (purchase.status === "active") return { ok: true, alreadyActive: true };
+
+    const pkg: any = purchase.listing_packages;
+    const days = pkg?.duration_days ?? 30;
+    const now = new Date();
+    const expires = new Date(now.getTime() + days * 86400_000).toISOString();
+    const receipt = `MANUAL-${now.getTime().toString(36).toUpperCase()}`;
+
+    // Flip transaction, if any, to success (guarded — never override a real terminal state)
+    if (purchase.mpesa_transaction_id) {
+      await supabaseAdmin.from("mpesa_transactions").update({
+        status: "success",
+        mpesa_receipt: receipt,
+        result_desc: `Marked paid by admin${data.note ? ` — ${data.note}` : ""}`,
+      }).eq("id", purchase.mpesa_transaction_id).eq("status", "pending");
+    }
+
+    // Activate the purchase
+    await supabaseAdmin.from("property_package_purchases").update({
+      status: "active",
+      activated_at: now.toISOString(),
+      expires_at: expires,
+    }).eq("id", purchase.id).neq("status", "active");
+
+    // Push property to admin review with package perks
+    await supabaseAdmin.from("properties").update({
+      status: "pending",
+      featured: pkg?.is_featured ?? false,
+      is_featured: pkg?.is_featured ?? false,
+      featured_until: pkg?.is_featured ? expires : null,
+    }).eq("id", purchase.property_id);
+
+    // Notify owner
+    await supabaseAdmin.from("notifications").insert({
+      user_id: purchase.owner_id,
+      type: "payment_success",
+      title: "Payment marked as received",
+      body: `An admin marked your listing package payment as received. Ref: ${receipt}. Your listing is now awaiting review.`,
+    });
+
+    return { ok: true, receipt };
+  });
+
