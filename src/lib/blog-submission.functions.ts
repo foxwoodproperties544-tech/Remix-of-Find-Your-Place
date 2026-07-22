@@ -329,12 +329,14 @@ export const adminApproveBlogPost = createServerFn({ method: "POST" })
     }).eq("id", data.id);
     if (error) throw error;
 
-    await context.supabase.from("notifications").insert({
-      user_id: post.author_id, type: "blog_approved",
-      title: "Your blog post is live",
-      body: "Your submission has been approved and published.",
-      link: "/dashboard/blog",
-    });
+    if (post.author_id) {
+      await context.supabase.from("notifications").insert({
+        user_id: post.author_id, type: "blog_approved",
+        title: "Your blog post is live",
+        body: "Your submission has been approved and published.",
+        link: "/dashboard/blog",
+      });
+    }
     return { ok: true };
   });
 
