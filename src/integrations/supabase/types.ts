@@ -304,65 +304,215 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_packages: {
+        Row: {
+          active: boolean
+          badge_color: string | null
+          created_at: string
+          description: string | null
+          duration_days: number
+          features: Json
+          homepage_placement: boolean
+          id: string
+          is_featured: boolean
+          is_sponsored: boolean
+          name: string
+          price: number
+          priority_placement: boolean
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          badge_color?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          features?: Json
+          homepage_placement?: boolean
+          id?: string
+          is_featured?: boolean
+          is_sponsored?: boolean
+          name: string
+          price?: number
+          priority_placement?: boolean
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          badge_color?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          features?: Json
+          homepage_placement?: boolean
+          id?: string
+          is_featured?: boolean
+          is_sponsored?: boolean
+          name?: string
+          price?: number
+          priority_placement?: boolean
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      blog_post_purchases: {
+        Row: {
+          activated_at: string | null
+          amount_paid: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          mpesa_transaction_id: string | null
+          package_id: string | null
+          post_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activated_at?: string | null
+          amount_paid?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          mpesa_transaction_id?: string | null
+          package_id?: string | null
+          post_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activated_at?: string | null
+          amount_paid?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          mpesa_transaction_id?: string | null
+          package_id?: string | null
+          post_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_post_purchases_mpesa_transaction_id_fkey"
+            columns: ["mpesa_transaction_id"]
+            isOneToOne: false
+            referencedRelation: "mpesa_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_post_purchases_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "blog_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_post_purchases_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_posts: {
         Row: {
+          admin_notes: string | null
           author_id: string | null
           category: string
           content: string
           cover_image: string | null
           created_at: string
           excerpt: string | null
+          expires_at: string | null
           id: string
+          is_sponsored: boolean
+          package_id: string | null
           published_at: string | null
           reading_minutes: number
+          reviewed_at: string | null
+          reviewed_by: string | null
           seo_description: string | null
           seo_title: string | null
           slug: string
           status: string
+          submitted_at: string | null
           tags: string[]
           title: string
           updated_at: string
           view_count: number
         }
         Insert: {
+          admin_notes?: string | null
           author_id?: string | null
           category?: string
           content?: string
           cover_image?: string | null
           created_at?: string
           excerpt?: string | null
+          expires_at?: string | null
           id?: string
+          is_sponsored?: boolean
+          package_id?: string | null
           published_at?: string | null
           reading_minutes?: number
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           seo_description?: string | null
           seo_title?: string | null
           slug: string
           status?: string
+          submitted_at?: string | null
           tags?: string[]
           title: string
           updated_at?: string
           view_count?: number
         }
         Update: {
+          admin_notes?: string | null
           author_id?: string | null
           category?: string
           content?: string
           cover_image?: string | null
           created_at?: string
           excerpt?: string | null
+          expires_at?: string | null
           id?: string
+          is_sponsored?: boolean
+          package_id?: string | null
           published_at?: string | null
           reading_minutes?: number
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           seo_description?: string | null
           seo_title?: string | null
           slug?: string
           status?: string
+          submitted_at?: string | null
           tags?: string[]
           title?: string
           updated_at?: string
           view_count?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "blog_packages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       faq_items: {
         Row: {
@@ -799,6 +949,7 @@ export type Database = {
         Row: {
           ad_campaign_id: string | null
           amount: number
+          blog_post_id: string | null
           checkout_request_id: string | null
           created_at: string
           duration_days: number | null
@@ -820,6 +971,7 @@ export type Database = {
         Insert: {
           ad_campaign_id?: string | null
           amount: number
+          blog_post_id?: string | null
           checkout_request_id?: string | null
           created_at?: string
           duration_days?: number | null
@@ -841,6 +993,7 @@ export type Database = {
         Update: {
           ad_campaign_id?: string | null
           amount?: number
+          blog_post_id?: string | null
           checkout_request_id?: string | null
           created_at?: string
           duration_days?: number | null
@@ -1457,6 +1610,7 @@ export type Database = {
         | "other"
         | "listing_package"
         | "advertisement"
+        | "blog_submission"
       mpesa_status: "pending" | "success" | "failed" | "cancelled"
       verification_status: "pending" | "approved" | "rejected"
     }
@@ -1633,6 +1787,7 @@ export const Constants = {
         "other",
         "listing_package",
         "advertisement",
+        "blog_submission",
       ],
       mpesa_status: ["pending", "success", "failed", "cancelled"],
       verification_status: ["pending", "approved", "rejected"],

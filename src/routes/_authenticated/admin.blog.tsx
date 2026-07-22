@@ -1,343 +1,250 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useServerFn } from "@tanstack/react-start";
+import {
+  adminListBlogSubmissions, adminGetBlogPost,
+  adminApproveBlogPost, adminRejectBlogPost, adminRequestBlogRevisions,
+  adminArchiveBlogPost, adminDeleteBlogPost, adminEditBlogPost,
+  adminBlogStats,
+} from "@/lib/blog-submission.functions";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { useRoles } from "@/hooks/use-role";
-import { slugify, isValidSlug, ensureUniqueBlogSlug } from "@/lib/slug";
 import { toast } from "sonner";
-import { ArrowLeft, CheckCircle2, XCircle, Loader2, ExternalLink, Plus, Pencil, Trash2, Wand2 } from "lucide-react";
+import { renderMarkdown } from "@/lib/markdown";
+import {
+  Loader2, ExternalLink, CheckCircle2, XCircle, AlertTriangle, Archive, Trash2,
+  Pencil, ArrowLeft, FileText, Clock, TrendingUp,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/blog")({
   component: AdminBlog,
-  head: () => ({ meta: [{ title: "Blog Admin — Foxwood Properties" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Blog submissions — Foxwood Admin" }, { name: "robots", content: "noindex" }] }),
 });
 
-type PostRow = {
-  id: string;
-  slug: string;
-  title: string;
-  status: string;
-  category: string;
-  published_at: string | null;
-  updated_at: string;
-};
+const TABS: { key: any; label: string }[] = [
+  { key: "pending_review", label: "Pending review" },
+  { key: "changes_requested", label: "Changes requested" },
+  { key: "pending_payment", label: "Pending payment" },
+  { key: "published", label: "Published" },
+  { key: "rejected", label: "Rejected" },
+  { key: "archived", label: "Archived" },
+  { key: "all", label: "All" },
+];
 
 function AdminBlog() {
-  const { user } = useAuth();
   const { isAdmin, loading } = useRoles();
   const qc = useQueryClient();
-  const [editingId, setEditingId] = useState<string | "new" | null>(null);
+  const [tab, setTab] = useState<any>("pending_review");
+  const [openId, setOpenId] = useState<string | null>(null);
 
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ["admin-blog-posts"],
+  const listFn = useServerFn(adminListBlogSubmissions);
+  const statsFn = useServerFn(adminBlogStats);
+
+  const { data: rows, isLoading } = useQuery({
+    queryKey: ["admin-blog-subs", tab],
     enabled: isAdmin,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("blog_posts")
-        .select("id, slug, title, status, category, published_at, updated_at")
-        .order("updated_at", { ascending: false });
-      if (error) throw error;
-      return data as PostRow[];
-    },
+    queryFn: () => listFn({ data: { status: tab } }),
   });
+  const { data: stats } = useQuery({ queryKey: ["admin-blog-stats"], enabled: isAdmin, queryFn: () => statsFn() });
 
-  const del = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("blog_posts").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      toast.success("Post deleted");
-      qc.invalidateQueries({ queryKey: ["admin-blog-posts"] });
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
+  if (loading) return <DashboardShell><div>Loading…</div></DashboardShell>;
+  if (!isAdmin) return <DashboardShell><div className="text-sm text-destructive">Admins only.</div></DashboardShell>;
 
-  if (loading) return <div className="container-page py-16">Loading…</div>;
-  if (!isAdmin) return <div className="container-page py-16">You need admin access to manage blog posts.</div>;
-
-  if (editingId) {
-    return (
-      <div className="container-page py-8">
-        <button onClick={() => setEditingId(null)} className="btn-ghost inline-flex mb-4">
-          <ArrowLeft className="h-4 w-4" /> Back to posts
-        </button>
-        <PostEditor
-          postId={editingId === "new" ? null : editingId}
-          userId={user?.id ?? ""}
-          onSaved={() => {
-            qc.invalidateQueries({ queryKey: ["admin-blog-posts"] });
-            setEditingId(null);
-          }}
-        />
-      </div>
-    );
-  }
+  if (openId) return <AdminBlogDetail id={openId} onBack={() => { setOpenId(null); qc.invalidateQueries({ queryKey: ["admin-blog-subs"] }); qc.invalidateQueries({ queryKey: ["admin-blog-stats"] }); }} />;
 
   return (
-    <div className="container-page py-8">
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <DashboardShell>
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-black">Blog Admin</h1>
-          <p className="text-muted-foreground">Create, edit, and manage blog posts. Slugs are validated and made unique automatically.</p>
+          <h1 className="text-2xl font-bold">Blog submissions</h1>
+          <p className="text-sm text-muted-foreground">Review, approve, reject, or request revisions.</p>
         </div>
-        <button onClick={() => setEditingId("new")} className="btn-primary btn-primary-hover inline-flex">
-          <Plus className="h-4 w-4" /> New post
-        </button>
+        <Link to="/admin/blog-packages" className="btn-ghost text-sm">Manage packages</Link>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="mt-4 grid gap-3 md:grid-cols-4">
+        <StatCard label="Pending review" icon={Clock} value={stats?.pending ?? 0} />
+        <StatCard label="Published" icon={CheckCircle2} value={stats?.published ?? 0} />
+        <StatCard label="Total posts" icon={FileText} value={stats?.total ?? 0} />
+        <StatCard label="Revenue (KSh)" icon={TrendingUp} value={Math.round(stats?.revenue ?? 0).toLocaleString()} />
+      </div>
+
+      <div className="mt-6 flex flex-wrap gap-1 border-b border-border">
+        {TABS.map((t) => (
+          <button key={t.key} onClick={() => setTab(t.key)}
+            className={`px-3 py-2 text-sm font-semibold border-b-2 ${tab === t.key ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-border bg-card overflow-hidden">
         {isLoading ? (
-          <div className="p-6 text-muted-foreground">Loading posts…</div>
-        ) : (posts ?? []).length === 0 ? (
-          <div className="p-8 text-center text-muted-foreground">No posts yet. Create your first one.</div>
+          <div className="p-6 text-sm text-muted-foreground">Loading…</div>
+        ) : !rows?.length ? (
+          <div className="p-10 text-center text-sm text-muted-foreground">Nothing here.</div>
         ) : (
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50 text-left">
-              <tr>
-                <th className="p-3">Title</th>
-                <th className="p-3">Slug</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Updated</th>
-                <th className="p-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(posts ?? []).map((p) => (
-                <tr key={p.id} className="border-t border-border">
-                  <td className="p-3 font-medium">{p.title}</td>
-                  <td className="p-3">
-                    <code className="text-xs bg-muted rounded px-1.5 py-0.5">{p.slug}</code>
-                  </td>
-                  <td className="p-3">
-                    <span className={
-                      "rounded-full px-2 py-0.5 text-xs font-semibold " +
-                      (p.status === "published"
-                        ? "bg-emerald-100 text-emerald-700"
-                        : p.status === "draft"
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-muted text-muted-foreground")
-                    }>
-                      {p.status}
-                    </span>
-                  </td>
-                  <td className="p-3 text-muted-foreground">{new Date(p.updated_at).toLocaleDateString()}</td>
-                  <td className="p-3 text-right space-x-2 whitespace-nowrap">
-                    <Link to="/blog/$slug" params={{ slug: p.slug }} className="btn-ghost inline-flex">
-                      <ExternalLink className="h-4 w-4" />
-                    </Link>
-                    <button onClick={() => setEditingId(p.id)} className="btn-ghost inline-flex" aria-label="Edit">
-                      <Pencil className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => { if (confirm("Delete this post?")) del.mutate(p.id); }}
-                      className="btn-ghost inline-flex text-destructive"
-                      aria-label="Delete"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="divide-y divide-border">
+            {rows.map((p: any) => (
+              <button key={p.id} onClick={() => setOpenId(p.id)}
+                className="w-full text-left p-4 md:p-5 hover:bg-muted/40 flex items-center gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap text-xs">
+                    <span className="rounded-full bg-muted px-2 py-0.5 font-semibold">{p.status}</span>
+                    {p.blog_packages?.name && <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 font-semibold">{p.blog_packages.name}</span>}
+                    <span className="text-muted-foreground">{p.category}</span>
+                  </div>
+                  <div className="mt-1 font-semibold truncate">{p.title}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Submitted {p.submitted_at ? new Date(p.submitted_at).toLocaleString() : "—"}
+                  </div>
+                </div>
+                <div className="text-xs text-muted-foreground">Review →</div>
+              </button>
+            ))}
+          </div>
         )}
       </div>
+    </DashboardShell>
+  );
+}
+
+function StatCard({ label, value, icon: Icon }: { label: string; value: any; icon: any }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-2 text-xs text-muted-foreground"><Icon className="h-3.5 w-3.5" /> {label}</div>
+      <div className="mt-1 text-2xl font-bold">{value}</div>
     </div>
   );
 }
 
-function PostEditor({ postId, userId, onSaved }: { postId: string | null; userId: string; onSaved: () => void }) {
-  const isNew = postId === null;
-  const nav = useNavigate();
+function AdminBlogDetail({ id, onBack }: { id: string; onBack: () => void }) {
+  const qc = useQueryClient();
+  const getFn = useServerFn(adminGetBlogPost);
+  const approve = useServerFn(adminApproveBlogPost);
+  const reject = useServerFn(adminRejectBlogPost);
+  const revise = useServerFn(adminRequestBlogRevisions);
+  const archive = useServerFn(adminArchiveBlogPost);
+  const del = useServerFn(adminDeleteBlogPost);
+  const edit = useServerFn(adminEditBlogPost);
 
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [slugTouched, setSlugTouched] = useState(false);
-  const [excerpt, setExcerpt] = useState("");
-  const [content, setContent] = useState("");
-  const [category, setCategory] = useState("guides");
-  const [tags, setTags] = useState("");
-  const [coverImage, setCoverImage] = useState("");
-  const [status, setStatus] = useState<"draft" | "published">("draft");
-  const [saving, setSaving] = useState(false);
-  const [checkingSlug, setCheckingSlug] = useState(false);
-  const [slugAvailable, setSlugAvailable] = useState<boolean | null>(null);
+  const [notes, setNotes] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [draft, setDraft] = useState<any | null>(null);
 
-  // Load existing
-  useEffect(() => {
-    if (!postId) return;
-    (async () => {
-      const { data, error } = await supabase.from("blog_posts").select("*").eq("id", postId).maybeSingle();
-      if (error) { toast.error(error.message); return; }
-      if (!data) return;
-      setTitle(data.title ?? "");
-      setSlug(data.slug ?? "");
-      setSlugTouched(true);
-      setExcerpt(data.excerpt ?? "");
-      setContent(data.content ?? "");
-      setCategory(data.category ?? "guides");
-      setTags((data.tags ?? []).join(", "));
-      setCoverImage(data.cover_image ?? "");
-      setStatus((data.status as "draft" | "published") ?? "draft");
-    })();
-  }, [postId]);
+  const { data: post, isLoading } = useQuery({
+    queryKey: ["admin-blog-post", id],
+    queryFn: () => getFn({ data: { id } }),
+  });
 
-  // Auto-generate slug from title until user edits it
-  useEffect(() => {
-    if (slugTouched) return;
-    if (!title) return;
-    setSlug(slugify(title));
-  }, [title, slugTouched]);
+  const run = async (fn: () => Promise<any>, msg: string) => {
+    try { await fn(); toast.success(msg); qc.invalidateQueries({ queryKey: ["admin-blog-post", id] }); onBack(); }
+    catch (e: any) { toast.error(e.message ?? "Failed"); }
+  };
 
-  const slugValid = useMemo(() => isValidSlug(slug), [slug]);
+  const saveEdit = useMutation({
+    mutationFn: async () => edit({ data: { id, patch: {
+      title: draft.title, excerpt: draft.excerpt || null, content: draft.content,
+      category: draft.category, tags: draft.tags, cover_image: draft.cover_image || null,
+      seo_title: draft.seo_title || null, seo_description: draft.seo_description || null,
+      is_sponsored: !!draft.is_sponsored,
+    }}}),
+    onSuccess: () => { toast.success("Post updated"); setEditMode(false); qc.invalidateQueries({ queryKey: ["admin-blog-post", id] }); },
+    onError: (e: any) => toast.error(e.message ?? "Failed"),
+  });
 
-  // Availability check (debounced)
-  useEffect(() => {
-    if (!slug || !slugValid) { setSlugAvailable(null); return; }
-    setCheckingSlug(true);
-    const handle = setTimeout(async () => {
-      let q = supabase.from("blog_posts").select("id").eq("slug", slug).limit(1);
-      if (postId) q = q.neq("id", postId);
-      const { data } = await q;
-      setSlugAvailable(!data || data.length === 0);
-      setCheckingSlug(false);
-    }, 350);
-    return () => clearTimeout(handle);
-  }, [slug, slugValid, postId]);
-
-  async function autoFix() {
-    const unique = await ensureUniqueBlogSlug(slug || title, postId ?? undefined);
-    setSlug(unique);
-    setSlugTouched(true);
-  }
-
-  async function save() {
-    if (!title.trim()) return toast.error("Title is required");
-    if (!content.trim()) return toast.error("Content is required");
-    setSaving(true);
-    try {
-      const finalSlug = await ensureUniqueBlogSlug(slug || title, postId ?? undefined);
-      const tagList = tags.split(",").map((t) => t.trim()).filter(Boolean);
-      const payload = {
-        title: title.trim(),
-        slug: finalSlug,
-        excerpt: excerpt.trim() || null,
-        content,
-        category,
-        tags: tagList,
-        cover_image: coverImage.trim() || null,
-        status,
-        published_at: status === "published" ? new Date().toISOString() : null,
-        author_id: userId,
-      };
-
-      if (isNew) {
-        const { error } = await supabase.from("blog_posts").insert(payload);
-        if (error) throw error;
-        toast.success(`Post created (/${finalSlug})`);
-      } else {
-        const { error } = await supabase.from("blog_posts").update(payload).eq("id", postId!);
-        if (error) throw error;
-        toast.success("Post updated");
-      }
-      onSaved();
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Failed to save";
-      toast.error(msg);
-    } finally {
-      setSaving(false);
-    }
-  }
+  if (isLoading || !post) return <DashboardShell><div className="text-sm text-muted-foreground">Loading…</div></DashboardShell>;
 
   return (
-    <div className="max-w-3xl">
-      <h2 className="text-2xl font-black">{isNew ? "New post" : "Edit post"}</h2>
+    <DashboardShell>
+      <button onClick={onBack} className="btn-ghost inline-flex items-center gap-2 text-sm mb-4">
+        <ArrowLeft className="h-4 w-4" /> Back to list
+      </button>
 
-      <div className="mt-6 space-y-4">
-        <label className="block">
-          <span className="text-sm font-semibold">Title</span>
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-background p-2.5"
-            placeholder="How to buy your first plot in Kenya"
-          />
-        </label>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 text-xs">
+            <span className="rounded-full bg-muted px-2 py-0.5 font-semibold">{post.status}</span>
+            {post.blog_packages?.name && <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 font-semibold">{post.blog_packages.name}</span>}
+          </div>
+          {editMode ? (
+            <div className="mt-3 space-y-3">
+              <input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })}
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xl font-bold" />
+              <textarea value={draft.excerpt ?? ""} onChange={(e) => setDraft({ ...draft, excerpt: e.target.value })}
+                rows={2} placeholder="Excerpt" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              <textarea value={draft.content} onChange={(e) => setDraft({ ...draft, content: e.target.value })}
+                rows={20} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-mono" />
+              <div className="flex gap-2">
+                <button onClick={() => setEditMode(false)} className="btn-ghost text-sm">Cancel</button>
+                <button onClick={() => saveEdit.mutate()} disabled={saveEdit.isPending}
+                  className="btn-primary btn-primary-hover text-sm inline-flex items-center gap-2">
+                  {saveEdit.isPending && <Loader2 className="h-4 w-4 animate-spin" />} Save changes
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h1 className="mt-2 text-3xl font-bold">{post.title}</h1>
+              {post.excerpt && <p className="mt-2 text-muted-foreground">{post.excerpt}</p>}
+              {post.cover_image && <img src={post.cover_image} alt="Cover" className="mt-4 w-full rounded-xl border border-border" />}
+              <div className="prose prose-sm max-w-none mt-6"
+                dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content || "") }} />
+            </>
+          )}
+        </div>
 
-        <div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">Slug (URL)</span>
-            <button type="button" onClick={autoFix} className="text-xs text-primary hover:underline inline-flex items-center gap-1">
-              <Wand2 className="h-3 w-3" /> Auto-generate unique slug
+        <aside className="space-y-4">
+          <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Actions</div>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
+              rows={3} placeholder="Admin notes (required for reject/revise)"
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            <button onClick={() => run(() => approve({ data: { id, notes: notes || undefined } }), "Approved & published")}
+              className="w-full btn-primary btn-primary-hover text-sm inline-flex items-center justify-center gap-2">
+              <CheckCircle2 className="h-4 w-4" /> Approve & publish
             </button>
+            <button onClick={() => { if (notes.length < 3) return toast.error("Add a note"); run(() => revise({ data: { id, notes } }), "Revisions requested"); }}
+              className="w-full btn-ghost text-sm inline-flex items-center justify-center gap-2 border border-border">
+              <AlertTriangle className="h-4 w-4" /> Request revisions
+            </button>
+            <button onClick={() => { if (notes.length < 3) return toast.error("Add a note"); run(() => reject({ data: { id, notes } }), "Rejected"); }}
+              className="w-full text-sm inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 bg-red-50 text-red-700 hover:bg-red-100 font-semibold">
+              <XCircle className="h-4 w-4" /> Reject
+            </button>
+            <div className="pt-3 border-t border-border grid grid-cols-2 gap-2">
+              <button onClick={() => { setDraft({ ...post, tags: post.tags ?? [] }); setEditMode(true); }}
+                className="btn-ghost text-xs inline-flex items-center justify-center gap-1">
+                <Pencil className="h-3.5 w-3.5" /> Edit
+              </button>
+              <button onClick={() => run(() => archive({ data: { id } }), "Archived")}
+                className="btn-ghost text-xs inline-flex items-center justify-center gap-1">
+                <Archive className="h-3.5 w-3.5" /> Archive
+              </button>
+              {post.status === "published" && (
+                <a href={`/blog/${post.slug}`} target="_blank" rel="noreferrer"
+                  className="btn-ghost text-xs inline-flex items-center justify-center gap-1 col-span-2">
+                  <ExternalLink className="h-3.5 w-3.5" /> View live
+                </a>
+              )}
+              <button onClick={() => { if (!confirm("Delete this post permanently?")) return; run(() => del({ data: { id } }), "Deleted"); }}
+                className="col-span-2 text-xs inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 bg-red-50 text-red-700 hover:bg-red-100 font-semibold">
+                <Trash2 className="h-3.5 w-3.5" /> Delete
+              </button>
+            </div>
           </div>
-          <div className="mt-1 flex items-stretch rounded-lg border border-border overflow-hidden bg-background">
-            <span className="px-3 text-sm text-muted-foreground bg-muted grid place-items-center">/blog/</span>
-            <input
-              value={slug}
-              onChange={(e) => { setSlug(slugify(e.target.value)); setSlugTouched(true); }}
-              onBlur={() => setSlug(slugify(slug))}
-              className="flex-1 p-2.5 bg-transparent focus:outline-none"
-              placeholder="my-post-slug"
-            />
-            <span className="px-3 grid place-items-center">
-              {!slug ? null :
-                !slugValid ? <XCircle className="h-4 w-4 text-destructive" /> :
-                checkingSlug ? <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /> :
-                slugAvailable === false ? <XCircle className="h-4 w-4 text-destructive" /> :
-                slugAvailable === true ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> :
-                null}
-            </span>
+
+          <div className="rounded-xl border border-border bg-card p-4 text-xs space-y-1">
+            <div><strong>Slug:</strong> {post.slug}</div>
+            <div><strong>Category:</strong> {post.category}</div>
+            <div><strong>Reading:</strong> {post.reading_minutes} min</div>
+            {post.submitted_at && <div><strong>Submitted:</strong> {new Date(post.submitted_at).toLocaleString()}</div>}
+            {post.expires_at && <div><strong>Expires:</strong> {new Date(post.expires_at).toLocaleString()}</div>}
+            {post.admin_notes && <div><strong>Previous note:</strong> {post.admin_notes}</div>}
           </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {!slug ? "A slug will be generated from the title." :
-              !slugValid ? "Use lowercase letters, numbers and hyphens (3–96 chars)." :
-              slugAvailable === false ? "This slug is taken — auto-generate will append a suffix on save." :
-              slugAvailable === true ? "Slug is available." :
-              "Checking availability…"}
-          </p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="block">
-            <span className="text-sm font-semibold">Category</span>
-            <input value={category} onChange={(e) => setCategory(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-background p-2.5" />
-          </label>
-          <label className="block">
-            <span className="text-sm font-semibold">Tags (comma-separated)</span>
-            <input value={tags} onChange={(e) => setTags(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-background p-2.5" placeholder="airbnb, nairobi, investment" />
-          </label>
-        </div>
-
-        <label className="block">
-          <span className="text-sm font-semibold">Cover image URL</span>
-          <input value={coverImage} onChange={(e) => setCoverImage(e.target.value)} className="mt-1 w-full rounded-lg border border-border bg-background p-2.5" placeholder="https://…" />
-        </label>
-
-        <label className="block">
-          <span className="text-sm font-semibold">Excerpt</span>
-          <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} className="mt-1 w-full rounded-lg border border-border bg-background p-2.5" />
-        </label>
-
-        <label className="block">
-          <span className="text-sm font-semibold">Content (Markdown)</span>
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} rows={16} className="mt-1 w-full rounded-lg border border-border bg-background p-2.5 font-mono text-sm" />
-        </label>
-
-        <label className="flex items-center gap-2">
-          <input type="checkbox" checked={status === "published"} onChange={(e) => setStatus(e.target.checked ? "published" : "draft")} />
-          <span className="text-sm font-semibold">Publish</span>
-        </label>
-
-        <div className="flex gap-3 pt-2">
-          <button onClick={save} disabled={saving} className="btn-primary btn-primary-hover">
-            {saving ? "Saving…" : isNew ? "Create post" : "Save changes"}
-          </button>
-          <button onClick={() => nav({ to: "/blog" })} className="btn-ghost">Cancel</button>
-        </div>
+        </aside>
       </div>
-    </div>
+    </DashboardShell>
   );
 }

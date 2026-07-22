@@ -25,9 +25,11 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
+      { to: "/dashboard/blog", label: "Write a blog", icon: FileText },
 
     ],
   });
+
 
   if (isAgent || isAdmin) {
     sections.push({
@@ -63,7 +65,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/ad-campaigns", label: "Ad campaigns", icon: ShieldCheck },
         { to: "/admin/subscriptions", label: "Subscriptions", icon: Star },
         { to: "/admin/notifications", label: "Notifications", icon: Bell },
-        { to: "/admin/blog", label: "Blog", icon: FileText },
+        { to: "/admin/blog", label: "Blog submissions", icon: FileText },
+        { to: "/admin/blog-packages", label: "Blog packages", icon: PlusCircle },
       ],
     });
   }

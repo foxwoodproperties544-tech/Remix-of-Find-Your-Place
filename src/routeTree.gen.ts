@@ -53,6 +53,7 @@ import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardKycRouteImport } from './routes/_authenticated/dashboard.kyc'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
+import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authenticated/dashboard.blog'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
 import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
 import { Route as AuthenticatedDashboardAdAnalyticsRouteImport } from './routes/_authenticated/dashboard.ad-analytics'
@@ -63,6 +64,7 @@ import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_a
 import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authenticated/admin.packages'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminKycRouteImport } from './routes/_authenticated/admin.kyc'
+import { Route as AuthenticatedAdminBlogPackagesRouteImport } from './routes/_authenticated/admin.blog-packages'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
@@ -73,7 +75,10 @@ import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_au
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
 import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
+import { Route as AuthenticatedDashboardBlogNewRouteImport } from './routes/_authenticated/dashboard.blog.new'
 import { Route as AuthenticatedAdminPackagesPreviewRouteImport } from './routes/_authenticated/admin.packages.preview'
+import { Route as AuthenticatedDashboardBlogIdPayRouteImport } from './routes/_authenticated/dashboard.blog.$id.pay'
+import { Route as AuthenticatedDashboardBlogIdEditRouteImport } from './routes/_authenticated/dashboard.blog.$id.edit'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -305,6 +310,12 @@ const AuthenticatedDashboardCrmRoute =
     path: '/dashboard/crm',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardBlogRoute =
+  AuthenticatedDashboardBlogRouteImport.update({
+    id: '/dashboard/blog',
+    path: '/dashboard/blog',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardAppointmentsRoute =
   AuthenticatedDashboardAppointmentsRouteImport.update({
     id: '/dashboard/appointments',
@@ -363,6 +374,12 @@ const AuthenticatedAdminKycRoute = AuthenticatedAdminKycRouteImport.update({
   path: '/kyc',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminBlogPackagesRoute =
+  AuthenticatedAdminBlogPackagesRouteImport.update({
+    id: '/blog-packages',
+    path: '/blog-packages',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminBlogRoute = AuthenticatedAdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -421,11 +438,29 @@ const AuthenticatedDashboardEditIdRoute =
     path: '/dashboard/edit/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardBlogNewRoute =
+  AuthenticatedDashboardBlogNewRouteImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AuthenticatedDashboardBlogRoute,
+  } as any)
 const AuthenticatedAdminPackagesPreviewRoute =
   AuthenticatedAdminPackagesPreviewRouteImport.update({
     id: '/preview',
     path: '/preview',
     getParentRoute: () => AuthenticatedAdminPackagesRoute,
+  } as any)
+const AuthenticatedDashboardBlogIdPayRoute =
+  AuthenticatedDashboardBlogIdPayRouteImport.update({
+    id: '/$id/pay',
+    path: '/$id/pay',
+    getParentRoute: () => AuthenticatedDashboardBlogRoute,
+  } as any)
+const AuthenticatedDashboardBlogIdEditRoute =
+  AuthenticatedDashboardBlogIdEditRouteImport.update({
+    id: '/$id/edit',
+    path: '/$id/edit',
+    getParentRoute: () => AuthenticatedDashboardBlogRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -465,6 +500,7 @@ export interface FileRoutesByFullPath {
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -475,6 +511,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
+  '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
@@ -487,12 +524,15 @@ export interface FileRoutesByFullPath {
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
+  '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -531,6 +571,7 @@ export interface FileRoutesByTo {
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -541,6 +582,7 @@ export interface FileRoutesByTo {
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
+  '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
@@ -553,12 +595,15 @@ export interface FileRoutesByTo {
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
+  '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -599,6 +644,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
+  '/_authenticated/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
   '/_authenticated/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -609,6 +655,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
+  '/_authenticated/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
@@ -621,12 +668,15 @@ export interface FileRoutesById {
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/_authenticated/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
   '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
+  '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -667,6 +717,7 @@ export interface FileRouteTypes {
     | '/admin/ads'
     | '/admin/analytics'
     | '/admin/blog'
+    | '/admin/blog-packages'
     | '/admin/kyc'
     | '/admin/notifications'
     | '/admin/packages'
@@ -677,6 +728,7 @@ export interface FileRouteTypes {
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
+    | '/dashboard/blog'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/kyc'
@@ -689,12 +741,15 @@ export interface FileRouteTypes {
     | '/api/public/mpesa-callback'
     | '/dashboard/'
     | '/admin/packages/preview'
+    | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/dashboard/blog/$id/edit'
+    | '/dashboard/blog/$id/pay'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -733,6 +788,7 @@ export interface FileRouteTypes {
     | '/admin/ads'
     | '/admin/analytics'
     | '/admin/blog'
+    | '/admin/blog-packages'
     | '/admin/kyc'
     | '/admin/notifications'
     | '/admin/packages'
@@ -743,6 +799,7 @@ export interface FileRouteTypes {
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
+    | '/dashboard/blog'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/kyc'
@@ -755,12 +812,15 @@ export interface FileRouteTypes {
     | '/api/public/mpesa-callback'
     | '/dashboard'
     | '/admin/packages/preview'
+    | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/dashboard/blog/$id/edit'
+    | '/dashboard/blog/$id/pay'
   id:
     | '__root__'
     | '/'
@@ -800,6 +860,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/ads'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/blog'
+    | '/_authenticated/admin/blog-packages'
     | '/_authenticated/admin/kyc'
     | '/_authenticated/admin/notifications'
     | '/_authenticated/admin/packages'
@@ -810,6 +871,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/ad-analytics'
     | '/_authenticated/dashboard/advertise'
     | '/_authenticated/dashboard/appointments'
+    | '/_authenticated/dashboard/blog'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/kyc'
@@ -822,12 +884,15 @@ export interface FileRouteTypes {
     | '/api/public/mpesa-callback'
     | '/_authenticated/dashboard/'
     | '/_authenticated/admin/packages/preview'
+    | '/_authenticated/dashboard/blog/new'
     | '/_authenticated/dashboard/edit/$id'
     | '/_authenticated/dashboard/feature/$id'
     | '/_authenticated/dashboard/leads/$id'
     | '/_authenticated/dashboard/leads/new'
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/verify/$id'
+    | '/_authenticated/dashboard/blog/$id/edit'
+    | '/_authenticated/dashboard/blog/$id/pay'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1174,6 +1239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardCrmRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/blog': {
+      id: '/_authenticated/dashboard/blog'
+      path: '/dashboard/blog'
+      fullPath: '/dashboard/blog'
+      preLoaderRoute: typeof AuthenticatedDashboardBlogRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/appointments': {
       id: '/_authenticated/dashboard/appointments'
       path: '/dashboard/appointments'
@@ -1242,6 +1314,13 @@ declare module '@tanstack/react-router' {
       path: '/kyc'
       fullPath: '/admin/kyc'
       preLoaderRoute: typeof AuthenticatedAdminKycRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/blog-packages': {
+      id: '/_authenticated/admin/blog-packages'
+      path: '/blog-packages'
+      fullPath: '/admin/blog-packages'
+      preLoaderRoute: typeof AuthenticatedAdminBlogPackagesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/blog': {
@@ -1314,12 +1393,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardEditIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/blog/new': {
+      id: '/_authenticated/dashboard/blog/new'
+      path: '/new'
+      fullPath: '/dashboard/blog/new'
+      preLoaderRoute: typeof AuthenticatedDashboardBlogNewRouteImport
+      parentRoute: typeof AuthenticatedDashboardBlogRoute
+    }
     '/_authenticated/admin/packages/preview': {
       id: '/_authenticated/admin/packages/preview'
       path: '/preview'
       fullPath: '/admin/packages/preview'
       preLoaderRoute: typeof AuthenticatedAdminPackagesPreviewRouteImport
       parentRoute: typeof AuthenticatedAdminPackagesRoute
+    }
+    '/_authenticated/dashboard/blog/$id/pay': {
+      id: '/_authenticated/dashboard/blog/$id/pay'
+      path: '/$id/pay'
+      fullPath: '/dashboard/blog/$id/pay'
+      preLoaderRoute: typeof AuthenticatedDashboardBlogIdPayRouteImport
+      parentRoute: typeof AuthenticatedDashboardBlogRoute
+    }
+    '/_authenticated/dashboard/blog/$id/edit': {
+      id: '/_authenticated/dashboard/blog/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/dashboard/blog/$id/edit'
+      preLoaderRoute: typeof AuthenticatedDashboardBlogIdEditRouteImport
+      parentRoute: typeof AuthenticatedDashboardBlogRoute
     }
   }
 }
@@ -1344,6 +1444,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAdsRoute: typeof AuthenticatedAdminAdsRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
+  AuthenticatedAdminBlogPackagesRoute: typeof AuthenticatedAdminBlogPackagesRoute
   AuthenticatedAdminKycRoute: typeof AuthenticatedAdminKycRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
   AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -1357,6 +1458,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAdsRoute: AuthenticatedAdminAdsRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
+  AuthenticatedAdminBlogPackagesRoute: AuthenticatedAdminBlogPackagesRoute,
   AuthenticatedAdminKycRoute: AuthenticatedAdminKycRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
   AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRouteWithChildren,
@@ -1367,6 +1469,25 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
 
 const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedDashboardBlogRouteChildren {
+  AuthenticatedDashboardBlogNewRoute: typeof AuthenticatedDashboardBlogNewRoute
+  AuthenticatedDashboardBlogIdEditRoute: typeof AuthenticatedDashboardBlogIdEditRoute
+  AuthenticatedDashboardBlogIdPayRoute: typeof AuthenticatedDashboardBlogIdPayRoute
+}
+
+const AuthenticatedDashboardBlogRouteChildren: AuthenticatedDashboardBlogRouteChildren =
+  {
+    AuthenticatedDashboardBlogNewRoute: AuthenticatedDashboardBlogNewRoute,
+    AuthenticatedDashboardBlogIdEditRoute:
+      AuthenticatedDashboardBlogIdEditRoute,
+    AuthenticatedDashboardBlogIdPayRoute: AuthenticatedDashboardBlogIdPayRoute,
+  }
+
+const AuthenticatedDashboardBlogRouteWithChildren =
+  AuthenticatedDashboardBlogRoute._addFileChildren(
+    AuthenticatedDashboardBlogRouteChildren,
+  )
 
 interface AuthenticatedDashboardLeadsRouteChildren {
   AuthenticatedDashboardLeadsIdRoute: typeof AuthenticatedDashboardLeadsIdRoute
@@ -1392,6 +1513,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAdAnalyticsRoute: typeof AuthenticatedDashboardAdAnalyticsRoute
   AuthenticatedDashboardAdvertiseRoute: typeof AuthenticatedDashboardAdvertiseRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
+  AuthenticatedDashboardBlogRoute: typeof AuthenticatedDashboardBlogRouteWithChildren
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardKycRoute: typeof AuthenticatedDashboardKycRoute
@@ -1418,6 +1540,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardAdvertiseRoute: AuthenticatedDashboardAdvertiseRoute,
   AuthenticatedDashboardAppointmentsRoute:
     AuthenticatedDashboardAppointmentsRoute,
+  AuthenticatedDashboardBlogRoute: AuthenticatedDashboardBlogRouteWithChildren,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardKycRoute: AuthenticatedDashboardKycRoute,
