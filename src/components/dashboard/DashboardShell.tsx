@@ -25,9 +25,11 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
+      { to: "/dashboard/blog", label: "Write a blog", icon: FileText },
 
     ],
   });
+
 
   if (isAgent || isAdmin) {
     sections.push({
