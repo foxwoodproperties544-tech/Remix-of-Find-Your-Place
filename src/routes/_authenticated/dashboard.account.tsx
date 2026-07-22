@@ -182,6 +182,42 @@ function Account() {
   );
 }
 
+function KycCallout() {
+  const { user } = useAuth();
+  const { data: kyc } = useQuery({
+    queryKey: ["my-kyc-dashboard", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("kyc_submissions").select("status, created_at, reviewed_at, reviewer_notes").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const status = kyc?.status ?? "none";
+  const isBlocked = status === "pending" || status === "approved";
+
+  const config: Record<string, { tone: string; title: string; body: string; cta: string }> = {
+    none: { tone: "border-primary/40 bg-primary-soft/40 text-primary", title: "Get your Verified badge", body: "Verify your identity to build trust with buyers and unlock premium listing features.", cta: "Verify identity" },
+    pending: { tone: "border-secondary/30 bg-secondary/10 text-foreground", title: "Verification in progress", body: "Your KYC submission is under review. We typically respond within 24–48 hours.", cta: "View details" },
+    approved: { tone: "border-primary/30 bg-primary-soft text-primary", title: "You are verified", body: "Your identity is verified. Buyers will see the Verified badge on your profile and listings.", cta: "Manage verification" },
+    rejected: { tone: "border-destructive/30 bg-destructive/10 text-foreground", title: "Verification rejected", body: kyc?.reviewer_notes ? `Reason: ${kyc.reviewer_notes}` : "Please re-submit with clearer documents.", cta: "Re-submit" },
+  };
+
+  const c = config[status] ?? config.none;
+
+  return (
+    <section className={`rounded-2xl border p-5 flex items-start gap-4 flex-wrap ${c.tone}`}>
+      <ShieldCheck className="h-6 w-6 mt-1 shrink-0" />
+      <div className="flex-1 min-w-[240px]">
+        <h3 className="font-semibold">{c.title}</h3>
+        <p className="text-sm opacity-90 mt-1">{c.body}</p>
+      </div>
+      <Link to="/dashboard/kyc" className={`btn-primary btn-primary-hover ${isBlocked ? "" : ""}`}>{c.cta}</Link>
+    </section>
+  );
+}
+
 function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
   return (
     <div>
