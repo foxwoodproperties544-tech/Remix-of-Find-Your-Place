@@ -195,7 +195,6 @@ function KycCallout() {
   });
 
   const status = kyc?.status ?? "none";
-  const isBlocked = status === "pending" || status === "approved";
 
   const config: Record<string, { tone: string; title: string; body: string; cta: string }> = {
     none: { tone: "border-primary/40 bg-primary-soft/40 text-primary", title: "Get your Verified badge", body: "Verify your identity to build trust with buyers and unlock premium listing features.", cta: "Verify identity" },
