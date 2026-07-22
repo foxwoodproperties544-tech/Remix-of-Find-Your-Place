@@ -118,6 +118,8 @@ function Account() {
         ))}
       </section>
 
+      <KycCallout />
+
       {!isAgent && !isAdmin && (
         <section className="rounded-2xl border border-dashed border-primary/40 bg-primary-soft/40 p-5 flex items-start gap-4 flex-wrap">
           <Home className="h-6 w-6 text-primary mt-1" />
