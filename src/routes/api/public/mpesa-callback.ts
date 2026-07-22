@@ -117,6 +117,23 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
             await supabaseAdmin.from("ad_campaigns").update({
               status: "pending_review",
             }).eq("id", campaignId);
+          } else if (txn.purpose === "blog_submission" && (txn as any).blog_post_id && txn.package_id) {
+            const postId = (txn as any).blog_post_id as string;
+            const { data: pkg } = await supabaseAdmin
+              .from("blog_packages").select("*").eq("id", txn.package_id).maybeSingle();
+            const days = pkg?.duration_days ?? txn.duration_days ?? 30;
+            const expires = new Date(Date.now() + days * 86400_000).toISOString();
+            await supabaseAdmin.from("blog_post_purchases").update({
+              status: "active",
+              activated_at: new Date().toISOString(),
+              expires_at: expires,
+            }).eq("mpesa_transaction_id", txn.id);
+            await supabaseAdmin.from("blog_posts").update({
+              status: "pending_review",
+              submitted_at: new Date().toISOString(),
+              expires_at: expires,
+              is_sponsored: pkg?.is_sponsored ?? false,
+            }).eq("id", postId);
           }
 
           await supabaseAdmin.from("notifications").insert({
