@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import { toast } from "sonner";
-import { Heart, Search, CalendarDays, Bell, User, Home } from "lucide-react";
+import { Heart, Search, CalendarDays, Bell, User, Home, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/account")({
   component: Account,
