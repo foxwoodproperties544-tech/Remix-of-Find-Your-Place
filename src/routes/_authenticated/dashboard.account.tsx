@@ -213,7 +213,7 @@ function KycCallout() {
         <h3 className="font-semibold">{c.title}</h3>
         <p className="text-sm opacity-90 mt-1">{c.body}</p>
       </div>
-      <Link to="/dashboard/kyc" className={`btn-primary btn-primary-hover ${isBlocked ? "" : ""}`}>{c.cta}</Link>
+      <Link to="/dashboard/kyc" className="btn-primary btn-primary-hover">{c.cta}</Link>
     </section>
   );
 }
