@@ -43,6 +43,7 @@ import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authen
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category.$category'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
@@ -251,6 +252,11 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const BlogCategoryCategoryRoute = BlogCategoryCategoryRouteImport.update({
+  id: '/blog/category/$category',
+  path: '/blog/category/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
   id: '/api/public/mpesa-callback',
   path: '/api/public/mpesa-callback',
@@ -522,6 +528,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
+  '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -593,6 +600,7 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
+  '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -666,6 +674,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
+  '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -739,6 +748,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
+    | '/blog/category/$category'
     | '/dashboard/'
     | '/admin/packages/preview'
     | '/dashboard/blog/new'
@@ -810,6 +820,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
+    | '/blog/category/$category'
     | '/dashboard'
     | '/admin/packages/preview'
     | '/dashboard/blog/new'
@@ -882,6 +893,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
+    | '/blog/category/$category'
     | '/_authenticated/dashboard/'
     | '/_authenticated/admin/packages/preview'
     | '/_authenticated/dashboard/blog/new'
@@ -927,6 +939,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
+  BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1168,6 +1181,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/blog/category/$category': {
+      id: '/blog/category/$category'
+      path: '/blog/category/$category'
+      fullPath: '/blog/category/$category'
+      preLoaderRoute: typeof BlogCategoryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/mpesa-callback': {
       id: '/api/public/mpesa-callback'
@@ -1594,6 +1614,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
+  BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

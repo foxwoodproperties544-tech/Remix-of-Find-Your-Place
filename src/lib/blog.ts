@@ -16,6 +16,8 @@ export interface BlogPost {
   seo_title: string | null;
   seo_description: string | null;
   view_count: number;
+  is_sponsored?: boolean;
+  blog_packages?: { is_featured?: boolean; priority_placement?: boolean; badge_color?: string | null; name?: string } | null;
   created_at: string;
   updated_at: string;
 }
