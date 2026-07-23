@@ -40,12 +40,38 @@ export interface AuthorProfile {
   company_name: string | null;
 }
 
-export async function listPublishedPosts(limit = 30): Promise<BlogPost[]> {
-  const { data, error } = await supabase
-    .from("blog_posts").select("*").eq("status", "published")
-    .order("published_at", { ascending: false }).limit(limit);
+/**
+ * Public: published posts, ordered by tier so Sponsored → Featured → Basic,
+ * then by recency. Sponsorship is stored on the post; featured comes from the
+ * chosen package. Uses a left join so posts with no package still return.
+ */
+export async function listPublishedPosts(
+  limit = 30,
+  opts: { category?: string; tag?: string } = {}
+): Promise<BlogPost[]> {
+  let q = supabase
+    .from("blog_posts")
+    .select("*, blog_packages(is_featured, priority_placement, badge_color, name)")
+    .eq("status", "published");
+  if (opts.category) q = q.eq("category", opts.category);
+  if (opts.tag) q = q.contains("tags", [opts.tag]);
+  const { data, error } = await q
+    .order("is_sponsored", { ascending: false })
+    .order("published_at", { ascending: false })
+    .limit(limit);
   if (error) throw error;
-  return (data ?? []) as BlogPost[];
+  // Secondary sort in JS to bubble featured packages above basic within same sponsored tier.
+  const rows = (data ?? []) as any[];
+  rows.sort((a, b) => {
+    const rank = (r: any) =>
+      (r.is_sponsored ? 3 : 0) +
+      (r.blog_packages?.is_featured ? 2 : 0) +
+      (r.blog_packages?.priority_placement ? 1 : 0);
+    const d = rank(b) - rank(a);
+    if (d !== 0) return d;
+    return new Date(b.published_at || 0).getTime() - new Date(a.published_at || 0).getTime();
+  });
+  return rows as BlogPost[];
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
