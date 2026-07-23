@@ -34,10 +34,8 @@ export interface Property {
   amenities: string[];
 }
 
-export const counties = [
-  "Nairobi","Kiambu","Kajiado","Machakos","Mombasa","Kisumu","Nakuru",
-  "Uasin Gishu","Nyeri","Laikipia","Kilifi","Kwale","Meru","Muranga","Kericho",
-];
+export { KENYA_COUNTIES as counties } from "./kenya-locations-data";
+
 export const locations = [
   { name: "Nairobi", count: 128, img: p2 },
   { name: "Kiambu", count: 64, img: p1 },
