@@ -126,6 +126,7 @@ function AdminBlogDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const reject = useServerFn(adminRejectBlogPost);
   const revise = useServerFn(adminRequestBlogRevisions);
   const archive = useServerFn(adminArchiveBlogPost);
+  const del = useServerFn(adminDeleteBlogPost);
   const edit = useServerFn(adminEditBlogPost);
   const runPlag = useServerFn(adminRunBlogPlagiarismCheck);
 
