@@ -12,9 +12,11 @@ export const Route = createFileRoute("/_authenticated/dashboard/new")({
 });
 
 import { CATEGORIES as CATS, ALL_TYPES, TYPE_GROUPS } from "@/lib/taxonomy";
+import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 const CATEGORIES = [...CATS];
 const TYPES = ALL_TYPES;
-const COUNTIES = ["Nairobi", "Kiambu", "Kajiado", "Machakos", "Mombasa", "Kisumu", "Nakuru", "Uasin Gishu"];
+const COUNTIES = KENYA_COUNTIES;
+
 
 const schema = z.object({
   title: z.string().trim().min(6, "Title must be at least 6 characters").max(120, "Title too long"),
@@ -258,10 +260,14 @@ function NewListing() {
 
         <div className="grid md:grid-cols-3 gap-4">
           <div>
-            <label className={label}>Town *</label>
-            <input value={form.town} onChange={(e) => upd("town", e.target.value)} className={`${input} ${errCls("town")}`} placeholder="Kitengela" />
+            <label className={label}>Town / Area *</label>
+            <input list="fx-sublocations" value={form.town} onChange={(e) => upd("town", e.target.value)} className={`${input} ${errCls("town")}`} placeholder="Start typing an area..." />
+            <datalist id="fx-sublocations">
+              {(KENYA_SUBLOCATIONS[form.county] ?? []).map((s) => <option key={s} value={s} />)}
+            </datalist>
             {errText("town")}
           </div>
+
           <div>
             <label className={label}>Area / Estate</label>
             <input value={form.area} onChange={(e) => upd("area", e.target.value)} className={input} placeholder="Acacia" />
