@@ -244,6 +244,8 @@ function AdminBlogDetail({ id, onBack }: { id: string; onBack: () => void }) {
             {post.expires_at && <div><strong>Expires:</strong> {new Date(post.expires_at).toLocaleString()}</div>}
             {post.admin_notes && <div><strong>Previous note:</strong> {post.admin_notes}</div>}
           </div>
+
+          <PlagiarismPanel post={post} runPlag={runPlag} qc={qc} id={id} />
         </aside>
       </div>
     </DashboardShell>
