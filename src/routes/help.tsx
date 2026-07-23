@@ -42,7 +42,7 @@ const categories = [
     { label: "Report a problem", to: "/contact" as const },
   ]},
   { icon: CreditCard, title: "Payments & pricing", desc: "M-Pesa, subscriptions and featured listings.", links: [
-    { label: "Pricing plans", to: "/pricing" as const },
+    { label: "Listing packages", to: "/listing-packages" as const },
     { label: "Upgrade to featured", to: "/dashboard/upgrade" as const },
   ]},
   { icon: Search, title: "Tools", desc: "Compare, calculate mortgage, and save searches.", links: [
