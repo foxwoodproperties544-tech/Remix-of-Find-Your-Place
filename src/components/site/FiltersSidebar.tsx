@@ -78,9 +78,10 @@ export function FiltersSidebar({ state, townOptions, onChange, onClear }: Filter
             {counties.map((c) => <option key={c}>{c}</option>)}
           </select>
           <select value={state.town} onChange={(e) => onChange({ town: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
-            <option value="">{state.county ? `All towns in ${state.county}` : "All towns"}</option>
-            {townOptions.map((t) => <option key={t}>{t}</option>)}
+            <option value="">{state.county ? `All areas in ${state.county}` : "All areas"}</option>
+            {Array.from(new Set([...(state.county ? KENYA_SUBLOCATIONS[state.county] ?? [] : []), ...townOptions])).sort().map((t) => <option key={t}>{t}</option>)}
           </select>
+
         </div>
       </Section>
 
