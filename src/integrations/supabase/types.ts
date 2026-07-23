@@ -438,6 +438,9 @@ export type Database = {
           id: string
           is_sponsored: boolean
           package_id: string | null
+          plagiarism_checked_at: string | null
+          plagiarism_report: Json | null
+          plagiarism_score: number | null
           published_at: string | null
           reading_minutes: number
           reviewed_at: string | null
@@ -464,6 +467,9 @@ export type Database = {
           id?: string
           is_sponsored?: boolean
           package_id?: string | null
+          plagiarism_checked_at?: string | null
+          plagiarism_report?: Json | null
+          plagiarism_score?: number | null
           published_at?: string | null
           reading_minutes?: number
           reviewed_at?: string | null
@@ -490,6 +496,9 @@ export type Database = {
           id?: string
           is_sponsored?: boolean
           package_id?: string | null
+          plagiarism_checked_at?: string | null
+          plagiarism_report?: Json | null
+          plagiarism_score?: number | null
           published_at?: string | null
           reading_minutes?: number
           reviewed_at?: string | null

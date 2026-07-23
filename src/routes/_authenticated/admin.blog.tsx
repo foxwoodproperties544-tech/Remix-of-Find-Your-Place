@@ -6,7 +6,7 @@ import {
   adminListBlogSubmissions, adminGetBlogPost,
   adminApproveBlogPost, adminRejectBlogPost, adminRequestBlogRevisions,
   adminArchiveBlogPost, adminDeleteBlogPost, adminEditBlogPost,
-  adminBlogStats,
+  adminBlogStats, adminRunBlogPlagiarismCheck,
 } from "@/lib/blog-submission.functions";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { useRoles } from "@/hooks/use-role";
@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { renderMarkdown } from "@/lib/markdown";
 import {
   Loader2, ExternalLink, CheckCircle2, XCircle, AlertTriangle, Archive, Trash2,
-  Pencil, ArrowLeft, FileText, Clock, TrendingUp,
+  Pencil, ArrowLeft, FileText, Clock, TrendingUp, ShieldAlert, Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/blog")({
@@ -128,6 +128,7 @@ function AdminBlogDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const archive = useServerFn(adminArchiveBlogPost);
   const del = useServerFn(adminDeleteBlogPost);
   const edit = useServerFn(adminEditBlogPost);
+  const runPlag = useServerFn(adminRunBlogPlagiarismCheck);
 
   const [notes, setNotes] = useState("");
   const [editMode, setEditMode] = useState(false);
@@ -243,8 +244,78 @@ function AdminBlogDetail({ id, onBack }: { id: string; onBack: () => void }) {
             {post.expires_at && <div><strong>Expires:</strong> {new Date(post.expires_at).toLocaleString()}</div>}
             {post.admin_notes && <div><strong>Previous note:</strong> {post.admin_notes}</div>}
           </div>
+
+          <PlagiarismPanel post={post} runPlag={runPlag} qc={qc} id={id} />
         </aside>
       </div>
     </DashboardShell>
+  );
+}
+
+function PlagiarismPanel({ post, runPlag, qc, id }: { post: any; runPlag: any; qc: any; id: string }) {
+  const [busy, setBusy] = useState(false);
+  const report = post.plagiarism_report as any | null;
+  const score: number | null = post.plagiarism_score ?? null;
+  const verdict = report?.verdict ?? (score == null ? null : score >= 60 ? "likely_copied" : score >= 30 ? "suspicious" : "clean");
+
+  async function run() {
+    setBusy(true);
+    try {
+      await runPlag({ data: { id } });
+      toast.success("Originality check complete");
+      qc.invalidateQueries({ queryKey: ["admin-blog-post", id] });
+    } catch (e: any) { toast.error(e.message ?? "Check failed"); }
+    finally { setBusy(false); }
+  }
+
+  const tone =
+    verdict === "likely_copied" ? "bg-red-50 text-red-800 border-red-200"
+    : verdict === "suspicious" ? "bg-amber-50 text-amber-900 border-amber-200"
+    : verdict === "clean" ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+    : "bg-muted/40 text-muted-foreground border-border";
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 space-y-3">
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1">
+          <ShieldAlert className="h-3.5 w-3.5" /> Originality check
+        </div>
+        <button onClick={run} disabled={busy}
+          className="btn-ghost text-xs inline-flex items-center gap-1 border border-border">
+          {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+          {report ? "Re-run" : "Run AI check"}
+        </button>
+      </div>
+      {score == null ? (
+        <p className="text-xs text-muted-foreground">
+          AI-assisted originality screening (heuristic — not a web-corpus match).
+        </p>
+      ) : (
+        <div className={`rounded-lg border p-3 text-xs ${tone}`}>
+          <div className="flex items-center justify-between">
+            <div className="font-bold uppercase tracking-wide">{verdict}</div>
+            <div className="text-xl font-black">{score}<span className="text-xs">/100</span></div>
+          </div>
+          {report?.reasons?.length ? (
+            <ul className="mt-2 list-disc pl-4 space-y-0.5">
+              {report.reasons.slice(0, 5).map((r: string, i: number) => <li key={i}>{r}</li>)}
+            </ul>
+          ) : null}
+          {report?.suspicious_passages?.length ? (
+            <div className="mt-2 space-y-2">
+              {report.suspicious_passages.slice(0, 4).map((p: any, i: number) => (
+                <div key={i} className="rounded border border-current/20 bg-white/60 p-2">
+                  <div className="italic">"{String(p.quote).slice(0, 240)}"</div>
+                  {p.why && <div className="mt-1 text-[11px] opacity-80">{p.why}</div>}
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {post.plagiarism_checked_at && (
+            <div className="mt-2 text-[10px] opacity-70">Checked {new Date(post.plagiarism_checked_at).toLocaleString()}</div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

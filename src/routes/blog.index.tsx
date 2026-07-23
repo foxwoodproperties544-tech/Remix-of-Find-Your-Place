@@ -100,7 +100,7 @@ function FeaturedPost({ p, authorMap }: { p: BlogPost; authorMap: Map<string, Au
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
           <span className="absolute top-4 left-4 rounded-full bg-secondary text-secondary-foreground text-xs font-bold uppercase tracking-wider px-3 py-1">
-            Featured
+            {p.is_sponsored ? "Sponsored" : "Featured"}
           </span>
         </div>
         <div className="flex flex-col justify-center p-6 sm:p-10 gap-4">
@@ -146,6 +146,9 @@ function PostCard({ p, authorMap }: { p: BlogPost; authorMap: Map<string, Author
           <span className="absolute top-3 left-3 rounded-full bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 capitalize shadow-soft">
             {p.category.replace("-", " ")}
           </span>
+          {p.is_sponsored && (
+            <span className="absolute top-3 right-3 rounded-full bg-secondary text-white text-[10px] font-bold uppercase px-2 py-0.5">Sponsored</span>
+          )}
         </div>
         <div className="flex flex-1 flex-col p-5">
           <h3 className="font-bold text-lg leading-snug line-clamp-2 group-hover:text-primary transition">
