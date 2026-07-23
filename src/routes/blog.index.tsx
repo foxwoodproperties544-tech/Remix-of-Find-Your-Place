@@ -100,7 +100,7 @@ function FeaturedPost({ p, authorMap }: { p: BlogPost; authorMap: Map<string, Au
             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
           <span className="absolute top-4 left-4 rounded-full bg-secondary text-secondary-foreground text-xs font-bold uppercase tracking-wider px-3 py-1">
-            Featured
+            {p.is_sponsored ? "Sponsored" : "Featured"}
           </span>
         </div>
         <div className="flex flex-col justify-center p-6 sm:p-10 gap-4">
