@@ -479,3 +479,86 @@ export const adminMarkBlogPurchasePaid = createServerFn({ method: "POST" })
     }).eq("id", purch.post_id);
     return { ok: true };
   });
+
+/** Admin: AI-assisted originality check (Lovable AI, heuristic — not a web-corpus match). */
+export const adminRunBlogPlagiarismCheck = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: post } = await context.supabase
+      .from("blog_posts").select("id, title, content").eq("id", data.id).maybeSingle();
+    if (!post) throw new Error("Not found");
+
+    const apiKey = process.env.LOVABLE_API_KEY;
+    if (!apiKey) throw new Error("AI gateway not configured");
+
+    const content = String(post.content ?? "").slice(0, 12000);
+    const prompt = `You are an editor screening a blog submission for originality. Return STRICT JSON only, no prose, matching:
+{"score": <0-100 integer risk of plagiarism/AI-boilerplate>, "verdict": "clean"|"suspicious"|"likely_copied", "reasons": [short strings], "suspicious_passages": [{"quote": string, "why": string}]}
+
+Article title: ${post.title}
+Article:
+"""${content}"""`;
+
+    let report: any = { score: 0, verdict: "clean", reasons: [], suspicious_passages: [] };
+    try {
+      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            { role: "system", content: "You return ONLY valid minified JSON." },
+            { role: "user", content: prompt },
+          ],
+        }),
+      });
+      if (res.status === 429) throw new Error("AI rate limit — try again shortly");
+      if (res.status === 402) throw new Error("AI credits exhausted — please top up");
+      if (!res.ok) throw new Error(`AI gateway error ${res.status}`);
+      const json: any = await res.json();
+      const text: string = json?.choices?.[0]?.message?.content ?? "{}";
+      const match = text.match(/\{[\s\S]*\}/);
+      report = JSON.parse(match ? match[0] : text);
+    } catch (e: any) {
+      report = { score: 0, verdict: "error", reasons: [e?.message ?? "check failed"], suspicious_passages: [] };
+    }
+
+    const score = Math.max(0, Math.min(100, Number(report.score ?? 0)));
+    await context.supabase.from("blog_posts").update({
+      plagiarism_score: score,
+      plagiarism_report: report,
+      plagiarism_checked_at: new Date().toISOString(),
+    }).eq("id", data.id);
+
+    return { ok: true, score, report };
+  });
+
+/** Public: list categories and tags with counts for filter pages. */
+export const listBlogTaxonomy = createServerFn({ method: "GET" }).handler(async () => {
+  const { createClient } = await import("@supabase/supabase-js");
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
+  const supabase = createClient(process.env.SUPABASE_URL!, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: {
+      fetch: (input, init) => {
+        const h = new Headers(init?.headers);
+        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+        h.set("apikey", key);
+        return fetch(input, { ...init, headers: h });
+      },
+    },
+  });
+  const { data } = await supabase.from("blog_posts").select("category, tags").eq("status", "published");
+  const cats = new Map<string, number>();
+  const tags = new Map<string, number>();
+  for (const r of (data ?? []) as any[]) {
+    cats.set(r.category, (cats.get(r.category) ?? 0) + 1);
+    for (const t of r.tags ?? []) tags.set(t, (tags.get(t) ?? 0) + 1);
+  }
+  return {
+    categories: [...cats.entries()].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count),
+    tags: [...tags.entries()].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count),
+  };
+});
