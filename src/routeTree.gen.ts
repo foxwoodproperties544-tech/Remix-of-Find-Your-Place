@@ -13,15 +13,18 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MortgageRouteImport } from './routes/mortgage'
+import { Route as ListingPackagesRouteImport } from './routes/listing-packages'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as BlogSubmissionPackagesRouteImport } from './routes/blog-submission-packages'
 import { Route as BlogSitemapDotxmlRouteImport } from './routes/blog-sitemap[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AgentDeveloperSubscriptionsRouteImport } from './routes/agent-developer-subscriptions'
+import { Route as AdvertisingPackagesRouteImport } from './routes/advertising-packages'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -102,14 +105,14 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MortgageRoute = MortgageRouteImport.update({
   id: '/mortgage',
   path: '/mortgage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingPackagesRoute = ListingPackagesRouteImport.update({
+  id: '/listing-packages',
+  path: '/listing-packages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -137,6 +140,11 @@ const CompareRoute = CompareRouteImport.update({
   path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogSubmissionPackagesRoute = BlogSubmissionPackagesRouteImport.update({
+  id: '/blog-submission-packages',
+  path: '/blog-submission-packages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSitemapDotxmlRoute = BlogSitemapDotxmlRouteImport.update({
   id: '/blog-sitemap.xml',
   path: '/blog-sitemap.xml',
@@ -145,6 +153,17 @@ const BlogSitemapDotxmlRoute = BlogSitemapDotxmlRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentDeveloperSubscriptionsRoute =
+  AgentDeveloperSubscriptionsRouteImport.update({
+    id: '/agent-developer-subscriptions',
+    path: '/agent-developer-subscriptions',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AdvertisingPackagesRoute = AdvertisingPackagesRouteImport.update({
+  id: '/advertising-packages',
+  path: '/advertising-packages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -478,15 +497,18 @@ const AuthenticatedDashboardBlogIdEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/advertising-packages': typeof AdvertisingPackagesRoute
+  '/agent-developer-subscriptions': typeof AgentDeveloperSubscriptionsRoute
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
+  '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRoute
+  '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -551,15 +573,18 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/advertising-packages': typeof AdvertisingPackagesRoute
+  '/agent-developer-subscriptions': typeof AgentDeveloperSubscriptionsRoute
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
+  '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRoute
+  '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -626,15 +651,18 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/advertising-packages': typeof AdvertisingPackagesRoute
+  '/agent-developer-subscriptions': typeof AgentDeveloperSubscriptionsRoute
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
+  '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRoute
+  '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
-  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -701,15 +729,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/advertising-packages'
+    | '/agent-developer-subscriptions'
     | '/auth'
     | '/blog-sitemap.xml'
+    | '/blog-submission-packages'
     | '/compare'
     | '/contact'
     | '/cookies'
     | '/faq'
     | '/help'
+    | '/listing-packages'
     | '/mortgage'
-    | '/pricing'
     | '/privacy'
     | '/property-sitemap.xml'
     | '/sitemap.xml'
@@ -774,15 +805,18 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/advertising-packages'
+    | '/agent-developer-subscriptions'
     | '/auth'
     | '/blog-sitemap.xml'
+    | '/blog-submission-packages'
     | '/compare'
     | '/contact'
     | '/cookies'
     | '/faq'
     | '/help'
+    | '/listing-packages'
     | '/mortgage'
-    | '/pricing'
     | '/privacy'
     | '/property-sitemap.xml'
     | '/sitemap.xml'
@@ -848,15 +882,18 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/advertising-packages'
+    | '/agent-developer-subscriptions'
     | '/auth'
     | '/blog-sitemap.xml'
+    | '/blog-submission-packages'
     | '/compare'
     | '/contact'
     | '/cookies'
     | '/faq'
     | '/help'
+    | '/listing-packages'
     | '/mortgage'
-    | '/pricing'
     | '/privacy'
     | '/property-sitemap.xml'
     | '/sitemap.xml'
@@ -923,15 +960,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AdvertisingPackagesRoute: typeof AdvertisingPackagesRoute
+  AgentDeveloperSubscriptionsRoute: typeof AgentDeveloperSubscriptionsRoute
   AuthRoute: typeof AuthRoute
   BlogSitemapDotxmlRoute: typeof BlogSitemapDotxmlRoute
+  BlogSubmissionPackagesRoute: typeof BlogSubmissionPackagesRoute
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRoute
+  ListingPackagesRoute: typeof ListingPackagesRoute
   MortgageRoute: typeof MortgageRoute
-  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -985,18 +1025,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/mortgage': {
       id: '/mortgage'
       path: '/mortgage'
       fullPath: '/mortgage'
       preLoaderRoute: typeof MortgageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listing-packages': {
+      id: '/listing-packages'
+      path: '/listing-packages'
+      fullPath: '/listing-packages'
+      preLoaderRoute: typeof ListingPackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -1034,6 +1074,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog-submission-packages': {
+      id: '/blog-submission-packages'
+      path: '/blog-submission-packages'
+      fullPath: '/blog-submission-packages'
+      preLoaderRoute: typeof BlogSubmissionPackagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog-sitemap.xml': {
       id: '/blog-sitemap.xml'
       path: '/blog-sitemap.xml'
@@ -1046,6 +1093,20 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agent-developer-subscriptions': {
+      id: '/agent-developer-subscriptions'
+      path: '/agent-developer-subscriptions'
+      fullPath: '/agent-developer-subscriptions'
+      preLoaderRoute: typeof AgentDeveloperSubscriptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/advertising-packages': {
+      id: '/advertising-packages'
+      path: '/advertising-packages'
+      fullPath: '/advertising-packages'
+      preLoaderRoute: typeof AdvertisingPackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1606,15 +1667,18 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AdvertisingPackagesRoute: AdvertisingPackagesRoute,
+  AgentDeveloperSubscriptionsRoute: AgentDeveloperSubscriptionsRoute,
   AuthRoute: AuthRoute,
   BlogSitemapDotxmlRoute: BlogSitemapDotxmlRoute,
+  BlogSubmissionPackagesRoute: BlogSubmissionPackagesRoute,
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
   FaqRoute: FaqRoute,
   HelpRoute: HelpRoute,
+  ListingPackagesRoute: ListingPackagesRoute,
   MortgageRoute: MortgageRoute,
-  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

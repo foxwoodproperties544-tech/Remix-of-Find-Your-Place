@@ -64,7 +64,7 @@ function AdminPricingPreview() {
           <Link to="/admin/packages" className="btn-ghost text-sm inline-flex items-center gap-1.5">
             <ArrowLeft className="h-4 w-4" /> Back to editor
           </Link>
-          <Link to="/pricing" target="_blank" className="btn-primary btn-primary-hover text-sm">
+          <Link to="/listing-packages" target="_blank" className="btn-primary btn-primary-hover text-sm">
             Open live page
           </Link>
         </div>
