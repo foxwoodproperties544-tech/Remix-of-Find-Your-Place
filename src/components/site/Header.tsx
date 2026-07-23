@@ -1,7 +1,7 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,17 +15,43 @@ const nav = [
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About Us" },
-  { to: "/pricing", label: "Pricing" },
   { to: "/contact", label: "Contact Us" },
 ];
+
+const moreItems = [
+  { to: "/listing-packages", label: "Listing Packages", icon: Home, desc: "Post a property with the right visibility" },
+  { to: "/advertising-packages", label: "Advertising Packages", icon: Megaphone, desc: "Homepage, sidebar, search & blog banners" },
+  { to: "/blog-submission-packages", label: "Blog Submission Packages", icon: PenSquare, desc: "Publish articles to Kenya's property audience" },
+  { to: "/agent-developer-subscriptions", label: "Agent & Developer Subscriptions", icon: Building2, desc: "Grow your agency with monthly plans" },
+] as const;
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { isAdmin } = useRoles();
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const moreActive = moreItems.some((m) => pathname === m.to);
+
+  // Close on outside click / Esc
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) setMoreOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMoreOpen(false); };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [moreOpen]);
 
   async function signOut() {
     await qc.cancelQueries();
@@ -52,6 +78,53 @@ export function Header() {
               activeProps={{ className: "text-primary bg-primary-soft" }}
             >{n.label}</Link>
           ))}
+          {/* More dropdown */}
+          <div
+            ref={moreRef}
+            className="relative"
+            onMouseEnter={() => setMoreOpen(true)}
+            onMouseLeave={() => setMoreOpen(false)}
+          >
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={moreOpen}
+              onClick={() => setMoreOpen((v) => !v)}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive || moreOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
+            >
+              More <ChevronDown className={`h-3.5 w-3.5 transition-transform ${moreOpen ? "rotate-180" : ""}`} />
+            </button>
+            {moreOpen && (
+              <div
+                role="menu"
+                className="absolute right-0 top-full pt-2 w-[22rem]"
+              >
+                <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
+                  {moreItems.map((m) => {
+                    const Icon = m.icon;
+                    const active = pathname === m.to;
+                    return (
+                      <Link
+                        key={m.to}
+                        to={m.to}
+                        role="menuitem"
+                        onClick={() => setMoreOpen(false)}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
+                      >
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className={`block font-semibold ${active ? "text-primary" : ""}`}>{m.label}</span>
+                          <span className="block text-xs text-muted-foreground">{m.desc}</span>
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </nav>
         <div className="hidden md:flex items-center gap-2">
           <a href="tel:+254700000000" className="btn-ghost !py-2 !px-4 text-sm"><Phone className="h-4 w-4" /> Call</a>
@@ -93,6 +166,27 @@ export function Header() {
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{n.label}</Link>
             ))}
+            {/* Mobile More accordion */}
+            <button
+              type="button"
+              aria-expanded={mobileMoreOpen}
+              onClick={() => setMobileMoreOpen((v) => !v)}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${moreActive ? "text-primary" : ""}`}
+            >
+              <span>More</span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${mobileMoreOpen ? "rotate-180" : ""}`} />
+            </button>
+            {mobileMoreOpen && (
+              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+                {moreItems.map((m) => (
+                  <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileMoreOpen(false); }}
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    activeProps={{ className: "text-primary bg-primary-soft" }}>
+                    {m.label}
+                  </Link>
+                ))}
+              </div>
+            )}
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">My listings</Link>
