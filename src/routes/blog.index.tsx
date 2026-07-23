@@ -146,6 +146,9 @@ function PostCard({ p, authorMap }: { p: BlogPost; authorMap: Map<string, Author
           <span className="absolute top-3 left-3 rounded-full bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 capitalize shadow-soft">
             {p.category.replace("-", " ")}
           </span>
+          {p.is_sponsored && (
+            <span className="absolute top-3 right-3 rounded-full bg-secondary text-white text-[10px] font-bold uppercase px-2 py-0.5">Sponsored</span>
+          )}
         </div>
         <div className="flex flex-1 flex-col p-5">
           <h3 className="font-bold text-lg leading-snug line-clamp-2 group-hover:text-primary transition">
