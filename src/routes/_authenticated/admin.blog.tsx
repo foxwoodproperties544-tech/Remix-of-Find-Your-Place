@@ -6,7 +6,7 @@ import {
   adminListBlogSubmissions, adminGetBlogPost,
   adminApproveBlogPost, adminRejectBlogPost, adminRequestBlogRevisions,
   adminArchiveBlogPost, adminDeleteBlogPost, adminEditBlogPost,
-  adminBlogStats,
+  adminBlogStats, adminRunBlogPlagiarismCheck,
 } from "@/lib/blog-submission.functions";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { useRoles } from "@/hooks/use-role";
@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { renderMarkdown } from "@/lib/markdown";
 import {
   Loader2, ExternalLink, CheckCircle2, XCircle, AlertTriangle, Archive, Trash2,
-  Pencil, ArrowLeft, FileText, Clock, TrendingUp,
+  Pencil, ArrowLeft, FileText, Clock, TrendingUp, ShieldAlert, Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/blog")({
