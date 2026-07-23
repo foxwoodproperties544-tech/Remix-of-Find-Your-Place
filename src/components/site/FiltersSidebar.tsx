@@ -1,6 +1,6 @@
 import { ChevronDown, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { counties } from "@/lib/mock-data";
+import { KENYA_COUNTIES as counties, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import {
   CATEGORIES,
   TYPE_GROUPS,
