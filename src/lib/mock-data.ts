@@ -34,7 +34,10 @@ export interface Property {
   amenities: string[];
 }
 
-export const counties = ["Nairobi","Kiambu","Kajiado","Machakos","Mombasa"];
+export const counties = [
+  "Nairobi","Kiambu","Kajiado","Machakos","Mombasa","Kisumu","Nakuru",
+  "Uasin Gishu","Nyeri","Laikipia","Kilifi","Kwale","Meru","Muranga","Kericho",
+];
 export const locations = [
   { name: "Nairobi", count: 128, img: p2 },
   { name: "Kiambu", count: 64, img: p1 },
@@ -44,6 +47,22 @@ export const locations = [
   { name: "Juja", count: 22, img: p1 },
   { name: "Mombasa", count: 37, img: p6 },
   { name: "Machakos", count: 19, img: p3 },
+  { name: "Thika", count: 34, img: p1 },
+  { name: "Naivasha", count: 26, img: p4 },
+  { name: "Nakuru", count: 30, img: p2 },
+  { name: "Eldoret", count: 24, img: p3 },
+  { name: "Kisumu", count: 21, img: p6 },
+  { name: "Nyeri", count: 15, img: p5 },
+  { name: "Nanyuki", count: 18, img: p4 },
+  { name: "Diani", count: 20, img: p6 },
+  { name: "Malindi", count: 17, img: p6 },
+  { name: "Kilifi", count: 16, img: p5 },
+  { name: "Karen", count: 29, img: p2 },
+  { name: "Runda", count: 14, img: p2 },
+  { name: "Westlands", count: 33, img: p2 },
+  { name: "Kileleshwa", count: 19, img: p2 },
+  { name: "Lavington", count: 22, img: p2 },
+  { name: "Ruiru", count: 27, img: p1 },
 ];
 
 export const properties: Property[] = [
