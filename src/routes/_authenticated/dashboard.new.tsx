@@ -12,9 +12,11 @@ export const Route = createFileRoute("/_authenticated/dashboard/new")({
 });
 
 import { CATEGORIES as CATS, ALL_TYPES, TYPE_GROUPS } from "@/lib/taxonomy";
+import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 const CATEGORIES = [...CATS];
 const TYPES = ALL_TYPES;
-const COUNTIES = ["Nairobi", "Kiambu", "Kajiado", "Machakos", "Mombasa", "Kisumu", "Nakuru", "Uasin Gishu"];
+const COUNTIES = KENYA_COUNTIES;
+
 
 const schema = z.object({
   title: z.string().trim().min(6, "Title must be at least 6 characters").max(120, "Title too long"),
