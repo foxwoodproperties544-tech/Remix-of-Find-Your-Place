@@ -16,7 +16,7 @@ import {
   cancelAdDowngrade,
 } from "@/lib/renewals.functions";
 import { listActivePackages } from "@/lib/packages.functions";
-import { listActiveBlogPackages } from "@/lib/blog-submission.functions";
+import { listBlogPackages } from "@/lib/blog-submission.functions";
 import { listActiveAdPackages } from "@/lib/ads.functions";
 
 type Kind = "listing" | "blog" | "ad";
