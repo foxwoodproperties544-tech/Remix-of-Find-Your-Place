@@ -29,7 +29,7 @@ export function SimilarProperties({ currentId, category, type, county, price }: 
 
       let q = base;
       if (category) q = q.eq("category", category);
-      if (type) q = q.eq("type", type);
+      if (type) q = q.eq("property_type", type);
       if (county) q = q.eq("county", county);
       if (min != null && max != null) q = q.gte("price", min).lte("price", max);
 
