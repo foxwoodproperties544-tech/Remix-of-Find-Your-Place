@@ -235,6 +235,15 @@ export const adminApproveCampaign = createServerFn({ method: "POST" })
       body: `"${c.title}" is now running until ${new Date(expires).toLocaleDateString()}.`,
       link: "/dashboard/my-ads",
     });
+    const { writeAudit } = await import("./audit.server");
+    await writeAudit({
+      actorId: context.userId,
+      actorEmail: (context.claims as any)?.email ?? null,
+      action: "ad_campaign.approve",
+      entityType: "ad_campaign",
+      entityId: data.id,
+      summary: `Approved ad "${c.title}"`,
+    });
     return { ok: true };
   });
 
