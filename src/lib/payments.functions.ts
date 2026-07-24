@@ -9,9 +9,10 @@ const featureSchema = z.object({
 });
 
 const tierSchema = z.object({
-  tier: z.enum(["basic", "pro", "elite"]),
+  tier: z.string().min(1),
   phone: z.string().min(9),
 });
+
 
 const verifySchema = z.object({
   propertyId: z.string().uuid(),
@@ -61,30 +62,47 @@ export const startFeaturedPayment = createServerFn({ method: "POST" })
     return { checkoutRequestId: stk.CheckoutRequestID, customerMessage: stk.CustomerMessage };
   });
 
-/** Upgrade agent tier (STK Push, 30-day period). */
+/** Upgrade agent tier (STK Push). Free tier activates immediately, promotes to agent role. */
 export const startTierUpgrade = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => tierSchema.parse(d))
   .handler(async ({ data, context }) => {
-    const { TIER_PLANS } = await import("./pricing");
-    const { initiateStkPush, normalizeKePhone } = await import("./mpesa.server");
-    const plan = TIER_PLANS.find((t) => t.id === data.tier)!;
+    const { data: plan, error: pErr } = await context.supabase
+      .from("tier_plans").select("*").eq("slug", data.tier).eq("active", true).maybeSingle();
+    if (pErr || !plan) throw new Error("Plan unavailable");
 
+    // Free tier — activate immediately, no STK.
+    if (Number(plan.price) === 0) {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const expires = new Date(Date.now() + (plan.duration_days ?? 30) * 86400_000).toISOString();
+      await supabaseAdmin.from("profiles").update({
+        tier: plan.slug as any,
+        tier_expires_at: expires,
+        listing_quota: plan.listing_quota,
+      }).eq("id", context.userId);
+      await supabaseAdmin.from("user_roles").upsert(
+        { user_id: context.userId, role: "agent" as any },
+        { onConflict: "user_id,role" }
+      );
+      return { checkoutRequestId: "free", customerMessage: "Plan activated" };
+    }
+
+    const { initiateStkPush, normalizeKePhone } = await import("./mpesa.server");
     const stk = await initiateStkPush({
       phone: data.phone,
-      amount: plan.price,
-      accountReference: `TIER${data.tier.toUpperCase()}`,
-      description: `${plan.name} tier - 30 days`,
+      amount: Number(plan.price),
+      accountReference: `TIER${plan.slug.toUpperCase()}`,
+      description: `${plan.name} tier - ${plan.duration_days} days`,
       callbackUrl: callbackUrlDefault(),
     });
 
     const { error } = await context.supabase.from("mpesa_transactions").insert({
       user_id: context.userId,
       phone_number: normalizeKePhone(data.phone),
-      amount: plan.price,
+      amount: Number(plan.price),
       purpose: "upgrade_tier",
-      tier: data.tier,
-      duration_days: 30,
+      tier: plan.slug as any,
+      duration_days: plan.duration_days ?? 30,
       merchant_request_id: stk.MerchantRequestID,
       checkout_request_id: stk.CheckoutRequestID,
       status: "pending",
@@ -92,6 +110,7 @@ export const startTierUpgrade = createServerFn({ method: "POST" })
     if (error) throw error;
     return { checkoutRequestId: stk.CheckoutRequestID, customerMessage: stk.CustomerMessage };
   });
+
 
 /** Pay verification fee for a property. */
 export const startVerificationPayment = createServerFn({ method: "POST" })
