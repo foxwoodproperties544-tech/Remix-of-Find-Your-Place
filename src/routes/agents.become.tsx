@@ -31,9 +31,26 @@ export const Route = createFileRoute("/agents/become")({
   component: BecomeAnAgentPage,
 });
 
+const COMPARISON_ROWS: { label: string; values: Record<string, string> }[] = [
+  { label: "Monthly price", values: { basic: "KSh 1,500", standard: "KSh 3,500", premium: "KSh 7,000", featured: "KSh 10,000" } },
+  { label: "Active listings", values: { basic: "5", standard: "15", premium: "20", featured: "Unlimited" } },
+  { label: "Featured listings", values: { basic: "—", standard: "2", premium: "10", featured: "Unlimited" } },
+  { label: "Photos per listing", values: { basic: "5", standard: "10", premium: "Unlimited", featured: "Unlimited" } },
+  { label: "Verified badge", values: { basic: "—", standard: "✓", premium: "✓", featured: "✓ Featured" } },
+  { label: "Search ranking", values: { basic: "Standard", standard: "Better", premium: "Priority", featured: "Highest" } },
+  { label: "Homepage promotion", values: { basic: "—", standard: "—", premium: "✓", featured: "Premium placement" } },
+  { label: "Company branding", values: { basic: "—", standard: "✓", premium: "✓", featured: "Premium profile" } },
+  { label: "Analytics", values: { basic: "Basic", standard: "Standard", premium: "Advanced", featured: "Premium" } },
+  { label: "Lead management", values: { basic: "—", standard: "—", premium: "✓", featured: "✓" } },
+  { label: "WhatsApp contact", values: { basic: "✓", standard: "✓", premium: "✓", featured: "✓" } },
+  { label: "Email support", values: { basic: "✓", standard: "✓", premium: "✓", featured: "Priority" } },
+  { label: "Phone support", values: { basic: "—", standard: "—", premium: "✓", featured: "Priority" } },
+];
+
 function BecomeAnAgentPage() {
   const { user } = useAuth();
-  const becomeHref = user ? "/dashboard/upgrade" : "/auth";
+  const hrefFor = (slug: string) =>
+    user ? `/dashboard/upgrade?tier=${slug}` : `/auth?redirect=/dashboard/upgrade?tier=${slug}`;
 
   const { data: plans = [], isLoading } = useQuery({
     queryKey: ["tier-plans-active"],
@@ -69,56 +86,91 @@ function BecomeAnAgentPage() {
               </p>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {plans.map((t) => (
-                <div
-                  key={t.id}
-                  className={`relative rounded-2xl border p-6 shadow-soft flex flex-col ${
-                    t.highlight ? "border-primary bg-primary-soft/40" : "border-border bg-card"
-                  }`}
-                >
-                  {t.highlight && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-3 py-1">
-                      Most popular
-                    </span>
-                  )}
-                  <h3 className="text-lg font-bold">{t.name}</h3>
-                  <div className="mt-3">
-                    {t.price === 0 ? (
-                      <span className="text-3xl font-extrabold">Free</span>
-                    ) : (
-                      <>
-                        <span className="text-3xl font-extrabold">KES {Number(t.price).toLocaleString()}</span>
-                        <span className="text-sm text-muted-foreground">
-                          {" "}/ {t.duration_days === 30 ? "month" : `${t.duration_days} days`}
-                        </span>
-                      </>
-                    )}
-                  </div>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {t.listing_quota >= 999 ? "Unlimited" : t.listing_quota} active listing{t.listing_quota === 1 ? "" : "s"}
-                  </p>
-                  <ul className="mt-4 space-y-2 text-sm flex-1">
-                    {t.perks.map((p) => (
-                      <li key={p} className="flex items-start gap-2">
-                        <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                        <span>{p}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    to={becomeHref}
-                    className={`mt-5 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-opacity ${
-                      t.highlight
-                        ? "bg-primary text-primary-foreground hover:opacity-90"
-                        : "border border-border bg-card hover:border-primary/50"
+            <>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {plans.map((t) => (
+                  <div
+                    key={t.id}
+                    className={`relative rounded-2xl border p-6 shadow-soft flex flex-col transition hover:-translate-y-1 hover:shadow-glow ${
+                      t.highlight ? "border-primary bg-primary-soft/40 ring-2 ring-primary/30" : "border-border bg-card"
                     }`}
                   >
-                    Become an agent <ArrowRight className="h-4 w-4" />
-                  </Link>
+                    {t.highlight && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-3 py-1 shadow-md">
+                        Most Popular
+                      </span>
+                    )}
+                    <h3 className="text-lg font-bold">{t.name}</h3>
+                    <div className="mt-3">
+                      {t.price === 0 ? (
+                        <span className="text-3xl font-extrabold">Free</span>
+                      ) : (
+                        <>
+                          <span className="text-3xl font-extrabold">KSh {Number(t.price).toLocaleString()}</span>
+                          <span className="text-sm text-muted-foreground">
+                            {" "}/ {t.duration_days === 30 ? "month" : `${t.duration_days} days`}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {t.listing_quota >= 999 ? "Unlimited" : t.listing_quota} active listing{t.listing_quota === 1 ? "" : "s"}
+                    </p>
+                    <ul className="mt-4 space-y-2 text-sm flex-1">
+                      {t.perks.map((p) => (
+                        <li key={p} className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      to={hrefFor(t.slug)}
+                      className={`mt-5 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-opacity ${
+                        t.highlight
+                          ? "bg-primary text-primary-foreground hover:opacity-90"
+                          : "border border-border bg-card hover:border-primary/50"
+                      }`}
+                    >
+                      Choose {t.name} <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-16">
+                <div className="text-center max-w-2xl mx-auto mb-6">
+                  <h3 className="text-xl md:text-2xl font-semibold">Compare plans</h3>
+                  <p className="text-sm text-muted-foreground mt-1">See exactly what's included at each level.</p>
                 </div>
-              ))}
-            </div>
+                <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-soft">
+                  <table className="w-full text-sm min-w-[720px]">
+                    <thead className="bg-muted/50">
+                      <tr>
+                        <th className="text-left font-semibold px-4 py-3">Feature</th>
+                        <th className="text-center font-semibold px-4 py-3">Basic</th>
+                        <th className="text-center font-semibold px-4 py-3">Standard</th>
+                        <th className="text-center font-semibold px-4 py-3 bg-primary-soft/40 text-primary">
+                          Premium
+                        </th>
+                        <th className="text-center font-semibold px-4 py-3">Featured</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {COMPARISON_ROWS.map((row, i) => (
+                        <tr key={row.label} className={i % 2 === 0 ? "bg-background" : "bg-muted/20"}>
+                          <td className="px-4 py-3 font-medium">{row.label}</td>
+                          <td className="px-4 py-3 text-center text-muted-foreground">{row.values.basic}</td>
+                          <td className="px-4 py-3 text-center text-muted-foreground">{row.values.standard}</td>
+                          <td className="px-4 py-3 text-center text-foreground font-medium bg-primary-soft/20">{row.values.premium}</td>
+                          <td className="px-4 py-3 text-center text-muted-foreground">{row.values.featured}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </section>
