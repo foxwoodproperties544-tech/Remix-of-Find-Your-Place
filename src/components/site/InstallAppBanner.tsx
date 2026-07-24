@@ -1,5 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Download, Share, X, Smartphone } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+type PwaEvent = "impression" | "install_click" | "dismiss" | "installed" | "ios_hint_shown";
+
+function detectPlatform(): string {
+  if (typeof navigator === "undefined") return "unknown";
+  const ua = navigator.userAgent || "";
+  if (/iPad|iPhone|iPod/.test(ua)) return "ios";
+  if (/Android/.test(ua)) return "android";
+  if (/Windows/.test(ua)) return "windows";
+  if (/Mac/.test(ua)) return "macos";
+  if (/Linux/.test(ua)) return "linux";
+  return "other";
+}
+
+async function trackPwaEvent(event_type: PwaEvent) {
+  try {
+    const { data: sess } = await supabase.auth.getSession();
+    await supabase.from("pwa_install_events").insert({
+      event_type,
+      platform: detectPlatform(),
+      user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
+      user_id: sess.session?.user.id ?? null,
+    });
+  } catch {
+    /* analytics is best-effort */
+  }
+}
 
 type BIPEvent = Event & {
   prompt: () => Promise<void>;
