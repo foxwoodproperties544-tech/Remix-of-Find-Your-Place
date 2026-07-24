@@ -82,12 +82,24 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
             const { data: plan } = await supabaseAdmin
               .from("tier_plans").select("*").eq("slug", txn.tier).maybeSingle();
             const days = plan?.duration_days ?? txn.duration_days ?? 30;
-            const quota = plan?.listing_quota ?? ({ basic: 15, pro: 60, elite: 999 } as Record<string, number>)[txn.tier] ?? 3;
-            const expires = new Date(Date.now() + days * 86400_000).toISOString();
+            const quota = plan?.listing_quota ?? 3;
+            // Renewal of the *same* active plan extends from the current expiry;
+            // a new/upgrade plan starts today.
+            const { data: cur } = await supabaseAdmin
+              .from("profiles").select("tier, tier_expires_at").eq("id", txn.user_id).maybeSingle();
+            const base =
+              cur?.tier === txn.tier && cur?.tier_expires_at && new Date(cur.tier_expires_at).getTime() > Date.now()
+                ? new Date(cur.tier_expires_at).getTime()
+                : Date.now();
+            const expires = new Date(base + days * 86400_000).toISOString();
             await supabaseAdmin.from("profiles").update({
               tier: txn.tier,
               tier_expires_at: expires,
               listing_quota: quota,
+              subscription_started_at: cur?.tier === txn.tier ? undefined : new Date().toISOString(),
+              pending_tier: null,
+              subscription_suspended: false,
+              last_expiry_reminder_days: null,
             }).eq("id", txn.user_id);
             // Promote to agent role so they can access the Listings section.
             await supabaseAdmin.from("user_roles").upsert(
