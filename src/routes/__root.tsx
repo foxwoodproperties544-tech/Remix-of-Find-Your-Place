@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "../components/site/Header";
 import { Footer } from "../components/site/Footer";
 import { CookieBanner } from "../components/site/CookieBanner";
+import { InstallAppBanner } from "../components/site/InstallAppBanner";
 
 function NotFoundComponent() {
   return (
@@ -142,6 +143,7 @@ function RootComponent() {
         <main className="flex-1"><Outlet /></main>
         <Footer />
         <CookieBanner />
+        <InstallAppBanner />
       </div>
     </QueryClientProvider>
   );
