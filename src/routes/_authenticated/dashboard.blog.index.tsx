@@ -5,7 +5,7 @@ import { listMyBlogPosts } from "@/lib/blog-submission.functions";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { PlusCircle, FileText, Clock, CheckCircle2, XCircle, AlertTriangle, Archive, ExternalLink, Pencil, CreditCard } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/dashboard/blog")({
+export const Route = createFileRoute("/_authenticated/dashboard/blog/")({
   component: MyBlogPage,
   head: () => ({ meta: [{ title: "My blog posts — Foxwood Properties" }, { name: "robots", content: "noindex" }] }),
 });

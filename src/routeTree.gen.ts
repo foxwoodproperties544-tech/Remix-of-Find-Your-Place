@@ -63,7 +63,6 @@ import { Route as AuthenticatedDashboardKycRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardBulkImportRouteImport } from './routes/_authenticated/dashboard.bulk-import'
-import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authenticated/dashboard.blog'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
 import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
 import { Route as AuthenticatedDashboardAdAnalyticsRouteImport } from './routes/_authenticated/dashboard.ad-analytics'
@@ -82,6 +81,7 @@ import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
+import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
@@ -375,12 +375,6 @@ const AuthenticatedDashboardBulkImportRoute =
     path: '/dashboard/bulk-import',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedDashboardBlogRoute =
-  AuthenticatedDashboardBlogRouteImport.update({
-    id: '/dashboard/blog',
-    path: '/dashboard/blog',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedDashboardAppointmentsRoute =
   AuthenticatedDashboardAppointmentsRouteImport.update({
     id: '/dashboard/appointments',
@@ -484,6 +478,12 @@ const AuthenticatedAdminAdCampaignsRoute =
     path: '/ad-campaigns',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedDashboardBlogIndexRoute =
+  AuthenticatedDashboardBlogIndexRouteImport.update({
+    id: '/dashboard/blog/',
+    path: '/dashboard/blog/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardVerifyIdRoute =
   AuthenticatedDashboardVerifyIdRouteImport.update({
     id: '/dashboard/verify/$id',
@@ -522,9 +522,9 @@ const AuthenticatedDashboardEditIdRoute =
   } as any)
 const AuthenticatedDashboardBlogNewRoute =
   AuthenticatedDashboardBlogNewRouteImport.update({
-    id: '/new',
-    path: '/new',
-    getParentRoute: () => AuthenticatedDashboardBlogRoute,
+    id: '/dashboard/blog/new',
+    path: '/dashboard/blog/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAdminPackagesPreviewRoute =
   AuthenticatedAdminPackagesPreviewRouteImport.update({
@@ -534,15 +534,15 @@ const AuthenticatedAdminPackagesPreviewRoute =
   } as any)
 const AuthenticatedDashboardBlogIdPayRoute =
   AuthenticatedDashboardBlogIdPayRouteImport.update({
-    id: '/$id/pay',
-    path: '/$id/pay',
-    getParentRoute: () => AuthenticatedDashboardBlogRoute,
+    id: '/dashboard/blog/$id/pay',
+    path: '/dashboard/blog/$id/pay',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardBlogIdEditRoute =
   AuthenticatedDashboardBlogIdEditRouteImport.update({
-    id: '/$id/edit',
-    path: '/$id/edit',
-    getParentRoute: () => AuthenticatedDashboardBlogRoute,
+    id: '/dashboard/blog/$id/edit',
+    path: '/dashboard/blog/$id/edit',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -602,7 +602,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
-  '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
@@ -626,6 +625,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -686,7 +686,6 @@ export interface FileRoutesByTo {
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
-  '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
@@ -710,6 +709,7 @@ export interface FileRoutesByTo {
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -772,7 +772,6 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
-  '/_authenticated/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/_authenticated/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
@@ -796,6 +795,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -858,7 +858,6 @@ export interface FileRouteTypes {
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
-    | '/dashboard/blog'
     | '/dashboard/bulk-import'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
@@ -882,6 +881,7 @@ export interface FileRouteTypes {
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/dashboard/blog/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   fileRoutesByTo: FileRoutesByTo
@@ -942,7 +942,6 @@ export interface FileRouteTypes {
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
-    | '/dashboard/blog'
     | '/dashboard/bulk-import'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
@@ -966,6 +965,7 @@ export interface FileRouteTypes {
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/dashboard/blog'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   id:
@@ -1027,7 +1027,6 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/ad-analytics'
     | '/_authenticated/dashboard/advertise'
     | '/_authenticated/dashboard/appointments'
-    | '/_authenticated/dashboard/blog'
     | '/_authenticated/dashboard/bulk-import'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/inquiries'
@@ -1051,6 +1050,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/leads/new'
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/verify/$id'
+    | '/_authenticated/dashboard/blog/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
   fileRoutesById: FileRoutesById
@@ -1477,13 +1477,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBulkImportRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/dashboard/blog': {
-      id: '/_authenticated/dashboard/blog'
-      path: '/dashboard/blog'
-      fullPath: '/dashboard/blog'
-      preLoaderRoute: typeof AuthenticatedDashboardBlogRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/dashboard/appointments': {
       id: '/_authenticated/dashboard/appointments'
       path: '/dashboard/appointments'
@@ -1610,6 +1603,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAdCampaignsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/dashboard/blog/': {
+      id: '/_authenticated/dashboard/blog/'
+      path: '/dashboard/blog'
+      fullPath: '/dashboard/blog/'
+      preLoaderRoute: typeof AuthenticatedDashboardBlogIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/verify/$id': {
       id: '/_authenticated/dashboard/verify/$id'
       path: '/dashboard/verify/$id'
@@ -1654,10 +1654,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/dashboard/blog/new': {
       id: '/_authenticated/dashboard/blog/new'
-      path: '/new'
+      path: '/dashboard/blog/new'
       fullPath: '/dashboard/blog/new'
       preLoaderRoute: typeof AuthenticatedDashboardBlogNewRouteImport
-      parentRoute: typeof AuthenticatedDashboardBlogRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/admin/packages/preview': {
       id: '/_authenticated/admin/packages/preview'
@@ -1668,17 +1668,17 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/dashboard/blog/$id/pay': {
       id: '/_authenticated/dashboard/blog/$id/pay'
-      path: '/$id/pay'
+      path: '/dashboard/blog/$id/pay'
       fullPath: '/dashboard/blog/$id/pay'
       preLoaderRoute: typeof AuthenticatedDashboardBlogIdPayRouteImport
-      parentRoute: typeof AuthenticatedDashboardBlogRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/blog/$id/edit': {
       id: '/_authenticated/dashboard/blog/$id/edit'
-      path: '/$id/edit'
+      path: '/dashboard/blog/$id/edit'
       fullPath: '/dashboard/blog/$id/edit'
       preLoaderRoute: typeof AuthenticatedDashboardBlogIdEditRouteImport
-      parentRoute: typeof AuthenticatedDashboardBlogRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
@@ -1735,25 +1735,6 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
 const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
-interface AuthenticatedDashboardBlogRouteChildren {
-  AuthenticatedDashboardBlogNewRoute: typeof AuthenticatedDashboardBlogNewRoute
-  AuthenticatedDashboardBlogIdEditRoute: typeof AuthenticatedDashboardBlogIdEditRoute
-  AuthenticatedDashboardBlogIdPayRoute: typeof AuthenticatedDashboardBlogIdPayRoute
-}
-
-const AuthenticatedDashboardBlogRouteChildren: AuthenticatedDashboardBlogRouteChildren =
-  {
-    AuthenticatedDashboardBlogNewRoute: AuthenticatedDashboardBlogNewRoute,
-    AuthenticatedDashboardBlogIdEditRoute:
-      AuthenticatedDashboardBlogIdEditRoute,
-    AuthenticatedDashboardBlogIdPayRoute: AuthenticatedDashboardBlogIdPayRoute,
-  }
-
-const AuthenticatedDashboardBlogRouteWithChildren =
-  AuthenticatedDashboardBlogRoute._addFileChildren(
-    AuthenticatedDashboardBlogRouteChildren,
-  )
-
 interface AuthenticatedDashboardLeadsRouteChildren {
   AuthenticatedDashboardLeadsIdRoute: typeof AuthenticatedDashboardLeadsIdRoute
   AuthenticatedDashboardLeadsNewRoute: typeof AuthenticatedDashboardLeadsNewRoute
@@ -1778,7 +1759,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAdAnalyticsRoute: typeof AuthenticatedDashboardAdAnalyticsRoute
   AuthenticatedDashboardAdvertiseRoute: typeof AuthenticatedDashboardAdvertiseRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
-  AuthenticatedDashboardBlogRoute: typeof AuthenticatedDashboardBlogRouteWithChildren
   AuthenticatedDashboardBulkImportRoute: typeof AuthenticatedDashboardBulkImportRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
@@ -1790,10 +1770,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardBlogNewRoute: typeof AuthenticatedDashboardBlogNewRoute
   AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
   AuthenticatedDashboardFeatureIdRoute: typeof AuthenticatedDashboardFeatureIdRoute
   AuthenticatedDashboardPayIdRoute: typeof AuthenticatedDashboardPayIdRoute
   AuthenticatedDashboardVerifyIdRoute: typeof AuthenticatedDashboardVerifyIdRoute
+  AuthenticatedDashboardBlogIndexRoute: typeof AuthenticatedDashboardBlogIndexRoute
+  AuthenticatedDashboardBlogIdEditRoute: typeof AuthenticatedDashboardBlogIdEditRoute
+  AuthenticatedDashboardBlogIdPayRoute: typeof AuthenticatedDashboardBlogIdPayRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -1806,7 +1790,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardAdvertiseRoute: AuthenticatedDashboardAdvertiseRoute,
   AuthenticatedDashboardAppointmentsRoute:
     AuthenticatedDashboardAppointmentsRoute,
-  AuthenticatedDashboardBlogRoute: AuthenticatedDashboardBlogRouteWithChildren,
   AuthenticatedDashboardBulkImportRoute: AuthenticatedDashboardBulkImportRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
@@ -1820,10 +1803,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  AuthenticatedDashboardBlogNewRoute: AuthenticatedDashboardBlogNewRoute,
   AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
   AuthenticatedDashboardFeatureIdRoute: AuthenticatedDashboardFeatureIdRoute,
   AuthenticatedDashboardPayIdRoute: AuthenticatedDashboardPayIdRoute,
   AuthenticatedDashboardVerifyIdRoute: AuthenticatedDashboardVerifyIdRoute,
+  AuthenticatedDashboardBlogIndexRoute: AuthenticatedDashboardBlogIndexRoute,
+  AuthenticatedDashboardBlogIdEditRoute: AuthenticatedDashboardBlogIdEditRoute,
+  AuthenticatedDashboardBlogIdPayRoute: AuthenticatedDashboardBlogIdPayRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
