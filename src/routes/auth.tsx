@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -93,6 +94,12 @@ function AuthPage() {
           {mode === "signin" ? "Create an account" : "Sign in"}
         </button>
       </p>
+      <div className="mt-6">
+        <SupportBanner
+          message={mode === "signin" ? "Trouble signing in?" : "Need help signing up?"}
+          whatsappMessage={`Hello Foxwood Properties, I need help ${mode === "signin" ? "signing in" : "creating an account"}.`}
+        />
+      </div>
       <p className="mt-6 text-center text-xs text-muted-foreground">
         <Link to="/">← Back to home</Link>
       </p>
