@@ -37,6 +37,7 @@ const schema = z.object({
   contact_phone: z.string().trim().max(30).optional(),
   contact_whatsapp: z.string().trim().max(30).optional(),
   video_url: z.string().trim().max(500).optional(),
+  tour_url: z.string().trim().max(500).optional(),
   lat: z.string().trim().optional(),
   lng: z.string().trim().optional(),
 });
@@ -50,6 +51,8 @@ function NewListing() {
   const [saving, setSaving] = useState<false | "draft" | "submit">(false);
   const [uploading, setUploading] = useState(0);
   const [images, setImages] = useState<string[]>([]);
+  const [imageHashes, setImageHashes] = useState<{ url: string; hash: string }[]>([]);
+  const [duplicateWarnings, setDuplicateWarnings] = useState<string[]>([]);
   const [docs, setDocs] = useState<DocEntry[]>([]);
   const [uploadingDocs, setUploadingDocs] = useState(0);
   const [dragOver, setDragOver] = useState(false);
@@ -62,7 +65,7 @@ function NewListing() {
     bedrooms: "0", bathrooms: "0", size: "",
     features: "", amenities: "",
     contact_phone: "", contact_whatsapp: "",
-    video_url: "", lat: "", lng: "",
+    video_url: "", tour_url: "", lat: "", lng: "",
   });
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
@@ -81,13 +84,36 @@ function NewListing() {
     setUploading((n) => n + valid.length);
     for (const file of valid) {
       try {
+        // Hash the file for duplicate detection
+        let hash = "";
+        try {
+          const buf = await file.arrayBuffer();
+          const digest = await crypto.subtle.digest("SHA-256", buf);
+          hash = Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+          if (imageHashes.some((h) => h.hash === hash)) {
+            toast.error(`${file.name} is already added to this listing`);
+            setUploading((n) => n - 1);
+            continue;
+          }
+          const { data: dup } = await supabase
+            .from("property_image_hashes")
+            .select("owner_id, property_id")
+            .eq("image_hash", hash)
+            .limit(3);
+          if (dup && dup.length) {
+            const others = dup.filter((d: any) => d.owner_id !== user.id);
+            if (others.length) {
+              setDuplicateWarnings((w) => [...w, `${file.name} matches a photo already used on another listing.`]);
+              toast.warning(`Duplicate photo detected — ${file.name} is used elsewhere on Foxwood`);
+            }
+          }
+        } catch { /* hashing best-effort */ }
+
         const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
         const { error } = await supabase.storage.from("property-images").upload(path, file);
         if (error) throw error;
-        // Try public URL first (works if bucket is public), else fall back to a long-lived signed URL.
         const { data: pub } = supabase.storage.from("property-images").getPublicUrl(path);
         let url = pub?.publicUrl;
-        // Probe public URL — if forbidden, use signed URL
         try {
           const head = await fetch(url, { method: "HEAD" });
           if (!head.ok) throw new Error("not public");
@@ -97,14 +123,17 @@ function NewListing() {
             .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
           if (signed?.signedUrl) url = signed.signedUrl;
         }
-        if (url) setImages((s) => [...s, url!]);
+        if (url) {
+          setImages((s) => [...s, url!]);
+          if (hash) setImageHashes((s) => [...s, { url: url!, hash }]);
+        }
       } catch (err: any) {
         toast.error(err?.message ?? `Failed to upload ${file.name}`);
       } finally {
         setUploading((n) => n - 1);
       }
     }
-  }, [user]);
+  }, [user, imageHashes]);
 
   function onDrop(e: React.DragEvent) {
     e.preventDefault(); setDragOver(false);
@@ -189,12 +218,21 @@ function NewListing() {
         contact_phone: v.contact_phone || null,
         contact_whatsapp: v.contact_whatsapp || null,
         video_url: form.video_url || null,
+        tour_url: form.tour_url || null,
         documents: docs,
         lat: latNum,
         lng: lngNum,
         status: mode === "draft" ? "draft" : "pending_payment",
       }).select("id").single();
       if (error) throw error;
+      if (inserted?.id && imageHashes.length) {
+        await supabase.from("property_image_hashes").insert(
+          imageHashes.map((h) => ({
+            property_id: inserted.id, owner_id: user.id,
+            image_hash: h.hash, image_url: h.url,
+          }))
+        );
+      }
       if (mode === "draft") {
         toast.success("Draft saved");
         navigate({ to: "/dashboard" });
@@ -365,12 +403,26 @@ function NewListing() {
             </div>
           )}
           <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1"><ImageIcon className="h-3 w-3" /> The first photo becomes the cover image.</div>
+          {duplicateWarnings.length > 0 && (
+            <div className="mt-3 rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800">
+              <div className="font-semibold mb-1">Possible duplicate photos detected</div>
+              <ul className="list-disc pl-5 space-y-0.5">
+                {duplicateWarnings.slice(-5).map((w, i) => <li key={i}>{w}</li>)}
+              </ul>
+              <p className="mt-1">Reused photos hurt trust and may be flagged by our moderators.</p>
+            </div>
+          )}
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
           <div className="md:col-span-3">
             <label className={label}>Video URL (YouTube, Vimeo, or MP4)</label>
             <input value={form.video_url} onChange={(e) => upd("video_url", e.target.value)} className={input} placeholder="https://youtu.be/..." />
+          </div>
+          <div className="md:col-span-3">
+            <label className={label}>360° virtual tour URL (Matterport, Kuula, or YouTube 360)</label>
+            <input value={form.tour_url} onChange={(e) => upd("tour_url", e.target.value)} className={input} placeholder="https://my.matterport.com/show/?m=..." />
+            <p className="mt-1 text-xs text-muted-foreground">Buyers spend up to 3× longer on listings with a 360° tour.</p>
           </div>
           <div>
             <label className={label}><MapPin className="inline h-3 w-3" /> Latitude</label>

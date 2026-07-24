@@ -37,6 +37,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
       items: [
         { to: "/dashboard", label: "My listings", icon: Home, end: true },
         { to: "/dashboard/new", label: "New listing", icon: PlusCircle },
+        { to: "/dashboard/bulk-import", label: "Bulk import (CSV)", icon: FileText },
         { to: "/dashboard/inquiries", label: "Inquiries", icon: Inbox },
         { to: "/dashboard/leads", label: "CRM · Leads", icon: Users2 },
         { to: "/dashboard/crm", label: "CRM board", icon: LayoutDashboard },
