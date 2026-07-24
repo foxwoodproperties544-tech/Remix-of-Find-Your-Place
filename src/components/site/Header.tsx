@@ -19,11 +19,13 @@ const nav = [
 ];
 
 const moreItems = [
+  { to: "/for-agents", label: "For Agents & Developers", icon: Building2, desc: "Tools, CRM, and packages for property pros" },
   { to: "/listing-packages", label: "Listing Packages", icon: Home, desc: "Post a property with the right visibility" },
   { to: "/advertising-packages", label: "Advertising Packages", icon: Megaphone, desc: "Homepage, sidebar, search & blog banners" },
   { to: "/blog-submission-packages", label: "Blog Submission Packages", icon: PenSquare, desc: "Publish articles to Kenya's property audience" },
   { to: "/agent-developer-subscriptions", label: "Agent & Developer Subscriptions", icon: Building2, desc: "Grow your agency with monthly plans" },
 ] as const;
+
 
 export function Header() {
   const [open, setOpen] = useState(false);
