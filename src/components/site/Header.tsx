@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2 } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2, FileText } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +23,7 @@ const moreItems = [
   { to: "/listing-packages", label: "Listing Packages", icon: Home, desc: "Post a property with the right visibility" },
   { to: "/advertising-packages", label: "Advertising Packages", icon: Megaphone, desc: "Homepage, sidebar, search & blog banners" },
   { to: "/blog-submission-packages", label: "Blog Submission Packages", icon: PenSquare, desc: "Publish articles to Kenya's property audience" },
+  { to: "/dashboard/blog/new", label: "Write a Blog", icon: PenSquare, desc: "Draft, submit, and publish your article" },
   { to: "/agent-developer-subscriptions", label: "Agent & Developer Subscriptions", icon: Building2, desc: "Grow your agency with monthly plans" },
 ] as const;
 
@@ -140,6 +141,8 @@ export function Header() {
                   <div className="px-3 py-2 text-xs text-muted-foreground truncate">{user.email}</div>
                   <Link to="/dashboard" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><LayoutDashboard className="h-4 w-4" /> My listings</Link>
                   <Link to="/dashboard/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PlusCircle className="h-4 w-4" /> Post listing</Link>
+                  <Link to="/dashboard/blog/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PenSquare className="h-4 w-4" /> Write a blog</Link>
+                  <Link to="/dashboard/blog" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><FileText className="h-4 w-4" /> My blog posts</Link>
                   <Link to="/dashboard/inquiries" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Inbox className="h-4 w-4" /> Inquiries</Link>
                   <Link to="/dashboard/appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><CalendarClock className="h-4 w-4" /> Appointments</Link>
                   <Link to="/dashboard/my-appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><CalendarClock className="h-4 w-4" /> My viewings</Link>
@@ -192,6 +195,8 @@ export function Header() {
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">My listings</Link>
+                <Link to="/dashboard/blog/new" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Write a blog</Link>
+                <Link to="/dashboard/blog" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">My blog posts</Link>
                 <Link to="/favorites" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Favorites</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted text-primary">Admin</Link>}
                 <button onClick={() => { setOpen(false); signOut(); }} className="text-left rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Sign out</button>
