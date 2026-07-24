@@ -221,7 +221,7 @@ function List() {
       toast("Sign in to filter by favorites", { action: { label: "Sign in", onClick: () => (window.location.href = "/auth") } });
       return;
     }
-    setFavsOnly((v) => !v);
+    setFavsOnly(!favsOnly);
   }
 
   const sidebar = <FiltersSidebar state={state} townOptions={townOptions} onChange={patch} onClear={clearAll} />;
@@ -321,7 +321,7 @@ function List() {
                 </div>
                 {totalPages > 1 && (
                   <div className="mt-10 flex items-center justify-center gap-2">
-                    <button disabled={currentPage === 1} onClick={() => { setPage((p) => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                    <button disabled={currentPage === 1} onClick={() => { setPage(Math.max(1, currentPage - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                       className="btn-ghost !py-2 !px-3 disabled:opacity-40"><ChevronLeft className="h-4 w-4" /> Prev</button>
                     <div className="flex items-center gap-1">
                       {pageNumbers(currentPage, totalPages).map((n, i) =>
@@ -330,7 +330,7 @@ function List() {
                               className={`min-w-9 h-9 rounded-lg text-sm font-semibold transition ${currentPage === n ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}>{n}</button>
                       )}
                     </div>
-                    <button disabled={currentPage === totalPages} onClick={() => { setPage((p) => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                    <button disabled={currentPage === totalPages} onClick={() => { setPage(Math.min(totalPages, currentPage + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                       className="btn-ghost !py-2 !px-3 disabled:opacity-40">Next <ChevronRight className="h-4 w-4" /></button>
                   </div>
                 )}
