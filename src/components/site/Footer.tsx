@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
-import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import footerBg from "@/assets/footer-realestate.jpg";
+import { SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, whatsappUrl } from "@/lib/support";
 
 export function Footer() {
   return (
@@ -38,11 +39,27 @@ export function Footer() {
               </a>
             ))}
           </div>
-          <ul className="mt-6 space-y-2 text-sm text-primary-foreground/85">
-            <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary" /> Nairobi, Kenya</li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-secondary" /> +254 700 000 000</li>
-            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-secondary" /> hello@foxwood.co.ke</li>
-          </ul>
+          <div className="mt-6">
+            <h4 className="font-semibold mb-3 text-sm">Contact Us</h4>
+            <ul className="space-y-2 text-sm text-primary-foreground/85">
+              <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary" /> Nairobi, Kenya</li>
+              <li>
+                <a href={`tel:${SUPPORT_PHONE_TEL}`} className="flex items-center gap-2 hover:text-secondary">
+                  <Phone className="h-4 w-4 text-secondary" /> Phone: {SUPPORT_PHONE_DISPLAY}
+                </a>
+              </li>
+              <li>
+                <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary">
+                  <MessageCircle className="h-4 w-4 text-secondary" /> WhatsApp: {SUPPORT_PHONE_DISPLAY}
+                </a>
+              </li>
+              <li>
+                <a href="mailto:hello@foxwood.co.ke" className="flex items-center gap-2 hover:text-secondary">
+                  <Mail className="h-4 w-4 text-secondary" /> hello@foxwood.co.ke
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div>

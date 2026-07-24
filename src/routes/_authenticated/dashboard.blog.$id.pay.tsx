@@ -7,6 +7,7 @@ import { getPaymentStatus } from "@/lib/payments.functions";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { toast } from "sonner";
 import { Check, Loader2, Star, Phone, ShieldCheck, Sparkles } from "lucide-react";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/blog/$id/pay")({
   component: PayForBlog,
@@ -69,6 +70,9 @@ function PayForBlog() {
 
   return (
     <DashboardShell>
+      <div className="mb-4">
+        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help completing a blog package payment." />
+      </div>
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
         <div>
           <div className="inline-flex items-center gap-2 text-xs font-semibold text-primary bg-primary-soft rounded-full px-3 py-1">

@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Phone, MessageCircle, Clock } from "lucide-react";
 import { useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import heroContact from "@/assets/hero-contact.jpg";
 import { absoluteUrl } from "@/lib/site-url";
+import { SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, whatsappUrl } from "@/lib/support";
 
 const OG_IMAGE = absoluteUrl(heroContact);
 const TITLE = "Contact — Foxwood Properties";
-const DESC = "Get in touch with Foxwood Properties. Call, email, or WhatsApp us.";
+const DESC = "Get in touch with Foxwood Properties. Call, email, or WhatsApp us on +254 759 556 026.";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -40,17 +41,35 @@ function Contact() {
 
       <section className="container-page py-14 grid gap-10 lg:grid-cols-[1fr_1.2fr]">
         <div className="space-y-4">
+          <div className="rounded-2xl border border-primary/20 bg-primary-soft p-6">
+            <div className="text-xs uppercase tracking-wider text-primary/80 font-semibold">Customer support</div>
+            <div className="mt-1 text-2xl font-bold text-primary">{SUPPORT_PHONE_DISPLAY}</div>
+            <p className="mt-1 text-sm text-foreground/70">We usually reply within a few minutes on WhatsApp.</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a href={`tel:${SUPPORT_PHONE_TEL}`} className="btn-primary btn-primary-hover !py-2 !px-4 text-sm">
+                <Phone className="h-4 w-4" /> Call Now
+              </a>
+              <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-secondary !py-2 !px-4 text-sm">
+                <MessageCircle className="h-4 w-4" /> WhatsApp
+              </a>
+            </div>
+          </div>
           {[
             {i: MapPin, t: "Office", v: "Westlands, Nairobi, Kenya"},
-            {i: Phone, t: "Phone", v: "+254 700 000 000"},
-            {i: Mail, t: "Email", v: "hello@foxwood.co.ke"},
-            {i: MessageCircle, t: "WhatsApp", v: "+254 700 000 000"},
-          ].map(({i:Icon,t,v}) => (
+            {i: Phone, t: "Phone", v: SUPPORT_PHONE_DISPLAY, href: `tel:${SUPPORT_PHONE_TEL}`},
+            {i: MessageCircle, t: "WhatsApp", v: SUPPORT_PHONE_DISPLAY, href: whatsappUrl()},
+            {i: Mail, t: "Email", v: "hello@foxwood.co.ke", href: "mailto:hello@foxwood.co.ke"},
+            {i: Clock, t: "Business hours", v: "Mon–Sat, 8:00 AM – 6:00 PM EAT"},
+          ].map(({i:Icon,t,v,href}: any) => (
             <div key={t} className="flex items-start gap-4 rounded-2xl border border-border p-5 bg-card">
               <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary"><Icon className="h-5 w-5" /></div>
               <div>
                 <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{t}</div>
-                <div className="font-semibold mt-0.5">{v}</div>
+                {href ? (
+                  <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="font-semibold mt-0.5 hover:text-primary">{v}</a>
+                ) : (
+                  <div className="font-semibold mt-0.5">{v}</div>
+                )}
               </div>
             </div>
           ))}

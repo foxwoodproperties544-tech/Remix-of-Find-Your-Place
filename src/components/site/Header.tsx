@@ -195,7 +195,7 @@ export function Header() {
           </div>
         </nav>
         <div className="hidden md:flex items-center gap-2">
-          <a href="tel:+254700000000" className="btn-ghost !py-2 !px-4 text-sm"><Phone className="h-4 w-4" /> Call</a>
+          <a href="tel:+254759556026" aria-label="Call Foxwood Properties on +254 759 556 026" className="btn-ghost !py-2 !px-4 text-sm"><Phone className="h-4 w-4" /> <span className="hidden xl:inline">+254 759 556 026</span><span className="xl:hidden">Call</span></a>
           {user ? (
             <div className="relative">
               <button onClick={() => setMenu(!menu)} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-primary-foreground font-semibold text-sm">
