@@ -171,7 +171,7 @@ function List() {
     return 0;
   });
 
-  useEffect(() => { setPage(1); }, [state, q, favsOnly, sortBy]);
+  // page auto-resets via updateSearch; no local reset needed
 
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
