@@ -28,7 +28,7 @@ export const Route = createFileRoute("/properties/$id")({
     if (mock) return {
       p: mock, ownerId: null as string | null, propertyKey: params.id,
       ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null },
-      videoUrl: null as string | null, documents: [] as Array<{ name: string; url: string }>,
+      videoUrl: null as string | null, tourUrl: null as string | null, documents: [] as Array<{ name: string; url: string }>,
       latOverride: null as number | null, lngOverride: null as number | null,
       contactPhone: null as string | null, contactWhatsapp: null as string | null,
       createdAt: null as string | null, verified: !!mock.verified, featured: !!mock.featured,
@@ -222,7 +222,7 @@ function PropertyNotFound() {
 function Detail() {
   const loaderData = Route.useLoaderData();
 
-  const { p, ownerId, propertyKey, ownerProfile, contactPhone, contactWhatsapp, videoUrl, documents, createdAt, verified, featured } = loaderData;
+  const { p, ownerId, propertyKey, ownerProfile, contactPhone, contactWhatsapp, videoUrl, tourUrl, documents, createdAt, verified, featured } = loaderData;
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
@@ -459,6 +459,17 @@ function Detail() {
                   <video src={videoUrl} controls className="h-full w-full" preload="metadata" />
                 )}
               </div>
+            </div>
+          )}
+
+          {/* 360° virtual tour */}
+          {tourUrl && (
+            <div>
+              <h2 className="text-xl font-bold flex items-center gap-2"><PlayCircle className="h-5 w-5 text-primary" /> 360° virtual tour</h2>
+              <div className="mt-3 aspect-video rounded-2xl overflow-hidden border border-border bg-black">
+                <iframe src={tourUrl} title="360° virtual tour" className="h-full w-full" allow="xr-spatial-tracking; accelerometer; gyroscope; fullscreen" allowFullScreen loading="lazy" />
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">Drag to look around · Pinch or scroll to zoom.</p>
             </div>
           )}
 
