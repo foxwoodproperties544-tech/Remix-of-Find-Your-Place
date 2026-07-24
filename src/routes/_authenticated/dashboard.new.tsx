@@ -13,6 +13,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/new")({
 
 import { CATEGORIES as CATS, ALL_TYPES, TYPE_GROUPS } from "@/lib/taxonomy";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+import { TownCombobox } from "@/components/site/TownCombobox";
 const CATEGORIES = [...CATS];
 const TYPES = ALL_TYPES;
 const COUNTIES = KENYA_COUNTIES;
@@ -147,6 +148,10 @@ function NewListing() {
           if (!newErrors[key]) newErrors[key] = issue.message;
         }
       }
+      // County ↔ town validation
+      if (form.county && form.town && !(KENYA_SUBLOCATIONS[form.county] ?? []).includes(form.town)) {
+        newErrors.town = `“${form.town}” is not a known area in ${form.county}. Pick a suggestion or change the county.`;
+      }
       if (images.length === 0) newErrors.images = "Please add at least one photo";
     } else {
       // draft: require only a title
@@ -261,11 +266,13 @@ function NewListing() {
         <div className="grid md:grid-cols-3 gap-4">
           <div>
             <label className={label}>Town / Area *</label>
-            <input list="fx-sublocations" value={form.town} onChange={(e) => upd("town", e.target.value)} className={`${input} ${errCls("town")}`} placeholder="Start typing an area..." />
-            <datalist id="fx-sublocations">
-              {(KENYA_SUBLOCATIONS[form.county] ?? []).map((s) => <option key={s} value={s} />)}
-            </datalist>
-            {errText("town")}
+            <TownCombobox
+              county={form.county}
+              value={form.town}
+              onChange={(v) => upd("town", v)}
+              placeholder="Start typing an area..."
+              error={errors.town}
+            />
           </div>
 
           <div>

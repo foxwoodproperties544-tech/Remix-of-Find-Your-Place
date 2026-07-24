@@ -29,6 +29,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
+import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ServicesValuationRouteImport } from './routes/services.valuation'
 import { Route as ServicesSellRouteImport } from './routes/services.sell'
@@ -40,12 +41,14 @@ import { Route as ServicesLeaseRouteImport } from './routes/services.lease'
 import { Route as ServicesInvestmentRouteImport } from './routes/services.investment'
 import { Route as ServicesBuyRouteImport } from './routes/services.buy'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
+import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AgentsIdRouteImport } from './routes/agents.$id'
 import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authenticated/saved-searches'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as LocationsCountyTownRouteImport } from './routes/locations.$county.$town'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category.$category'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
@@ -185,6 +188,11 @@ const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
   path: '/properties/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LocationsIndexRoute = LocationsIndexRouteImport.update({
+  id: '/locations/',
+  path: '/locations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -240,6 +248,11 @@ const PropertiesIdRoute = PropertiesIdRouteImport.update({
   path: '/properties/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LocationsCountyRoute = LocationsCountyRouteImport.update({
+  id: '/locations/$county',
+  path: '/locations/$county',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
@@ -272,6 +285,11 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const LocationsCountyTownRoute = LocationsCountyTownRouteImport.update({
+  id: '/$town',
+  path: '/$town',
+  getParentRoute: () => LocationsCountyRoute,
+} as any)
 const BlogTagTagRoute = BlogTagTagRouteImport.update({
   id: '/blog/tag/$tag',
   path: '/blog/tag/$tag',
@@ -518,6 +536,7 @@ export interface FileRoutesByFullPath {
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
@@ -529,6 +548,7 @@ export interface FileRoutesByFullPath {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
+  '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
@@ -558,6 +578,7 @@ export interface FileRoutesByFullPath {
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
+  '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -594,6 +615,7 @@ export interface FileRoutesByTo {
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
@@ -605,6 +627,7 @@ export interface FileRoutesByTo {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog': typeof BlogIndexRoute
+  '/locations': typeof LocationsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
@@ -634,6 +657,7 @@ export interface FileRoutesByTo {
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
+  '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -672,6 +696,7 @@ export interface FileRoutesById {
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
@@ -683,6 +708,7 @@ export interface FileRoutesById {
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
   '/blog/': typeof BlogIndexRoute
+  '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/_authenticated/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/_authenticated/admin/ads': typeof AuthenticatedAdminAdsRoute
@@ -712,6 +738,7 @@ export interface FileRoutesById {
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
+  '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -750,6 +777,7 @@ export interface FileRouteTypes {
     | '/saved-searches'
     | '/agents/$id'
     | '/blog/$slug'
+    | '/locations/$county'
     | '/properties/$id'
     | '/services/buy'
     | '/services/investment'
@@ -761,6 +789,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog/'
+    | '/locations/'
     | '/properties/'
     | '/admin/ad-campaigns'
     | '/admin/ads'
@@ -790,6 +819,7 @@ export interface FileRouteTypes {
     | '/api/public/mpesa-callback'
     | '/blog/category/$category'
     | '/blog/tag/$tag'
+    | '/locations/$county/$town'
     | '/dashboard/'
     | '/admin/packages/preview'
     | '/dashboard/blog/new'
@@ -826,6 +856,7 @@ export interface FileRouteTypes {
     | '/saved-searches'
     | '/agents/$id'
     | '/blog/$slug'
+    | '/locations/$county'
     | '/properties/$id'
     | '/services/buy'
     | '/services/investment'
@@ -837,6 +868,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog'
+    | '/locations'
     | '/properties'
     | '/admin/ad-campaigns'
     | '/admin/ads'
@@ -866,6 +898,7 @@ export interface FileRouteTypes {
     | '/api/public/mpesa-callback'
     | '/blog/category/$category'
     | '/blog/tag/$tag'
+    | '/locations/$county/$town'
     | '/dashboard'
     | '/admin/packages/preview'
     | '/dashboard/blog/new'
@@ -903,6 +936,7 @@ export interface FileRouteTypes {
     | '/_authenticated/saved-searches'
     | '/agents/$id'
     | '/blog/$slug'
+    | '/locations/$county'
     | '/properties/$id'
     | '/services/buy'
     | '/services/investment'
@@ -914,6 +948,7 @@ export interface FileRouteTypes {
     | '/services/sell'
     | '/services/valuation'
     | '/blog/'
+    | '/locations/'
     | '/properties/'
     | '/_authenticated/admin/ad-campaigns'
     | '/_authenticated/admin/ads'
@@ -943,6 +978,7 @@ export interface FileRouteTypes {
     | '/api/public/mpesa-callback'
     | '/blog/category/$category'
     | '/blog/tag/$tag'
+    | '/locations/$county/$town'
     | '/_authenticated/dashboard/'
     | '/_authenticated/admin/packages/preview'
     | '/_authenticated/dashboard/blog/new'
@@ -978,6 +1014,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   AgentsIdRoute: typeof AgentsIdRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
   ServicesInvestmentRoute: typeof ServicesInvestmentRoute
@@ -989,6 +1026,7 @@ export interface RootRouteChildren {
   ServicesSellRoute: typeof ServicesSellRoute
   ServicesValuationRoute: typeof ServicesValuationRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
@@ -1137,6 +1175,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/locations/': {
+      id: '/locations/'
+      path: '/locations'
+      fullPath: '/locations/'
+      preLoaderRoute: typeof LocationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -1214,6 +1259,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/locations/$county': {
+      id: '/locations/$county'
+      path: '/locations/$county'
+      fullPath: '/locations/$county'
+      preLoaderRoute: typeof LocationsCountyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/blog/$slug'
@@ -1255,6 +1307,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/locations/$county/$town': {
+      id: '/locations/$county/$town'
+      path: '/$town'
+      fullPath: '/locations/$county/$town'
+      preLoaderRoute: typeof LocationsCountyTownRouteImport
+      parentRoute: typeof LocationsCountyRoute
     }
     '/blog/tag/$tag': {
       id: '/blog/tag/$tag'
@@ -1663,6 +1722,18 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface LocationsCountyRouteChildren {
+  LocationsCountyTownRoute: typeof LocationsCountyTownRoute
+}
+
+const LocationsCountyRouteChildren: LocationsCountyRouteChildren = {
+  LocationsCountyTownRoute: LocationsCountyTownRoute,
+}
+
+const LocationsCountyRouteWithChildren = LocationsCountyRoute._addFileChildren(
+  LocationsCountyRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1685,6 +1756,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   AgentsIdRoute: AgentsIdRoute,
   BlogSlugRoute: BlogSlugRoute,
+  LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
   ServicesBuyRoute: ServicesBuyRoute,
   ServicesInvestmentRoute: ServicesInvestmentRoute,
@@ -1696,6 +1768,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesSellRoute: ServicesSellRoute,
   ServicesValuationRoute: ServicesValuationRoute,
   BlogIndexRoute: BlogIndexRoute,
+  LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
@@ -1704,13 +1777,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

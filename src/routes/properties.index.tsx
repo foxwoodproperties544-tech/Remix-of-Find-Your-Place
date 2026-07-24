@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { properties as mockProps } from "@/lib/mock-data";
 import { PropertyCard } from "@/components/site/PropertyCard";
-import { Search, SlidersHorizontal, BookmarkPlus, X, Heart, ChevronLeft, ChevronRight, Filter } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
+import { Search, SlidersHorizontal, BookmarkPlus, X, Heart, ChevronLeft, ChevronRight, Filter, Map as MapIcon, List as ListIcon } from "lucide-react";
+import { useMemo, useState, useEffect, lazy, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPublishedProperties } from "@/lib/properties";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,19 +17,31 @@ import { absoluteUrl } from "@/lib/site-url";
 import { FiltersSidebar, type FiltersState } from "@/components/site/FiltersSidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AdSlot } from "@/components/site/AdSlot";
+import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+
+const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
 
 const searchSchema = z.object({
-  category: z.string().optional(),
-  type: z.string().optional(),
-  county: z.string().optional(),
-  town: z.string().optional(),
-  q: z.string().optional(),
-  minPrice: z.coerce.number().optional(),
-  maxPrice: z.coerce.number().optional(),
-  minBeds: z.coerce.number().optional(),
-  minSize: z.coerce.number().optional(),
-  maxSize: z.coerce.number().optional(),
-  favs: z.coerce.boolean().optional(),
+  category: fallback(z.string(), "").default(""),
+  type: fallback(z.string(), "").default(""),
+  county: fallback(z.string(), "").default(""),
+  town: fallback(z.string(), "").default(""),
+  q: fallback(z.string(), "").default(""),
+  minPrice: fallback(z.string(), "").default(""),
+  maxPrice: fallback(z.string(), "").default(""),
+  minBeds: fallback(z.string(), "").default(""),
+  minBaths: fallback(z.string(), "").default(""),
+  minSize: fallback(z.string(), "").default(""),
+  maxSize: fallback(z.string(), "").default(""),
+  features: fallback(z.string(), "").default(""),
+  nearby: fallback(z.string(), "").default(""),
+  status: fallback(z.string(), "").default(""),
+  listingType: fallback(z.string(), "").default(""),
+  purpose: fallback(z.string(), "").default(""),
+  sort: fallback(z.string(), "newest").default("newest"),
+  page: fallback(z.number().int(), 1).default(1),
+  favs: fallback(z.boolean(), false).default(false),
+  view: fallback(z.string(), "list").default("list"),
 });
 
 const PAGE_SIZE = 12;
@@ -51,45 +64,69 @@ export const Route = createFileRoute("/properties/")({
       { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
-  validateSearch: searchSchema,
+  validateSearch: zodValidator(searchSchema),
   component: List,
 });
 
+function splitCsv(s: string): Set<string> {
+  return new Set(s ? s.split(",").filter(Boolean) : []);
+}
+function joinCsv(s: Set<string>): string {
+  return [...s].join(",");
+}
+
 function List() {
   const params = Route.useSearch();
+  const navigate = useNavigate({ from: "/properties" });
   const { user } = useAuth();
   const { favorites } = useFavorites();
 
-  const [state, setState] = useState<FiltersState>({
-    category: params.category ?? "",
-    type: params.type ?? "",
-    county: params.county ?? "",
-    town: params.town ?? "",
-    minPrice: params.minPrice?.toString() ?? "",
-    maxPrice: params.maxPrice?.toString() ?? "",
-    minBeds: params.minBeds?.toString() ?? "",
-    minBaths: "",
-    minSize: params.minSize?.toString() ?? "",
-    maxSize: params.maxSize?.toString() ?? "",
-    features: new Set<string>(),
-    nearby: new Set<string>(),
-    status: "",
-    listingType: "",
-    purpose: "",
-  });
-  const [q, setQ] = useState(params.q ?? "");
-  const [favsOnly, setFavsOnly] = useState<boolean>(!!params.favs);
-  const [sortBy, setSortBy] = useState<"newest" | "price-asc" | "price-desc" | "beds-desc">("newest");
-  const [page, setPage] = useState(1);
+  const state: FiltersState = useMemo(() => ({
+    category: params.category,
+    type: params.type,
+    county: params.county,
+    town: params.town,
+    minPrice: params.minPrice,
+    maxPrice: params.maxPrice,
+    minBeds: params.minBeds,
+    minBaths: params.minBaths,
+    minSize: params.minSize,
+    maxSize: params.maxSize,
+    features: splitCsv(params.features),
+    nearby: splitCsv(params.nearby),
+    status: params.status,
+    listingType: params.listingType,
+    purpose: params.purpose,
+  }), [params]);
+
+  const q = params.q;
+  const favsOnly = params.favs;
+  const sortBy = params.sort as "newest" | "price-asc" | "price-desc" | "beds-desc";
+  const page = params.page;
+  const view = params.view as "list" | "map";
+
+  function updateSearch(patch: Record<string, unknown>) {
+    navigate({ search: (prev: any) => ({ ...prev, ...patch, page: patch.page ?? 1 }), replace: false });
+  }
+  function patch(p: Partial<FiltersState>) {
+    const out: Record<string, unknown> = { ...p };
+    if (p.features) out.features = joinCsv(p.features);
+    if (p.nearby) out.nearby = joinCsv(p.nearby);
+    updateSearch(out);
+  }
+  function setQ(v: string) { updateSearch({ q: v }); }
+  function setSortBy(v: string) { updateSearch({ sort: v }); }
+  function setPage(n: number) { navigate({ search: (prev: any) => ({ ...prev, page: n }) }); }
+  function setFavsOnly(v: boolean) { updateSearch({ favs: v }); }
+  function setView(v: "list" | "map") { navigate({ search: (prev: any) => ({ ...prev, view: v }) }); }
+
   const [showSave, setShowSave] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savingName, setSavingName] = useState("");
   const [mobileFilters, setMobileFilters] = useState(false);
 
-  function patch(p: Partial<FiltersState>) { setState((s) => ({ ...s, ...p })); }
   function clearAll() {
-    setState({ category: "", type: "", county: "", town: "", minPrice: "", maxPrice: "", minBeds: "", minBaths: "", minSize: "", maxSize: "", features: new Set(), nearby: new Set(), status: "", listingType: "", purpose: "" });
-    setQ(""); setFavsOnly(false);
+    navigate({ search: () => ({}) as any });
   }
 
   const { data: dbProps } = useQuery({ queryKey: ["properties"], queryFn: fetchPublishedProperties });
@@ -100,7 +137,6 @@ function List() {
     return Array.from(new Set(pool.map((p) => p.town).filter(Boolean))).sort();
   }, [all, state.county]);
 
-  useEffect(() => { if (state.town && !townOptions.includes(state.town)) patch({ town: "" }); }, [state.town, townOptions]);
 
   const filtered = all.filter((p) => {
     if (state.category && p.category !== state.category) return false;
@@ -135,7 +171,7 @@ function List() {
     return 0;
   });
 
-  useEffect(() => { setPage(1); }, [state, q, favsOnly, sortBy]);
+  // page auto-resets via updateSearch; no local reset needed
 
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -185,7 +221,7 @@ function List() {
       toast("Sign in to filter by favorites", { action: { label: "Sign in", onClick: () => (window.location.href = "/auth") } });
       return;
     }
-    setFavsOnly((v) => !v);
+    setFavsOnly(!favsOnly);
   }
 
   const sidebar = <FiltersSidebar state={state} townOptions={townOptions} onChange={patch} onClear={clearAll} />;
@@ -244,6 +280,16 @@ function List() {
                   <option value="price-desc">Price: High to Low</option>
                   <option value="beds-desc">Most bedrooms</option>
                 </select>
+                <div className="inline-flex rounded-full border border-border overflow-hidden text-xs">
+                  <button onClick={() => setView("list")} aria-pressed={view === "list"}
+                    className={`px-3 py-2 inline-flex items-center gap-1 ${view === "list" ? "bg-primary text-primary-foreground" : "bg-background"}`}>
+                    <ListIcon className="h-3.5 w-3.5" /> List
+                  </button>
+                  <button onClick={() => setView("map")} aria-pressed={view === "map"}
+                    className={`px-3 py-2 inline-flex items-center gap-1 ${view === "map" ? "bg-primary text-primary-foreground" : "bg-background"}`}>
+                    <MapIcon className="h-3.5 w-3.5" /> Map
+                  </button>
+                </div>
                 {activeCount > 0 && <button onClick={clearAll} className="btn-ghost !py-2 !px-3 text-xs"><X className="h-3.5 w-3.5" /> Clear</button>}
                 {activeCount > 0 && <button onClick={() => setShowSave(true)} className="btn-secondary !py-2 !px-4 text-xs"><BookmarkPlus className="h-4 w-4" /> Save</button>}
               </div>
@@ -271,6 +317,25 @@ function List() {
               </div>
             )}
 
+            {view === "map" && (
+              <div className="mb-6">
+                <Suspense fallback={<div className="h-[420px] rounded-xl border border-border bg-muted animate-pulse" />}>
+                  <MapFilter
+                    selectedCounty={state.county || undefined}
+                    onSelect={(name) => {
+                      if (KENYA_COUNTIES.includes(name)) patch({ county: name, town: "" });
+                      else {
+                        // town click: try to find owning county
+                        const owning = KENYA_COUNTIES.find((c) => (KENYA_SUBLOCATIONS[c] ?? []).includes(name));
+                        patch({ county: owning ?? state.county, town: name });
+                      }
+                    }}
+                  />
+                </Suspense>
+              </div>
+            )}
+
+
             {sorted.length === 0 ? (
               <div className="text-center py-24 border border-dashed border-border rounded-2xl bg-muted/30">
                 <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary">{favsOnly ? <Heart className="h-6 w-6" /> : <Search className="h-6 w-6" />}</div>
@@ -285,7 +350,7 @@ function List() {
                 </div>
                 {totalPages > 1 && (
                   <div className="mt-10 flex items-center justify-center gap-2">
-                    <button disabled={currentPage === 1} onClick={() => { setPage((p) => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                    <button disabled={currentPage === 1} onClick={() => { setPage(Math.max(1, currentPage - 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                       className="btn-ghost !py-2 !px-3 disabled:opacity-40"><ChevronLeft className="h-4 w-4" /> Prev</button>
                     <div className="flex items-center gap-1">
                       {pageNumbers(currentPage, totalPages).map((n, i) =>
@@ -294,7 +359,7 @@ function List() {
                               className={`min-w-9 h-9 rounded-lg text-sm font-semibold transition ${currentPage === n ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}>{n}</button>
                       )}
                     </div>
-                    <button disabled={currentPage === totalPages} onClick={() => { setPage((p) => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                    <button disabled={currentPage === totalPages} onClick={() => { setPage(Math.min(totalPages, currentPage + 1)); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                       className="btn-ghost !py-2 !px-3 disabled:opacity-40">Next <ChevronRight className="h-4 w-4" /></button>
                   </div>
                 )}

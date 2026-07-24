@@ -1,61 +1,43 @@
-# Paid Blog Submission System
+# Location Search Upgrade
 
-Mirrors the existing property-package flow (M-Pesa → admin approval → publish) but for blog articles. Reuses `blog_posts`, adds packages, purchases, and dashboard/admin surfaces.
+Five related improvements to how users find listings by location.
 
-## 1. Database
+## 1. Shareable URL filters on `/properties`
 
-**New: `blog_packages`** — name, slug, price_kes, duration_days, is_featured, is_sponsored, features (jsonb), sort_order, is_active. Seeded with Basic (500), Featured (1,500), Sponsored (3,000).
+- Serialize all filters (category, type, county, town, price, beds, baths, size, features, nearby, status, listingType, purpose, sort, page, favorites-only) into search params via TanStack Router `validateSearch` (zod + `fallback`).
+- On mount, hydrate `FiltersState` from `Route.useSearch()`; on any change, `navigate({ search: (prev) => ({...prev, ...patch}) })` so URLs are shareable and Back/Forward works.
+- Sets (`features`, `nearby`) encoded as comma-separated strings.
 
-**New: `blog_post_purchases`** — post_id, user_id, package_id, amount_kes, mpesa_transaction_id, status (pending/paid/failed), expires_at.
+## 2. County ↔ town validation
 
-**Alter `blog_posts`**:
-- Extend status enum: `draft | pending_payment | paid | pending_review | changes_requested | approved | published | rejected | expired`
-- Add: `package_id`, `submitted_at`, `reviewed_at`, `reviewed_by`, `admin_notes`, `expires_at`, `is_sponsored`, `seo_title`, `meta_description` (if missing).
+- In `FiltersSidebar` and `dashboard/new` listing form: if `town` is set but not in `KENYA_SUBLOCATIONS[county]`, show an inline error ("`<town>` is not in `<county>`").
+- Listing form: block submit until resolved (either pick a valid town, change county, or clear town).
+- Filters sidebar: soft warning + one-click "Clear town".
 
-**Trigger**: extend `expire_listing_packages()` to also expire blog posts whose `expires_at < now()`.
+## 3. Fuzzy autocomplete for sublocations
 
-**RLS**:
-- Public reads only `status = 'published' AND expires_at > now()`.
-- Authors read/edit their own drafts + non-published statuses.
-- Admins full access.
+- Add lightweight fuzzy matcher (small custom scorer — no new dependency: normalized substring + Levenshtein-lite for ≤2 typos) in `src/lib/fuzzy.ts`.
+- Replace the town `<select>` in filters and listing form with a combobox: text input + dropdown of top 8 matches across the selected county (or all counties if none selected). Keyboard navigable.
 
-## 2. Server functions (`src/lib/blog-submission.functions.ts`)
+## 4. Map-based filter
 
-- `listBlogPackages()` / admin CRUD `upsertBlogPackage`, `toggleBlogPackage`
-- `createBlogDraft`, `updateBlogDraft`, `submitForPayment(postId, packageId)` → creates purchase, initiates STK Push (reuses existing M-Pesa helper), sets status `pending_payment`
-- M-Pesa callback (extend `/api/public/mpesa-callback` to handle `blog_post` purchases) → sets `paid` + `pending_review` + `expires_at`
-- Admin: `listSubmissions(status)`, `approveBlogPost`, `rejectBlogPost`, `requestRevisions`, `archiveBlogPost`, `adminMarkBlogPurchasePaid`
+- New `MapFilter` component on `/properties` (toggle button "Map view"): OpenStreetMap embed with markers for each county/major town using existing `LOCATION_COORDS`.
+- Clicking a marker sets `county` (and clears `town`) in URL filters. Uses Leaflet via CDN loaded client-side only (dynamic import behind `<ClientOnly>`-style effect) to avoid SSR issues.
 
-## 3. Frontend
+## 5. Location landing pages
 
-**User dashboard** (under `_authenticated/dashboard.blog/`):
-- `dashboard.blog.index.tsx` — list my posts with status pill, actions (edit/pay/renew)
-- `dashboard.blog.new.tsx` — rich editor (reuse existing Markdown editor + preview), featured image upload, category/tags/SEO fields
-- `dashboard.blog.$id.edit.tsx`
-- `dashboard.blog.$id.preview.tsx`
-- `dashboard.blog.$id.pay.tsx` — package selection + STK Push (mirrors `dashboard.pay.$id.tsx`)
+- New dynamic routes:
+  - `src/routes/locations.index.tsx` → grid of all counties.
+  - `src/routes/locations.$county.tsx` → county page: hero, description, list of sublocations, filtered property grid.
+  - `src/routes/locations.$county.$town.tsx` → sublocation page: filtered listings for that town.
+- Each has unique `head()` metadata (title, description, og tags, canonical) and JSON-LD `Place` schema for SEO.
+- Add these URLs to `sitemap.xml` generator.
+- Slugified params (`nairobi`, `nairobi/karen`); helper to map slug ↔ display name.
 
-**Admin** (`_authenticated/admin.blog/`):
-- `admin.blog.index.tsx` — submissions queue with tabs (pending review / changes requested / approved / published / rejected)
-- `admin.blog.packages.tsx` — CRUD packages
-- `admin.blog.$id.review.tsx` — full preview + approve/reject/request-revisions/edit
-- Revenue stat card on admin analytics
+## Technical notes
 
-**Public blog** — update `blog.index.tsx` to sort sponsored/featured first, add "Sponsored"/"Featured" badges. Add JSON-LD Article schema and OG tags on `blog.$slug.tsx` (verify).
-
-## 4. Rich editor
-
-Use existing markdown pipeline (already supports headings/lists/tables/YouTube/callouts). Add image upload button that stores to a new public `blog-images` bucket and inserts markdown image syntax.
-
-## 5. Navigation
-
-- `DashboardShell`: add "Write a blog" for all authenticated users
-- Admin nav: add "Blog submissions" and "Blog packages"
-
-## 6. SEO / Sitemap
-
-Extend the existing sitemap generator to include published blog posts. Ensure `blog.$slug.tsx` head() sets title, description, og:*, twitter:*, and Article JSON-LD from post data (fill any gaps).
-
-## Out of scope (not requested)
-- Plagiarism detection (surface a placeholder note only if the user later asks)
-- Auto-renewal billing (manual renewal via re-pay)
+- Zod search schema uses `fallback()` (never `.catch()`), no bounds — clamp in component.
+- Fuzzy matching pure-JS, deterministic, no new dep.
+- Leaflet loaded via `<link>`/`<script>` tags in `__root.tsx` head OR dynamic import inside `useEffect` — pick dynamic import to avoid loading on every page.
+- Sitemap: enumerate counties + sublocations from `KENYA_SUBLOCATIONS`.
+- No DB migrations required.
