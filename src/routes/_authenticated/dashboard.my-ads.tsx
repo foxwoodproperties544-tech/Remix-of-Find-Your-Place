@@ -59,6 +59,7 @@ function MyAds() {
   });
 
   const [scheduleFor, setScheduleFor] = useState<any | null>(null);
+  const [renewFor, setRenewFor] = useState<any | null>(null);
   const [startsAt, setStartsAt] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
   const save = useMutation({
