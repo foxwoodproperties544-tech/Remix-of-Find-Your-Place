@@ -262,6 +262,13 @@ function Detail() {
     });
   }, [p.id, propertyKey, ownerId]);
 
+  // Set support context so the floating WhatsApp mentions this property.
+  useEffect(() => {
+    const ref = p.id ? ` — ref: ${p.id}` : "";
+    setSupportOverride({ context: "property", extra: `re: ${p.title}${ref}` });
+    return () => setSupportOverride(null);
+  }, [p.id, p.title]);
+
   // Lightbox keyboard nav
   useEffect(() => {
     if (!lightbox) return;
