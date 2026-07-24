@@ -110,6 +110,25 @@ function FAQPage() {
 
   const waMessage = supportMessageFor("faq");
 
+  // Debounced search analytics
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    const term = q.trim();
+    if (term.length < 2) return;
+    searchTimer.current = setTimeout(() => trackFaqEvent({ event_type: "search", search_term: term }), 800);
+    return () => { if (searchTimer.current) clearTimeout(searchTimer.current); };
+  }, [q]);
+
+  const handleChip = (cat: string) => {
+    setActiveCat(cat);
+    trackFaqEvent({ event_type: "chip_select", category: cat, search_term: q.trim() || null });
+    if (cat !== "all") {
+      const el = document.getElementById(slugifyCategory(cat));
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -139,7 +158,7 @@ function FAQPage() {
             <div className="flex flex-wrap lg:flex-col gap-1.5">
               <button
                 type="button"
-                onClick={() => setActiveCat("all")}
+                onClick={() => handleChip("all")}
                 className={`text-left rounded-lg px-3 py-2 text-sm transition ${activeCat === "all" ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-muted"}`}
               >
                 All topics <span className="text-xs opacity-70">({faqs.length})</span>
@@ -148,7 +167,7 @@ function FAQPage() {
                 <button
                   key={cat}
                   type="button"
-                  onClick={() => { setActiveCat(cat); const el = document.getElementById(slugifyCategory(cat)); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
+                  onClick={() => handleChip(cat)}
                   className={`text-left rounded-lg px-3 py-2 text-sm transition ${activeCat === cat ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-muted"}`}
                 >
                   {CATEGORY_LABELS[cat] ?? cat} <span className="text-xs opacity-70">({count})</span>
