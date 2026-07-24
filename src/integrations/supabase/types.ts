@@ -1078,6 +1078,42 @@ export type Database = {
         }
         Relationships: []
       }
+      phone_verifications: {
+        Row: {
+          attempts: number
+          code_hash: string
+          created_at: string
+          expires_at: string
+          id: string
+          phone: string
+          sent_at: string
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          attempts?: number
+          code_hash: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          phone: string
+          sent_at?: string
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          attempts?: number
+          code_hash?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          phone?: string
+          sent_at?: string
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1090,6 +1126,8 @@ export type Database = {
           kyc_verified_at: string | null
           listing_quota: number
           phone: string | null
+          phone_verified: boolean
+          phone_verified_at: string | null
           role_primary: string | null
           tier: Database["public"]["Enums"]["agent_tier"]
           tier_expires_at: string | null
@@ -1108,6 +1146,8 @@ export type Database = {
           kyc_verified_at?: string | null
           listing_quota?: number
           phone?: string | null
+          phone_verified?: boolean
+          phone_verified_at?: string | null
           role_primary?: string | null
           tier?: Database["public"]["Enums"]["agent_tier"]
           tier_expires_at?: string | null
@@ -1126,6 +1166,8 @@ export type Database = {
           kyc_verified_at?: string | null
           listing_quota?: number
           phone?: string | null
+          phone_verified?: boolean
+          phone_verified_at?: string | null
           role_primary?: string | null
           tier?: Database["public"]["Enums"]["agent_tier"]
           tier_expires_at?: string | null
@@ -1574,6 +1616,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      run_saved_search_alerts: { Args: never; Returns: number }
     }
     Enums: {
       agent_tier: "free" | "basic" | "pro" | "elite"

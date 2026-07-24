@@ -18,6 +18,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { useCompare } from "@/hooks/use-compare";
 import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
+import { SimilarProperties } from "@/components/site/SimilarProperties";
 import { AppointmentBookingForm } from "@/components/site/AppointmentBookingForm";
 import { useQuery } from "@tanstack/react-query";
 
@@ -519,15 +520,15 @@ function Detail() {
         </aside>
       </section>
 
-      {/* Similar */}
-      {related.length > 0 && (
-        <section className="container-page pb-16">
-          <h2 className="text-2xl font-bold mb-6">Similar properties</h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map(r => <PropertyCard key={r.id} p={r} />)}
-          </div>
-        </section>
-      )}
+      {/* Similar properties (live from DB) */}
+      <SimilarProperties
+        currentId={p.id}
+        category={p.category}
+        type={p.type}
+        county={p.county}
+        price={p.price}
+      />
+
 
       <RecentlyViewedRail excludeId={p.id} />
 
