@@ -32,6 +32,11 @@ const COMPARISON: { label: string; get: (t: TierPlanRow) => string | boolean }[]
 
 
 function Page() {
+  const { data: plans = [], isLoading } = useQuery({
+    queryKey: ["tier-plans-active"],
+    queryFn: () => listActiveTierPlans(),
+  });
+
   return (
     <PackagePageShell
       eyebrow={<><Building2 className="h-3.5 w-3.5" /> Agent & Developer Plans</>}
@@ -51,79 +56,84 @@ function Page() {
         { q: "What happens if I exceed my listing quota?", a: "New listings pause until you archive existing ones or upgrade to a bigger plan." },
       ]}
     >
-      {/* Cards */}
       <section>
         <SectionHeader title="Subscription plans" subtitle="Monthly pricing in KES. Cancel or change anytime." />
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {TIER_PLANS.map((t) => (
-            <div key={t.id} className={`relative rounded-2xl border p-6 shadow-soft flex flex-col ${t.highlight ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}>
-              {t.highlight && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-3 py-1">
-                  Most popular
-                </span>
-              )}
-              <h3 className="text-lg font-bold">{t.name}</h3>
-              <div className="mt-3">
-                {t.price === 0 ? (
-                  <span className="text-3xl font-extrabold">Free</span>
-                ) : (
-                  <>
-                    <span className="text-3xl font-extrabold">KES {t.price.toLocaleString()}</span>
-                    <span className="text-sm text-muted-foreground"> / month</span>
-                  </>
+        {isLoading ? (
+          <div className="mt-8 text-sm text-muted-foreground">Loading plans…</div>
+        ) : (
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {plans.map((t) => (
+              <div key={t.id} className={`relative rounded-2xl border p-6 shadow-soft flex flex-col ${t.highlight ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}>
+                {t.highlight && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-3 py-1">
+                    Most popular
+                  </span>
                 )}
+                <h3 className="text-lg font-bold">{t.name}</h3>
+                <div className="mt-3">
+                  {t.price === 0 ? (
+                    <span className="text-3xl font-extrabold">Free</span>
+                  ) : (
+                    <>
+                      <span className="text-3xl font-extrabold">KES {Number(t.price).toLocaleString()}</span>
+                      <span className="text-sm text-muted-foreground"> / {t.duration_days === 30 ? "month" : `${t.duration_days} days`}</span>
+                    </>
+                  )}
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">Up to {t.listing_quota >= 999 ? "unlimited" : t.listing_quota} active listings</div>
+                <ul className="mt-4 space-y-2 flex-1">
+                  {t.perks.map((perk) => <Li key={perk}>{perk}</Li>)}
+                </ul>
+                <Link
+                  to="/dashboard/upgrade"
+                  search={{ tier: t.slug } as any}
+                  className={`mt-6 justify-center ${t.price === 0 ? "btn-ghost" : "btn-primary btn-primary-hover"}`}
+                >
+                  {t.price === 0 ? "Get started" : `Subscribe`}
+                </Link>
               </div>
-              <div className="mt-1 text-xs text-muted-foreground">Up to {t.quota === 999 ? "unlimited" : t.quota} active listings</div>
-              <ul className="mt-4 space-y-2 flex-1">
-                {t.perks.map((perk) => <Li key={perk}>{perk}</Li>)}
-              </ul>
-              <Link
-                to="/dashboard/upgrade"
-                search={{ tier: t.id } as any}
-                className={`mt-6 justify-center ${t.price === 0 ? "btn-ghost" : "btn-primary btn-primary-hover"}`}
-              >
-                {t.price === 0 ? "Get started" : `Subscribe`}
-              </Link>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* Comparison */}
-      <section>
-        <SectionHeader title="Compare plans" subtitle="Every feature at a glance." />
-        <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/40">
-              <tr>
-                <th className="text-left p-4 font-semibold">Feature</th>
-                {TIER_PLANS.map((t) => (
-                  <th key={t.id} className="text-center p-4 font-semibold">{t.name}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARISON.map((row) => (
-                <tr key={row.label} className="border-t border-border">
-                  <td className="p-4 text-muted-foreground">{row.label}</td>
-                  {TIER_PLANS.map((t) => {
-                    const v = row.get(t);
-                    return (
-                      <td key={t.id} className="p-4 text-center">
-                        {typeof v === "boolean" ? (
-                          v ? <Check className="h-4 w-4 text-primary mx-auto" /> : <XIcon className="h-4 w-4 text-muted-foreground/50 mx-auto" />
-                        ) : (
-                          <span className="text-foreground">{v}</span>
-                        )}
-                      </td>
-                    );
-                  })}
+      {plans.length > 0 && (
+        <section>
+          <SectionHeader title="Compare plans" subtitle="Every feature at a glance." />
+          <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/40">
+                <tr>
+                  <th className="text-left p-4 font-semibold">Feature</th>
+                  {plans.map((t) => (
+                    <th key={t.id} className="text-center p-4 font-semibold">{t.name}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+              </thead>
+              <tbody>
+                {COMPARISON.map((row) => (
+                  <tr key={row.label} className="border-t border-border">
+                    <td className="p-4 text-muted-foreground">{row.label}</td>
+                    {plans.map((t) => {
+                      const v = row.get(t);
+                      return (
+                        <td key={t.id} className="p-4 text-center">
+                          {typeof v === "boolean" ? (
+                            v ? <Check className="h-4 w-4 text-primary mx-auto" /> : <XIcon className="h-4 w-4 text-muted-foreground/50 mx-auto" />
+                          ) : (
+                            <span className="text-foreground">{v}</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
     </PackagePageShell>
   );
 }
+
