@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import { toast } from "sonner";
 import { Heart, Search, CalendarDays, Bell, User, Home, ShieldCheck } from "lucide-react";
+import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
 
 export const Route = createFileRoute("/_authenticated/dashboard/account")({
   component: Account,
@@ -119,6 +120,9 @@ function Account() {
       </section>
 
       <KycCallout />
+
+      <PhoneVerifyCard />
+
 
       {!isAgent && !isAdmin && (
         <section className="rounded-2xl border border-dashed border-primary/40 bg-primary-soft/40 p-5 flex items-start gap-4 flex-wrap">

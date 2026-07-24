@@ -61,10 +61,11 @@ function SavedSearches() {
         <p className="text-sm text-muted-foreground mt-1">We'll notify you when new listings match your saved filters.</p>
       </div>
 
-      <div className="mt-6 rounded-xl border border-border bg-primary-soft/50 p-4 flex items-start gap-3 text-xs text-primary/90">
+      <div className="mt-6 rounded-xl border border-primary/20 bg-primary-soft/50 p-4 flex items-start gap-3 text-xs text-primary/90">
         <Info className="h-4 w-4 shrink-0 mt-0.5" />
-        <p>Email notifications for new matches roll out shortly. Your saved searches are already tracked and shown here whenever you visit.</p>
+        <p>Alerts are live. We check every hour and send an in-app notification the moment a new listing matches your saved filters. Toggle the bell to pause alerts for any search.</p>
       </div>
+
 
       <div className="mt-8">
         {isLoading ? (
