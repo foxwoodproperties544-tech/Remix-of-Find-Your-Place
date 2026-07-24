@@ -8,8 +8,9 @@ import {
   resumeCampaign,
   updateCampaignSchedule,
 } from "@/lib/ads.functions";
-import { Megaphone, Eye, MousePointerClick, ExternalLink, Plus, Pause, Play, CalendarDays, BarChart3 } from "lucide-react";
+import { Megaphone, Eye, MousePointerClick, ExternalLink, Plus, Pause, Play, CalendarDays, BarChart3, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
+import { RenewPackageDialog } from "@/components/site/RenewPackageDialog";
 
 export const Route = createFileRoute("/_authenticated/dashboard/my-ads")({
   component: MyAds,
