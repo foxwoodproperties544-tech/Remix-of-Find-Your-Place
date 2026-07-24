@@ -129,7 +129,7 @@ export function BlogEditor({ initial, onChange }: Props) {
                 className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold ${tab === "write" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}>
                 <PencilLine className="h-3.5 w-3.5" /> Write
               </button>
-              <button type="button" onClick={() => setTab("preview")}
+              <button type="button" id="blog-preview-tab" onClick={() => setTab("preview")}
                 className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold ${tab === "preview" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}>
                 <Eye className="h-3.5 w-3.5" /> Preview
               </button>
