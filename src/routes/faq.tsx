@@ -259,13 +259,41 @@ function FAQPage() {
 
 function FAQItem({ item }: { item: Faq }) {
   const [open, setOpen] = useState(false);
+  const answerRef = useRef<HTMLDivElement>(null);
+
+  // Track clicks on any link inside the answer body.
+  useEffect(() => {
+    const el = answerRef.current;
+    if (!el) return;
+    const onClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)?.closest("a");
+      if (!target) return;
+      trackFaqEvent({
+        event_type: "answer_link_click",
+        category: item.category,
+        question_id: item.id,
+        link_href: (target as HTMLAnchorElement).href,
+      });
+    };
+    el.addEventListener("click", onClick);
+    return () => el.removeEventListener("click", onClick);
+  }, [item.category, item.id, open]);
+
   return (
-    <details open={open} onToggle={(e) => setOpen((e.target as HTMLDetailsElement).open)} className="group">
+    <details
+      open={open}
+      onToggle={(e) => {
+        const isOpen = (e.target as HTMLDetailsElement).open;
+        setOpen(isOpen);
+        if (isOpen) trackFaqEvent({ event_type: "answer_link_click", category: item.category, question_id: item.id, link_href: "#open" });
+      }}
+      className="group"
+    >
       <summary className="cursor-pointer list-none px-5 py-4 flex items-center justify-between gap-4 hover:bg-muted/40">
         <span className="font-semibold text-left">{item.question}</span>
         <ChevronDown className={`h-4 w-4 text-muted-foreground shrink-0 transition ${open ? "rotate-180" : ""}`} />
       </summary>
-      <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{item.answer}</div>
+      <div ref={answerRef} className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{item.answer}</div>
     </details>
   );
 }
