@@ -102,6 +102,50 @@ export function Header() {
               activeProps={{ className: "text-primary bg-primary-soft" }}
             >{n.label}</Link>
           ))}
+          {/* Agents dropdown */}
+          <div
+            ref={agentsRef}
+            className="relative"
+            onMouseEnter={() => setAgentsOpen(true)}
+            onMouseLeave={() => setAgentsOpen(false)}
+          >
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={agentsOpen}
+              onClick={() => setAgentsOpen((v) => !v)}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive || agentsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
+            >
+              Agents <ChevronDown className={`h-3.5 w-3.5 transition-transform ${agentsOpen ? "rotate-180" : ""}`} />
+            </button>
+            {agentsOpen && (
+              <div role="menu" className="absolute right-0 top-full pt-2 w-[22rem]">
+                <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
+                  {agentsItems.map((m) => {
+                    const Icon = m.icon;
+                    const active = pathname === m.to;
+                    return (
+                      <Link
+                        key={m.to}
+                        to={m.to}
+                        role="menuitem"
+                        onClick={() => setAgentsOpen(false)}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
+                      >
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className={`block font-semibold ${active ? "text-primary" : ""}`}>{m.label}</span>
+                          <span className="block text-xs text-muted-foreground">{m.desc}</span>
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
           {/* More dropdown */}
           <div
             ref={moreRef}
