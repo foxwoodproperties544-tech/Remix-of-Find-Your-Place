@@ -15,6 +15,7 @@ import { Header } from "../components/site/Header";
 import { Footer } from "../components/site/Footer";
 import { CookieBanner } from "../components/site/CookieBanner";
 import { InstallAppBanner } from "../components/site/InstallAppBanner";
+import { FloatingWhatsApp } from "../components/site/FloatingWhatsApp";
 
 function NotFoundComponent() {
   return (
@@ -144,6 +145,7 @@ function RootComponent() {
         <Footer />
         <CookieBanner />
         <InstallAppBanner />
+        <FloatingWhatsApp />
       </div>
     </QueryClientProvider>
   );
