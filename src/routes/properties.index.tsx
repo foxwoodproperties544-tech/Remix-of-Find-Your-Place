@@ -317,6 +317,25 @@ function List() {
               </div>
             )}
 
+            {view === "map" && (
+              <div className="mb-6">
+                <Suspense fallback={<div className="h-[420px] rounded-xl border border-border bg-muted animate-pulse" />}>
+                  <MapFilter
+                    selectedCounty={state.county || undefined}
+                    onSelect={(name) => {
+                      if (KENYA_COUNTIES.includes(name)) patch({ county: name, town: "" });
+                      else {
+                        // town click: try to find owning county
+                        const owning = KENYA_COUNTIES.find((c) => (KENYA_SUBLOCATIONS[c] ?? []).includes(name));
+                        patch({ county: owning ?? state.county, town: name });
+                      }
+                    }}
+                  />
+                </Suspense>
+              </div>
+            )}
+
+
             {sorted.length === 0 ? (
               <div className="text-center py-24 border border-dashed border-border rounded-2xl bg-muted/30">
                 <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary">{favsOnly ? <Heart className="h-6 w-6" /> : <Search className="h-6 w-6" />}</div>
