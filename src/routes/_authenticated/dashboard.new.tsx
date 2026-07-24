@@ -37,6 +37,7 @@ const schema = z.object({
   contact_phone: z.string().trim().max(30).optional(),
   contact_whatsapp: z.string().trim().max(30).optional(),
   video_url: z.string().trim().max(500).optional(),
+  tour_url: z.string().trim().max(500).optional(),
   lat: z.string().trim().optional(),
   lng: z.string().trim().optional(),
 });
@@ -50,6 +51,8 @@ function NewListing() {
   const [saving, setSaving] = useState<false | "draft" | "submit">(false);
   const [uploading, setUploading] = useState(0);
   const [images, setImages] = useState<string[]>([]);
+  const [imageHashes, setImageHashes] = useState<{ url: string; hash: string }[]>([]);
+  const [duplicateWarnings, setDuplicateWarnings] = useState<string[]>([]);
   const [docs, setDocs] = useState<DocEntry[]>([]);
   const [uploadingDocs, setUploadingDocs] = useState(0);
   const [dragOver, setDragOver] = useState(false);
@@ -62,7 +65,7 @@ function NewListing() {
     bedrooms: "0", bathrooms: "0", size: "",
     features: "", amenities: "",
     contact_phone: "", contact_whatsapp: "",
-    video_url: "", lat: "", lng: "",
+    video_url: "", tour_url: "", lat: "", lng: "",
   });
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
