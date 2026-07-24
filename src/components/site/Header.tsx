@@ -63,6 +63,20 @@ export function Header() {
     };
   }, [moreOpen]);
 
+  useEffect(() => {
+    if (!agentsOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (agentsRef.current && !agentsRef.current.contains(e.target as Node)) setAgentsOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setAgentsOpen(false); };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [agentsOpen]);
+
   async function signOut() {
     await qc.cancelQueries();
     qc.clear();
