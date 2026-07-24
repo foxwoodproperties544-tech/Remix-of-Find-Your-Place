@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
-  Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog,
+  Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown,
 } from "lucide-react";
 import { toast } from "sonner";
 
