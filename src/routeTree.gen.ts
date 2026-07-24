@@ -82,6 +82,7 @@ import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
+import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
@@ -484,6 +485,12 @@ const AuthenticatedAdminAdCampaignsRoute =
     path: '/ad-campaigns',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedDashboardBlogIndexRoute =
+  AuthenticatedDashboardBlogIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardBlogRoute,
+  } as any)
 const AuthenticatedDashboardVerifyIdRoute =
   AuthenticatedDashboardVerifyIdRouteImport.update({
     id: '/dashboard/verify/$id',
@@ -626,6 +633,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -686,7 +694,6 @@ export interface FileRoutesByTo {
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
-  '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
@@ -710,6 +717,7 @@ export interface FileRoutesByTo {
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -796,6 +804,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -882,6 +891,7 @@ export interface FileRouteTypes {
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/dashboard/blog/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   fileRoutesByTo: FileRoutesByTo
@@ -942,7 +952,6 @@ export interface FileRouteTypes {
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
-    | '/dashboard/blog'
     | '/dashboard/bulk-import'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
@@ -966,6 +975,7 @@ export interface FileRouteTypes {
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/dashboard/blog'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   id:
@@ -1051,6 +1061,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/leads/new'
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/verify/$id'
+    | '/_authenticated/dashboard/blog/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
   fileRoutesById: FileRoutesById
@@ -1610,6 +1621,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAdCampaignsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/dashboard/blog/': {
+      id: '/_authenticated/dashboard/blog/'
+      path: '/'
+      fullPath: '/dashboard/blog/'
+      preLoaderRoute: typeof AuthenticatedDashboardBlogIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardBlogRoute
+    }
     '/_authenticated/dashboard/verify/$id': {
       id: '/_authenticated/dashboard/verify/$id'
       path: '/dashboard/verify/$id'
@@ -1737,6 +1755,7 @@ const AuthenticatedAdminRouteWithChildren =
 
 interface AuthenticatedDashboardBlogRouteChildren {
   AuthenticatedDashboardBlogNewRoute: typeof AuthenticatedDashboardBlogNewRoute
+  AuthenticatedDashboardBlogIndexRoute: typeof AuthenticatedDashboardBlogIndexRoute
   AuthenticatedDashboardBlogIdEditRoute: typeof AuthenticatedDashboardBlogIdEditRoute
   AuthenticatedDashboardBlogIdPayRoute: typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1744,6 +1763,7 @@ interface AuthenticatedDashboardBlogRouteChildren {
 const AuthenticatedDashboardBlogRouteChildren: AuthenticatedDashboardBlogRouteChildren =
   {
     AuthenticatedDashboardBlogNewRoute: AuthenticatedDashboardBlogNewRoute,
+    AuthenticatedDashboardBlogIndexRoute: AuthenticatedDashboardBlogIndexRoute,
     AuthenticatedDashboardBlogIdEditRoute:
       AuthenticatedDashboardBlogIdEditRoute,
     AuthenticatedDashboardBlogIdPayRoute: AuthenticatedDashboardBlogIdPayRoute,
