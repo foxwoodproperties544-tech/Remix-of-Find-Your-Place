@@ -1,5 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Download, Share, X, Smartphone } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+
+type PwaEvent = "impression" | "install_click" | "dismiss" | "installed" | "ios_hint_shown";
+
+function detectPlatform(): string {
+  if (typeof navigator === "undefined") return "unknown";
+  const ua = navigator.userAgent || "";
+  if (/iPad|iPhone|iPod/.test(ua)) return "ios";
+  if (/Android/.test(ua)) return "android";
+  if (/Windows/.test(ua)) return "windows";
+  if (/Mac/.test(ua)) return "macos";
+  if (/Linux/.test(ua)) return "linux";
+  return "other";
+}
+
+async function trackPwaEvent(event_type: PwaEvent) {
+  try {
+    const { data: sess } = await supabase.auth.getSession();
+    await supabase.from("pwa_install_events").insert({
+      event_type,
+      platform: detectPlatform(),
+      user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 500) : null,
+      user_id: sess.session?.user.id ?? null,
+    });
+  } catch {
+    /* analytics is best-effort */
+  }
+}
 
 type BIPEvent = Event & {
   prompt: () => Promise<void>;
@@ -40,6 +68,7 @@ export function InstallAppBanner() {
   const [deferred, setDeferred] = useState<BIPEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const [showIosHint, setShowIosHint] = useState(false);
+  const impressionLogged = useRef(false);
 
   useEffect(() => {
     if (isStandalone() || recentlyDismissed()) return;
@@ -52,6 +81,7 @@ export function InstallAppBanner() {
     window.addEventListener("beforeinstallprompt", onBIP);
 
     const onInstalled = () => {
+      trackPwaEvent("installed");
       setVisible(false);
       setDeferred(null);
     };
@@ -70,21 +100,31 @@ export function InstallAppBanner() {
     };
   }, []);
 
+  useEffect(() => {
+    if ((visible || showIosHint) && !impressionLogged.current) {
+      impressionLogged.current = true;
+      trackPwaEvent("impression");
+    }
+  }, [visible, showIosHint]);
+
   const dismiss = () => {
     try {
       localStorage.setItem(DISMISS_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
+    trackPwaEvent("dismiss");
     setVisible(false);
     setShowIosHint(false);
   };
 
   const install = async () => {
+    trackPwaEvent("install_click");
     if (deferred) {
       try {
         await deferred.prompt();
-        await deferred.userChoice;
+        const choice = await deferred.userChoice;
+        if (choice?.outcome === "dismissed") trackPwaEvent("dismiss");
       } catch {
         /* ignore */
       }
@@ -92,7 +132,10 @@ export function InstallAppBanner() {
       setVisible(false);
       return;
     }
-    if (isIos()) setShowIosHint(true);
+    if (isIos()) {
+      setShowIosHint(true);
+      trackPwaEvent("ios_hint_shown");
+    }
   };
 
   if (!visible && !showIosHint) return null;
