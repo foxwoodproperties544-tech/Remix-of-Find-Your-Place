@@ -107,7 +107,11 @@ function OurAgentsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {agents.map((a) => (
+            {agents.map((a) => {
+              const tierLabel = a.tier && a.tier !== "free"
+                ? a.tier.charAt(0).toUpperCase() + a.tier.slice(1)
+                : null;
+              return (
               <Link
                 key={a.id}
                 to="/agents/$id"
@@ -122,7 +126,7 @@ function OurAgentsPage() {
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <h3 className="text-sm font-semibold truncate group-hover:text-primary">
                       {a.full_name || "Agent"}
                     </h3>
@@ -133,6 +137,22 @@ function OurAgentsPage() {
                   {a.company_name && (
                     <p className="text-xs text-muted-foreground truncate">{a.company_name}</p>
                   )}
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                    {a.subscribed ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary text-[10px] font-semibold px-2 py-0.5">
+                        <BadgeCheck className="h-3 w-3" /> Subscribed{tierLabel ? ` · ${tierLabel}` : ""}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center rounded-full bg-muted text-muted-foreground text-[10px] font-medium px-2 py-0.5">
+                        Free tier
+                      </span>
+                    )}
+                    {a.verified && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary/15 text-secondary text-[10px] font-semibold px-2 py-0.5">
+                        Verified
+                      </span>
+                    )}
+                  </div>
                   {a.bio && (
                     <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{a.bio}</p>
                   )}
@@ -141,7 +161,8 @@ function OurAgentsPage() {
                   </span>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
