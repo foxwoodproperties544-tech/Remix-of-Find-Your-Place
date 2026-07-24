@@ -60,7 +60,7 @@ function Page() {
     >
       <PricingGrid packages={pkgs as any} />
       <div className="mt-8">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help choosing a listing package." />
+        <SupportBanner context="listing_packages" whatsappMessage="Hello Foxwood Properties, I need help choosing a listing package." />
       </div>
     </PackagePageShell>
   );

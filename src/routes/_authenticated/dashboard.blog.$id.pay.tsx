@@ -71,7 +71,7 @@ function PayForBlog() {
   return (
     <DashboardShell>
       <div className="mb-4">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help completing a blog package payment." />
+        <SupportBanner context="payment" whatsappMessage="Hello Foxwood Properties, I need help completing a blog package payment." />
       </div>
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
         <div>

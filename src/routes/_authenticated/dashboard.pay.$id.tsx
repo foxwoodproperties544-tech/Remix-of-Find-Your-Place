@@ -89,7 +89,7 @@ function PayForListing() {
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-4">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help completing a listing payment." />
+        <SupportBanner context="payment" whatsappMessage="Hello Foxwood Properties, I need help completing a listing payment." />
       </div>
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
         <div>

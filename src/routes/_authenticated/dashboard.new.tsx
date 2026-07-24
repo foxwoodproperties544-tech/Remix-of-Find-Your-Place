@@ -265,7 +265,7 @@ function NewListing() {
       </div>
 
       <div className="mt-4">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help posting a listing." />
+        <SupportBanner context="dashboard" whatsappMessage="Hello Foxwood Properties, I need help posting a listing." />
       </div>
 
       <form onSubmit={(e) => save("submit", e)} className="mt-8 space-y-6" noValidate>
