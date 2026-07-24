@@ -13,6 +13,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/new")({
 
 import { CATEGORIES as CATS, ALL_TYPES, TYPE_GROUPS } from "@/lib/taxonomy";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+import { TownCombobox } from "@/components/site/TownCombobox";
 const CATEGORIES = [...CATS];
 const TYPES = ALL_TYPES;
 const COUNTIES = KENYA_COUNTIES;
