@@ -13,13 +13,13 @@ const nav = [
   { to: "/properties", label: "Rent", search: { category: "For Rent" } as const },
   { to: "/properties", label: "Lease", search: { category: "For Lease" } as const },
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
+  { to: "/for-agents", label: "Agents" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ];
 
 const moreItems = [
-  { to: "/for-agents", label: "For Agents & Developers", icon: Building2, desc: "Tools, CRM, and packages for property pros" },
   { to: "/listing-packages", label: "Listing Packages", icon: Home, desc: "Post a property with the right visibility" },
   { to: "/advertising-packages", label: "Advertising Packages", icon: Megaphone, desc: "Homepage, sidebar, search & blog banners" },
   { to: "/blog-submission-packages", label: "Blog Submission Packages", icon: PenSquare, desc: "Publish articles to Kenya's property audience" },
