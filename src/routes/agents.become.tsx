@@ -6,6 +6,7 @@ import { absoluteUrl } from "@/lib/site-url";
 import { listActiveTierPlans } from "@/lib/tier-plans.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 const TITLE = "Become an Agent — Foxwood Properties";
 const DESC =
@@ -66,6 +67,10 @@ function BecomeAnAgentPage() {
         title="Grow your real estate business with Foxwood"
         subtitle="Pick a subscription that matches how you work. Pay by M-Pesa; change plans anytime."
       />
+
+      <div className="container-page mt-6">
+        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help picking an agent plan." />
+      </div>
 
       <section className="bg-muted/30 border-y border-border">
         <div className="container-page py-14">
