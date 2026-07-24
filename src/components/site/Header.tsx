@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2, FileText } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2, FileText, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,11 +13,15 @@ const nav = [
   { to: "/properties", label: "Rent", search: { category: "For Rent" } as const },
   { to: "/properties", label: "Lease", search: { category: "For Lease" } as const },
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
-  { to: "/for-agents", label: "Agents" },
   { to: "/blog", label: "Blog" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ];
+
+const agentsItems = [
+  { to: "/agents", label: "Our Agents", icon: UsersIcon, desc: "Meet verified agents and developers on Foxwood" },
+  { to: "/agents/become", label: "Become an Agent", icon: Sparkles, desc: "See subscription plans and join Foxwood" },
+] as const;
 
 const moreItems = [
   { to: "/listing-packages", label: "Listing Packages", icon: Home, desc: "Post a property with the right visibility" },
@@ -32,13 +36,17 @@ export function Header() {
   const [menu, setMenu] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const [agentsOpen, setAgentsOpen] = useState(false);
+  const [mobileAgentsOpen, setMobileAgentsOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  const agentsRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { isAdmin } = useRoles();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const moreActive = moreItems.some((m) => pathname === m.to);
+  const agentsActive = agentsItems.some((m) => pathname === m.to);
 
   // Close on outside click / Esc
   useEffect(() => {
@@ -54,6 +62,20 @@ export function Header() {
       document.removeEventListener("keydown", onKey);
     };
   }, [moreOpen]);
+
+  useEffect(() => {
+    if (!agentsOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (agentsRef.current && !agentsRef.current.contains(e.target as Node)) setAgentsOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setAgentsOpen(false); };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [agentsOpen]);
 
   async function signOut() {
     await qc.cancelQueries();
@@ -80,6 +102,50 @@ export function Header() {
               activeProps={{ className: "text-primary bg-primary-soft" }}
             >{n.label}</Link>
           ))}
+          {/* Agents dropdown */}
+          <div
+            ref={agentsRef}
+            className="relative"
+            onMouseEnter={() => setAgentsOpen(true)}
+            onMouseLeave={() => setAgentsOpen(false)}
+          >
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={agentsOpen}
+              onClick={() => setAgentsOpen((v) => !v)}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive || agentsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
+            >
+              Agents <ChevronDown className={`h-3.5 w-3.5 transition-transform ${agentsOpen ? "rotate-180" : ""}`} />
+            </button>
+            {agentsOpen && (
+              <div role="menu" className="absolute right-0 top-full pt-2 w-[22rem]">
+                <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
+                  {agentsItems.map((m) => {
+                    const Icon = m.icon;
+                    const active = pathname === m.to;
+                    return (
+                      <Link
+                        key={m.to}
+                        to={m.to}
+                        role="menuitem"
+                        onClick={() => setAgentsOpen(false)}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
+                      >
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className={`block font-semibold ${active ? "text-primary" : ""}`}>{m.label}</span>
+                          <span className="block text-xs text-muted-foreground">{m.desc}</span>
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
           {/* More dropdown */}
           <div
             ref={moreRef}
@@ -170,6 +236,27 @@ export function Header() {
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{n.label}</Link>
             ))}
+            {/* Mobile Agents accordion */}
+            <button
+              type="button"
+              aria-expanded={mobileAgentsOpen}
+              onClick={() => setMobileAgentsOpen((v) => !v)}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${agentsActive ? "text-primary" : ""}`}
+            >
+              <span>Agents</span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${mobileAgentsOpen ? "rotate-180" : ""}`} />
+            </button>
+            {mobileAgentsOpen && (
+              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+                {agentsItems.map((m) => (
+                  <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    activeProps={{ className: "text-primary bg-primary-soft" }}>
+                    {m.label}
+                  </Link>
+                ))}
+              </div>
+            )}
             {/* Mobile More accordion */}
             <button
               type="button"
