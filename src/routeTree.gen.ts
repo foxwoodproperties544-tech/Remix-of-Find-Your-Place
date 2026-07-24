@@ -32,6 +32,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as ServicesValuationRouteImport } from './routes/services.valuation'
 import { Route as ServicesSellRouteImport } from './routes/services.sell'
 import { Route as ServicesRentRouteImport } from './routes/services.rent'
@@ -207,6 +208,11 @@ const LocationsIndexRoute = LocationsIndexRouteImport.update({
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentsIndexRoute = AgentsIndexRouteImport.update({
+  id: '/agents/',
+  path: '/agents/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesValuationRoute = ServicesValuationRouteImport.update({
@@ -588,6 +594,7 @@ export interface FileRoutesByFullPath {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
@@ -673,6 +680,7 @@ export interface FileRoutesByTo {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/properties': typeof PropertiesIndexRoute
@@ -759,6 +767,7 @@ export interface FileRoutesById {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
@@ -846,6 +855,7 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/agents/'
     | '/blog/'
     | '/locations/'
     | '/properties/'
@@ -931,6 +941,7 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/agents'
     | '/blog'
     | '/locations'
     | '/properties'
@@ -1016,6 +1027,7 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/agents/'
     | '/blog/'
     | '/locations/'
     | '/properties/'
@@ -1100,6 +1112,7 @@ export interface RootRouteChildren {
   ServicesRentRoute: typeof ServicesRentRoute
   ServicesSellRoute: typeof ServicesSellRoute
   ServicesValuationRoute: typeof ServicesValuationRoute
+  AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
@@ -1269,6 +1282,13 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agents/': {
+      id: '/agents/'
+      path: '/agents'
+      fullPath: '/agents/'
+      preLoaderRoute: typeof AgentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/valuation': {
@@ -1895,6 +1915,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRentRoute: ServicesRentRoute,
   ServicesSellRoute: ServicesSellRoute,
   ServicesValuationRoute: ServicesValuationRoute,
+  AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
