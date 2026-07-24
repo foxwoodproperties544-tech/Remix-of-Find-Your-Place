@@ -133,7 +133,7 @@ function PwaAnalytics() {
             {platformRows.length === 0 && (
               <tr><td colSpan={7} className="py-4 text-muted-foreground">No events yet in this range.</td></tr>
             )}
-            {platformRows.map((r) => {
+            {platformRows.map((r: any) => {
               const ctr = r.impression > 0 ? ((r.install_click / r.impression) * 100).toFixed(2) : "0.00";
               return (
                 <tr key={r.platform} className="border-b border-border/60">
