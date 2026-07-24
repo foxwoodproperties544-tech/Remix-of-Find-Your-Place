@@ -42,8 +42,8 @@ function PwaAnalytics() {
   const byDay = data?.byDay ?? [];
 
   const platformRows = useMemo(() => {
-    if (!data) return [];
-    return Object.entries(data.byPlatform).map(([platform, counts]) => ({ platform, ...counts }));
+    if (!data) return [] as { platform: string; impression: number; install_click: number; installed: number; dismiss: number; ios_hint_shown: number }[];
+    return Object.entries(data.byPlatform).map(([platform, counts]) => ({ platform, ...(counts as Record<string, number>) })) as any;
   }, [data]);
 
   function exportCsv() {

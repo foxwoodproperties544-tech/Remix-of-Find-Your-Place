@@ -71,6 +71,7 @@ import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
+import { Route as AuthenticatedAdminPwaAnalyticsRouteImport } from './routes/_authenticated/admin.pwa-analytics'
 import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authenticated/admin.packages'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminKycRouteImport } from './routes/_authenticated/admin.kyc'
@@ -420,6 +421,12 @@ const AuthenticatedAdminSubscriptionsRoute =
     path: '/subscriptions',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminPwaAnalyticsRoute =
+  AuthenticatedAdminPwaAnalyticsRouteImport.update({
+    id: '/pwa-analytics',
+    path: '/pwa-analytics',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminPackagesRoute =
   AuthenticatedAdminPackagesRouteImport.update({
     id: '/packages',
@@ -579,6 +586,7 @@ export interface FileRoutesByFullPath {
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
+  '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -661,6 +669,7 @@ export interface FileRoutesByTo {
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
+  '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -745,6 +754,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
+  '/_authenticated/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -829,6 +839,7 @@ export interface FileRouteTypes {
     | '/admin/kyc'
     | '/admin/notifications'
     | '/admin/packages'
+    | '/admin/pwa-analytics'
     | '/admin/subscriptions'
     | '/admin/users'
     | '/admin/verifications'
@@ -911,6 +922,7 @@ export interface FileRouteTypes {
     | '/admin/kyc'
     | '/admin/notifications'
     | '/admin/packages'
+    | '/admin/pwa-analytics'
     | '/admin/subscriptions'
     | '/admin/users'
     | '/admin/verifications'
@@ -994,6 +1006,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/kyc'
     | '/_authenticated/admin/notifications'
     | '/_authenticated/admin/packages'
+    | '/_authenticated/admin/pwa-analytics'
     | '/_authenticated/admin/subscriptions'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
@@ -1507,6 +1520,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSubscriptionsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/pwa-analytics': {
+      id: '/_authenticated/admin/pwa-analytics'
+      path: '/pwa-analytics'
+      fullPath: '/admin/pwa-analytics'
+      preLoaderRoute: typeof AuthenticatedAdminPwaAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/packages': {
       id: '/_authenticated/admin/packages'
       path: '/packages'
@@ -1668,6 +1688,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminKycRoute: typeof AuthenticatedAdminKycRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
   AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRouteWithChildren
+  AuthenticatedAdminPwaAnalyticsRoute: typeof AuthenticatedAdminPwaAnalyticsRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
@@ -1683,6 +1704,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminKycRoute: AuthenticatedAdminKycRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
   AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRouteWithChildren,
+  AuthenticatedAdminPwaAnalyticsRoute: AuthenticatedAdminPwaAnalyticsRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
