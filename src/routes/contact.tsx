@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import heroContact from "@/assets/hero-contact.jpg";
 import { absoluteUrl } from "@/lib/site-url";
-import { SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, whatsappUrl } from "@/lib/support";
+import { SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, trackSupportClick, whatsappUrl } from "@/lib/support";
 
 const OG_IMAGE = absoluteUrl(heroContact);
 const TITLE = "Contact — Foxwood Properties";
