@@ -68,6 +68,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/notifications", label: "Notifications", icon: Bell },
         { to: "/admin/blog", label: "Blog submissions", icon: FileText },
         { to: "/admin/blog-packages", label: "Blog packages", icon: PlusCircle },
+        { to: "/admin/audit", label: "Audit logs", icon: ShieldCheck },
       ],
     });
   }
