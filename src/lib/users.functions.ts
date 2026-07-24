@@ -69,6 +69,7 @@ export const setUserRole = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { writeAudit } = await import("./audit.server");
 
     if (data.action === "add") {
       const { error } = await supabaseAdmin
@@ -86,6 +87,16 @@ export const setUserRole = createServerFn({ method: "POST" })
         .eq("role", data.role);
       if (error) throw error;
     }
+
+    await writeAudit({
+      actorId: context.userId,
+      actorEmail: (context.claims as any)?.email ?? null,
+      action: data.action === "add" ? "role.grant" : "role.revoke",
+      entityType: "user",
+      entityId: data.userId,
+      summary: `${data.action === "add" ? "Granted" : "Revoked"} role "${data.role}"`,
+      metadata: { role: data.role },
+    });
     return { ok: true };
   });
 
@@ -95,7 +106,17 @@ export const setUserVerified = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { writeAudit } = await import("./audit.server");
     const { error } = await supabaseAdmin.from("profiles").update({ verified: data.verified }).eq("id", data.userId);
     if (error) throw error;
+    await writeAudit({
+      actorId: context.userId,
+      actorEmail: (context.claims as any)?.email ?? null,
+      action: data.verified ? "user.verify" : "user.unverify",
+      entityType: "user",
+      entityId: data.userId,
+      summary: data.verified ? "Marked user verified" : "Removed user verification",
+    });
     return { ok: true };
   });
+
