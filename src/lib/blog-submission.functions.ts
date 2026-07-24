@@ -337,6 +337,12 @@ export const adminApproveBlogPost = createServerFn({ method: "POST" })
         link: "/dashboard/blog",
       });
     }
+    const { writeAudit } = await import("./audit.server");
+    await writeAudit({
+      actorId: context.userId, actorEmail: (context.claims as any)?.email ?? null,
+      action: "blog.approve", entityType: "blog_post", entityId: data.id,
+      summary: "Approved blog post", metadata: { notes: data.notes ?? null },
+    });
     return { ok: true };
   });
 
