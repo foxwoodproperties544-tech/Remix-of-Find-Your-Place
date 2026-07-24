@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+import { toSlug } from "@/lib/location-slug";
 
 const BASE_URL = "https://find-joy-list.lovable.app";
 
@@ -37,6 +39,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/services/marketing", changefreq: "monthly", priority: "0.6" },
   { path: "/services/management", changefreq: "monthly", priority: "0.6" },
   { path: "/services/investment", changefreq: "monthly", priority: "0.6" },
+  { path: "/locations", changefreq: "weekly", priority: "0.7" },
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
@@ -44,6 +47,16 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const entries: SitemapEntry[] = [...staticEntries];
+
+        // Location landing pages (counties + sublocations)
+        for (const county of KENYA_COUNTIES) {
+          const cSlug = toSlug(county);
+          entries.push({ path: `/locations/${cSlug}`, changefreq: "weekly", priority: "0.6" });
+          for (const town of KENYA_SUBLOCATIONS[county] ?? []) {
+            entries.push({ path: `/locations/${cSlug}/${toSlug(town)}`, changefreq: "weekly", priority: "0.5" });
+          }
+        }
+
 
         try {
           const { data: props } = await supabase
