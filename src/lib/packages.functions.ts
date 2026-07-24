@@ -301,6 +301,17 @@ export const adminMarkPurchasePaid = createServerFn({ method: "POST" })
       body: `An admin marked your listing package payment as received. Ref: ${receipt}. Your listing is now awaiting review.`,
     });
 
+    const { writeAudit } = await import("./audit.server");
+    await writeAudit({
+      actorId: context.userId,
+      actorEmail: (context.claims as any)?.email ?? null,
+      action: "purchase.mark_paid",
+      entityType: "property_package_purchase",
+      entityId: purchase.id,
+      summary: `Manually marked purchase paid (receipt ${receipt})`,
+      metadata: { property_id: purchase.property_id, note: data.note ?? null },
+    });
+
     return { ok: true, receipt };
   });
 
