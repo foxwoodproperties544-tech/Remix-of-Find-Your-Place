@@ -9,9 +9,10 @@ const featureSchema = z.object({
 });
 
 const tierSchema = z.object({
-  tier: z.enum(["basic", "pro", "elite"]),
+  tier: z.string().min(1),
   phone: z.string().min(9),
 });
+
 
 const verifySchema = z.object({
   propertyId: z.string().uuid(),
