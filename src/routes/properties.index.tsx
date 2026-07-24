@@ -280,6 +280,16 @@ function List() {
                   <option value="price-desc">Price: High to Low</option>
                   <option value="beds-desc">Most bedrooms</option>
                 </select>
+                <div className="inline-flex rounded-full border border-border overflow-hidden text-xs">
+                  <button onClick={() => setView("list")} aria-pressed={view === "list"}
+                    className={`px-3 py-2 inline-flex items-center gap-1 ${view === "list" ? "bg-primary text-primary-foreground" : "bg-background"}`}>
+                    <ListIcon className="h-3.5 w-3.5" /> List
+                  </button>
+                  <button onClick={() => setView("map")} aria-pressed={view === "map"}
+                    className={`px-3 py-2 inline-flex items-center gap-1 ${view === "map" ? "bg-primary text-primary-foreground" : "bg-background"}`}>
+                    <MapIcon className="h-3.5 w-3.5" /> Map
+                  </button>
+                </div>
                 {activeCount > 0 && <button onClick={clearAll} className="btn-ghost !py-2 !px-3 text-xs"><X className="h-3.5 w-3.5" /> Clear</button>}
                 {activeCount > 0 && <button onClick={() => setShowSave(true)} className="btn-secondary !py-2 !px-4 text-xs"><BookmarkPlus className="h-4 w-4" /> Save</button>}
               </div>
