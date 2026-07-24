@@ -34,6 +34,15 @@ export const decideAccountVerification = createServerFn({ method: "POST" })
         ? "Congratulations — your Foxwood account is now verified."
         : `Your verification request was not approved.${data.reason ? " Reason: " + data.reason : ""}`,
       link: "/dashboard/profile",
+    const { writeAudit } = await import("./audit.server");
+    await writeAudit({
+      actorId: context.userId,
+      actorEmail: (context.claims as any)?.email ?? null,
+      action: verified ? "account.verify" : "account.reject",
+      entityType: "user",
+      entityId: data.userId,
+      summary: verified ? "Approved account verification" : "Rejected account verification",
+      metadata: { reason: data.reason ?? null },
     });
 
     return { ok: true };

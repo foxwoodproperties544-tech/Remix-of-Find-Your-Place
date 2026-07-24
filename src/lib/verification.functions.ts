@@ -60,5 +60,16 @@ export const decideVerification = createServerFn({ method: "POST" })
         verified: true, verified_at: new Date().toISOString(), verified_by: context.userId,
       }).eq("id", req.property_id);
     }
+
+    const { writeAudit } = await import("./audit.server");
+    await writeAudit({
+      actorId: context.userId,
+      actorEmail: (context.claims as any)?.email ?? null,
+      action: data.approve ? "verification.approve" : "verification.reject",
+      entityType: "verification_request",
+      entityId: data.requestId,
+      summary: `Listing verification ${data.approve ? "approved" : "rejected"}`,
+      metadata: { property_id: req.property_id, reviewer_notes: data.reviewerNotes },
+    });
     return { ok: true };
   });
