@@ -160,12 +160,31 @@ function MyAds() {
                   <button onClick={() => openSchedule(c)} className="btn-ghost text-xs inline-flex items-center gap-1">
                     <CalendarDays className="h-3.5 w-3.5" /> Schedule
                   </button>
+                  <button onClick={() => setRenewFor(c)} className="btn-ghost text-xs inline-flex items-center gap-1">
+                    <RefreshCw className="h-3.5 w-3.5" /> Renew / Change plan
+                  </button>
+                  {c.pending_package && (
+                    <span className="text-[10px] font-semibold text-secondary bg-secondary/10 rounded-full px-2 py-0.5">Downgrade → {c.pending_package.name}</span>
+                  )}
                 </div>
               </div>
             </div>
           );
         })}
       </div>
+
+      {renewFor && (
+        <RenewPackageDialog
+          open={!!renewFor}
+          onClose={() => setRenewFor(null)}
+          kind="ad"
+          entityId={renewFor.id}
+          currentPackageId={renewFor.package_id}
+          currentPrice={Number(renewFor.ad_packages?.price ?? 0)}
+          pendingPackageName={renewFor.pending_package?.name}
+          onSuccess={invalidate}
+        />
+      )}
 
       {scheduleFor && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
