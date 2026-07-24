@@ -36,13 +36,17 @@ export function Header() {
   const [menu, setMenu] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const [agentsOpen, setAgentsOpen] = useState(false);
+  const [mobileAgentsOpen, setMobileAgentsOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  const agentsRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { isAdmin } = useRoles();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const moreActive = moreItems.some((m) => pathname === m.to);
+  const agentsActive = agentsItems.some((m) => pathname === m.to);
 
   // Close on outside click / Esc
   useEffect(() => {
