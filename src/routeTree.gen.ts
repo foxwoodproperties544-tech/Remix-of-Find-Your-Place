@@ -56,7 +56,9 @@ import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category.$category'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
+import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
+import { Route as AuthenticatedDashboardPaymentHistoryRouteImport } from './routes/_authenticated/dashboard.payment-history'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardMyAppointmentsRouteImport } from './routes/_authenticated/dashboard.my-appointments'
 import { Route as AuthenticatedDashboardMyAdsRouteImport } from './routes/_authenticated/dashboard.my-ads'
@@ -85,10 +87,12 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
+import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api/public/hooks/subscription-scan'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
+import { Route as AuthenticatedDashboardInvoiceIdRouteImport } from './routes/_authenticated/dashboard.invoice.$id'
 import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 import { Route as AuthenticatedDashboardBlogNewRouteImport } from './routes/_authenticated/dashboard.blog.new'
@@ -334,10 +338,22 @@ const AuthenticatedDashboardUpgradeRoute =
     path: '/dashboard/upgrade',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardSubscriptionRoute =
+  AuthenticatedDashboardSubscriptionRouteImport.update({
+    id: '/dashboard/subscription',
+    path: '/dashboard/subscription',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardProfileRoute =
   AuthenticatedDashboardProfileRouteImport.update({
     id: '/dashboard/profile',
     path: '/dashboard/profile',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardPaymentHistoryRoute =
+  AuthenticatedDashboardPaymentHistoryRouteImport.update({
+    id: '/dashboard/payment-history',
+    path: '/dashboard/payment-history',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardNewRoute =
@@ -503,6 +519,12 @@ const AuthenticatedDashboardBlogIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedDashboardBlogRoute,
   } as any)
+const ApiPublicHooksSubscriptionScanRoute =
+  ApiPublicHooksSubscriptionScanRouteImport.update({
+    id: '/api/public/hooks/subscription-scan',
+    path: '/api/public/hooks/subscription-scan',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedDashboardVerifyIdRoute =
   AuthenticatedDashboardVerifyIdRouteImport.update({
     id: '/dashboard/verify/$id',
@@ -526,6 +548,12 @@ const AuthenticatedDashboardLeadsIdRoute =
     id: '/$id',
     path: '/$id',
     getParentRoute: () => AuthenticatedDashboardLeadsRoute,
+  } as any)
+const AuthenticatedDashboardInvoiceIdRoute =
+  AuthenticatedDashboardInvoiceIdRouteImport.update({
+    id: '/dashboard/invoice/$id',
+    path: '/dashboard/invoice/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardFeatureIdRoute =
   AuthenticatedDashboardFeatureIdRouteImport.update({
@@ -632,7 +660,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -643,10 +673,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -718,7 +750,9 @@ export interface FileRoutesByTo {
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -729,10 +763,12 @@ export interface FileRoutesByTo {
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -807,7 +843,9 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/_authenticated/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/_authenticated/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -818,10 +856,12 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/_authenticated/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
+  '/_authenticated/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -896,7 +936,9 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
+    | '/dashboard/payment-history'
     | '/dashboard/profile'
+    | '/dashboard/subscription'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/blog/category/$category'
@@ -907,10 +949,12 @@ export interface FileRouteTypes {
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
+    | '/dashboard/invoice/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
@@ -982,7 +1026,9 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
+    | '/dashboard/payment-history'
     | '/dashboard/profile'
+    | '/dashboard/subscription'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/blog/category/$category'
@@ -993,10 +1039,12 @@ export interface FileRouteTypes {
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
+    | '/dashboard/invoice/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
     | '/dashboard/verify/$id'
+    | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
@@ -1070,7 +1118,9 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/my-ads'
     | '/_authenticated/dashboard/my-appointments'
     | '/_authenticated/dashboard/new'
+    | '/_authenticated/dashboard/payment-history'
     | '/_authenticated/dashboard/profile'
+    | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
     | '/blog/category/$category'
@@ -1081,10 +1131,12 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/blog/new'
     | '/_authenticated/dashboard/edit/$id'
     | '/_authenticated/dashboard/feature/$id'
+    | '/_authenticated/dashboard/invoice/$id'
     | '/_authenticated/dashboard/leads/$id'
     | '/_authenticated/dashboard/leads/new'
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/verify/$id'
+    | '/api/public/hooks/subscription-scan'
     | '/_authenticated/dashboard/blog/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
@@ -1132,6 +1184,7 @@ export interface RootRouteChildren {
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
+  ApiPublicHooksSubscriptionScanRoute: typeof ApiPublicHooksSubscriptionScanRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1465,11 +1518,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardUpgradeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/subscription': {
+      id: '/_authenticated/dashboard/subscription'
+      path: '/dashboard/subscription'
+      fullPath: '/dashboard/subscription'
+      preLoaderRoute: typeof AuthenticatedDashboardSubscriptionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/profile': {
       id: '/_authenticated/dashboard/profile'
       path: '/dashboard/profile'
       fullPath: '/dashboard/profile'
       preLoaderRoute: typeof AuthenticatedDashboardProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/payment-history': {
+      id: '/_authenticated/dashboard/payment-history'
+      path: '/dashboard/payment-history'
+      fullPath: '/dashboard/payment-history'
+      preLoaderRoute: typeof AuthenticatedDashboardPaymentHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/new': {
@@ -1668,6 +1735,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBlogIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardBlogRoute
     }
+    '/api/public/hooks/subscription-scan': {
+      id: '/api/public/hooks/subscription-scan'
+      path: '/api/public/hooks/subscription-scan'
+      fullPath: '/api/public/hooks/subscription-scan'
+      preLoaderRoute: typeof ApiPublicHooksSubscriptionScanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/dashboard/verify/$id': {
       id: '/_authenticated/dashboard/verify/$id'
       path: '/dashboard/verify/$id'
@@ -1695,6 +1769,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/leads/$id'
       preLoaderRoute: typeof AuthenticatedDashboardLeadsIdRouteImport
       parentRoute: typeof AuthenticatedDashboardLeadsRoute
+    }
+    '/_authenticated/dashboard/invoice/$id': {
+      id: '/_authenticated/dashboard/invoice/$id'
+      path: '/dashboard/invoice/$id'
+      fullPath: '/dashboard/invoice/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardInvoiceIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/feature/$id': {
       id: '/_authenticated/dashboard/feature/$id'
@@ -1847,11 +1928,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardMyAdsRoute: typeof AuthenticatedDashboardMyAdsRoute
   AuthenticatedDashboardMyAppointmentsRoute: typeof AuthenticatedDashboardMyAppointmentsRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
+  AuthenticatedDashboardPaymentHistoryRoute: typeof AuthenticatedDashboardPaymentHistoryRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
+  AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
   AuthenticatedDashboardFeatureIdRoute: typeof AuthenticatedDashboardFeatureIdRoute
+  AuthenticatedDashboardInvoiceIdRoute: typeof AuthenticatedDashboardInvoiceIdRoute
   AuthenticatedDashboardPayIdRoute: typeof AuthenticatedDashboardPayIdRoute
   AuthenticatedDashboardVerifyIdRoute: typeof AuthenticatedDashboardVerifyIdRoute
 }
@@ -1877,11 +1961,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardMyAppointmentsRoute:
     AuthenticatedDashboardMyAppointmentsRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
+  AuthenticatedDashboardPaymentHistoryRoute:
+    AuthenticatedDashboardPaymentHistoryRoute,
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
+  AuthenticatedDashboardSubscriptionRoute:
+    AuthenticatedDashboardSubscriptionRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
   AuthenticatedDashboardFeatureIdRoute: AuthenticatedDashboardFeatureIdRoute,
+  AuthenticatedDashboardInvoiceIdRoute: AuthenticatedDashboardInvoiceIdRoute,
   AuthenticatedDashboardPayIdRoute: AuthenticatedDashboardPayIdRoute,
   AuthenticatedDashboardVerifyIdRoute: AuthenticatedDashboardVerifyIdRoute,
 }
@@ -1943,17 +2032,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
   BlogTagTagRoute: BlogTagTagRoute,
+  ApiPublicHooksSubscriptionScanRoute: ApiPublicHooksSubscriptionScanRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
