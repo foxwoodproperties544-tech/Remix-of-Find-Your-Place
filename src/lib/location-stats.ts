@@ -1,4 +1,4 @@
-import type { Property } from "@/lib/properties";
+import type { Property } from "@/lib/mock-data";
 
 const KES = new Intl.NumberFormat("en-KE", { style: "currency", currency: "KES", maximumFractionDigits: 0 });
 export const fmt = (n: number) => KES.format(Math.round(n));
@@ -41,7 +41,7 @@ export function computeCategoryStats(listings: Property[]): CategoryStat[] {
 export function computeTypeStats(listings: Property[]): CategoryStat[] {
   const groups = new Map<string, number[]>();
   for (const p of listings) {
-    const t = (p.property_type ?? "").trim();
+    const t = (p.type ?? "").trim();
     const price = Number(p.price);
     if (!t || !Number.isFinite(price) || price <= 0) continue;
     if (!groups.has(t)) groups.set(t, []);

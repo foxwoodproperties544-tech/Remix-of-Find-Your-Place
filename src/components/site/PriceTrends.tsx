@@ -1,6 +1,6 @@
 import { TrendingUp } from "lucide-react";
 import { computeCategoryStats, computeTypeStats, fmt } from "@/lib/location-stats";
-import type { Property } from "@/lib/properties";
+import type { Property } from "@/lib/mock-data";
 
 export function PriceTrends({ listings, label }: { listings: Property[]; label: string }) {
   const byCat = computeCategoryStats(listings);
