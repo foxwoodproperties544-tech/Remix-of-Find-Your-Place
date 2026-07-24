@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
   Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
+  Phone, MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -147,6 +148,19 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             ))}
 
             <div className="pt-4 border-t border-white/10">
+              <div className="px-3 text-[10px] uppercase tracking-wider text-primary-foreground/60 font-semibold mb-2">Support</div>
+              <div className="px-3 pb-3">
+                <div className="text-xs text-primary-foreground/80 mb-2">Need help? Call or WhatsApp</div>
+                <div className="text-sm font-semibold text-white">+254 759 556 026</div>
+                <div className="mt-2 flex gap-2">
+                  <a href="tel:+254759556026" className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg bg-white/10 hover:bg-white/20 px-2 py-1.5 text-xs font-semibold">
+                    <Phone className="h-3.5 w-3.5" /> Call
+                  </a>
+                  <a href="https://wa.me/254759556026?text=Hello%20Foxwood%20Properties%2C%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg bg-[#25D366] hover:opacity-90 px-2 py-1.5 text-xs font-semibold">
+                    <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                  </a>
+                </div>
+              </div>
               <button onClick={signOut} className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-primary-foreground/80 hover:bg-white/10 hover:text-white">
                 <LogOut className="h-4 w-4" /> Sign out
               </button>
