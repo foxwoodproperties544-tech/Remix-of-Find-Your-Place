@@ -1021,7 +1021,7 @@ export type Database = {
           result_code: number | null
           result_desc: string | null
           status: Database["public"]["Enums"]["mpesa_status"]
-          tier: Database["public"]["Enums"]["agent_tier"] | null
+          tier: string | null
           updated_at: string
           user_id: string
         }
@@ -1043,7 +1043,7 @@ export type Database = {
           result_code?: number | null
           result_desc?: string | null
           status?: Database["public"]["Enums"]["mpesa_status"]
-          tier?: Database["public"]["Enums"]["agent_tier"] | null
+          tier?: string | null
           updated_at?: string
           user_id: string
         }
@@ -1065,7 +1065,7 @@ export type Database = {
           result_code?: number | null
           result_desc?: string | null
           status?: Database["public"]["Enums"]["mpesa_status"]
-          tier?: Database["public"]["Enums"]["agent_tier"] | null
+          tier?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -1162,6 +1162,24 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1172,12 +1190,16 @@ export type Database = {
           id: string
           kyc_status: Database["public"]["Enums"]["kyc_status"]
           kyc_verified_at: string | null
+          last_expiry_reminder_days: number | null
           listing_quota: number
+          pending_tier: string | null
           phone: string | null
           phone_verified: boolean
           phone_verified_at: string | null
           role_primary: string | null
-          tier: Database["public"]["Enums"]["agent_tier"]
+          subscription_started_at: string | null
+          subscription_suspended: boolean
+          tier: string
           tier_expires_at: string | null
           updated_at: string
           verified: boolean
@@ -1192,12 +1214,16 @@ export type Database = {
           id: string
           kyc_status?: Database["public"]["Enums"]["kyc_status"]
           kyc_verified_at?: string | null
+          last_expiry_reminder_days?: number | null
           listing_quota?: number
+          pending_tier?: string | null
           phone?: string | null
           phone_verified?: boolean
           phone_verified_at?: string | null
           role_primary?: string | null
-          tier?: Database["public"]["Enums"]["agent_tier"]
+          subscription_started_at?: string | null
+          subscription_suspended?: boolean
+          tier?: string
           tier_expires_at?: string | null
           updated_at?: string
           verified?: boolean
@@ -1212,12 +1238,16 @@ export type Database = {
           id?: string
           kyc_status?: Database["public"]["Enums"]["kyc_status"]
           kyc_verified_at?: string | null
+          last_expiry_reminder_days?: number | null
           listing_quota?: number
+          pending_tier?: string | null
           phone?: string | null
           phone_verified?: boolean
           phone_verified_at?: string | null
           role_primary?: string | null
-          tier?: Database["public"]["Enums"]["agent_tier"]
+          subscription_started_at?: string | null
+          subscription_suspended?: boolean
+          tier?: string
           tier_expires_at?: string | null
           updated_at?: string
           verified?: boolean
@@ -1778,6 +1808,7 @@ export type Database = {
         Returns: boolean
       }
       run_saved_search_alerts: { Args: never; Returns: number }
+      send_subscription_reminders: { Args: never; Returns: number }
     }
     Enums: {
       agent_tier: "free" | "basic" | "pro" | "elite"
