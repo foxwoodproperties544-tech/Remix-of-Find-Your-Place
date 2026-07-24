@@ -1,6 +1,7 @@
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown, X, AlertTriangle } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { KENYA_COUNTIES as counties, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+import { TownCombobox } from "@/components/site/TownCombobox";
 import {
   CATEGORIES,
   TYPE_GROUPS,
