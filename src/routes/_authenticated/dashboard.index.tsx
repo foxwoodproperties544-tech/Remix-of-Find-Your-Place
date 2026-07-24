@@ -52,6 +52,17 @@ function Dashboard() {
 
   const propertyIds = useMemo(() => (data ?? []).map(p => p.id), [data]);
 
+  const purchases = useQuery<any[]>({
+    queryKey: ["my-listing-purchases", user?.id],
+    enabled: !!user,
+    queryFn: () => listPurchasesFn(),
+  });
+  const purchasesByProp = useMemo(() => {
+    const m = new Map<string, any>();
+    for (const row of purchases.data ?? []) m.set(row.property_id, row);
+    return m;
+  }, [purchases.data]);
+
   const insights = useQuery({
     queryKey: ["my-insights", user?.id, range, propertyIds.length],
     enabled: !!user && propertyIds.length > 0,
