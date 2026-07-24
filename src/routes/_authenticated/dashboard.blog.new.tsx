@@ -6,6 +6,7 @@ import { BlogEditor } from "@/components/blog/BlogEditor";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { toast } from "sonner";
 import { Loader2, Save, Send, Eye, FileText } from "lucide-react";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/blog/new")({
   component: NewBlogPost,
@@ -79,6 +80,9 @@ function NewBlogPost() {
 
   return (
     <DashboardShell>
+      <div className="mb-4">
+        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help submitting a blog post." />
+      </div>
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <div className="flex items-center gap-2 flex-wrap">

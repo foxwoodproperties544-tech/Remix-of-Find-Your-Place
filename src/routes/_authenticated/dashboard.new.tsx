@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin } from "lucide-react";
 import { z } from "zod";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/new")({
   component: NewListing,
@@ -261,6 +262,10 @@ function NewListing() {
       <div className="mt-4 flex items-start gap-2 rounded-xl border border-primary/20 bg-primary-soft/40 p-3 text-xs text-primary">
         <Info className="h-4 w-4 mt-0.5 shrink-0" />
         <span>Add clear, high-quality photos to help your listing stand out. You can drag & drop multiple images at once.</span>
+      </div>
+
+      <div className="mt-4">
+        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help posting a listing." />
       </div>
 
       <form onSubmit={(e) => save("submit", e)} className="mt-8 space-y-6" noValidate>
