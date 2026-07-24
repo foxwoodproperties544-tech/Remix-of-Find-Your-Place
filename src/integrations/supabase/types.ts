@@ -27,6 +27,7 @@ export type Database = {
           mpesa_transaction_id: string | null
           owner_id: string
           package_id: string
+          pending_package_id: string | null
           placement: string
           starts_at: string | null
           status: string
@@ -46,6 +47,7 @@ export type Database = {
           mpesa_transaction_id?: string | null
           owner_id: string
           package_id: string
+          pending_package_id?: string | null
           placement: string
           starts_at?: string | null
           status?: string
@@ -65,6 +67,7 @@ export type Database = {
           mpesa_transaction_id?: string | null
           owner_id?: string
           package_id?: string
+          pending_package_id?: string | null
           placement?: string
           starts_at?: string | null
           status?: string
@@ -76,6 +79,13 @@ export type Database = {
           {
             foreignKeyName: "ad_campaigns_package_id_fkey"
             columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "ad_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ad_campaigns_pending_package_id_fkey"
+            columns: ["pending_package_id"]
             isOneToOne: false
             referencedRelation: "ad_packages"
             referencedColumns: ["id"]
@@ -418,6 +428,7 @@ export type Database = {
           id: string
           mpesa_transaction_id: string | null
           package_id: string | null
+          pending_package_id: string | null
           post_id: string
           status: string
           updated_at: string
@@ -431,6 +442,7 @@ export type Database = {
           id?: string
           mpesa_transaction_id?: string | null
           package_id?: string | null
+          pending_package_id?: string | null
           post_id: string
           status?: string
           updated_at?: string
@@ -444,6 +456,7 @@ export type Database = {
           id?: string
           mpesa_transaction_id?: string | null
           package_id?: string | null
+          pending_package_id?: string | null
           post_id?: string
           status?: string
           updated_at?: string
@@ -460,6 +473,13 @@ export type Database = {
           {
             foreignKeyName: "blog_post_purchases_package_id_fkey"
             columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "blog_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_post_purchases_pending_package_id_fkey"
+            columns: ["pending_package_id"]
             isOneToOne: false
             referencedRelation: "blog_packages"
             referencedColumns: ["id"]
@@ -1432,6 +1452,7 @@ export type Database = {
           mpesa_transaction_id: string | null
           owner_id: string
           package_id: string
+          pending_package_id: string | null
           property_id: string
           status: string
           updated_at: string
@@ -1445,6 +1466,7 @@ export type Database = {
           mpesa_transaction_id?: string | null
           owner_id: string
           package_id: string
+          pending_package_id?: string | null
           property_id: string
           status?: string
           updated_at?: string
@@ -1458,6 +1480,7 @@ export type Database = {
           mpesa_transaction_id?: string | null
           owner_id?: string
           package_id?: string
+          pending_package_id?: string | null
           property_id?: string
           status?: string
           updated_at?: string
@@ -1473,6 +1496,13 @@ export type Database = {
           {
             foreignKeyName: "property_package_purchases_package_id_fkey"
             columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "listing_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_package_purchases_pending_package_id_fkey"
+            columns: ["pending_package_id"]
             isOneToOne: false
             referencedRelation: "listing_packages"
             referencedColumns: ["id"]
@@ -1600,6 +1630,39 @@ export type Database = {
           notify_email?: boolean
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      scan_runs: {
+        Row: {
+          duration_ms: number
+          error_message: string | null
+          error_step: string | null
+          id: string
+          ok: boolean
+          ran_at: string
+          reminders_sent: number
+          triggered_by: string
+        }
+        Insert: {
+          duration_ms?: number
+          error_message?: string | null
+          error_step?: string | null
+          id?: string
+          ok: boolean
+          ran_at?: string
+          reminders_sent?: number
+          triggered_by?: string
+        }
+        Update: {
+          duration_ms?: number
+          error_message?: string | null
+          error_step?: string | null
+          id?: string
+          ok?: boolean
+          ran_at?: string
+          reminders_sent?: number
+          triggered_by?: string
         }
         Relationships: []
       }

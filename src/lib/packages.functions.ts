@@ -214,7 +214,7 @@ export const listPropertyPackages = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("property_package_purchases")
-      .select("*, listing_packages(name, slug, badge_color, price, duration_days)")
+      .select("*, listing_packages!property_package_purchases_package_id_fkey(name, slug, badge_color, price, duration_days), pending_package:listing_packages!property_package_purchases_pending_package_id_fkey(name, price, duration_days)")
       .eq("property_id", data.propertyId)
       .order("created_at", { ascending: false });
     if (error) throw error;
@@ -231,7 +231,7 @@ export const adminListRecentPurchases = createServerFn({ method: "GET" })
     await assertAdmin(context.supabase, context.userId);
     let q = context.supabase
       .from("property_package_purchases")
-      .select("*, listing_packages(name, price, duration_days), properties(title, status)")
+      .select("*, listing_packages!property_package_purchases_package_id_fkey(name, price, duration_days), properties(title, status)")
       .order("created_at", { ascending: false })
       .limit(100);
     if (data.status !== "all") q = q.eq("status", data.status);
@@ -257,7 +257,7 @@ export const adminMarkPurchasePaid = createServerFn({ method: "POST" })
 
     const { data: purchase, error: pErr } = await supabaseAdmin
       .from("property_package_purchases")
-      .select("*, listing_packages(*)")
+      .select("*, listing_packages!property_package_purchases_package_id_fkey(*)")
       .eq("id", data.purchaseId)
       .maybeSingle();
     if (pErr || !purchase) throw new Error("Purchase not found");

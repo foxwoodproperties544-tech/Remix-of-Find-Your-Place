@@ -118,43 +118,89 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
             const { data: pkg } = await supabaseAdmin
               .from("listing_packages").select("*").eq("id", txn.package_id).maybeSingle();
             const days = pkg?.duration_days ?? txn.duration_days ?? 30;
-            const expires = new Date(Date.now() + days * 86400_000).toISOString();
-            // Activate the pending purchase
-            await supabaseAdmin.from("property_package_purchases").update({
-              status: "active",
-              activated_at: new Date().toISOString(),
-              expires_at: expires,
-            }).eq("mpesa_transaction_id", txn.id);
-            // Push property to admin review with the package's perks applied
-            await supabaseAdmin.from("properties").update({
-              status: "pending",
-              featured: pkg?.is_featured ?? false,
-              is_featured: pkg?.is_featured ?? false,
-              featured_until: pkg?.is_featured ? expires : null,
-            }).eq("id", txn.property_id);
+            const meta = (txn as any).metadata ?? {};
+            const renewalOf = meta?.renewal_of as string | undefined;
+            if (renewalOf) {
+              // Renew/upgrade existing purchase
+              const { data: cur } = await supabaseAdmin
+                .from("property_package_purchases").select("expires_at").eq("id", renewalOf).maybeSingle();
+              const base = meta.mode === "renew" && cur?.expires_at && new Date(cur.expires_at).getTime() > Date.now()
+                ? new Date(cur.expires_at).getTime() : Date.now();
+              const expires = new Date(base + days * 86400_000).toISOString();
+              await supabaseAdmin.from("property_package_purchases").update({
+                package_id: txn.package_id, status: "active",
+                activated_at: new Date().toISOString(), expires_at: expires,
+                pending_package_id: null, mpesa_transaction_id: txn.id,
+              }).eq("id", renewalOf);
+              await supabaseAdmin.from("properties").update({
+                status: "published",
+                featured: pkg?.is_featured ?? false,
+                is_featured: pkg?.is_featured ?? false,
+                featured_until: pkg?.is_featured ? expires : null,
+              }).eq("id", txn.property_id);
+            } else {
+              const expires = new Date(Date.now() + days * 86400_000).toISOString();
+              await supabaseAdmin.from("property_package_purchases").update({
+                status: "active", activated_at: new Date().toISOString(), expires_at: expires,
+              }).eq("mpesa_transaction_id", txn.id);
+              await supabaseAdmin.from("properties").update({
+                status: "pending",
+                featured: pkg?.is_featured ?? false,
+                is_featured: pkg?.is_featured ?? false,
+                featured_until: pkg?.is_featured ? expires : null,
+              }).eq("id", txn.property_id);
+            }
           } else if (txn.purpose === "advertisement" && (txn as any).ad_campaign_id) {
             const campaignId = (txn as any).ad_campaign_id as string;
-            // Move campaign into admin review; days start when admin approves.
-            await supabaseAdmin.from("ad_campaigns").update({
-              status: "pending_review",
-            }).eq("id", campaignId);
+            const meta = (txn as any).metadata ?? {};
+            if (meta?.renewal) {
+              const pkgId = meta.package_id as string | undefined;
+              const { data: pkg } = pkgId
+                ? await supabaseAdmin.from("ad_packages").select("*").eq("id", pkgId).maybeSingle()
+                : { data: null as any };
+              const days = pkg?.duration_days ?? txn.duration_days ?? 30;
+              const { data: cur } = await supabaseAdmin
+                .from("ad_campaigns").select("expires_at").eq("id", campaignId).maybeSingle();
+              const base = meta.mode === "renew" && cur?.expires_at && new Date(cur.expires_at).getTime() > Date.now()
+                ? new Date(cur.expires_at).getTime() : Date.now();
+              const expires = new Date(base + days * 86400_000).toISOString();
+              await supabaseAdmin.from("ad_campaigns").update({
+                package_id: pkgId ?? undefined, placement: pkg?.placement ?? undefined,
+                status: "active", starts_at: new Date().toISOString(),
+                expires_at: expires, pending_package_id: null,
+              }).eq("id", campaignId);
+            } else {
+              await supabaseAdmin.from("ad_campaigns").update({ status: "pending_review" }).eq("id", campaignId);
+            }
           } else if (txn.purpose === "blog_submission" && (txn as any).blog_post_id && txn.package_id) {
             const postId = (txn as any).blog_post_id as string;
+            const meta = (txn as any).metadata ?? {};
             const { data: pkg } = await supabaseAdmin
               .from("blog_packages").select("*").eq("id", txn.package_id).maybeSingle();
             const days = pkg?.duration_days ?? txn.duration_days ?? 30;
-            const expires = new Date(Date.now() + days * 86400_000).toISOString();
-            await supabaseAdmin.from("blog_post_purchases").update({
-              status: "active",
-              activated_at: new Date().toISOString(),
-              expires_at: expires,
-            }).eq("mpesa_transaction_id", txn.id);
-            await supabaseAdmin.from("blog_posts").update({
-              status: "pending_review",
-              submitted_at: new Date().toISOString(),
-              expires_at: expires,
-              is_sponsored: pkg?.is_sponsored ?? false,
-            }).eq("id", postId);
+            if (meta?.renewal) {
+              const { data: cur } = await supabaseAdmin
+                .from("blog_posts").select("expires_at").eq("id", postId).maybeSingle();
+              const base = meta.mode === "renew" && cur?.expires_at && new Date(cur.expires_at).getTime() > Date.now()
+                ? new Date(cur.expires_at).getTime() : Date.now();
+              const expires = new Date(base + days * 86400_000).toISOString();
+              await supabaseAdmin.from("blog_post_purchases").update({
+                status: "active", activated_at: new Date().toISOString(), expires_at: expires,
+              }).eq("mpesa_transaction_id", txn.id);
+              await supabaseAdmin.from("blog_posts").update({
+                status: "published", package_id: txn.package_id, expires_at: expires,
+                is_sponsored: pkg?.is_sponsored ?? false,
+              }).eq("id", postId);
+            } else {
+              const expires = new Date(Date.now() + days * 86400_000).toISOString();
+              await supabaseAdmin.from("blog_post_purchases").update({
+                status: "active", activated_at: new Date().toISOString(), expires_at: expires,
+              }).eq("mpesa_transaction_id", txn.id);
+              await supabaseAdmin.from("blog_posts").update({
+                status: "pending_review", submitted_at: new Date().toISOString(), expires_at: expires,
+                is_sponsored: pkg?.is_sponsored ?? false,
+              }).eq("id", postId);
+            }
           }
 
           await supabaseAdmin.from("notifications").insert({

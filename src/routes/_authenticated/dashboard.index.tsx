@@ -9,6 +9,9 @@ import { PlusCircle, Trash2, ExternalLink, Home, CheckCircle2, Clock, XCircle, E
 import { toast } from "sonner";
 import { useMemo, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
+import { RenewPackageDialog } from "@/components/site/RenewPackageDialog";
+import { listMyActiveListingPurchases } from "@/lib/renewals.functions";
+import { useServerFn } from "@tanstack/react-start";
 import heroTools from "@/assets/hero-tools.jpg";
 
 
@@ -32,6 +35,8 @@ function Dashboard() {
   const { isAgent, isAdmin, loading: rolesLoading } = useRoles();
   const qc = useQueryClient();
   const [range, setRange] = useState<RangeKey>("30");
+  const [renewFor, setRenewFor] = useState<{ purchase: any; property: any } | null>(null);
+  const listPurchasesFn = useServerFn(listMyActiveListingPurchases);
 
   if (!rolesLoading && !isAgent && !isAdmin) {
     return <Navigate to="/dashboard/account" replace />;
@@ -46,6 +51,17 @@ function Dashboard() {
   });
 
   const propertyIds = useMemo(() => (data ?? []).map(p => p.id), [data]);
+
+  const purchases = useQuery<any[]>({
+    queryKey: ["my-listing-purchases", user?.id],
+    enabled: !!user,
+    queryFn: () => listPurchasesFn(),
+  });
+  const purchasesByProp = useMemo(() => {
+    const m = new Map<string, any>();
+    for (const row of purchases.data ?? []) m.set(row.property_id, row);
+    return m;
+  }, [purchases.data]);
 
   const insights = useQuery({
     queryKey: ["my-insights", user?.id, range, propertyIds.length],
@@ -217,6 +233,11 @@ function Dashboard() {
                     {(p.status === "rejected" || p.status === "draft") && (
                       <button onClick={() => renew.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-primary" title="Submit for review"><RefreshCw className="h-4 w-4" /></button>
                     )}
+                    {purchasesByProp.get(p.id) && (
+                      <button onClick={() => setRenewFor({ purchase: purchasesByProp.get(p.id), property: p })} className="btn-ghost !px-3 !py-2 text-primary text-xs inline-flex items-center gap-1" title="Renew / change plan">
+                        <RefreshCw className="h-3.5 w-3.5" /> Plan
+                      </button>
+                    )}
                     <button onClick={() => confirm("Delete this listing?") && del.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </div>
@@ -226,6 +247,19 @@ function Dashboard() {
         )}
         </div>
       </div>
+
+      {renewFor && (
+        <RenewPackageDialog
+          open={!!renewFor}
+          onClose={() => setRenewFor(null)}
+          kind="listing"
+          entityId={renewFor.purchase.id}
+          currentPackageId={renewFor.purchase.package_id}
+          currentPrice={Number(renewFor.purchase.listing_packages?.price ?? 0)}
+          pendingPackageName={renewFor.purchase.pending_package?.name}
+          onSuccess={() => { qc.invalidateQueries({ queryKey: ["my-listing-purchases"] }); qc.invalidateQueries({ queryKey: ["my-properties"] }); }}
+        />
+      )}
     </>
   );
 }

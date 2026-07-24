@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { useState } from "react";
 import { listMyBlogPosts } from "@/lib/blog-submission.functions";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
-import { PlusCircle, FileText, Clock, CheckCircle2, XCircle, AlertTriangle, Archive, ExternalLink, Pencil, CreditCard } from "lucide-react";
+import { PlusCircle, FileText, Clock, CheckCircle2, XCircle, AlertTriangle, Archive, ExternalLink, Pencil, CreditCard, RefreshCw } from "lucide-react";
+import { RenewPackageDialog } from "@/components/site/RenewPackageDialog";
 
 export const Route = createFileRoute("/_authenticated/dashboard/blog/")({
   component: MyBlogPage,
@@ -24,7 +26,9 @@ const STATUS_META: Record<string, { label: string; icon: any; className: string 
 };
 
 function MyBlogPage() {
+  const qc = useQueryClient();
   const listFn = useServerFn(listMyBlogPosts);
+  const [renewFor, setRenewFor] = useState<any | null>(null);
   const { data: posts, isLoading } = useQuery({
     queryKey: ["my-blog-posts"],
     queryFn: () => listFn(),
@@ -102,6 +106,11 @@ function MyBlogPage() {
                         <CreditCard className="h-3.5 w-3.5" /> {p.status === "expired" ? "Renew" : "Choose package & submit"}
                       </Link>
                     )}
+                    {["published", "approved"].includes(p.status) && (
+                      <button onClick={() => setRenewFor(p)} className="btn-ghost text-sm inline-flex items-center gap-1">
+                        <RefreshCw className="h-3.5 w-3.5" /> Manage plan
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -109,6 +118,18 @@ function MyBlogPage() {
           </div>
         )}
       </div>
+
+      {renewFor && (
+        <RenewPackageDialog
+          open={!!renewFor}
+          onClose={() => setRenewFor(null)}
+          kind="blog"
+          entityId={renewFor.id}
+          currentPackageId={renewFor.package_id}
+          currentPrice={Number(renewFor.blog_packages?.price ?? 0)}
+          onSuccess={() => qc.invalidateQueries({ queryKey: ["my-blog-posts"] })}
+        />
+      )}
     </DashboardShell>
   );
 }

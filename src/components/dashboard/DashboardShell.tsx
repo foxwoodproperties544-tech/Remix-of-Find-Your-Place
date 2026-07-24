@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
-  Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown,
+  Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -73,8 +73,9 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/blog-packages", label: "Blog packages", icon: PlusCircle },
         { to: "/admin/tier-plans", label: "Agent tier plans", icon: PlusCircle },
 
-        { to: "/admin/audit", label: "Audit logs", icon: ShieldCheck },
-        { to: "/admin/pwa-analytics", label: "PWA install analytics", icon: LayoutDashboard },
+       { to: "/admin/audit", label: "Audit logs", icon: ShieldCheck },
+       { to: "/admin/scan-runs", label: "Subscription scan runs", icon: RefreshCw },
+       { to: "/admin/pwa-analytics", label: "PWA install analytics", icon: LayoutDashboard },
       ],
     });
   }
