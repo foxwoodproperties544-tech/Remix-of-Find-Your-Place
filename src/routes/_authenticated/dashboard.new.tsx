@@ -403,12 +403,26 @@ function NewListing() {
             </div>
           )}
           <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1"><ImageIcon className="h-3 w-3" /> The first photo becomes the cover image.</div>
+          {duplicateWarnings.length > 0 && (
+            <div className="mt-3 rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs text-amber-800">
+              <div className="font-semibold mb-1">Possible duplicate photos detected</div>
+              <ul className="list-disc pl-5 space-y-0.5">
+                {duplicateWarnings.slice(-5).map((w, i) => <li key={i}>{w}</li>)}
+              </ul>
+              <p className="mt-1">Reused photos hurt trust and may be flagged by our moderators.</p>
+            </div>
+          )}
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
           <div className="md:col-span-3">
             <label className={label}>Video URL (YouTube, Vimeo, or MP4)</label>
             <input value={form.video_url} onChange={(e) => upd("video_url", e.target.value)} className={input} placeholder="https://youtu.be/..." />
+          </div>
+          <div className="md:col-span-3">
+            <label className={label}>360° virtual tour URL (Matterport, Kuula, or YouTube 360)</label>
+            <input value={form.tour_url} onChange={(e) => upd("tour_url", e.target.value)} className={input} placeholder="https://my.matterport.com/show/?m=..." />
+            <p className="mt-1 text-xs text-muted-foreground">Buyers spend up to 3× longer on listings with a 360° tour.</p>
           </div>
           <div>
             <label className={label}><MapPin className="inline h-3 w-3" /> Latitude</label>
