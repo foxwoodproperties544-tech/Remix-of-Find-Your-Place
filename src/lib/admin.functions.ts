@@ -34,6 +34,8 @@ export const decideAccountVerification = createServerFn({ method: "POST" })
         ? "Congratulations — your Foxwood account is now verified."
         : `Your verification request was not approved.${data.reason ? " Reason: " + data.reason : ""}`,
       link: "/dashboard/profile",
+    });
+
     const { writeAudit } = await import("./audit.server");
     await writeAudit({
       actorId: context.userId,
