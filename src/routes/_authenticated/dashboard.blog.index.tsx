@@ -106,6 +106,11 @@ function MyBlogPage() {
                         <CreditCard className="h-3.5 w-3.5" /> {p.status === "expired" ? "Renew" : "Choose package & submit"}
                       </Link>
                     )}
+                    {["published", "approved"].includes(p.status) && (
+                      <button onClick={() => setRenewFor(p)} className="btn-ghost text-sm inline-flex items-center gap-1">
+                        <RefreshCw className="h-3.5 w-3.5" /> Manage plan
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -113,6 +118,18 @@ function MyBlogPage() {
           </div>
         )}
       </div>
+
+      {renewFor && (
+        <RenewPackageDialog
+          open={!!renewFor}
+          onClose={() => setRenewFor(null)}
+          kind="blog"
+          entityId={renewFor.id}
+          currentPackageId={renewFor.package_id}
+          currentPrice={Number(renewFor.blog_packages?.price ?? 0)}
+          onSuccess={() => qc.invalidateQueries({ queryKey: ["my-blog-posts"] })}
+        />
+      )}
     </DashboardShell>
   );
 }
