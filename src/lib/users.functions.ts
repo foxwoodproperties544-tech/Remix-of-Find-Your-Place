@@ -10,6 +10,8 @@ export type PublicAgent = {
   bio: string | null;
   verified: boolean | null;
   tier: string | null;
+  tier_expires_at: string | null;
+  subscribed: boolean;
 };
 
 /** Public: list users with an 'agent' role, verified first. */
@@ -22,13 +24,20 @@ export const listPublicAgents = createServerFn({ method: "GET" }).handler(async 
   if (!ids.length) return [] as PublicAgent[];
   const { data, error } = await supabaseAdmin
     .from("profiles")
-    .select("id, full_name, company_name, avatar_url, bio, verified, tier")
+    .select("id, full_name, company_name, avatar_url, bio, verified, tier, tier_expires_at")
     .in("id", ids)
     .order("verified", { ascending: false })
     .order("full_name", { ascending: true })
     .limit(48);
   if (error) throw error;
-  return (data ?? []) as PublicAgent[];
+  const now = Date.now();
+  return (data ?? []).map((p: any) => ({
+    ...p,
+    subscribed:
+      !!p.tier &&
+      p.tier !== "free" &&
+      (!p.tier_expires_at || new Date(p.tier_expires_at).getTime() > now),
+  })) as PublicAgent[];
 });
 
 
