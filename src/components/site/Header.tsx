@@ -236,6 +236,27 @@ export function Header() {
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{n.label}</Link>
             ))}
+            {/* Mobile Agents accordion */}
+            <button
+              type="button"
+              aria-expanded={mobileAgentsOpen}
+              onClick={() => setMobileAgentsOpen((v) => !v)}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${agentsActive ? "text-primary" : ""}`}
+            >
+              <span>Agents</span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${mobileAgentsOpen ? "rotate-180" : ""}`} />
+            </button>
+            {mobileAgentsOpen && (
+              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+                {agentsItems.map((m) => (
+                  <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    activeProps={{ className: "text-primary bg-primary-soft" }}>
+                    {m.label}
+                  </Link>
+                ))}
+              </div>
+            )}
             {/* Mobile More accordion */}
             <button
               type="button"
