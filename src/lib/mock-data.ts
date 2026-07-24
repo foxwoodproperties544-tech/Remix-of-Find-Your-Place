@@ -32,6 +32,8 @@ export interface Property {
   description: string;
   features: string[];
   amenities: string[];
+  lat?: number | null;
+  lng?: number | null;
 }
 
 export { KENYA_COUNTIES as counties } from "./kenya-locations-data";
