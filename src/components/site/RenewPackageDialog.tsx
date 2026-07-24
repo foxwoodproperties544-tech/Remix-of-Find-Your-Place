@@ -47,7 +47,7 @@ export function RenewPackageDialog({
 
   const listFn =
     kind === "listing" ? listActivePackages :
-    kind === "blog"    ? listActiveBlogPackages :
+    kind === "blog"    ? listBlogPackages :
                           listActiveAdPackages;
 
   const { data: packages = [], isLoading } = useQuery<any[]>({
