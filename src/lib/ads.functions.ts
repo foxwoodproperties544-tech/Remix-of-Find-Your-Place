@@ -216,9 +216,9 @@ export const adminApproveCampaign = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { data: c } = await context.supabase
-      .from("ad_campaigns").select("*, ad_packages(duration_days)").eq("id", data.id).single();
+      .from("ad_campaigns").select("*, ad_packages!ad_campaigns_package_id_fkey(duration_days)").eq("id", data.id).single();
     if (!c) throw new Error("Not found");
-    const days = c.ad_packages?.duration_days ?? 7;
+    const days = (c.ad_packages as any)?.duration_days ?? 7;
     const now = new Date();
     const expires = new Date(now.getTime() + days * 86400_000).toISOString();
     const { error } = await context.supabase.from("ad_campaigns").update({
