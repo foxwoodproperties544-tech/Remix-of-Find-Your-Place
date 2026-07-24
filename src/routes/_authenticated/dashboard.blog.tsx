@@ -99,7 +99,7 @@ function MyBlogPage() {
                     )}
                     {needsPayment && (
                       <Link to="/dashboard/blog/$id/pay" params={{ id: p.id }} className="btn-primary btn-primary-hover text-sm inline-flex items-center gap-1">
-                        <CreditCard className="h-3.5 w-3.5" /> {p.status === "expired" ? "Renew" : "Choose package & pay"}
+                        <CreditCard className="h-3.5 w-3.5" /> {p.status === "expired" ? "Renew" : "Choose package & submit"}
                       </Link>
                     )}
                   </div>
