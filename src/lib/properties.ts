@@ -59,6 +59,8 @@ export function toProperty(r: DbPropertyRow): Property {
     description: r.description,
     features: r.features,
     amenities: r.amenities,
+    lat: r.lat ?? null,
+    lng: r.lng ?? null,
   };
 }
 

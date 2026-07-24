@@ -20,6 +20,7 @@ import { AdSlot } from "@/components/site/AdSlot";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
+const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
 
 const searchSchema = z.object({
   category: fallback(z.string(), "").default(""),
@@ -318,20 +319,29 @@ function List() {
             )}
 
             {view === "map" && (
-              <div className="mb-6">
-                <Suspense fallback={<div className="h-[420px] rounded-xl border border-border bg-muted animate-pulse" />}>
-                  <MapFilter
-                    selectedCounty={state.county || undefined}
-                    onSelect={(name) => {
-                      if (KENYA_COUNTIES.includes(name)) patch({ county: name, town: "" });
-                      else {
-                        // town click: try to find owning county
-                        const owning = KENYA_COUNTIES.find((c) => (KENYA_SUBLOCATIONS[c] ?? []).includes(name));
-                        patch({ county: owning ?? state.county, town: name });
-                      }
-                    }}
-                  />
+              <div className="mb-6 space-y-3">
+                <Suspense fallback={<div className="h-[520px] rounded-xl border border-border bg-muted animate-pulse" />}>
+                  <PropertyMap properties={sorted} height={520} />
                 </Suspense>
+                <details className="rounded-xl border border-border bg-card">
+                  <summary className="cursor-pointer px-3 py-2 text-xs font-semibold text-muted-foreground hover:text-foreground">
+                    Filter by county on a map
+                  </summary>
+                  <div className="p-3 pt-0">
+                    <Suspense fallback={<div className="h-[420px] rounded-xl border border-border bg-muted animate-pulse" />}>
+                      <MapFilter
+                        selectedCounty={state.county || undefined}
+                        onSelect={(name) => {
+                          if (KENYA_COUNTIES.includes(name)) patch({ category: state.category, county: name, town: "" });
+                          else {
+                            const owning = KENYA_COUNTIES.find((c) => (KENYA_SUBLOCATIONS[c] ?? []).includes(name));
+                            patch({ county: owning ?? state.county, town: name });
+                          }
+                        }}
+                      />
+                    </Suspense>
+                  </div>
+                </details>
               </div>
             )}
 
