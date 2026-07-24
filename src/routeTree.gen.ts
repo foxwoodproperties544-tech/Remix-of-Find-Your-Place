@@ -15,6 +15,7 @@ import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sit
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MortgageRouteImport } from './routes/mortgage'
 import { Route as ListingPackagesRouteImport } from './routes/listing-packages'
+import { Route as HelpCenterRouteImport } from './routes/help-center'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForAgentsRouteImport } from './routes/for-agents'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -129,6 +130,11 @@ const MortgageRoute = MortgageRouteImport.update({
 const ListingPackagesRoute = ListingPackagesRouteImport.update({
   id: '/listing-packages',
   path: '/listing-packages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpCenterRoute = HelpCenterRouteImport.update({
+  id: '/help-center',
+  path: '/help-center',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -613,6 +619,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
+  '/help-center': typeof HelpCenterRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
@@ -705,6 +712,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
+  '/help-center': typeof HelpCenterRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
@@ -798,6 +806,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
+  '/help-center': typeof HelpCenterRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
@@ -892,6 +901,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/for-agents'
     | '/help'
+    | '/help-center'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
@@ -984,6 +994,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/for-agents'
     | '/help'
+    | '/help-center'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
@@ -1076,6 +1087,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/for-agents'
     | '/help'
+    | '/help-center'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
@@ -1170,6 +1182,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   ForAgentsRoute: typeof ForAgentsRoute
   HelpRoute: typeof HelpRoute
+  HelpCenterRoute: typeof HelpCenterRoute
   ListingPackagesRoute: typeof ListingPackagesRoute
   MortgageRoute: typeof MortgageRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -1242,6 +1255,13 @@ declare module '@tanstack/react-router' {
       path: '/listing-packages'
       fullPath: '/listing-packages'
       preLoaderRoute: typeof ListingPackagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help-center': {
+      id: '/help-center'
+      path: '/help-center'
+      fullPath: '/help-center'
+      preLoaderRoute: typeof HelpCenterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -2027,6 +2047,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   ForAgentsRoute: ForAgentsRoute,
   HelpRoute: HelpRoute,
+  HelpCenterRoute: HelpCenterRoute,
   ListingPackagesRoute: ListingPackagesRoute,
   MortgageRoute: MortgageRoute,
   PrivacyRoute: PrivacyRoute,

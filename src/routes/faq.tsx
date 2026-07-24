@@ -10,9 +10,11 @@ import {
   SUPPORT_PHONE_DISPLAY,
   SUPPORT_PHONE_TEL,
   supportMessageFor,
+  trackFaqEvent,
   trackSupportClick,
   whatsappUrl,
 } from "@/lib/support";
+import { useEffect, useRef } from "react";
 
 const TITLE = "Help & Support FAQ — Foxwood Properties";
 const DESC = "Search answers about buying, renting, listing, payments, verification and support at Foxwood Properties, or reach the team by phone or WhatsApp.";
