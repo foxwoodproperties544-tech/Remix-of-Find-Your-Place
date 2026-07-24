@@ -96,6 +96,7 @@ function AuthPage() {
       </p>
       <div className="mt-6">
         <SupportBanner
+          context="auth"
           message={mode === "signin" ? "Trouble signing in?" : "Need help signing up?"}
           whatsappMessage={`Hello Foxwood Properties, I need help ${mode === "signin" ? "signing in" : "creating an account"}.`}
         />
