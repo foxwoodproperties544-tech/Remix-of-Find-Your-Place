@@ -591,6 +591,110 @@ export type Database = {
           },
         ]
       }
+      chat_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          sender_id: string | null
+          sender_role: string
+          session_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+          sender_role?: string
+          session_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          sender_id?: string | null
+          sender_role?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_sessions: {
+        Row: {
+          assigned_admin_id: string | null
+          created_at: string
+          id: string
+          last_message_at: string
+          status: string
+          subject: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_admin_id?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          status?: string
+          subject?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_admin_id?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          status?: string
+          subject?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      faq_analytics_events: {
+        Row: {
+          category: string | null
+          created_at: string
+          event_type: string
+          id: string
+          link_href: string | null
+          path: string | null
+          question_id: string | null
+          search_term: string | null
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          link_href?: string | null
+          path?: string | null
+          question_id?: string | null
+          search_term?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          link_href?: string | null
+          path?: string | null
+          question_id?: string | null
+          search_term?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       faq_items: {
         Row: {
           answer: string
@@ -1690,6 +1794,51 @@ export type Database = {
           id?: string
           page_path?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          admin_response: string | null
+          body: string
+          category: string
+          created_at: string
+          id: string
+          priority: string
+          resolved_at: string | null
+          screenshot_path: string | null
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_response?: string | null
+          body: string
+          category?: string
+          created_at?: string
+          id?: string
+          priority?: string
+          resolved_at?: string | null
+          screenshot_path?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_response?: string | null
+          body?: string
+          category?: string
+          created_at?: string
+          id?: string
+          priority?: string
+          resolved_at?: string | null
+          screenshot_path?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
