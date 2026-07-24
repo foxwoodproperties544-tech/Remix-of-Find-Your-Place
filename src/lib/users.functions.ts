@@ -2,6 +2,36 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 
+export type PublicAgent = {
+  id: string;
+  full_name: string | null;
+  company_name: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  verified: boolean | null;
+  tier: string | null;
+};
+
+/** Public: list users with an 'agent' role, verified first. */
+export const listPublicAgents = createServerFn({ method: "GET" }).handler(async () => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: roleRows, error: rErr } = await supabaseAdmin
+    .from("user_roles").select("user_id").eq("role", "agent");
+  if (rErr) throw rErr;
+  const ids = Array.from(new Set((roleRows ?? []).map((r) => r.user_id)));
+  if (!ids.length) return [] as PublicAgent[];
+  const { data, error } = await supabaseAdmin
+    .from("profiles")
+    .select("id, full_name, company_name, avatar_url, bio, verified, tier")
+    .in("id", ids)
+    .order("verified", { ascending: false })
+    .order("full_name", { ascending: true })
+    .limit(48);
+  if (error) throw error;
+  return (data ?? []) as PublicAgent[];
+});
+
+
 const ROLES = ["admin", "agent", "user", "owner", "buyer", "tenant", "developer"] as const;
 type AppRole = (typeof ROLES)[number];
 
