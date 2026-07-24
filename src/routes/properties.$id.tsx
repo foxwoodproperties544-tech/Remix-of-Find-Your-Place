@@ -47,7 +47,7 @@ export const Route = createFileRoute("/properties/$id")({
       p: toProperty(row), ownerId: row.owner_id, propertyKey: row.id,
       ownerProfile: (profile ?? null) as any,
       contactPhone: row.contact_phone, contactWhatsapp: row.contact_whatsapp,
-      videoUrl: row.video_url ?? null, documents,
+      videoUrl: row.video_url ?? null, tourUrl: (row as any).tour_url ?? null, documents,
       latOverride: row.lat != null ? Number(row.lat) : null,
       lngOverride: row.lng != null ? Number(row.lng) : null,
       createdAt: row.created_at ?? null,
