@@ -26,7 +26,9 @@ const STATUS_META: Record<string, { label: string; icon: any; className: string 
 };
 
 function MyBlogPage() {
+  const qc = useQueryClient();
   const listFn = useServerFn(listMyBlogPosts);
+  const [renewFor, setRenewFor] = useState<any | null>(null);
   const { data: posts, isLoading } = useQuery({
     queryKey: ["my-blog-posts"],
     queryFn: () => listFn(),
