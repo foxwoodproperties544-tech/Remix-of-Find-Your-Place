@@ -218,12 +218,21 @@ function NewListing() {
         contact_phone: v.contact_phone || null,
         contact_whatsapp: v.contact_whatsapp || null,
         video_url: form.video_url || null,
+        tour_url: form.tour_url || null,
         documents: docs,
         lat: latNum,
         lng: lngNum,
         status: mode === "draft" ? "draft" : "pending_payment",
       }).select("id").single();
       if (error) throw error;
+      if (inserted?.id && imageHashes.length) {
+        await supabase.from("property_image_hashes").insert(
+          imageHashes.map((h) => ({
+            property_id: inserted.id, owner_id: user.id,
+            image_hash: h.hash, image_url: h.url,
+          }))
+        );
+      }
       if (mode === "draft") {
         toast.success("Draft saved");
         navigate({ to: "/dashboard" });
