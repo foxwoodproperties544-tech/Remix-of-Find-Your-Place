@@ -68,6 +68,7 @@ export function InstallAppBanner() {
   const [deferred, setDeferred] = useState<BIPEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const [showIosHint, setShowIosHint] = useState(false);
+  const impressionLogged = useRef(false);
 
   useEffect(() => {
     if (isStandalone() || recentlyDismissed()) return;
@@ -80,6 +81,7 @@ export function InstallAppBanner() {
     window.addEventListener("beforeinstallprompt", onBIP);
 
     const onInstalled = () => {
+      trackPwaEvent("installed");
       setVisible(false);
       setDeferred(null);
     };
@@ -98,21 +100,31 @@ export function InstallAppBanner() {
     };
   }, []);
 
+  useEffect(() => {
+    if ((visible || showIosHint) && !impressionLogged.current) {
+      impressionLogged.current = true;
+      trackPwaEvent("impression");
+    }
+  }, [visible, showIosHint]);
+
   const dismiss = () => {
     try {
       localStorage.setItem(DISMISS_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
+    trackPwaEvent("dismiss");
     setVisible(false);
     setShowIosHint(false);
   };
 
   const install = async () => {
+    trackPwaEvent("install_click");
     if (deferred) {
       try {
         await deferred.prompt();
-        await deferred.userChoice;
+        const choice = await deferred.userChoice;
+        if (choice?.outcome === "dismissed") trackPwaEvent("dismiss");
       } catch {
         /* ignore */
       }
@@ -120,7 +132,10 @@ export function InstallAppBanner() {
       setVisible(false);
       return;
     }
-    if (isIos()) setShowIosHint(true);
+    if (isIos()) {
+      setShowIosHint(true);
+      trackPwaEvent("ios_hint_shown");
+    }
   };
 
   if (!visible && !showIosHint) return null;
