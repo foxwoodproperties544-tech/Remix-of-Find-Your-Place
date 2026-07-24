@@ -188,7 +188,7 @@ export const listMyCampaigns = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("ad_campaigns")
-      .select("*, ad_packages(name, price, placement, duration_days, badge_color)")
+      .select("*, ad_packages!ad_campaigns_package_id_fkey(name, price, placement, duration_days, badge_color), pending_package:ad_packages!ad_campaigns_pending_package_id_fkey(name, price, duration_days)")
       .eq("owner_id", context.userId)
       .order("created_at", { ascending: false });
     if (error) throw error;
