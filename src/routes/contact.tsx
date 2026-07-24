@@ -46,10 +46,20 @@ function Contact() {
             <div className="mt-1 text-2xl font-bold text-primary">{SUPPORT_PHONE_DISPLAY}</div>
             <p className="mt-1 text-sm text-foreground/70">We usually reply within a few minutes on WhatsApp.</p>
             <div className="mt-4 flex flex-wrap gap-2">
-              <a href={`tel:${SUPPORT_PHONE_TEL}`} className="btn-primary btn-primary-hover !py-2 !px-4 text-sm">
+              <a
+                href={`tel:${SUPPORT_PHONE_TEL}`}
+                onClick={() => trackSupportClick("call", "contact")}
+                className="btn-primary btn-primary-hover !py-2 !px-4 text-sm"
+              >
                 <Phone className="h-4 w-4" /> Call Now
               </a>
-              <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="btn-secondary !py-2 !px-4 text-sm">
+              <a
+                href={whatsappUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackSupportClick("whatsapp", "contact")}
+                className="btn-secondary !py-2 !px-4 text-sm"
+              >
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </a>
             </div>

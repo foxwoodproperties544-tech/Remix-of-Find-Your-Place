@@ -153,10 +153,20 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 <div className="text-xs text-primary-foreground/80 mb-2">Need help? Call or WhatsApp</div>
                 <div className="text-sm font-semibold text-white">+254 759 556 026</div>
                 <div className="mt-2 flex gap-2">
-                  <a href="tel:+254759556026" className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg bg-white/10 hover:bg-white/20 px-2 py-1.5 text-xs font-semibold">
+                  <a
+                    href="tel:+254759556026"
+                    onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("call", "dashboard")); }}
+                    className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg bg-white/10 hover:bg-white/20 px-2 py-1.5 text-xs font-semibold"
+                  >
                     <Phone className="h-3.5 w-3.5" /> Call
                   </a>
-                  <a href="https://wa.me/254759556026?text=Hello%20Foxwood%20Properties%2C%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg bg-[#25D366] hover:opacity-90 px-2 py-1.5 text-xs font-semibold">
+                  <a
+                    href="https://wa.me/254759556026?text=Hello%20Foxwood%20Properties%2C%20I%20need%20help%20with%20my%20dashboard."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("whatsapp", "dashboard")); }}
+                    className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg bg-[#25D366] hover:opacity-90 px-2 py-1.5 text-xs font-semibold"
+                  >
                     <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
                   </a>
                 </div>

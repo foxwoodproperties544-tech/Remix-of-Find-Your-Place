@@ -743,8 +743,22 @@ function AgentCard({ ownerId, profile, title, contactPhone, contactWhatsapp }:
         <div className="text-xs font-semibold text-foreground/80">Need Help? Contact Foxwood Properties</div>
         <div className="text-[11px] text-muted-foreground">Support: +254 759 556 026</div>
         <div className="mt-2 flex gap-2">
-          <a href="tel:+254759556026" className="btn-ghost !py-1.5 !px-3 text-xs flex-1 justify-center"><Phone className="h-3.5 w-3.5" /> Call Admin</a>
-          <a href="https://wa.me/254759556026?text=Hello%20Foxwood%20Properties%2C%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" className="btn-ghost !py-1.5 !px-3 text-xs flex-1 justify-center"><MessageCircle className="h-3.5 w-3.5" /> WhatsApp Admin</a>
+          <a
+            href="tel:+254759556026"
+            onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("call", "property")); }}
+            className="btn-ghost !py-1.5 !px-3 text-xs flex-1 justify-center"
+          >
+            <Phone className="h-3.5 w-3.5" /> Call Admin
+          </a>
+          <a
+            href={`https://wa.me/254759556026?text=${encodeURIComponent(`Hello Foxwood Properties, I need assistance about "${title}".`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("whatsapp", "property")); }}
+            className="btn-ghost !py-1.5 !px-3 text-xs flex-1 justify-center"
+          >
+            <MessageCircle className="h-3.5 w-3.5" /> WhatsApp Admin
+          </a>
         </div>
       </div>
     </div>
