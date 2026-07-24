@@ -148,6 +148,10 @@ function NewListing() {
           if (!newErrors[key]) newErrors[key] = issue.message;
         }
       }
+      // County ↔ town validation
+      if (form.county && form.town && !(KENYA_SUBLOCATIONS[form.county] ?? []).includes(form.town)) {
+        newErrors.town = `“${form.town}” is not a known area in ${form.county}. Pick a suggestion or change the county.`;
+      }
       if (images.length === 0) newErrors.images = "Please add at least one photo";
     } else {
       // draft: require only a title
