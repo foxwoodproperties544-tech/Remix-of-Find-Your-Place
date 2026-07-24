@@ -78,11 +78,18 @@ export function FiltersSidebar({ state, townOptions, onChange, onClear }: Filter
             <option value="">All counties</option>
             {counties.map((c) => <option key={c}>{c}</option>)}
           </select>
-          <select value={state.town} onChange={(e) => onChange({ town: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
-            <option value="">{state.county ? `All areas in ${state.county}` : "All areas"}</option>
-            {Array.from(new Set([...(state.county ? KENYA_SUBLOCATIONS[state.county] ?? [] : []), ...townOptions])).sort().map((t) => <option key={t}>{t}</option>)}
-          </select>
-
+          <TownCombobox
+            county={state.county}
+            value={state.town}
+            onChange={(v) => onChange({ town: v })}
+            extraOptions={townOptions}
+          />
+          {state.county && state.town && !(KENYA_SUBLOCATIONS[state.county] ?? []).includes(state.town) && (
+            <div className="flex items-start gap-1.5 rounded-md border border-amber-300/50 bg-amber-50 dark:bg-amber-900/20 px-2 py-1.5 text-[11px] text-amber-800 dark:text-amber-200">
+              <AlertTriangle className="h-3 w-3 mt-0.5 shrink-0" />
+              <span>“{state.town}” isn’t a known area in {state.county}. <button onClick={() => onChange({ town: "" })} className="underline font-medium">Clear</button></span>
+            </div>
+          )}
         </div>
       </Section>
 
