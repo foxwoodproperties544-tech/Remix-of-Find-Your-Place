@@ -1213,6 +1213,7 @@ export type Database = {
           slug: string | null
           status: string
           title: string
+          tour_url: string | null
           town: string
           updated_at: string
           verified: boolean
@@ -1255,6 +1256,7 @@ export type Database = {
           slug?: string | null
           status?: string
           title: string
+          tour_url?: string | null
           town: string
           updated_at?: string
           verified?: boolean
@@ -1297,6 +1299,7 @@ export type Database = {
           slug?: string | null
           status?: string
           title?: string
+          tour_url?: string | null
           town?: string
           updated_at?: string
           verified?: boolean
@@ -1305,6 +1308,41 @@ export type Database = {
           video_url?: string | null
         }
         Relationships: []
+      }
+      property_image_hashes: {
+        Row: {
+          created_at: string
+          id: string
+          image_hash: string
+          image_url: string | null
+          owner_id: string
+          property_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_hash: string
+          image_url?: string | null
+          owner_id: string
+          property_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_hash?: string
+          image_url?: string | null
+          owner_id?: string
+          property_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_image_hashes_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_package_purchases: {
         Row: {
