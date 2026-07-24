@@ -35,6 +35,8 @@ function Dashboard() {
   const { isAgent, isAdmin, loading: rolesLoading } = useRoles();
   const qc = useQueryClient();
   const [range, setRange] = useState<RangeKey>("30");
+  const [renewFor, setRenewFor] = useState<{ purchase: any; property: any } | null>(null);
+  const listPurchasesFn = useServerFn(listMyActiveListingPurchases);
 
   if (!rolesLoading && !isAgent && !isAdmin) {
     return <Navigate to="/dashboard/account" replace />;
