@@ -45,6 +45,7 @@ import { Route as ServicesBuyRouteImport } from './routes/services.buy'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AgentsBecomeRouteImport } from './routes/agents.become'
 import { Route as AgentsIdRouteImport } from './routes/agents.$id'
 import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authenticated/saved-searches'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
@@ -273,6 +274,11 @@ const LocationsCountyRoute = LocationsCountyRouteImport.update({
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentsBecomeRoute = AgentsBecomeRouteImport.update({
+  id: '/agents/become',
+  path: '/agents/become',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AgentsIdRoute = AgentsIdRouteImport.update({
@@ -582,6 +588,7 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
+  '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
@@ -668,6 +675,7 @@ export interface FileRoutesByTo {
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
+  '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
@@ -755,6 +763,7 @@ export interface FileRoutesById {
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
+  '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
@@ -843,6 +852,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/saved-searches'
     | '/agents/$id'
+    | '/agents/become'
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
@@ -929,6 +939,7 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/saved-searches'
     | '/agents/$id'
+    | '/agents/become'
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
@@ -1015,6 +1026,7 @@ export interface FileRouteTypes {
     | '/_authenticated/favorites'
     | '/_authenticated/saved-searches'
     | '/agents/$id'
+    | '/agents/become'
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
@@ -1100,6 +1112,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   AgentsIdRoute: typeof AgentsIdRoute
+  AgentsBecomeRoute: typeof AgentsBecomeRoute
   BlogSlugRoute: typeof BlogSlugRoute
   LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
@@ -1373,6 +1386,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agents/become': {
+      id: '/agents/become'
+      path: '/agents/become'
+      fullPath: '/agents/become'
+      preLoaderRoute: typeof AgentsBecomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/agents/$id': {
@@ -1903,6 +1923,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   AgentsIdRoute: AgentsIdRoute,
+  AgentsBecomeRoute: AgentsBecomeRoute,
   BlogSlugRoute: BlogSlugRoute,
   LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
