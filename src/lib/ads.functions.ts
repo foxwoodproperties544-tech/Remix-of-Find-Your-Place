@@ -202,7 +202,7 @@ export const adminListCampaigns = createServerFn({ method: "GET" })
     await assertAdmin(context.supabase, context.userId);
     let q = context.supabase
       .from("ad_campaigns")
-      .select("*, ad_packages(name, price, placement, duration_days)")
+      .select("*, ad_packages!ad_campaigns_package_id_fkey(name, price, placement, duration_days)")
       .order("created_at", { ascending: false });
     if (data.status) q = q.eq("status", data.status);
     const { data: rows, error } = await q;
