@@ -233,6 +233,11 @@ function Dashboard() {
                     {(p.status === "rejected" || p.status === "draft") && (
                       <button onClick={() => renew.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-primary" title="Submit for review"><RefreshCw className="h-4 w-4" /></button>
                     )}
+                    {purchasesByProp.get(p.id) && (
+                      <button onClick={() => setRenewFor({ purchase: purchasesByProp.get(p.id), property: p })} className="btn-ghost !px-3 !py-2 text-primary text-xs inline-flex items-center gap-1" title="Renew / change plan">
+                        <RefreshCw className="h-3.5 w-3.5" /> Plan
+                      </button>
+                    )}
                     <button onClick={() => confirm("Delete this listing?") && del.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </div>
@@ -242,6 +247,19 @@ function Dashboard() {
         )}
         </div>
       </div>
+
+      {renewFor && (
+        <RenewPackageDialog
+          open={!!renewFor}
+          onClose={() => setRenewFor(null)}
+          kind="listing"
+          entityId={renewFor.purchase.id}
+          currentPackageId={renewFor.purchase.package_id}
+          currentPrice={Number(renewFor.purchase.listing_packages?.price ?? 0)}
+          pendingPackageName={renewFor.purchase.pending_package?.name}
+          onSuccess={() => { qc.invalidateQueries({ queryKey: ["my-listing-purchases"] }); qc.invalidateQueries({ queryKey: ["my-properties"] }); }}
+        />
+      )}
     </>
   );
 }
