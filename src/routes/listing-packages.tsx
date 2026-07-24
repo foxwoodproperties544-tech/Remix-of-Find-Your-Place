@@ -5,6 +5,7 @@ import { PricingGrid } from "@/components/site/PricingGrid";
 import { listActivePackages } from "@/lib/packages.functions";
 import heroTools from "@/assets/hero-tools.jpg";
 import { Home } from "lucide-react";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 const qo = queryOptions({ queryKey: ["active-packages"], queryFn: () => listActivePackages() });
 
@@ -58,6 +59,9 @@ function Page() {
       ]}
     >
       <PricingGrid packages={pkgs as any} />
+      <div className="mt-8">
+        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help choosing a listing package." />
+      </div>
     </PackagePageShell>
   );
 }
