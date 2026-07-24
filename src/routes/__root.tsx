@@ -58,6 +58,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#0F766E" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "Foxwood" },
       { title: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
       { name: "description", content: SITE_DESC },
       { property: "og:title", content: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
