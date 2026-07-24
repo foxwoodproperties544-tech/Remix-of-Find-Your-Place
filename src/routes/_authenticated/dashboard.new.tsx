@@ -84,13 +84,36 @@ function NewListing() {
     setUploading((n) => n + valid.length);
     for (const file of valid) {
       try {
+        // Hash the file for duplicate detection
+        let hash = "";
+        try {
+          const buf = await file.arrayBuffer();
+          const digest = await crypto.subtle.digest("SHA-256", buf);
+          hash = Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+          if (imageHashes.some((h) => h.hash === hash)) {
+            toast.error(`${file.name} is already added to this listing`);
+            setUploading((n) => n - 1);
+            continue;
+          }
+          const { data: dup } = await supabase
+            .from("property_image_hashes")
+            .select("owner_id, property_id")
+            .eq("image_hash", hash)
+            .limit(3);
+          if (dup && dup.length) {
+            const others = dup.filter((d: any) => d.owner_id !== user.id);
+            if (others.length) {
+              setDuplicateWarnings((w) => [...w, `${file.name} matches a photo already used on another listing.`]);
+              toast.warning(`Duplicate photo detected — ${file.name} is used elsewhere on Foxwood`);
+            }
+          }
+        } catch { /* hashing best-effort */ }
+
         const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
         const { error } = await supabase.storage.from("property-images").upload(path, file);
         if (error) throw error;
-        // Try public URL first (works if bucket is public), else fall back to a long-lived signed URL.
         const { data: pub } = supabase.storage.from("property-images").getPublicUrl(path);
         let url = pub?.publicUrl;
-        // Probe public URL — if forbidden, use signed URL
         try {
           const head = await fetch(url, { method: "HEAD" });
           if (!head.ok) throw new Error("not public");
@@ -100,14 +123,17 @@ function NewListing() {
             .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
           if (signed?.signedUrl) url = signed.signedUrl;
         }
-        if (url) setImages((s) => [...s, url!]);
+        if (url) {
+          setImages((s) => [...s, url!]);
+          if (hash) setImageHashes((s) => [...s, { url: url!, hash }]);
+        }
       } catch (err: any) {
         toast.error(err?.message ?? `Failed to upload ${file.name}`);
       } finally {
         setUploading((n) => n - 1);
       }
     }
-  }, [user]);
+  }, [user, imageHashes]);
 
   function onDrop(e: React.DragEvent) {
     e.preventDefault(); setDragOver(false);
