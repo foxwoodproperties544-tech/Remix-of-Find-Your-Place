@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { PackagePageShell, Li, SectionHeader } from "@/components/site/PackagePageShell";
-import { TIER_PLANS } from "@/lib/pricing";
+import { listActiveTierPlans, type TierPlanRow } from "@/lib/tier-plans.functions";
 import heroAbout from "@/assets/hero-about.jpg";
 import { Building2, Check, X as XIcon } from "lucide-react";
 
@@ -20,16 +21,15 @@ export const Route = createFileRoute("/agent-developer-subscriptions")({
   }),
 });
 
-const COMPARISON: { label: string; get: (t: typeof TIER_PLANS[number]) => string | boolean }[] = [
-  { label: "Active listings", get: (t) => t.quota === 999 ? "Unlimited" : `${t.quota}` },
+const COMPARISON: { label: string; get: (t: TierPlanRow) => string | boolean }[] = [
+  { label: "Active listings", get: (t) => t.listing_quota >= 999 ? "Unlimited" : `${t.listing_quota}` },
   { label: "Featured listings / month", get: (t) => t.perks.find((p) => p.toLowerCase().includes("featured")) ?? "—" },
   { label: "Verified agent badge", get: (t) => t.perks.some((p) => /verified/i.test(p)) },
   { label: "Analytics dashboard", get: (t) => t.price > 0 },
-  { label: "Lead / CRM access", get: (t) => true },
-  { label: "Team members", get: (t) => t.id === "elite" ? "Unlimited" : t.id === "pro" ? "Up to 5" : t.id === "basic" ? "Up to 2" : "1" },
-  { label: "Company profile page", get: (t) => t.price > 0 },
+  { label: "Lead / CRM access", get: () => true },
   { label: "Priority support", get: (t) => t.price >= 4500 },
 ];
+
 
 function Page() {
   return (
