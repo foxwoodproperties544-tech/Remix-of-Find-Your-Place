@@ -266,11 +266,13 @@ function NewListing() {
         <div className="grid md:grid-cols-3 gap-4">
           <div>
             <label className={label}>Town / Area *</label>
-            <input list="fx-sublocations" value={form.town} onChange={(e) => upd("town", e.target.value)} className={`${input} ${errCls("town")}`} placeholder="Start typing an area..." />
-            <datalist id="fx-sublocations">
-              {(KENYA_SUBLOCATIONS[form.county] ?? []).map((s) => <option key={s} value={s} />)}
-            </datalist>
-            {errText("town")}
+            <TownCombobox
+              county={form.county}
+              value={form.town}
+              onChange={(v) => upd("town", v)}
+              placeholder="Start typing an area..."
+              error={errors.town}
+            />
           </div>
 
           <div>
