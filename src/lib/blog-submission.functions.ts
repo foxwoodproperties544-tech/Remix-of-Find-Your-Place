@@ -308,7 +308,7 @@ export const adminApproveBlogPost = createServerFn({ method: "POST" })
     await assertAdmin(context.supabase, context.userId);
     const { data: post } = await context.supabase
       .from("blog_posts")
-      .select("id, author_id, expires_at, package_id, blog_packages(duration_days, is_sponsored)")
+      .select("id, author_id, expires_at, package_id, blog_packages!blog_post_purchases_package_id_fkey(duration_days, is_sponsored)")
       .eq("id", data.id).maybeSingle();
     if (!post) throw new Error("Not found");
 
@@ -447,7 +447,7 @@ export const listBlogPostPurchases = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("blog_post_purchases")
-      .select("*, blog_packages(name, price, duration_days)")
+      .select("*, blog_packages!blog_post_purchases_package_id_fkey(name, price, duration_days)")
       .eq("post_id", data.postId)
       .order("created_at", { ascending: false });
     if (error) throw error;
@@ -476,7 +476,7 @@ export const adminMarkBlogPurchasePaid = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
     const { data: purch } = await context.supabase
-      .from("blog_post_purchases").select("*, blog_packages(duration_days, is_sponsored)")
+      .from("blog_post_purchases").select("*, blog_packages!blog_post_purchases_package_id_fkey(duration_days, is_sponsored)")
       .eq("id", data.purchaseId).maybeSingle();
     if (!purch) throw new Error("Purchase not found");
     const days = (purch as any).blog_packages?.duration_days ?? 30;
