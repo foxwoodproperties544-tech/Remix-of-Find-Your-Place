@@ -1573,6 +1573,54 @@ export type Database = {
         }
         Relationships: []
       }
+      tier_plans: {
+        Row: {
+          active: boolean
+          badge_color: string | null
+          created_at: string
+          duration_days: number
+          highlight: boolean
+          id: string
+          listing_quota: number
+          name: string
+          perks: Json
+          price: number
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          badge_color?: string | null
+          created_at?: string
+          duration_days?: number
+          highlight?: boolean
+          id?: string
+          listing_quota?: number
+          name: string
+          perks?: Json
+          price?: number
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          badge_color?: string | null
+          created_at?: string
+          duration_days?: number
+          highlight?: boolean
+          id?: string
+          listing_quota?: number
+          name?: string
+          perks?: Json
+          price?: number
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
