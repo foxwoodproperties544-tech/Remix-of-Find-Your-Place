@@ -20,6 +20,7 @@ import { AdSlot } from "@/components/site/AdSlot";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
+const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
 
 const searchSchema = z.object({
   category: fallback(z.string(), "").default(""),
