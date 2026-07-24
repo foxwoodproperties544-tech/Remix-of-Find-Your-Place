@@ -8,6 +8,7 @@ import { MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPublishedProperties } from "@/lib/properties";
 import { PropertyCard } from "@/components/site/PropertyCard";
+import { PriceTrends } from "@/components/site/PriceTrends";
 
 export const Route = createFileRoute("/locations/$county")({
   head: ({ params }) => {
@@ -45,14 +46,19 @@ function CountyPage() {
     <>
       <PageHero image={heroAbout} size="sm" eyebrow={<><MapPin className="h-3.5 w-3.5" /> {county}</>} title={`Properties in ${county}`} subtitle={`${listings.length} listing${listings.length === 1 ? "" : "s"} across ${towns.length} areas.`} />
       <section className="container-page py-8">
-        <h2 className="text-lg font-bold mb-3">Popular areas in {county}</h2>
-        <div className="flex flex-wrap gap-2">
-          {towns.slice(0, 40).map((t) => (
-            <Link key={t} to="/locations/$county/$town" params={{ county: slug, town: toSlug(t) }} className="rounded-full border border-border px-3 py-1.5 text-xs hover:border-primary/40">
-              {t}
-            </Link>
-          ))}
-          {towns.length > 40 && <span className="text-xs text-muted-foreground self-center">+{towns.length - 40} more</span>}
+        <div className="grid gap-6 lg:grid-cols-3 mb-8">
+          <div className="lg:col-span-2">
+            <h2 className="text-lg font-bold mb-3">Popular areas in {county}</h2>
+            <div className="flex flex-wrap gap-2">
+              {towns.slice(0, 40).map((t) => (
+                <Link key={t} to="/locations/$county/$town" params={{ county: slug, town: toSlug(t) }} className="rounded-full border border-border px-3 py-1.5 text-xs hover:border-primary/40">
+                  {t}
+                </Link>
+              ))}
+              {towns.length > 40 && <span className="text-xs text-muted-foreground self-center">+{towns.length - 40} more</span>}
+            </div>
+          </div>
+          <div><PriceTrends listings={listings} label={county} /></div>
         </div>
 
         <div className="mt-8">
