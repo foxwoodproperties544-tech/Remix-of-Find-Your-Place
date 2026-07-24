@@ -16,6 +16,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MortgageRouteImport } from './routes/mortgage'
 import { Route as ListingPackagesRouteImport } from './routes/listing-packages'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as ForAgentsRouteImport } from './routes/for-agents'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -123,6 +124,11 @@ const ListingPackagesRoute = ListingPackagesRouteImport.update({
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForAgentsRoute = ForAgentsRouteImport.update({
+  id: '/for-agents',
+  path: '/for-agents',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -537,6 +543,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/faq': typeof FaqRoute
+  '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
@@ -618,6 +625,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/faq': typeof FaqRoute
+  '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
@@ -701,6 +709,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/faq': typeof FaqRoute
+  '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
@@ -784,6 +793,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookies'
     | '/faq'
+    | '/for-agents'
     | '/help'
     | '/listing-packages'
     | '/mortgage'
@@ -865,6 +875,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookies'
     | '/faq'
+    | '/for-agents'
     | '/help'
     | '/listing-packages'
     | '/mortgage'
@@ -947,6 +958,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/cookies'
     | '/faq'
+    | '/for-agents'
     | '/help'
     | '/listing-packages'
     | '/mortgage'
@@ -1030,6 +1042,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
   FaqRoute: typeof FaqRoute
+  ForAgentsRoute: typeof ForAgentsRoute
   HelpRoute: typeof HelpRoute
   ListingPackagesRoute: typeof ListingPackagesRoute
   MortgageRoute: typeof MortgageRoute
@@ -1107,6 +1120,13 @@ declare module '@tanstack/react-router' {
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/for-agents': {
+      id: '/for-agents'
+      path: '/for-agents'
+      fullPath: '/for-agents'
+      preLoaderRoute: typeof ForAgentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -1790,6 +1810,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
   FaqRoute: FaqRoute,
+  ForAgentsRoute: ForAgentsRoute,
   HelpRoute: HelpRoute,
   ListingPackagesRoute: ListingPackagesRoute,
   MortgageRoute: MortgageRoute,
@@ -1820,13 +1841,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
