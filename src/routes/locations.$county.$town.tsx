@@ -7,13 +7,15 @@ import { MapPin } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPublishedProperties } from "@/lib/properties";
 import { PropertyCard } from "@/components/site/PropertyCard";
+import { PriceTrends } from "@/components/site/PriceTrends";
+import { NeighborhoodGuide } from "@/components/site/NeighborhoodGuide";
 
 export const Route = createFileRoute("/locations/$county/$town")({
   head: ({ params }) => {
     const county = countyFromSlug(params.county) ?? params.county;
     const town = townFromSlug(county, params.town) ?? params.town;
-    const title = `Properties in ${town}, ${county} — Foxwood Properties`;
-    const desc = `Verified properties for sale, rent, and lease in ${town}, ${county}. Compare listings and contact agents on Foxwood Properties.`;
+    const title = `Property Prices & Homes in ${town}, ${county} — Foxwood Properties`;
+    const desc = `${town}, ${county} property guide: verified homes for sale, rent, and lease with real-time median prices, neighborhood insights, and direct agent contact.`;
     const url = `https://find-joy-list.lovable.app/locations/${params.county}/${params.town}`;
     return {
       meta: [
@@ -28,6 +30,20 @@ export const Route = createFileRoute("/locations/$county/$town")({
         { name: "twitter:image", content: absoluteUrl(heroAbout) },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Locations", item: "https://find-joy-list.lovable.app/locations" },
+              { "@type": "ListItem", position: 2, name: county, item: `https://find-joy-list.lovable.app/locations/${params.county}` },
+              { "@type": "ListItem", position: 3, name: town, item: url },
+            ],
+          }),
+        },
+      ],
     };
   },
   component: TownPage,
@@ -51,6 +67,14 @@ function TownPage() {
           <Link to="/locations" className="hover:text-primary">Locations</Link> ›{" "}
           <Link to="/locations/$county" params={{ county: cSlug }} className="hover:text-primary">{county}</Link> › <span className="text-foreground">{town}</span>
         </div>
+
+        <h1 className="sr-only">Properties for sale, rent, and lease in {town}, {county}</h1>
+
+        <div className="grid gap-6 lg:grid-cols-3 mb-8">
+          <div className="lg:col-span-2"><NeighborhoodGuide town={town} county={county} /></div>
+          <div><PriceTrends listings={listings} label={town} /></div>
+        </div>
+
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-bold">Listings in {town}</h2>
           <Link to="/properties" search={{ county, town }} className="text-sm text-primary font-medium">Refine in search →</Link>
