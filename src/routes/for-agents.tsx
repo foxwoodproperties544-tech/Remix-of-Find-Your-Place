@@ -1,24 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { PageHero } from "@/components/site/PageHero";
 import heroTools from "@/assets/hero-tools.jpg";
 import { absoluteUrl } from "@/lib/site-url";
+import { listPublicAgents } from "@/lib/users.functions";
+import { listActiveTierPlans } from "@/lib/tier-plans.functions";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Building2,
-  Upload,
-  Users,
-  CalendarClock,
-  BarChart3,
-  Camera,
   ShieldCheck,
-  Megaphone,
-  Sparkles,
-  Check,
   ArrowRight,
+  Check,
+  Users,
+  Sparkles,
 } from "lucide-react";
 
-const TITLE = "For Agents & Developers — Foxwood Properties";
+const TITLE = "Agents — Foxwood Properties";
 const DESC =
-  "Grow your Kenyan real estate business with Foxwood Properties. Bulk import listings, manage leads with a built-in CRM, host 360° virtual tours, book viewings, and reach thousands of qualified buyers.";
+  "Meet verified real estate agents and developers on Foxwood Properties. Browse profiles, see subscription pricing, and join as an agent to grow your business across Kenya.";
 const OG = absoluteUrl(heroTools);
 const CANON = "https://find-joy-list.lovable.app/for-agents";
 
@@ -36,212 +35,204 @@ export const Route = createFileRoute("/for-agents")({
       { name: "twitter:image", content: OG },
     ],
     links: [{ rel: "canonical", href: CANON }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Service",
-          name: "Foxwood Properties — Agent & Developer Platform",
-          provider: { "@type": "Organization", name: "Foxwood Properties" },
-          areaServed: "Kenya",
-          description: DESC,
-          url: CANON,
-        }),
-      },
-    ],
   }),
-  component: ForAgentsPage,
+  component: AgentsPage,
 });
 
-const FEATURES = [
-  {
-    icon: Upload,
-    title: "Bulk CSV import",
-    desc: "Upload up to 200 listings at once with client-side validation and instant previews.",
-  },
-  {
-    icon: Users,
-    title: "Built-in CRM",
-    desc: "Every enquiry becomes a lead. Assign, tag, add notes, and track from first touch to closed deal.",
-  },
-  {
-    icon: CalendarClock,
-    title: "Appointment booking",
-    desc: "Let buyers book viewings from your listing page. Approve, reschedule, and send WhatsApp confirmations.",
-  },
-  {
-    icon: Camera,
-    title: "360° virtual tours",
-    desc: "Embed Matterport, Kuula, or any tour link directly on your property detail pages.",
-  },
-  {
-    icon: BarChart3,
-    title: "Analytics dashboard",
-    desc: "See views, favourites, and enquiry conversion by listing — with date range filters and CSV export.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Verified agent badge",
-    desc: "Complete KYC once and display a trust badge on every listing, agent profile, and search result.",
-  },
-  {
-    icon: Megaphone,
-    title: "Featured placements",
-    desc: "Promote listings to the homepage, sidebar, and search results with transparent M-Pesa pricing.",
-  },
-  {
-    icon: Sparkles,
-    title: "Duplicate photo detection",
-    desc: "Automatic SHA-256 hashing warns you if a photo is already used elsewhere on the platform.",
-  },
-];
+function AgentsPage() {
+  const { user } = useAuth();
+  const { data: agents = [], isLoading: agentsLoading } = useQuery({
+    queryKey: ["public-agents"],
+    queryFn: () => listPublicAgents(),
+  });
+  const { data: plans = [], isLoading: plansLoading } = useQuery({
+    queryKey: ["tier-plans-active"],
+    queryFn: () => listActiveTierPlans(),
+  });
 
-const STEPS = [
-  { n: 1, title: "Create your account", desc: "Sign up in under a minute — email or Google." },
-  { n: 2, title: "Complete KYC", desc: "Upload ID and licence to unlock the verified badge." },
-  { n: 3, title: "List or import", desc: "Add one listing, or bulk-import your whole portfolio." },
-  { n: 4, title: "Convert leads", desc: "Manage enquiries, viewings, and offers in one place." },
-];
+  const becomeHref = user ? "/dashboard/upgrade" : "/auth";
 
-function ForAgentsPage() {
   return (
     <>
       <PageHero
         image={heroTools}
         size="md"
-        eyebrow={
-          <>
-            <Building2 className="h-3.5 w-3.5" /> For Agents & Developers
-          </>
-        }
-        title="The complete platform for Kenyan property professionals"
-        subtitle="List, market, and close faster. Foxwood Properties gives agents and developers the tools to reach thousands of qualified buyers, renters, and investors — all in one dashboard."
+        eyebrow={<><Users className="h-3.5 w-3.5" /> Agents</>}
+        title="Meet Kenya's Foxwood-verified agents"
+        subtitle="Browse trusted agents and developers, see what it costs to join, and become one yourself in minutes."
       />
 
-      {/* Primary CTA */}
+      {/* Quick actions */}
       <section className="container-page pt-8">
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Link
-            to="/auth"
-            className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            Start listing free <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link
-            to="/pricing"
+          <a
+            href="#pricing"
             className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium hover:border-primary/50 transition-colors"
           >
             View pricing
+          </a>
+          <Link
+            to={becomeHref}
+            className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            Become an agent <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
 
-      {/* Feature grid */}
+      {/* Current agents */}
       <section className="container-page py-14">
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <h2 className="text-2xl md:text-3xl font-semibold">Everything you need to run a modern agency</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold">Our current agents</h2>
           <p className="text-sm text-muted-foreground mt-2">
-            Purpose-built for the Kenyan market — M-Pesa payments, WhatsApp integration, and local knowledge baked in.
+            Verified professionals ready to help you buy, rent, or lease across Kenya.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {FEATURES.map((f) => (
-            <div
-              key={f.title}
-              className="rounded-xl border border-border bg-card p-5 hover:border-primary/40 hover:shadow-sm transition-all"
+
+        {agentsLoading ? (
+          <div className="text-sm text-muted-foreground text-center">Loading agents…</div>
+        ) : agents.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-border p-10 text-center">
+            <Sparkles className="h-6 w-6 text-primary mx-auto mb-3" />
+            <h3 className="text-base font-semibold">Be one of our first agents</h3>
+            <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
+              No agents have joined yet. Sign up today and get pride of place on this page.
+            </p>
+            <Link
+              to={becomeHref}
+              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:opacity-90"
             >
-              <div className="h-9 w-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-3">
-                <f.icon className="h-4.5 w-4.5" />
-              </div>
-              <h3 className="text-sm font-semibold">{f.title}</h3>
-              <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{f.desc}</p>
-            </div>
-          ))}
-        </div>
+              Become an agent <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {agents.map((a) => (
+              <Link
+                key={a.id}
+                to="/agents/$id"
+                params={{ id: a.id }}
+                className="group rounded-xl border border-border bg-card p-5 hover:border-primary/40 hover:shadow-sm transition-all flex items-start gap-4"
+              >
+                <div className="h-14 w-14 rounded-full bg-primary-soft text-primary overflow-hidden flex items-center justify-center flex-shrink-0">
+                  {a.avatar_url ? (
+                    <img src={a.avatar_url} alt={a.full_name ?? "Agent"} className="h-full w-full object-cover" />
+                  ) : (
+                    <Building2 className="h-6 w-6" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-sm font-semibold truncate group-hover:text-primary">
+                      {a.full_name || "Agent"}
+                    </h3>
+                    {a.verified && (
+                      <ShieldCheck className="h-4 w-4 text-primary flex-shrink-0" aria-label="Verified" />
+                    )}
+                  </div>
+                  {a.company_name && (
+                    <p className="text-xs text-muted-foreground truncate">{a.company_name}</p>
+                  )}
+                  {a.bio && (
+                    <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{a.bio}</p>
+                  )}
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary">
+                    View profile <ArrowRight className="h-3 w-3" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* How it works */}
-      <section className="bg-muted/30 border-y border-border">
+      {/* Pricing */}
+      <section id="pricing" className="bg-muted/30 border-y border-border scroll-mt-20">
         <div className="container-page py-14">
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="text-2xl md:text-3xl font-semibold">Live in four steps</h2>
-            <p className="text-sm text-muted-foreground mt-2">From sign-up to your first published listing in under 30 minutes.</p>
-          </div>
-          <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {STEPS.map((s) => (
-              <li key={s.n} className="rounded-xl bg-card border border-border p-5">
-                <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mb-3">
-                  {s.n}
-                </div>
-                <h3 className="text-sm font-semibold">{s.title}</h3>
-                <p className="text-xs text-muted-foreground mt-1.5">{s.desc}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* Why Foxwood */}
-      <section className="container-page py-14">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-semibold">Why agents choose Foxwood</h2>
-            <p className="text-sm text-muted-foreground mt-3">
-              We're built for how Kenyan real estate actually works — mobile-first buyers, WhatsApp-driven enquiries, and M-Pesa payments.
+            <h2 className="text-2xl md:text-3xl font-semibold">Pricing to become an agent</h2>
+            <p className="text-sm text-muted-foreground mt-2">
+              Pick the subscription that matches how you work. Pay by M-Pesa; change plans anytime.
             </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "M-Pesa STK Push for listing and advertising packages",
-                "WhatsApp click-to-chat on every listing and viewing confirmation",
-                "SEO-optimised listing pages that rank on Google Kenya",
-                "Neighbourhood guides and price trends for 47 counties",
-                "Admin moderation to protect your brand from spam",
-                "Free tier — post your first listing at no cost",
-              ].map((point) => (
-                <li key={point} className="flex items-start gap-3 text-sm">
-                  <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
           </div>
-          <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-secondary/5 p-8">
-            <div className="grid grid-cols-2 gap-6 text-center">
-              <div>
-                <div className="text-3xl font-bold text-primary">47</div>
-                <div className="text-xs text-muted-foreground mt-1">Counties covered</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">200</div>
-                <div className="text-xs text-muted-foreground mt-1">Listings per bulk import</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">24/7</div>
-                <div className="text-xs text-muted-foreground mt-1">Buyer discovery</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-primary">0 KES</div>
-                <div className="text-xs text-muted-foreground mt-1">To get started</div>
-              </div>
+
+          {plansLoading ? (
+            <div className="text-sm text-muted-foreground text-center">Loading plans…</div>
+          ) : plans.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-border p-8 text-center max-w-lg mx-auto">
+              <p className="text-sm text-muted-foreground">
+                Subscription plans are being finalised. Check back shortly, or{" "}
+                <Link to="/contact" className="text-primary underline">contact us</Link> for early access.
+              </p>
             </div>
-          </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {plans.map((t) => (
+                <div
+                  key={t.id}
+                  className={`relative rounded-2xl border p-6 shadow-soft flex flex-col ${
+                    t.highlight ? "border-primary bg-primary-soft/40" : "border-border bg-card"
+                  }`}
+                >
+                  {t.highlight && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary text-primary-foreground text-[11px] font-bold uppercase tracking-wider px-3 py-1">
+                      Most popular
+                    </span>
+                  )}
+                  <h3 className="text-lg font-bold">{t.name}</h3>
+                  <div className="mt-3">
+                    {t.price === 0 ? (
+                      <span className="text-3xl font-extrabold">Free</span>
+                    ) : (
+                      <>
+                        <span className="text-3xl font-extrabold">KES {Number(t.price).toLocaleString()}</span>
+                        <span className="text-sm text-muted-foreground">
+                          {" "}/ {t.duration_days === 30 ? "month" : `${t.duration_days} days`}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {t.listing_quota >= 999 ? "Unlimited" : t.listing_quota} active listing{t.listing_quota === 1 ? "" : "s"}
+                  </p>
+                  <ul className="mt-4 space-y-2 text-sm flex-1">
+                    {t.perks.map((p) => (
+                      <li key={p} className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to={becomeHref}
+                    className={`mt-5 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-opacity ${
+                      t.highlight
+                        ? "bg-primary text-primary-foreground hover:opacity-90"
+                        : "border border-border bg-card hover:border-primary/50"
+                    }`}
+                  >
+                    Become an agent <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="container-page pb-16">
+      <section className="container-page py-16">
         <div className="rounded-2xl border border-border bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-8 md:p-12 text-center">
-          <h2 className="text-2xl md:text-3xl font-semibold">Ready to grow your agency?</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold">Ready to join Foxwood as an agent?</h2>
           <p className="text-sm md:text-base mt-3 opacity-90 max-w-xl mx-auto">
-            Join hundreds of Kenyan agents and developers already using Foxwood Properties to close deals faster.
+            Create your account, pick a plan, and start reaching qualified buyers, renters, and investors across Kenya today.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
             <Link
-              to="/auth"
+              to={becomeHref}
               className="inline-flex items-center gap-2 rounded-lg bg-background text-foreground px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity"
             >
-              Create your free account <ArrowRight className="h-4 w-4" />
+              Become an agent <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               to="/contact"
