@@ -79,13 +79,22 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
               is_featured: true, featured_until: until, featured: true,
             }).eq("id", txn.property_id);
           } else if (txn.purpose === "upgrade_tier" && txn.tier) {
-            const expires = new Date(Date.now() + (txn.duration_days ?? 30) * 86400_000).toISOString();
-            const quotaByTier: Record<string, number> = { basic: 15, pro: 60, elite: 999 };
+            const { data: plan } = await supabaseAdmin
+              .from("tier_plans").select("*").eq("slug", txn.tier).maybeSingle();
+            const days = plan?.duration_days ?? txn.duration_days ?? 30;
+            const quota = plan?.listing_quota ?? ({ basic: 15, pro: 60, elite: 999 } as Record<string, number>)[txn.tier] ?? 3;
+            const expires = new Date(Date.now() + days * 86400_000).toISOString();
             await supabaseAdmin.from("profiles").update({
               tier: txn.tier,
               tier_expires_at: expires,
-              listing_quota: quotaByTier[txn.tier] ?? 3,
+              listing_quota: quota,
             }).eq("id", txn.user_id);
+            // Promote to agent role so they can access the Listings section.
+            await supabaseAdmin.from("user_roles").upsert(
+              { user_id: txn.user_id, role: "agent" as any },
+              { onConflict: "user_id,role" }
+            );
+
           } else if (txn.purpose === "verification_fee" && txn.property_id) {
             // Auto-create a pending verification request tied to the payment
             await supabaseAdmin.from("verification_requests").insert({
