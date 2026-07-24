@@ -129,9 +129,12 @@ function Account() {
           <Home className="h-6 w-6 text-primary mt-1" />
           <div className="flex-1 min-w-[240px]">
             <h3 className="font-semibold">List your own property</h3>
-            <p className="text-sm text-muted-foreground mt-1">Become an agent or owner to publish listings, manage inquiries and grow your business on Foxwood.</p>
+            <p className="text-sm text-muted-foreground mt-1">Pick a listing package, add your property details, and reach thousands of buyers and renters on Foxwood.</p>
           </div>
-          <Link to="/dashboard/upgrade" className="btn-primary btn-primary-hover">Get started</Link>
+          <div className="flex gap-2 flex-wrap">
+            <Link to="/listing-packages" className="btn-primary btn-primary-hover">Get started</Link>
+            <Link to="/dashboard/upgrade" className="btn-ghost">Become an agent</Link>
+          </div>
         </section>
       )}
 
