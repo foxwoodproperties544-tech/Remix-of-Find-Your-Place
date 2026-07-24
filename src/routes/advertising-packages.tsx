@@ -4,6 +4,7 @@ import { PackagePageShell, Li, SectionHeader } from "@/components/site/PackagePa
 import { listActiveAdPackages } from "@/lib/ads.functions";
 import heroTools from "@/assets/hero-tools.jpg";
 import { ArrowRight, Megaphone } from "lucide-react";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 const qo = queryOptions({ queryKey: ["active-ad-packages"], queryFn: () => listActiveAdPackages() });
 
