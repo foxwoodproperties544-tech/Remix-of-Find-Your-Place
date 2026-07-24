@@ -4,6 +4,7 @@ import { PackagePageShell, Li, SectionHeader } from "@/components/site/PackagePa
 import { listBlogPackages } from "@/lib/blog-submission.functions";
 import heroBlog from "@/assets/hero-blog.jpg";
 import { ArrowRight, PenSquare } from "lucide-react";
+import { SupportBanner } from "@/components/site/SupportBanner";
 
 const qo = queryOptions({ queryKey: ["active-blog-packages"], queryFn: () => listBlogPackages() });
 
@@ -87,6 +88,9 @@ function Page() {
           </div>
         </section>
       )}
+      <div className="mt-8">
+        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help with a blog submission package." />
+      </div>
     </PackagePageShell>
   );
 }
