@@ -1666,6 +1666,33 @@ export type Database = {
         }
         Relationships: []
       }
+      support_click_events: {
+        Row: {
+          action: string
+          context: string
+          created_at: string
+          id: string
+          page_path: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          context?: string
+          created_at?: string
+          id?: string
+          page_path?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          context?: string
+          created_at?: string
+          id?: string
+          page_path?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       tier_plans: {
         Row: {
           active: boolean

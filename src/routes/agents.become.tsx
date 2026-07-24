@@ -69,7 +69,7 @@ function BecomeAnAgentPage() {
       />
 
       <div className="container-page mt-6">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help picking an agent plan." />
+        <SupportBanner context="agent_subscription" whatsappMessage="Hello Foxwood Properties, I need help picking an agent plan." />
       </div>
 
       <section className="bg-muted/30 border-y border-border">

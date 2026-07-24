@@ -116,7 +116,7 @@ function Page() {
         ))
       )}
       <div className="mt-8">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help with an advertising package." />
+        <SupportBanner context="advertising_packages" whatsappMessage="Hello Foxwood Properties, I need help with an advertising package." />
       </div>
     </PackagePageShell>
   );

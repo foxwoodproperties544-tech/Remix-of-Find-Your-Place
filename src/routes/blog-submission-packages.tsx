@@ -89,7 +89,7 @@ function Page() {
         </section>
       )}
       <div className="mt-8">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help with a blog submission package." />
+        <SupportBanner context="blog_packages" whatsappMessage="Hello Foxwood Properties, I need help with a blog submission package." />
       </div>
     </PackagePageShell>
   );

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import footerBg from "@/assets/footer-realestate.jpg";
-import { SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, whatsappUrl } from "@/lib/support";
+import { SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, trackSupportClick, whatsappUrl } from "@/lib/support";
 
 export function Footer() {
   return (
@@ -44,12 +44,12 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-primary-foreground/85">
               <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-secondary" /> Nairobi, Kenya</li>
               <li>
-                <a href={`tel:${SUPPORT_PHONE_TEL}`} className="flex items-center gap-2 hover:text-secondary">
+                <a href={`tel:${SUPPORT_PHONE_TEL}`} onClick={() => trackSupportClick("call", "generic")} className="flex items-center gap-2 hover:text-secondary">
                   <Phone className="h-4 w-4 text-secondary" /> Phone: {SUPPORT_PHONE_DISPLAY}
                 </a>
               </li>
               <li>
-                <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary">
+                <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" onClick={() => trackSupportClick("whatsapp", "generic")} className="flex items-center gap-2 hover:text-secondary">
                   <MessageCircle className="h-4 w-4 text-secondary" /> WhatsApp: {SUPPORT_PHONE_DISPLAY}
                 </a>
               </li>

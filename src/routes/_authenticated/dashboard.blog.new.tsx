@@ -81,7 +81,7 @@ function NewBlogPost() {
   return (
     <DashboardShell>
       <div className="mb-4">
-        <SupportBanner whatsappMessage="Hello Foxwood Properties, I need help submitting a blog post." />
+        <SupportBanner context="blog" whatsappMessage="Hello Foxwood Properties, I need help submitting a blog post." />
       </div>
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
