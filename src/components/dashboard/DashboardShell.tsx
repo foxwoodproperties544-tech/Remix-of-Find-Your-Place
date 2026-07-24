@@ -25,6 +25,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
+      { to: "/dashboard/subscription", label: "My subscription", icon: Crown },
+      { to: "/dashboard/payment-history", label: "Payment history", icon: Receipt },
       { to: "/dashboard/blog/new", label: "Write a blog", icon: FileText, end: true },
       { to: "/dashboard/blog", label: "My blog posts", icon: FileText, end: true },
 
