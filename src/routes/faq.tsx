@@ -10,9 +10,11 @@ import {
   SUPPORT_PHONE_DISPLAY,
   SUPPORT_PHONE_TEL,
   supportMessageFor,
+  trackFaqEvent,
   trackSupportClick,
   whatsappUrl,
 } from "@/lib/support";
+import { useEffect, useRef } from "react";
 
 const TITLE = "Help & Support FAQ — Foxwood Properties";
 const DESC = "Search answers about buying, renting, listing, payments, verification and support at Foxwood Properties, or reach the team by phone or WhatsApp.";
@@ -108,6 +110,25 @@ function FAQPage() {
 
   const waMessage = supportMessageFor("faq");
 
+  // Debounced search analytics
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    const term = q.trim();
+    if (term.length < 2) return;
+    searchTimer.current = setTimeout(() => trackFaqEvent({ event_type: "search", search_term: term }), 800);
+    return () => { if (searchTimer.current) clearTimeout(searchTimer.current); };
+  }, [q]);
+
+  const handleChip = (cat: string) => {
+    setActiveCat(cat);
+    trackFaqEvent({ event_type: "chip_select", category: cat, search_term: q.trim() || null });
+    if (cat !== "all") {
+      const el = document.getElementById(slugifyCategory(cat));
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -137,7 +158,7 @@ function FAQPage() {
             <div className="flex flex-wrap lg:flex-col gap-1.5">
               <button
                 type="button"
-                onClick={() => setActiveCat("all")}
+                onClick={() => handleChip("all")}
                 className={`text-left rounded-lg px-3 py-2 text-sm transition ${activeCat === "all" ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-muted"}`}
               >
                 All topics <span className="text-xs opacity-70">({faqs.length})</span>
@@ -146,7 +167,7 @@ function FAQPage() {
                 <button
                   key={cat}
                   type="button"
-                  onClick={() => { setActiveCat(cat); const el = document.getElementById(slugifyCategory(cat)); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }}
+                  onClick={() => handleChip(cat)}
                   className={`text-left rounded-lg px-3 py-2 text-sm transition ${activeCat === cat ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-muted"}`}
                 >
                   {CATEGORY_LABELS[cat] ?? cat} <span className="text-xs opacity-70">({count})</span>
@@ -238,13 +259,41 @@ function FAQPage() {
 
 function FAQItem({ item }: { item: Faq }) {
   const [open, setOpen] = useState(false);
+  const answerRef = useRef<HTMLDivElement>(null);
+
+  // Track clicks on any link inside the answer body.
+  useEffect(() => {
+    const el = answerRef.current;
+    if (!el) return;
+    const onClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)?.closest("a");
+      if (!target) return;
+      trackFaqEvent({
+        event_type: "answer_link_click",
+        category: item.category,
+        question_id: item.id,
+        link_href: (target as HTMLAnchorElement).href,
+      });
+    };
+    el.addEventListener("click", onClick);
+    return () => el.removeEventListener("click", onClick);
+  }, [item.category, item.id, open]);
+
   return (
-    <details open={open} onToggle={(e) => setOpen((e.target as HTMLDetailsElement).open)} className="group">
+    <details
+      open={open}
+      onToggle={(e) => {
+        const isOpen = (e.target as HTMLDetailsElement).open;
+        setOpen(isOpen);
+        if (isOpen) trackFaqEvent({ event_type: "answer_link_click", category: item.category, question_id: item.id, link_href: "#open" });
+      }}
+      className="group"
+    >
       <summary className="cursor-pointer list-none px-5 py-4 flex items-center justify-between gap-4 hover:bg-muted/40">
         <span className="font-semibold text-left">{item.question}</span>
         <ChevronDown className={`h-4 w-4 text-muted-foreground shrink-0 transition ${open ? "rotate-180" : ""}`} />
       </summary>
-      <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{item.answer}</div>
+      <div ref={answerRef} className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{item.answer}</div>
     </details>
   );
 }

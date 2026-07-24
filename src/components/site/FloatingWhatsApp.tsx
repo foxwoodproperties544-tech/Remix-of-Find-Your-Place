@@ -4,14 +4,16 @@ import {
   inferContextFromPath,
   supportMessageFor,
   trackSupportClick,
+  useSupportOverride,
   whatsappUrl,
   SUPPORT_PHONE_DISPLAY,
 } from "@/lib/support";
 
 export function FloatingWhatsApp() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const context = inferContextFromPath(pathname);
-  const message = supportMessageFor(context);
+  const override = useSupportOverride();
+  const context = override?.context ?? inferContextFromPath(pathname);
+  const message = supportMessageFor(context, override?.extra);
 
   return (
     <a

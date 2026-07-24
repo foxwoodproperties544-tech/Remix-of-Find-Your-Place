@@ -18,6 +18,7 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { useCompare } from "@/hooks/use-compare";
 import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
+import { setSupportOverride } from "@/lib/support";
 import { SimilarProperties } from "@/components/site/SimilarProperties";
 import { AppointmentBookingForm } from "@/components/site/AppointmentBookingForm";
 import { useQuery } from "@tanstack/react-query";
@@ -261,6 +262,13 @@ function Detail() {
       supabase.from("property_views").insert({ property_key: propertyKey, viewer_user_id: data.user?.id ?? null }).then(() => {});
     });
   }, [p.id, propertyKey, ownerId]);
+
+  // Set support context so the floating WhatsApp mentions this property.
+  useEffect(() => {
+    const ref = p.id ? ` — ref: ${p.id}` : "";
+    setSupportOverride({ context: "property", extra: `re: ${p.title}${ref}` });
+    return () => setSupportOverride(null);
+  }, [p.id, p.title]);
 
   // Lightbox keyboard nav
   useEffect(() => {
