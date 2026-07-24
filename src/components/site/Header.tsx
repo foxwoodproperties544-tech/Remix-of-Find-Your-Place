@@ -246,17 +246,28 @@ export function Header() {
               <span>Agents</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileAgentsOpen ? "rotate-180" : ""}`} />
             </button>
-            {mobileAgentsOpen && (
-              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
-                {agentsItems.map((m) => (
-                  <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
-                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                    activeProps={{ className: "text-primary bg-primary-soft" }}>
-                    {m.label}
-                  </Link>
-                ))}
+            <div
+              className={`grid overflow-hidden transition-all duration-200 ease-out ${mobileAgentsOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+            >
+              <div className="min-h-0">
+                <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+                  {agentsItems.map((m) => {
+                    const active = pathname === m.to;
+                    return (
+                      <Link
+                        key={m.to}
+                        to={m.to}
+                        onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
+                        aria-current={active ? "page" : undefined}
+                        className={`rounded-lg px-3 py-2 text-sm transition-colors ${active ? "bg-primary-soft text-primary font-semibold" : "hover:bg-muted"}`}
+                      >
+                        {m.label}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
-            )}
+            </div>
             {/* Mobile More accordion */}
             <button
               type="button"
