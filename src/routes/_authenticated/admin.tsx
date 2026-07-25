@@ -202,6 +202,30 @@ function Admin() {
   );
 }
 
+function AdminMfaNudge() {
+  const [hasMfa, setHasMfa] = useState<boolean | null>(null);
+  const [dismissed, setDismissed] = useState(false);
+  useEffect(() => {
+    supabase.auth.mfa.listFactors().then(({ data }) => {
+      const verified = ((data?.all ?? []) as any[]).some((f) => f.factor_type === "totp" && f.status === "verified");
+      setHasMfa(verified);
+    }).catch(() => setHasMfa(null));
+  }, []);
+  if (hasMfa !== false || dismissed) return null;
+  return (
+    <div className="mt-4 rounded-xl border border-amber-300/60 bg-amber-50 dark:bg-amber-950/30 p-4 flex items-start gap-3">
+      <ShieldCheck className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+      <div className="flex-1 text-sm">
+        <div className="font-semibold text-amber-900 dark:text-amber-100">Enable two-factor authentication</div>
+        <div className="text-amber-800/90 dark:text-amber-200/90">Admin accounts should be protected by 2FA. Set up an authenticator app to keep the platform secure.</div>
+      </div>
+      <Link to="/dashboard/security" className="rounded-lg bg-amber-600 text-white px-3 py-1.5 text-xs font-semibold hover:bg-amber-700">Set up 2FA</Link>
+      <button onClick={() => setDismissed(true)} className="text-xs text-amber-800 hover:underline">Later</button>
+    </div>
+  );
+}
+
+
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, { cls: string; Icon: any }> = {
     published: { cls: "bg-primary-soft text-primary", Icon: Eye },
