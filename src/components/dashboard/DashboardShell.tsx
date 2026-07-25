@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
   Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
-  Phone, MessageCircle, LifeBuoy, SlidersHorizontal,
+  Phone, MessageCircle, LifeBuoy, SlidersHorizontal, CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -63,6 +63,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
       section: "Admin",
       items: [
         { to: "/admin", label: "Moderation", icon: ShieldCheck, end: true },
+        { to: "/admin/queue", label: "Approval queue", icon: CheckCircle2 },
         { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
         { to: "/admin/agents", label: "Invite agents", icon: UserCog },

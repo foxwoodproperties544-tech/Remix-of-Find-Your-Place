@@ -69,12 +69,7 @@ function AuditPage() {
   if (loading) return <div className="p-6">Loading…</div>;
   if (!isAdmin) return <div className="p-6">Admins only.</div>;
 
-  // When agentId is set, we want events where agent is EITHER actor or entity.
-  // The server ORed via applying both filters — but that's an AND. Do a client OR here.
-  const rowsRaw = (data ?? []) as any[];
-  const rows = agentId
-    ? rowsRaw.filter((r) => r.actor_id === agentId || r.entity_id === agentId)
-    : rowsRaw;
+  const rows = (data ?? []) as any[];
 
   function exportCsv() {
     const header = ["created_at", "actor_email", "actor_id", "action", "entity_type", "entity_id", "summary", "ip_address"];
