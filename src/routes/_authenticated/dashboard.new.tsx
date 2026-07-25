@@ -72,15 +72,17 @@ function NewListing() {
   const [foundingStatus, setFoundingStatus] = useState<{
     isFounding: boolean; quota: number; used: number; remaining: number; atQuota: boolean;
   } | null>(null);
+  const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data: prof } = await supabase
         .from("profiles")
-        .select("tier, tier_expires_at, listing_quota")
+        .select("tier, tier_expires_at, listing_quota, profile_completed_at")
         .eq("id", user.id)
         .maybeSingle();
+      setProfileComplete(!!(prof as any)?.profile_completed_at);
       const active =
         prof?.tier === "founding" &&
         (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
@@ -101,6 +103,7 @@ function NewListing() {
       });
     })();
   }, [user]);
+
 
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
