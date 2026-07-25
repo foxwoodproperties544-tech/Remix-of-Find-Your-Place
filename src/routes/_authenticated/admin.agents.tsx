@@ -4,8 +4,10 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { adminInviteAgent, listCompAgents, revokeCompAgent } from "@/lib/admin-agents.functions";
-import { ShieldCheck, UserPlus, Sparkles, Trash2, Loader2, BadgeCheck } from "lucide-react";
+import { listPendingAgentVerifications, decideAgentVerification } from "@/lib/agent-verification.functions";
+import { ShieldCheck, UserPlus, Sparkles, Trash2, Loader2, BadgeCheck, Check, X, FileText, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/_authenticated/admin/agents")({
   component: AdminAgents,
