@@ -7,6 +7,7 @@ import { useRoles } from "@/hooks/use-role";
 import { toast } from "sonner";
 import { Heart, Search, CalendarDays, Bell, User, Home, ShieldCheck } from "lucide-react";
 import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
+import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist";
 
 export const Route = createFileRoute("/_authenticated/dashboard/account")({
   component: Account,
@@ -118,10 +119,12 @@ function Account() {
           </Link>
         ))}
       </section>
+      <OnboardingChecklist />
 
       <KycCallout />
 
       <PhoneVerifyCard />
+
 
 
       {!isAgent && !isAdmin && (
