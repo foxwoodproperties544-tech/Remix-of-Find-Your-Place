@@ -69,6 +69,39 @@ function NewListing() {
     contact_phone: "", contact_whatsapp: "",
     video_url: "", tour_url: "", lat: "", lng: "",
   });
+  const [foundingStatus, setFoundingStatus] = useState<{
+    isFounding: boolean; quota: number; used: number; remaining: number; atQuota: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("tier, tier_expires_at, listing_quota")
+        .eq("id", user.id)
+        .maybeSingle();
+      const active =
+        prof?.tier === "founding" &&
+        (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
+      if (!active) { setFoundingStatus(null); return; }
+      const quota = Number(prof?.listing_quota ?? 0);
+      const { count } = await supabase
+        .from("properties")
+        .select("id", { count: "exact", head: true })
+        .eq("owner_id", user.id)
+        .in("status", ["pending", "published"]);
+      const used = count ?? 0;
+      setFoundingStatus({
+        isFounding: true,
+        quota,
+        used,
+        remaining: Math.max(0, quota - used),
+        atQuota: quota > 0 && used >= quota,
+      });
+    })();
+  }, [user]);
+
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
     setForm((f) => ({ ...f, [k]: v }));
