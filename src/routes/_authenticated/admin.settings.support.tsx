@@ -53,14 +53,16 @@ function SupportSettings() {
 
   const save = async () => {
     setSaving(true);
-    const rows = [
-      { key: "support_hours", value: { start, end, days, timezone } },
-      { key: "support_online_override", value: { mode: override } },
-    ];
-    for (const r of rows) {
-      const { error } = await supabase.from("platform_settings").upsert(r, { onConflict: "key" });
-      if (error) { toast.error(error.message); setSaving(false); return; }
-    }
+    const hoursRes = await supabase.from("platform_settings").upsert(
+      { key: "support_hours", value: { start, end, days, timezone } as any },
+      { onConflict: "key" },
+    );
+    if (hoursRes.error) { toast.error(hoursRes.error.message); setSaving(false); return; }
+    const overrideRes = await supabase.from("platform_settings").upsert(
+      { key: "support_online_override", value: { mode: override } as any },
+      { onConflict: "key" },
+    );
+    if (overrideRes.error) { toast.error(overrideRes.error.message); setSaving(false); return; }
     setSaving(false);
     toast.success("Support settings saved");
   };

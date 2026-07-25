@@ -24,7 +24,7 @@ export function OnboardingChecklist() {
       const [prof, listings, subs, kyc] = await Promise.all([
         supabase.from("profiles").select("full_name, phone, phone_verified, avatar_url, bio, company_name, tier, kyc_status").eq("id", user!.id).maybeSingle(),
         supabase.from("properties").select("id", { count: "exact", head: true }).eq("owner_id", user!.id),
-        supabase.from("property_package_purchases").select("id", { count: "exact", head: true }).eq("user_id", user!.id).eq("status", "active"),
+        supabase.from("property_package_purchases").select("id", { count: "exact", head: true }).eq("owner_id", user!.id).eq("status", "active"),
         supabase.from("kyc_submissions").select("id", { count: "exact", head: true }).eq("user_id", user!.id),
       ]);
       return {
