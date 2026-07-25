@@ -343,6 +343,37 @@ function NewListing() {
         <SupportBanner context="dashboard" whatsappMessage="Hello Foxwood Properties, I need help posting a listing." />
       </div>
 
+      {foundingStatus?.atQuota && (
+        <div className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/10 p-4 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-secondary mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <div className="font-semibold text-secondary">
+              You've used all {foundingStatus.quota} free founding listings
+            </div>
+            <p className="text-sm text-foreground/80 mt-1">
+              You can still create a listing, but it won't be published until you choose a paid
+              package. Pick a plan first for the smoothest flow.
+            </p>
+            <div className="mt-3 flex gap-2 flex-wrap">
+              <Link to="/dashboard/upgrade" className="btn-primary btn-primary-hover text-sm">
+                <Crown className="h-4 w-4" /> Choose a plan
+              </Link>
+              <Link to="/listing-packages" className="btn-ghost text-sm">See packages</Link>
+            </div>
+          </div>
+        </div>
+      )}
+      {foundingStatus && !foundingStatus.atQuota && foundingStatus.remaining <= 2 && (
+        <div className="mt-4 rounded-2xl border border-primary/20 bg-primary-soft/40 p-3 text-xs text-primary flex items-start gap-2">
+          <Info className="h-4 w-4 mt-0.5 shrink-0" />
+          <span>
+            {foundingStatus.remaining} free founding listing{foundingStatus.remaining === 1 ? "" : "s"} left.
+            After that you'll need a paid package to publish more.
+          </span>
+        </div>
+      )}
+
+
       <form onSubmit={(e) => save("submit", e)} className="mt-8 space-y-6" noValidate>
         <div>
           <label className={label}>Title *</label>
