@@ -9,7 +9,7 @@ import {
   adminGetRevenue, adminListExpiring, adminGetGracePeriods, adminSetGracePeriods,
 } from "@/lib/subscriptions.functions";
 import { lookupPayment } from "@/lib/admin.functions";
-import { ShieldCheck, Search, Star, CalendarCheck, Receipt, Bell, Ban, Trash2, Clock, Settings2 } from "lucide-react";
+import { ShieldCheck, Search, Star, CalendarCheck, Receipt, Bell, Ban, Trash2, Clock, Settings2, Download } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/subscriptions")({
