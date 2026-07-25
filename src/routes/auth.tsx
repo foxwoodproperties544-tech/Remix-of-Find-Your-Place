@@ -103,6 +103,12 @@ function AuthPage() {
         {mode === "signin" ? "Sign in to save favorites & list properties." : "Join Foxwood to list properties & save favorites."}
       </p>
 
+      {refCode && (
+        <div className="mt-4 rounded-lg border border-primary/30 bg-primary-soft text-primary text-xs px-3 py-2 text-center">
+          🎁 You were referred with code <span className="font-mono font-bold">{refCode}</span> — sign up to credit your friend.
+        </div>
+      )}
+
       <button onClick={google} className="mt-6 w-full btn-ghost !py-3 flex items-center justify-center gap-2">
         <svg className="h-5 w-5" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.4 5.9 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.6 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.4 5.9 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.4 0 10.3-2.1 14-5.5l-6.5-5.3C29.6 34.6 26.9 36 24 36c-5.2 0-9.6-3.1-11.3-7.4l-6.6 5.1C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.4-2.4 4.4-4.5 5.8l6.5 5.3C41.8 35.7 44 30.2 44 24c0-1.2-.1-2.3-.4-3.5z"/></svg>
         Continue with Google
