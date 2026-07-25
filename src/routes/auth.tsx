@@ -15,13 +15,38 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [refCode, setRefCode] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard" });
+    // Capture ?ref= from URL, persist for later
+    const params = new URLSearchParams(window.location.search);
+    const r = params.get("ref");
+    if (r) {
+      const clean = r.trim().toUpperCase().slice(0, 12);
+      setRefCode(clean);
+      try { localStorage.setItem("foxwood_ref", clean); } catch {}
+      setMode("signup");
+    } else {
+      try {
+        const stored = localStorage.getItem("foxwood_ref");
+        if (stored) setRefCode(stored);
+      } catch {}
+    }
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (data.session) {
+        // Attribute referrer if we still have one stashed
+        try {
+          const stored = localStorage.getItem("foxwood_ref");
+          if (stored) {
+            await supabase.rpc("claim_referral" as any, { _code: stored });
+            localStorage.removeItem("foxwood_ref");
+          }
+        } catch {}
+        navigate({ to: "/dashboard" });
+      }
     });
   }, [navigate]);
 
@@ -32,13 +57,25 @@ function AuthPage() {
       if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
           email, password,
-          options: { emailRedirectTo: window.location.origin, data: { full_name: fullName } },
+          options: {
+            emailRedirectTo: window.location.origin,
+            data: { full_name: fullName, referred_by_code: refCode || undefined },
+          },
         });
         if (error) throw error;
+        try { localStorage.removeItem("foxwood_ref"); } catch {}
         toast.success("Account created! You are signed in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        // Attempt post-hoc referral attribution
+        try {
+          const stored = localStorage.getItem("foxwood_ref");
+          if (stored) {
+            await supabase.rpc("claim_referral" as any, { _code: stored });
+            localStorage.removeItem("foxwood_ref");
+          }
+        } catch {}
         toast.success("Welcome back!");
       }
       router.invalidate();
@@ -57,6 +94,7 @@ function AuthPage() {
     router.invalidate();
     navigate({ to: "/dashboard" });
   }
+
 
   return (
     <div className="container-page py-16 max-w-md mx-auto">
