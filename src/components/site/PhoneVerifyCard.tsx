@@ -33,6 +33,8 @@ export function PhoneVerifyCard() {
       setSent(false); setCode("");
       qc.invalidateQueries({ queryKey: ["phone-verify-status"] });
       qc.invalidateQueries({ queryKey: ["profile"] });
+      qc.invalidateQueries({ queryKey: ["my-profile"] });
+
     },
     onError: (e: any) => toast.error(e?.message ?? "Invalid code"),
   });

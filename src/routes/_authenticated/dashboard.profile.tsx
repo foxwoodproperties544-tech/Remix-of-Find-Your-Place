@@ -1,17 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { UserCog, Upload, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
+import { UserCog, Upload, CheckCircle2, AlertCircle, ExternalLink, ShieldCheck, BadgeCheck, Clock, XCircle } from "lucide-react";
 import { SERVICES, ALL_TYPES } from "@/lib/taxonomy";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
+import { requestAgentVerification } from "@/lib/agent-verification.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard/profile")({
   component: ProfilePage,
   head: () => ({ meta: [{ title: "My profile — Foxwood" }, { name: "robots", content: "noindex" }] }),
 });
+
 
 const LANGUAGES = ["English", "Kiswahili", "Kikuyu", "Luo", "Luhya", "Kalenjin", "Kamba", "Meru", "Somali", "French", "Arabic"];
 
@@ -137,14 +141,18 @@ function ProfilePage() {
     name: form.full_name.trim().length > 1,
     bio: form.bio.trim().length >= 60,
     phone: form.phone.trim().length > 6,
+    phone_verified: !!(data as any)?.phone_verified,
     location: !!form.county && !!form.town,
     services: form.services.length > 0,
     areas: form.service_areas.length > 0,
     avatar: !!form.avatar_url,
   };
-  const complete = checks.name && checks.bio && checks.phone && checks.location && checks.services && checks.areas;
+  const complete = checks.name && checks.bio && checks.phone && checks.phone_verified && checks.location && checks.services && checks.areas;
+  const verificationStatus = ((data as any)?.agent_verification_status ?? "none") as "none" | "pending" | "approved" | "rejected";
+  const isVerified = !!(data as any)?.verified;
 
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading…</div>;
+
 
   return (
     <div className="max-w-4xl">
@@ -168,6 +176,7 @@ function ProfilePage() {
               <ChecklistItem ok={checks.avatar} label="Profile photo" />
               <ChecklistItem ok={checks.bio} label="Bio (60+ characters)" />
               <ChecklistItem ok={checks.phone} label="Phone number" />
+              <ChecklistItem ok={checks.phone_verified} label="Phone verified (SMS code)" />
               <ChecklistItem ok={checks.location} label="County & town" />
               <ChecklistItem ok={checks.services} label="At least one service" />
               <ChecklistItem ok={checks.areas} label="At least one area served" />
@@ -180,6 +189,21 @@ function ProfilePage() {
           )}
         </div>
       </div>
+
+      {/* Phone verification (required for public profile) */}
+      <div className="mt-5">
+        <PhoneVerifyCard />
+      </div>
+
+      {/* Agent verification */}
+      <VerificationCard
+        complete={complete}
+        phoneVerified={checks.phone_verified}
+        status={verificationStatus}
+        verified={isVerified}
+        reviewerNotes={(data as any)?.agent_verification_reviewer_notes ?? null}
+      />
+
 
       <form
         className="mt-6 space-y-8"
@@ -318,6 +342,99 @@ function ProfilePage() {
     </div>
   );
 }
+
+function VerificationCard({
+  complete, phoneVerified, status, verified, reviewerNotes,
+}: {
+  complete: boolean; phoneVerified: boolean;
+  status: "none" | "pending" | "approved" | "rejected";
+  verified: boolean; reviewerNotes: string | null;
+}) {
+  const qc = useQueryClient();
+  const requestFn = useServerFn(requestAgentVerification);
+  const [notes, setNotes] = useState("");
+  const request = useMutation({
+    mutationFn: () => requestFn({ data: { notes: notes.trim() || undefined } }),
+    onSuccess: () => {
+      toast.success("Verification requested — we'll email you when reviewed");
+      setNotes("");
+      qc.invalidateQueries({ queryKey: ["my-profile"] });
+    },
+    onError: (e: any) => toast.error(e.message ?? "Failed to submit"),
+  });
+
+  if (verified || status === "approved") {
+    return (
+      <div className="mt-5 rounded-2xl border border-primary/30 bg-primary-soft p-5 flex items-start gap-3">
+        <BadgeCheck className="h-6 w-6 text-primary shrink-0" />
+        <div>
+          <div className="font-semibold text-primary">You're a Foxwood-verified agent</div>
+          <p className="text-xs text-muted-foreground mt-1">The verified badge is showing on your public profile.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "pending") {
+    return (
+      <div className="mt-5 rounded-2xl border border-secondary/30 bg-secondary/10 p-5 flex items-start gap-3">
+        <Clock className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
+        <div>
+          <div className="font-semibold">Verification pending review</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            An admin will review your profile shortly. You'll be notified by email and in the app once a decision is made.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const canRequest = complete && phoneVerified;
+  return (
+    <div className="mt-5 rounded-2xl border border-border bg-card p-5">
+      <div className="flex items-start gap-3">
+        <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+        <div className="flex-1">
+          <div className="font-semibold">Request the Foxwood Verified Agent badge</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            Verified agents are ranked higher on the directory and rank of trust with buyers. Requires a complete profile and a verified phone number.
+          </p>
+          {status === "rejected" && reviewerNotes && (
+            <div className="mt-3 rounded-lg border border-destructive/30 bg-destructive/10 p-3 flex items-start gap-2 text-xs">
+              <XCircle className="h-4 w-4 text-destructive shrink-0" />
+              <div><strong>Reviewer notes:</strong> {reviewerNotes}</div>
+            </div>
+          )}
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value.slice(0, 500))}
+            placeholder="Optional: anything the reviewer should know (license number, referral, etc.)"
+            className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm min-h-[80px]"
+            maxLength={500}
+          />
+          <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
+            <span className="text-xs text-muted-foreground">
+              {canRequest
+                ? "Ready to submit."
+                : !phoneVerified
+                  ? "Verify your phone first."
+                  : "Complete your profile checklist above first."}
+            </span>
+            <button
+              type="button"
+              onClick={() => request.mutate()}
+              disabled={!canRequest || request.isPending}
+              className="btn-primary btn-primary-hover disabled:opacity-50"
+            >
+              {request.isPending ? "Submitting…" : status === "rejected" ? "Resubmit for review" : "Request verification"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function ChecklistItem({ ok, label }: { ok: boolean; label: string }) {
   return (

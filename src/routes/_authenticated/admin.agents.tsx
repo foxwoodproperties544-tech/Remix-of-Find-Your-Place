@@ -4,8 +4,10 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { adminInviteAgent, listCompAgents, revokeCompAgent } from "@/lib/admin-agents.functions";
-import { ShieldCheck, UserPlus, Sparkles, Trash2, Loader2, BadgeCheck } from "lucide-react";
+import { listPendingAgentVerifications, decideAgentVerification } from "@/lib/agent-verification.functions";
+import { ShieldCheck, UserPlus, Sparkles, Trash2, Loader2, BadgeCheck, Check, X, FileText, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/_authenticated/admin/agents")({
   component: AdminAgents,
@@ -217,9 +219,101 @@ function AdminAgents() {
           </table>
         </div>
       </div>
+
+      <VerificationQueue />
     </div>
   );
 }
+
+function VerificationQueue() {
+  const qc = useQueryClient();
+  const listFn = useServerFn(listPendingAgentVerifications);
+  const decideFn = useServerFn(decideAgentVerification);
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-agent-verifications"],
+    queryFn: () => listFn(),
+  });
+  const decide = useMutation({
+    mutationFn: (v: { userId: string; approve: boolean; notes?: string }) =>
+      decideFn({ data: { userId: v.userId, approve: v.approve, reviewerNotes: v.notes } }),
+    onSuccess: (_r, v) => {
+      toast.success(v.approve ? "Agent verified" : "Verification rejected");
+      qc.invalidateQueries({ queryKey: ["admin-agent-verifications"] });
+      qc.invalidateQueries({ queryKey: ["public-agents"] });
+    },
+    onError: (e: any) => toast.error(e.message ?? "Failed"),
+  });
+
+  return (
+    <div>
+      <h2 className="font-semibold mb-3 flex items-center gap-2">
+        <BadgeCheck className="h-4 w-4 text-primary" /> Pending agent verifications ({data?.length ?? 0})
+      </h2>
+      <div className="grid gap-3">
+        {isLoading && <div className="text-sm text-muted-foreground">Loading…</div>}
+        {!isLoading && !data?.length && (
+          <div className="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            No pending verification requests.
+          </div>
+        )}
+        {data?.map((r: any) => (
+          <div key={r.id} className="rounded-xl border border-border bg-card p-4">
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="font-semibold truncate">{r.full_name ?? "Agent"}</h3>
+                  {r.company_name && <span className="text-xs text-muted-foreground">· {r.company_name}</span>}
+                </div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  {[r.town, r.county].filter(Boolean).join(", ") || "—"} · {r.phone ?? "no phone"}
+                  {r.years_experience ? ` · ${r.years_experience} yrs` : ""}
+                  {r.license_number ? ` · License #${r.license_number}` : ""}
+                </div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Requested {r.agent_verification_requested_at ? new Date(r.agent_verification_requested_at).toLocaleDateString() : "—"}
+                </div>
+                {r.agent_verification_reviewer_notes && (
+                  <p className="text-xs mt-2 italic text-muted-foreground">Agent note: {r.agent_verification_reviewer_notes}</p>
+                )}
+                <div className="mt-2 flex gap-3 flex-wrap">
+                  {r.agent_verification_id_url && (
+                    <a href={r.agent_verification_id_url} target="_blank" rel="noopener" className="text-xs inline-flex items-center gap-1 text-primary hover:underline">
+                      <FileText className="h-3.5 w-3.5" /> ID document
+                    </a>
+                  )}
+                  {r.agent_verification_license_url && (
+                    <a href={r.agent_verification_license_url} target="_blank" rel="noopener" className="text-xs inline-flex items-center gap-1 text-primary hover:underline">
+                      <FileText className="h-3.5 w-3.5" /> License
+                    </a>
+                  )}
+                  <a href={`/agents/${r.id}`} target="_blank" rel="noopener" className="text-xs inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+                    <ExternalLink className="h-3.5 w-3.5" /> View public profile
+                  </a>
+                </div>
+              </div>
+              <div className="flex gap-2 shrink-0">
+                <button
+                  onClick={() => {
+                    const n = prompt("Reason (required)"); if (!n) return;
+                    decide.mutate({ userId: r.id, approve: false, notes: n });
+                  }}
+                  className="btn-ghost !px-3 !py-2 text-destructive"
+                  title="Reject"
+                ><X className="h-4 w-4" /></button>
+                <button
+                  onClick={() => decide.mutate({ userId: r.id, approve: true })}
+                  className="btn-primary btn-primary-hover !px-3 !py-2"
+                  title="Approve"
+                ><Check className="h-4 w-4" /></button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 
 const inputCls = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary transition-colors";
 

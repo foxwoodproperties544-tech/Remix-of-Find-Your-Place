@@ -1307,6 +1307,13 @@ export type Database = {
       profiles: {
         Row: {
           address_line: string | null
+          agent_verification_id_url: string | null
+          agent_verification_license_url: string | null
+          agent_verification_requested_at: string | null
+          agent_verification_reviewed_at: string | null
+          agent_verification_reviewed_by: string | null
+          agent_verification_reviewer_notes: string | null
+          agent_verification_status: string
           avatar_url: string | null
           bio: string | null
           comp_granted_at: string | null
@@ -1356,6 +1363,13 @@ export type Database = {
         }
         Insert: {
           address_line?: string | null
+          agent_verification_id_url?: string | null
+          agent_verification_license_url?: string | null
+          agent_verification_requested_at?: string | null
+          agent_verification_reviewed_at?: string | null
+          agent_verification_reviewed_by?: string | null
+          agent_verification_reviewer_notes?: string | null
+          agent_verification_status?: string
           avatar_url?: string | null
           bio?: string | null
           comp_granted_at?: string | null
@@ -1405,6 +1419,13 @@ export type Database = {
         }
         Update: {
           address_line?: string | null
+          agent_verification_id_url?: string | null
+          agent_verification_license_url?: string | null
+          agent_verification_requested_at?: string | null
+          agent_verification_reviewed_at?: string | null
+          agent_verification_reviewed_by?: string | null
+          agent_verification_reviewer_notes?: string | null
+          agent_verification_status?: string
           avatar_url?: string | null
           bio?: string | null
           comp_granted_at?: string | null
