@@ -18,6 +18,7 @@ import { FiltersSidebar, type FiltersState } from "@/components/site/FiltersSide
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AdSlot } from "@/components/site/AdSlot";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+import { fuzzySearch } from "@/lib/fuzzy";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
 const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
@@ -139,7 +140,7 @@ function List() {
   }, [all, state.county]);
 
 
-  const filtered = all.filter((p) => {
+  const preFiltered = all.filter((p) => {
     if (state.category && p.category !== state.category) return false;
     if (state.type && p.type !== state.type) return false;
     if (state.county && p.county !== state.county) return false;
@@ -161,9 +162,12 @@ function List() {
       for (const a of state.nearby) if (!p.amenities.includes(a)) return false;
     }
     if (favsOnly && !favorites.has(p.id)) return false;
-    if (q && !(`${p.title} ${p.area} ${p.town}`).toLowerCase().includes(q.toLowerCase())) return false;
     return true;
   });
+
+  const filtered = q
+    ? fuzzySearch(preFiltered, q, (p) => `${p.title} ${p.area} ${p.town} ${p.type} ${p.category}`, 500).map((r) => r.item)
+    : preFiltered;
 
   const sorted = [...filtered].sort((a, b) => {
     if (sortBy === "price-asc") return a.price - b.price;
