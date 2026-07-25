@@ -79,15 +79,20 @@ function AgentPage() {
             <div className="grid h-24 w-24 place-items-center rounded-full bg-primary text-primary-foreground font-bold text-3xl ring-4 ring-background shadow-glow">{initials || "FA"}</div>
           )}
           <div className="flex-1 min-w-[240px]">
-            <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider flex-wrap">
               {roleLabel}
-              {p.verified && <BadgeCheck className="h-4 w-4 text-primary" aria-label="Verified" />}
+              {p.verified && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary text-primary-foreground px-2.5 py-0.5 text-[11px] normal-case tracking-normal">
+                  <BadgeCheck className="h-3.5 w-3.5" /> Foxwood Verified Agent
+                </span>
+              )}
               {p.kyc_status === "approved" && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 text-[10px]">
                   <ShieldCheck className="h-3 w-3" /> KYC verified
                 </span>
               )}
             </div>
+
             <h1 className="text-3xl md:text-4xl font-bold mt-1">{name}</h1>
             {p.company_name && (
               <div className="mt-2 flex items-center gap-1 text-sm font-medium">
