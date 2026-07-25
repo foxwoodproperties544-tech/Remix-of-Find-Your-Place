@@ -13,6 +13,7 @@ export const listAuditLogs = createServerFn({ method: "GET" })
         entityType: z.string().optional(),
         actorId: z.string().uuid().optional(),
         entityId: z.string().uuid().optional(),
+        agentId: z.string().uuid().optional(),
         startDate: z.string().optional(),
         endDate: z.string().optional(),
         limit: z.number().int().min(1).max(500).optional(),
