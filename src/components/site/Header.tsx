@@ -223,11 +223,9 @@ export function Header() {
             onClick={() => setSearchOpen(true)}
             aria-label="Search properties, locations, categories (Ctrl+K)"
             title="Search (Ctrl+K)"
-            className="inline-flex items-center gap-2 rounded-full border border-border px-3 h-10 text-xs text-muted-foreground hover:text-primary hover:bg-primary-soft transition-colors"
+            className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"
           >
             <Search className="h-4 w-4" />
-            <span className="hidden xl:inline">Search…</span>
-            <kbd className="hidden xl:inline rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium">Ctrl K</kbd>
           </button>
           <LanguageToggle />
           <a href="tel:+254759556026" onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("call", "generic")); }} aria-label="Call Foxwood Properties on +254 759 556 026" title="+254 759 556 026" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"><Phone className="h-4 w-4" /></a>
