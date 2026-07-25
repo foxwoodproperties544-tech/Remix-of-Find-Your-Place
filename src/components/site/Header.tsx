@@ -250,9 +250,14 @@ export function Header() {
           )}
           <Link to={user ? "/dashboard/new" : "/auth"} className="btn-primary btn-primary-hover !py-2 !px-5 text-sm">List Property</Link>
         </div>
-        <button onClick={() => setOpen(!open)} className="lg:hidden grid h-10 w-10 place-items-center rounded-full border border-border" aria-label="Toggle menu">
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="lg:hidden flex items-center gap-1">
+          <button onClick={() => setSearchOpen(true)} className="grid h-10 w-10 place-items-center rounded-full border border-border" aria-label="Search">
+            <Search className="h-4 w-4" />
+          </button>
+          <button onClick={() => setOpen(!open)} className="grid h-10 w-10 place-items-center rounded-full border border-border" aria-label="Toggle menu">
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
       {open && (
         <div className="lg:hidden border-t border-border bg-background">
