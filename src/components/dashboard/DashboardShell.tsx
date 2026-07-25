@@ -65,6 +65,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin", label: "Moderation", icon: ShieldCheck, end: true },
         { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
+        { to: "/admin/agents", label: "Invite agents", icon: UserCog },
         { to: "/admin/verifications", label: "Listing verifications", icon: ShieldCheck },
         { to: "/admin/kyc", label: "Agent KYC", icon: UserCog },
 
