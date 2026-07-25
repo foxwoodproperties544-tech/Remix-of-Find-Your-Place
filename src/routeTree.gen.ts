@@ -82,6 +82,7 @@ import { Route as AuthenticatedAdminTierPlansRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
 import { Route as AuthenticatedAdminScanRunsRouteImport } from './routes/_authenticated/admin.scan-runs'
+import { Route as AuthenticatedAdminQueueRouteImport } from './routes/_authenticated/admin.queue'
 import { Route as AuthenticatedAdminPwaAnalyticsRouteImport } from './routes/_authenticated/admin.pwa-analytics'
 import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authenticated/admin.packages'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
@@ -500,6 +501,11 @@ const AuthenticatedAdminScanRunsRoute =
     path: '/scan-runs',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminQueueRoute = AuthenticatedAdminQueueRouteImport.update({
+  id: '/queue',
+  path: '/queue',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminPwaAnalyticsRoute =
   AuthenticatedAdminPwaAnalyticsRouteImport.update({
     id: '/pwa-analytics',
@@ -700,6 +706,7 @@ export interface FileRoutesByFullPath {
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
+  '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -799,6 +806,7 @@ export interface FileRoutesByTo {
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
+  '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -899,6 +907,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/_authenticated/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
+  '/_authenticated/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/_authenticated/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -1000,6 +1009,7 @@ export interface FileRouteTypes {
     | '/admin/notifications'
     | '/admin/packages'
     | '/admin/pwa-analytics'
+    | '/admin/queue'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
     | '/admin/support'
@@ -1099,6 +1109,7 @@ export interface FileRouteTypes {
     | '/admin/notifications'
     | '/admin/packages'
     | '/admin/pwa-analytics'
+    | '/admin/queue'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
     | '/admin/support'
@@ -1198,6 +1209,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/notifications'
     | '/_authenticated/admin/packages'
     | '/_authenticated/admin/pwa-analytics'
+    | '/_authenticated/admin/queue'
     | '/_authenticated/admin/scan-runs'
     | '/_authenticated/admin/subscriptions'
     | '/_authenticated/admin/support'
@@ -1804,6 +1816,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminScanRunsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/queue': {
+      id: '/_authenticated/admin/queue'
+      path: '/queue'
+      fullPath: '/admin/queue'
+      preLoaderRoute: typeof AuthenticatedAdminQueueRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/pwa-analytics': {
       id: '/_authenticated/admin/pwa-analytics'
       path: '/pwa-analytics'
@@ -2009,6 +2028,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
   AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRouteWithChildren
   AuthenticatedAdminPwaAnalyticsRoute: typeof AuthenticatedAdminPwaAnalyticsRoute
+  AuthenticatedAdminQueueRoute: typeof AuthenticatedAdminQueueRoute
   AuthenticatedAdminScanRunsRoute: typeof AuthenticatedAdminScanRunsRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
@@ -2030,6 +2050,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
   AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRouteWithChildren,
   AuthenticatedAdminPwaAnalyticsRoute: AuthenticatedAdminPwaAnalyticsRoute,
+  AuthenticatedAdminQueueRoute: AuthenticatedAdminQueueRoute,
   AuthenticatedAdminScanRunsRoute: AuthenticatedAdminScanRunsRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
