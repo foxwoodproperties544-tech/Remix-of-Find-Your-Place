@@ -1,7 +1,8 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2, FileText, Sparkles } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2, FileText, Sparkles, Search } from "lucide-react";
+import { SearchCommand } from "./SearchCommand";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,6 +35,7 @@ const moreItems = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [agentsOpen, setAgentsOpen] = useState(false);
@@ -76,6 +78,18 @@ export function Header() {
       document.removeEventListener("keydown", onKey);
     };
   }, [agentsOpen]);
+
+  // Global Ctrl/Cmd+K to open search palette
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   async function signOut() {
     await qc.cancelQueries();
@@ -195,6 +209,17 @@ export function Header() {
           </div>
         </nav>
         <div className="hidden md:flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search properties, locations, categories (Ctrl+K)"
+            title="Search (Ctrl+K)"
+            className="inline-flex items-center gap-2 rounded-full border border-border px-3 h-10 text-xs text-muted-foreground hover:text-primary hover:bg-primary-soft transition-colors"
+          >
+            <Search className="h-4 w-4" />
+            <span className="hidden xl:inline">Search…</span>
+            <kbd className="hidden xl:inline rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium">Ctrl K</kbd>
+          </button>
           <a href="tel:+254759556026" onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("call", "generic")); }} aria-label="Call Foxwood Properties on +254 759 556 026" title="+254 759 556 026" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"><Phone className="h-4 w-4" /></a>
           {user ? (
             <div className="relative">
