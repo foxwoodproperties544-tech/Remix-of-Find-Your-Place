@@ -132,6 +132,9 @@ function Admin() {
         <Link to="/admin/verifications" className="btn-ghost text-sm"><ShieldCheck className="h-4 w-4" /> Verifications queue</Link>
       </div>
 
+      <AdminMfaNudge />
+
+
       <div className="mt-6 flex gap-2 border-b border-border">
         {STATUSES.map((s) => (
           <button key={s} onClick={() => setTab(s)}
