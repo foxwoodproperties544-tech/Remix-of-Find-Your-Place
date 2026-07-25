@@ -3,10 +3,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchPropertiesByOwner } from "@/lib/properties";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { ProfileReviews } from "@/components/site/ProfileReviews";
+import { useAuth } from "@/hooks/use-auth";
 import {
   Phone, MessageCircle, MapPin, Home, BadgeCheck, Building2, Mail, Globe, Facebook, Instagram,
-  Linkedin, Twitter, Music2, Clock, Languages as LangIcon, Briefcase, Award, ShieldCheck,
+  Linkedin, Twitter, Music2, Clock, Languages as LangIcon, Briefcase, Award, ShieldCheck, AlertCircle, CheckCircle2,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/agents/$id")({
   loader: async ({ params }) => {
