@@ -8,6 +8,7 @@ import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useLanguage } from "./LanguageProvider";
 
 const nav = [
   { to: "/properties", label: "Buy", search: { category: "For Sale" } as const },
