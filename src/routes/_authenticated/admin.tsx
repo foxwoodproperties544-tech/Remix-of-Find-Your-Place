@@ -8,7 +8,7 @@ import { formatKsh } from "@/lib/mock-data";
 import { claimFirstAdmin } from "@/lib/admin.functions";
 import { CheckCircle2, XCircle, Trash2, ExternalLink, ShieldCheck, Clock, EyeOff, Eye, Star } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: Admin,
