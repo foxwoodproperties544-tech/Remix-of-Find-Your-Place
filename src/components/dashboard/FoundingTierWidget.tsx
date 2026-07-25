@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router";
 import { Sparkles, Clock, CheckCircle2, AlertTriangle, Crown } from "lucide-react";
 import { getMyFoundingStatus } from "@/lib/founding.functions";
 
+const FOUNDING_TOTAL_DAYS = 30;
+
 export function FoundingTierWidget() {
   const fn = useServerFn(getMyFoundingStatus);
   const { data, isLoading } = useQuery({
@@ -13,9 +15,7 @@ export function FoundingTierWidget() {
   });
 
   if (isLoading) {
-    return (
-      <div className="rounded-2xl border border-border bg-card p-5 animate-pulse h-40" />
-    );
+    return <div className="rounded-2xl border border-border bg-card p-5 animate-pulse h-40" />;
   }
   if (!data) return null;
   if (!data.active && !data.is_comp) {
@@ -34,10 +34,13 @@ export function FoundingTierWidget() {
     );
   }
 
-  const pct = data.listing_quota > 0
+  const listingPct = data.listing_quota > 0
     ? Math.min(100, Math.round((data.published_count / data.listing_quota) * 100))
     : 0;
-  const expiringSoon = data.days_remaining !== null && data.days_remaining <= 14;
+  const daysRemaining = data.days_remaining ?? 0;
+  const daysPct = Math.max(0, Math.min(100, Math.round((daysRemaining / FOUNDING_TOTAL_DAYS) * 100)));
+  const expiringSoon = data.days_remaining !== null && data.days_remaining <= 7;
+  const veryClose = data.days_remaining !== null && data.days_remaining <= 3;
   const atQuota = data.remaining <= 0 && data.listing_quota > 0;
 
   return (
@@ -53,13 +56,53 @@ export function FoundingTierWidget() {
         <Link to="/dashboard/subscription" className="btn-ghost text-xs">Manage plan</Link>
       </div>
 
+      {expiringSoon && (
+        <div
+          className={`flex items-start gap-2 rounded-xl border p-3 text-xs ${
+            veryClose
+              ? "border-destructive/30 bg-destructive/10 text-destructive"
+              : "border-secondary/30 bg-secondary/10 text-secondary"
+          }`}
+        >
+          <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+          <div>
+            <div className="font-semibold">
+              {daysRemaining <= 0
+                ? "Your founding plan has expired"
+                : `Founding plan expires in ${daysRemaining} day${daysRemaining === 1 ? "" : "s"}`}
+            </div>
+            <div className="mt-0.5">
+              Choose a paid plan to keep publishing new listings after expiry.
+            </div>
+            <Link to="/dashboard/upgrade" className="mt-2 inline-flex items-center gap-1 font-semibold underline">
+              <Crown className="h-3.5 w-3.5" /> Upgrade now
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {atQuota && (
+        <div className="flex items-start gap-2 rounded-xl border border-secondary/30 bg-secondary/10 p-3 text-xs text-secondary">
+          <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+          <div>
+            <div className="font-semibold">You've used all {data.listing_quota} free founding listings</div>
+            <div className="mt-0.5">
+              Any additional listing needs a paid package before it can go live.
+            </div>
+            <Link to="/dashboard/upgrade" className="mt-2 inline-flex items-center gap-1 font-semibold underline">
+              <Crown className="h-3.5 w-3.5" /> Choose a plan
+            </Link>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-3 sm:grid-cols-3">
         <Stat
           label="Expires in"
-          value={data.days_remaining !== null ? `${data.days_remaining}d` : "—"}
+          value={data.days_remaining !== null ? `${daysRemaining}d` : "—"}
           hint={data.expires_at ? new Date(data.expires_at).toDateString() : "No expiry"}
           icon={<Clock className="h-4 w-4" />}
-          tone={expiringSoon ? "warn" : "default"}
+          tone={veryClose ? "warn" : expiringSoon ? "info" : "default"}
         />
         <Stat
           label="Listings used"
@@ -77,18 +120,39 @@ export function FoundingTierWidget() {
         />
       </div>
 
+      {data.days_remaining !== null && (
+        <div>
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1">
+            <span>Time remaining on founding plan</span>
+            <span>{daysRemaining} / {FOUNDING_TOTAL_DAYS} days</span>
+          </div>
+          <div className="h-2 rounded-full bg-muted overflow-hidden">
+            <div
+              className={`h-full transition-all ${
+                veryClose ? "bg-destructive" : expiringSoon ? "bg-secondary" : "bg-primary"
+              }`}
+              style={{ width: `${daysPct}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       {data.listing_quota > 0 && (
         <div>
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1">
+            <span>Free listings used</span>
+            <span>{data.published_count} / {data.listing_quota}</span>
+          </div>
           <div className="h-2 rounded-full bg-muted overflow-hidden">
             <div
               className={`h-full ${atQuota ? "bg-secondary" : "bg-primary"} transition-all`}
-              style={{ width: `${pct}%` }}
+              style={{ width: `${listingPct}%` }}
             />
           </div>
           <div className="mt-1 text-xs text-muted-foreground">
             {atQuota
-              ? "You've reached your published-listing quota. Unpublish an old listing or upgrade to add more."
-              : `${pct}% of your ${data.listing_quota}-listing quota used`}
+              ? "You've reached your free listing quota. Choose a paid plan to add more."
+              : `${data.remaining} free listing${data.remaining === 1 ? "" : "s"} left on the founding plan`}
           </div>
         </div>
       )}

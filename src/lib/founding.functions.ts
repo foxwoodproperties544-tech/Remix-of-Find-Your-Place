@@ -176,7 +176,16 @@ export const moderateListing = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .select("id, owner_id, title, status")
       .single();
-    if (error) throw error; // trigger will raise if quota exceeded
+    if (error) {
+      const msg = (error.message || "").toLowerCase();
+      if (msg.includes("quota")) {
+        throw new Error(
+          "Cannot approve: this agent has reached their free-listing quota under the founding plan. Ask them to upgrade or unpublish an existing listing before approving another.",
+        );
+      }
+      throw error;
+    }
+
 
     await writeAudit({
       actorId: context.userId,

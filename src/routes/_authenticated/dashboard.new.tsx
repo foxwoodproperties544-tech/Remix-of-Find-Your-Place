@@ -1,11 +1,12 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useCallback, useRef, useState } from "react";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin } from "lucide-react";
+import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin, Crown, AlertTriangle } from "lucide-react";
 import { z } from "zod";
 import { SupportBanner } from "@/components/site/SupportBanner";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard/new")({
   component: NewListing,
@@ -68,6 +69,39 @@ function NewListing() {
     contact_phone: "", contact_whatsapp: "",
     video_url: "", tour_url: "", lat: "", lng: "",
   });
+  const [foundingStatus, setFoundingStatus] = useState<{
+    isFounding: boolean; quota: number; used: number; remaining: number; atQuota: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("tier, tier_expires_at, listing_quota")
+        .eq("id", user.id)
+        .maybeSingle();
+      const active =
+        prof?.tier === "founding" &&
+        (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
+      if (!active) { setFoundingStatus(null); return; }
+      const quota = Number(prof?.listing_quota ?? 0);
+      const { count } = await supabase
+        .from("properties")
+        .select("id", { count: "exact", head: true })
+        .eq("owner_id", user.id)
+        .in("status", ["pending", "published"]);
+      const used = count ?? 0;
+      setFoundingStatus({
+        isFounding: true,
+        quota,
+        used,
+        remaining: Math.max(0, quota - used),
+        atQuota: quota > 0 && used >= quota,
+      });
+    })();
+  }, [user]);
+
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
     setForm((f) => ({ ...f, [k]: v }));
@@ -257,7 +291,19 @@ function NewListing() {
         }
         if (compActive && quota > 0 && usedCount < quota) {
           await supabase.from("properties").update({ status: "pending" }).eq("id", inserted!.id);
-          toast.success(`Listing submitted — awaiting admin approval (${usedCount + 1}/${quota} free listings used)`);
+          const nowUsed = usedCount + 1;
+          const remaining = Math.max(0, quota - nowUsed);
+          // Notify agent when they hit the quota with this submission
+          if (remaining === 0) {
+            await supabase.from("notifications").insert({
+              user_id: user.id,
+              type: "founding_quota_reached",
+              title: `You've used all ${quota} free founding listings`,
+              body: `Great work! To publish any additional listing, choose a paid package. Founding listings already submitted will continue through review.`,
+              link: "/dashboard/upgrade",
+            });
+          }
+          toast.success(`Listing submitted — awaiting admin approval (${nowUsed}/${quota} free listings used)`);
           navigate({ to: "/dashboard" });
         } else {
           if (compActive) {
@@ -267,6 +313,7 @@ function NewListing() {
           }
           navigate({ to: "/dashboard/pay/$id", params: { id: inserted!.id } });
         }
+
 
       }
     } catch (err: any) {
@@ -295,6 +342,37 @@ function NewListing() {
       <div className="mt-4">
         <SupportBanner context="dashboard" whatsappMessage="Hello Foxwood Properties, I need help posting a listing." />
       </div>
+
+      {foundingStatus?.atQuota && (
+        <div className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/10 p-4 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-secondary mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <div className="font-semibold text-secondary">
+              You've used all {foundingStatus.quota} free founding listings
+            </div>
+            <p className="text-sm text-foreground/80 mt-1">
+              You can still create a listing, but it won't be published until you choose a paid
+              package. Pick a plan first for the smoothest flow.
+            </p>
+            <div className="mt-3 flex gap-2 flex-wrap">
+              <Link to="/dashboard/upgrade" className="btn-primary btn-primary-hover text-sm">
+                <Crown className="h-4 w-4" /> Choose a plan
+              </Link>
+              <Link to="/listing-packages" className="btn-ghost text-sm">See packages</Link>
+            </div>
+          </div>
+        </div>
+      )}
+      {foundingStatus && !foundingStatus.atQuota && foundingStatus.remaining <= 2 && (
+        <div className="mt-4 rounded-2xl border border-primary/20 bg-primary-soft/40 p-3 text-xs text-primary flex items-start gap-2">
+          <Info className="h-4 w-4 mt-0.5 shrink-0" />
+          <span>
+            {foundingStatus.remaining} free founding listing{foundingStatus.remaining === 1 ? "" : "s"} left.
+            After that you'll need a paid package to publish more.
+          </span>
+        </div>
+      )}
+
 
       <form onSubmit={(e) => save("submit", e)} className="mt-8 space-y-6" noValidate>
         <div>
