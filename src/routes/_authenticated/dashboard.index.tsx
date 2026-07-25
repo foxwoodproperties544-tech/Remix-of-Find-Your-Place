@@ -12,6 +12,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { RenewPackageDialog } from "@/components/site/RenewPackageDialog";
 import { listMyActiveListingPurchases } from "@/lib/renewals.functions";
 import { useServerFn } from "@tanstack/react-start";
+import { FoundingTierWidget } from "@/components/dashboard/FoundingTierWidget";
 import heroTools from "@/assets/hero-tools.jpg";
 
 
@@ -135,7 +136,8 @@ function Dashboard() {
         actions={<Link to="/dashboard/new" className="btn-secondary !py-2 !px-4 text-sm"><PlusCircle className="h-4 w-4" /> Post a new listing</Link>}
       />
       <div className="container-page py-10">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
+        <FoundingTierWidget />
+        <div className="mt-8 flex items-center justify-between gap-3 flex-wrap">
         <h2 className="text-lg font-bold flex items-center gap-2"><TrendingUp className="h-5 w-5 text-primary" /> Insights</h2>
         <div className="inline-flex rounded-full border border-border bg-background p-1">
           {(Object.keys(RANGE_LABELS) as RangeKey[]).map(k => (
