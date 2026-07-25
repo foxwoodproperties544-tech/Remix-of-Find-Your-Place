@@ -238,19 +238,36 @@ function NewListing() {
         toast.success("Draft saved");
         navigate({ to: "/dashboard" });
       } else {
-        // Comp / founding-tier agents skip payment and go straight to admin review
+        // Founding-tier agents get their first N listings free (quota from plan).
+        // Beyond quota, they must choose a paid package like anyone else.
         const { data: prof } = await supabase
-          .from("profiles").select("tier, tier_expires_at").eq("id", user.id).maybeSingle();
+          .from("profiles").select("tier, tier_expires_at, listing_quota").eq("id", user.id).maybeSingle();
         const compActive = prof?.tier === "founding" &&
           (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
-        if (compActive) {
+        const quota = Number(prof?.listing_quota ?? 0);
+        let usedCount = 0;
+        if (compActive && quota > 0) {
+          const { count } = await supabase
+            .from("properties")
+            .select("id", { count: "exact", head: true })
+            .eq("owner_id", user.id)
+            .in("status", ["pending", "published"])
+            .neq("id", inserted!.id);
+          usedCount = count ?? 0;
+        }
+        if (compActive && quota > 0 && usedCount < quota) {
           await supabase.from("properties").update({ status: "pending" }).eq("id", inserted!.id);
-          toast.success("Listing submitted — awaiting admin approval (no payment required)");
+          toast.success(`Listing submitted — awaiting admin approval (${usedCount + 1}/${quota} free listings used)`);
           navigate({ to: "/dashboard" });
         } else {
-          toast.success("Listing created — choose a package to publish");
+          if (compActive) {
+            toast.info(`You've used all ${quota} free founding listings — choose a package to publish this one`);
+          } else {
+            toast.success("Listing created — choose a package to publish");
+          }
           navigate({ to: "/dashboard/pay/$id", params: { id: inserted!.id } });
         }
+
       }
     } catch (err: any) {
       toast.error(err.message ?? "Failed to save");
