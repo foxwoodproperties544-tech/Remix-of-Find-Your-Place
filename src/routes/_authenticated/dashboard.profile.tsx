@@ -1,17 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { UserCog, Upload, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
+import { UserCog, Upload, CheckCircle2, AlertCircle, ExternalLink, ShieldCheck, BadgeCheck, Clock, XCircle } from "lucide-react";
 import { SERVICES, ALL_TYPES } from "@/lib/taxonomy";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
+import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
+import { requestAgentVerification } from "@/lib/agent-verification.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard/profile")({
   component: ProfilePage,
   head: () => ({ meta: [{ title: "My profile — Foxwood" }, { name: "robots", content: "noindex" }] }),
 });
+
 
 const LANGUAGES = ["English", "Kiswahili", "Kikuyu", "Luo", "Luhya", "Kalenjin", "Kamba", "Meru", "Somali", "French", "Arabic"];
 
