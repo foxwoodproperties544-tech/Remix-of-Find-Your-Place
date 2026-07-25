@@ -1668,6 +1668,27 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_hits: {
+        Row: {
+          bucket: string
+          hit_at: string
+          id: string
+          key: string
+        }
+        Insert: {
+          bucket: string
+          hit_at?: string
+          id?: string
+          key: string
+        }
+        Update: {
+          bucket?: string
+          hit_at?: string
+          id?: string
+          key?: string
+        }
+        Relationships: []
+      }
       reviews: {
         Row: {
           comment: string | null
@@ -2037,6 +2058,15 @@ export type Database = {
       bump_ad_daily_stat: {
         Args: { _campaign: string; _kind: string }
         Returns: undefined
+      }
+      check_and_hit_rate_limit: {
+        Args: {
+          _bucket: string
+          _key: string
+          _limit: number
+          _window_seconds: number
+        }
+        Returns: boolean
       }
       expire_listing_packages: { Args: never; Returns: undefined }
       has_role: {
