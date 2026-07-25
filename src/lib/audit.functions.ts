@@ -38,6 +38,7 @@ export const listAuditLogs = createServerFn({ method: "GET" })
     if (data.entityType) q = q.eq("entity_type", data.entityType);
     if (data.actorId) q = q.eq("actor_id", data.actorId);
     if (data.entityId) q = q.eq("entity_id", data.entityId);
+    if (data.agentId) q = q.or(`actor_id.eq.${data.agentId},entity_id.eq.${data.agentId}`);
     if (data.startDate) q = q.gte("created_at", data.startDate);
     if (data.endDate) q = q.lte("created_at", data.endDate);
 
