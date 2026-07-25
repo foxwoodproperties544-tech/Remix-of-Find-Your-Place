@@ -48,6 +48,14 @@ export function Header() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useLanguage();
+  const navLabel = (label: string) => {
+    const map: Record<string, any> = {
+      "Buy": "nav_buy", "Rent": "nav_rent", "Lease": "nav_lease", "Airbnbs": "nav_airbnbs",
+      "Blog": "nav_blog", "About Us": "nav_about", "Contact Us": "nav_contact",
+    };
+    return map[label] ? t(map[label]) : label;
+  };
   const moreActive = moreItems.some((m) => pathname === m.to);
   const agentsActive = agentsItems.some((m) => pathname === m.to);
 
