@@ -18,6 +18,7 @@ import { InstallAppBanner } from "../components/site/InstallAppBanner";
 import { FloatingWhatsApp } from "../components/site/FloatingWhatsApp";
 import { LiveChatWidget } from "../components/site/LiveChatWidget";
 import { TosAcceptBanner } from "../components/site/TosAcceptBanner";
+import { LanguageProvider } from "../components/site/LanguageProvider";
 
 function NotFoundComponent() {
   return (
@@ -141,16 +142,18 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col">
-        <TosAcceptBanner />
-        <Header />
-        <main className="flex-1"><Outlet /></main>
-        <Footer />
-        <CookieBanner />
-        <InstallAppBanner />
-        <FloatingWhatsApp />
-        <LiveChatWidget />
-      </div>
+      <LanguageProvider>
+        <div className="min-h-screen flex flex-col">
+          <TosAcceptBanner />
+          <Header />
+          <main className="flex-1"><Outlet /></main>
+          <Footer />
+          <CookieBanner />
+          <InstallAppBanner />
+          <FloatingWhatsApp />
+          <LiveChatWidget />
+        </div>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

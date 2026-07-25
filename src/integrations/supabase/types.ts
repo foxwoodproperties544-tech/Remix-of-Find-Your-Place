@@ -1320,6 +1320,8 @@ export type Database = {
           phone: string | null
           phone_verified: boolean
           phone_verified_at: string | null
+          referral_code: string | null
+          referred_by: string | null
           role_primary: string | null
           subscription_started_at: string | null
           subscription_suspended: boolean
@@ -1346,6 +1348,8 @@ export type Database = {
           phone?: string | null
           phone_verified?: boolean
           phone_verified_at?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
           role_primary?: string | null
           subscription_started_at?: string | null
           subscription_suspended?: boolean
@@ -1372,6 +1376,8 @@ export type Database = {
           phone?: string | null
           phone_verified?: boolean
           phone_verified_at?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
           role_primary?: string | null
           subscription_started_at?: string | null
           subscription_suspended?: boolean
@@ -1383,7 +1389,15 @@ export type Database = {
           verified?: boolean
           whatsapp?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       properties: {
         Row: {
@@ -2074,7 +2088,9 @@ export type Database = {
         }
         Returns: boolean
       }
+      claim_referral: { Args: { _code: string }; Returns: boolean }
       expire_listing_packages: { Args: never; Returns: undefined }
+      generate_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

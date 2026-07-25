@@ -8,6 +8,7 @@ import { useRoles } from "@/hooks/use-role";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useLanguage } from "./LanguageProvider";
 
 const nav = [
   { to: "/properties", label: "Buy", search: { category: "For Sale" } as const },
@@ -47,6 +48,14 @@ export function Header() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { t } = useLanguage();
+  const navLabel = (label: string) => {
+    const map: Record<string, any> = {
+      "Buy": "nav_buy", "Rent": "nav_rent", "Lease": "nav_lease", "Airbnbs": "nav_airbnbs",
+      "Blog": "nav_blog", "About Us": "nav_about", "Contact Us": "nav_contact",
+    };
+    return map[label] ? t(map[label]) : label;
+  };
   const moreActive = moreItems.some((m) => pathname === m.to);
   const agentsActive = agentsItems.some((m) => pathname === m.to);
 
@@ -114,7 +123,7 @@ export function Header() {
               className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
               activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
               activeProps={{ className: "text-primary bg-primary-soft" }}
-            >{n.label}</Link>
+            >{navLabel(n.label)}</Link>
           ))}
           {/* Agents dropdown */}
           <div
@@ -220,6 +229,7 @@ export function Header() {
             <span className="hidden xl:inline">Search…</span>
             <kbd className="hidden xl:inline rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium">Ctrl K</kbd>
           </button>
+          <LanguageToggle />
           <a href="tel:+254759556026" onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("call", "generic")); }} aria-label="Call Foxwood Properties on +254 759 556 026" title="+254 759 556 026" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"><Phone className="h-4 w-4" /></a>
           {user ? (
             <div className="relative">
@@ -264,7 +274,7 @@ export function Header() {
           <nav className="container-page flex flex-col py-3">
             {nav.map((n, i) => (
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{n.label}</Link>
+                className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{navLabel(n.label)}</Link>
             ))}
             {/* Mobile Agents accordion */}
             <button
@@ -337,5 +347,21 @@ export function Header() {
       )}
       <SearchCommand open={searchOpen} onOpenChange={setSearchOpen} />
     </header>
+  );
+}
+
+function LanguageToggle() {
+  const { lang, setLang } = useLanguage();
+  return (
+    <button
+      onClick={() => setLang(lang === "en" ? "sw" : "en")}
+      aria-label={`Switch language to ${lang === "en" ? "Swahili" : "English"}`}
+      title={lang === "en" ? "Badilisha lugha — Kiswahili" : "Switch language — English"}
+      className="hidden md:inline-flex items-center gap-1 h-10 px-3 rounded-full border border-border text-xs font-semibold text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"
+    >
+      <span className={lang === "en" ? "text-primary" : ""}>EN</span>
+      <span className="text-muted-foreground">/</span>
+      <span className={lang === "sw" ? "text-primary" : ""}>SW</span>
+    </button>
   );
 }

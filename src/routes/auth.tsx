@@ -15,13 +15,38 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [refCode, setRefCode] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const router = useRouter();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/dashboard" });
+    // Capture ?ref= from URL, persist for later
+    const params = new URLSearchParams(window.location.search);
+    const r = params.get("ref");
+    if (r) {
+      const clean = r.trim().toUpperCase().slice(0, 12);
+      setRefCode(clean);
+      try { localStorage.setItem("foxwood_ref", clean); } catch {}
+      setMode("signup");
+    } else {
+      try {
+        const stored = localStorage.getItem("foxwood_ref");
+        if (stored) setRefCode(stored);
+      } catch {}
+    }
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (data.session) {
+        // Attribute referrer if we still have one stashed
+        try {
+          const stored = localStorage.getItem("foxwood_ref");
+          if (stored) {
+            await supabase.rpc("claim_referral" as any, { _code: stored });
+            localStorage.removeItem("foxwood_ref");
+          }
+        } catch {}
+        navigate({ to: "/dashboard" });
+      }
     });
   }, [navigate]);
 
@@ -32,13 +57,25 @@ function AuthPage() {
       if (mode === "signup") {
         const { error } = await supabase.auth.signUp({
           email, password,
-          options: { emailRedirectTo: window.location.origin, data: { full_name: fullName } },
+          options: {
+            emailRedirectTo: window.location.origin,
+            data: { full_name: fullName, referred_by_code: refCode || undefined },
+          },
         });
         if (error) throw error;
+        try { localStorage.removeItem("foxwood_ref"); } catch {}
         toast.success("Account created! You are signed in.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        // Attempt post-hoc referral attribution
+        try {
+          const stored = localStorage.getItem("foxwood_ref");
+          if (stored) {
+            await supabase.rpc("claim_referral" as any, { _code: stored });
+            localStorage.removeItem("foxwood_ref");
+          }
+        } catch {}
         toast.success("Welcome back!");
       }
       router.invalidate();
@@ -58,12 +95,19 @@ function AuthPage() {
     navigate({ to: "/dashboard" });
   }
 
+
   return (
     <div className="container-page py-16 max-w-md mx-auto">
       <h1 className="text-3xl font-bold text-center">{mode === "signin" ? "Welcome back" : "Create your account"}</h1>
       <p className="mt-2 text-center text-sm text-muted-foreground">
         {mode === "signin" ? "Sign in to save favorites & list properties." : "Join Foxwood to list properties & save favorites."}
       </p>
+
+      {refCode && (
+        <div className="mt-4 rounded-lg border border-primary/30 bg-primary-soft text-primary text-xs px-3 py-2 text-center">
+          🎁 You were referred with code <span className="font-mono font-bold">{refCode}</span> — sign up to credit your friend.
+        </div>
+      )}
 
       <button onClick={google} className="mt-6 w-full btn-ghost !py-3 flex items-center justify-center gap-2">
         <svg className="h-5 w-5" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.4 5.9 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.6 18.9 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.4 5.9 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.4 0 10.3-2.1 14-5.5l-6.5-5.3C29.6 34.6 26.9 36 24 36c-5.2 0-9.6-3.1-11.3-7.4l-6.6 5.1C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.4-2.4 4.4-4.5 5.8l6.5 5.3C41.8 35.7 44 30.2 44 24c0-1.2-.1-2.3-.4-3.5z"/></svg>
