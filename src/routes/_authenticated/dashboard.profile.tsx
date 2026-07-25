@@ -176,6 +176,7 @@ function ProfilePage() {
               <ChecklistItem ok={checks.avatar} label="Profile photo" />
               <ChecklistItem ok={checks.bio} label="Bio (60+ characters)" />
               <ChecklistItem ok={checks.phone} label="Phone number" />
+              <ChecklistItem ok={checks.phone_verified} label="Phone verified (SMS code)" />
               <ChecklistItem ok={checks.location} label="County & town" />
               <ChecklistItem ok={checks.services} label="At least one service" />
               <ChecklistItem ok={checks.areas} label="At least one area served" />
@@ -188,6 +189,21 @@ function ProfilePage() {
           )}
         </div>
       </div>
+
+      {/* Phone verification (required for public profile) */}
+      <div className="mt-5">
+        <PhoneVerifyCard />
+      </div>
+
+      {/* Agent verification */}
+      <VerificationCard
+        complete={complete}
+        phoneVerified={checks.phone_verified}
+        status={verificationStatus}
+        verified={isVerified}
+        reviewerNotes={(data as any)?.agent_verification_reviewer_notes ?? null}
+      />
+
 
       <form
         className="mt-6 space-y-8"
