@@ -1,11 +1,12 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useCallback, useRef, useState } from "react";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin } from "lucide-react";
+import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin, Crown, AlertTriangle } from "lucide-react";
 import { z } from "zod";
 import { SupportBanner } from "@/components/site/SupportBanner";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard/new")({
   component: NewListing,
