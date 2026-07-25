@@ -291,7 +291,19 @@ function NewListing() {
         }
         if (compActive && quota > 0 && usedCount < quota) {
           await supabase.from("properties").update({ status: "pending" }).eq("id", inserted!.id);
-          toast.success(`Listing submitted — awaiting admin approval (${usedCount + 1}/${quota} free listings used)`);
+          const nowUsed = usedCount + 1;
+          const remaining = Math.max(0, quota - nowUsed);
+          // Notify agent when they hit the quota with this submission
+          if (remaining === 0) {
+            await supabase.from("notifications").insert({
+              user_id: user.id,
+              type: "founding_quota_reached",
+              title: `You've used all ${quota} free founding listings`,
+              body: `Great work! To publish any additional listing, choose a paid package. Founding listings already submitted will continue through review.`,
+              link: "/dashboard/upgrade",
+            });
+          }
+          toast.success(`Listing submitted — awaiting admin approval (${nowUsed}/${quota} free listings used)`);
           navigate({ to: "/dashboard" });
         } else {
           if (compActive) {
@@ -301,6 +313,7 @@ function NewListing() {
           }
           navigate({ to: "/dashboard/pay/$id", params: { id: inserted!.id } });
         }
+
 
       }
     } catch (err: any) {
