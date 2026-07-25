@@ -50,6 +50,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/advertise", label: "Advertise", icon: PlusCircle },
         { to: "/dashboard/my-ads", label: "My ads", icon: Star },
         { to: "/dashboard/ad-analytics", label: "Ad analytics", icon: LayoutDashboard },
+        { to: "/dashboard/insights", label: "Traffic insights", icon: LayoutDashboard },
 
       ],
     });

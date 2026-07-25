@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { listUsers, setUserRole } from "@/lib/users.functions";
 import { decideAccountVerification } from "@/lib/admin.functions";
-import { ShieldCheck, Search, BadgeCheck, X, ThumbsUp, ThumbsDown } from "lucide-react";
+import { ShieldCheck, Search, BadgeCheck, X, ThumbsUp, ThumbsDown, Download } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
@@ -70,7 +70,28 @@ function AdminUsers() {
           <h1 className="text-3xl font-bold mt-2">Users &amp; roles</h1>
           <p className="text-sm text-muted-foreground mt-1">Grant or revoke roles and manage profile verification.</p>
         </div>
-        <Link to="/admin" className="btn-ghost text-sm">Moderation</Link>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              const rows = (data ?? []) as any[];
+              const header = ["id", "full_name", "email", "company_name", "phone", "tier", "verified", "roles"];
+              const lines = [header.join(",")].concat(
+                rows.map((r) =>
+                  [r.id, r.full_name, r.email, r.company_name, r.phone, r.tier, r.verified, (r.roles ?? []).join("|")]
+                    .map((v) => JSON.stringify(v ?? ""))
+                    .join(","),
+                ),
+              );
+              const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url; a.download = `foxwood-users-${Date.now()}.csv`; a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="btn-ghost text-sm inline-flex items-center gap-1.5"
+          ><Download className="h-4 w-4" /> Export CSV</button>
+          <Link to="/admin" className="btn-ghost text-sm">Moderation</Link>
+        </div>
       </div>
 
       <div className="mt-6 relative max-w-md">

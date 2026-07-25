@@ -9,7 +9,7 @@ import {
   adminGetRevenue, adminListExpiring, adminGetGracePeriods, adminSetGracePeriods,
 } from "@/lib/subscriptions.functions";
 import { lookupPayment } from "@/lib/admin.functions";
-import { ShieldCheck, Search, Star, CalendarCheck, Receipt, Bell, Ban, Trash2, Clock, Settings2 } from "lucide-react";
+import { ShieldCheck, Search, Star, CalendarCheck, Receipt, Bell, Ban, Trash2, Clock, Settings2, Download } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/subscriptions")({
@@ -124,7 +124,24 @@ function AdminSubscriptions() {
           <h1 className="text-3xl font-bold mt-2">Subscriptions</h1>
           <p className="text-sm text-muted-foreground mt-1">Manage all active tier subscriptions, revenue, and renewals.</p>
         </div>
-        <Link to="/admin/analytics" className="btn-ghost text-sm">Analytics</Link>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              const rows = (data ?? []) as any[];
+              const header = ["id","full_name","company_name","phone","tier","pending_tier","tier_expires_at","subscription_suspended"];
+              const lines = [header.join(",")].concat(
+                rows.map((r) => header.map((k) => JSON.stringify(r[k] ?? "")).join(",")),
+              );
+              const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url; a.download = `foxwood-subscriptions-${Date.now()}.csv`; a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="btn-ghost text-sm inline-flex items-center gap-1.5"
+          ><Download className="h-4 w-4" /> Export CSV</button>
+          <Link to="/admin/analytics" className="btn-ghost text-sm">Analytics</Link>
+        </div>
       </div>
 
       {/* Revenue + expiring summary */}
