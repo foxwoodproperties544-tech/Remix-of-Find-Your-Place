@@ -12,9 +12,17 @@ export type PublicAgent = {
   tier: string | null;
   tier_expires_at: string | null;
   subscribed: boolean;
+  county: string | null;
+  town: string | null;
+  services: string[] | null;
+  specialties: string[] | null;
+  service_areas: string[] | null;
+  languages: string[] | null;
+  years_experience: number | null;
+  agent_verification_status: string | null;
 };
 
-/** Public: list users with an 'agent' role, verified first. */
+/** Public: list users with an 'agent' role and a complete profile, verified first. */
 export const listPublicAgents = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: roleRows, error: rErr } = await supabaseAdmin
@@ -24,21 +32,38 @@ export const listPublicAgents = createServerFn({ method: "GET" }).handler(async 
   if (!ids.length) return [] as PublicAgent[];
   const { data, error } = await supabaseAdmin
     .from("profiles")
-    .select("id, full_name, company_name, avatar_url, bio, verified, tier, tier_expires_at")
+    .select("id, full_name, company_name, avatar_url, bio, verified, tier, tier_expires_at, county, town, services, specialties, service_areas, languages, years_experience, agent_verification_status, profile_completed_at")
     .in("id", ids)
+    .not("profile_completed_at", "is", null)
     .order("verified", { ascending: false })
     .order("full_name", { ascending: true })
-    .limit(48);
+    .limit(200);
   if (error) throw error;
   const now = Date.now();
   return (data ?? []).map((p: any) => ({
-    ...p,
+    id: p.id,
+    full_name: p.full_name,
+    company_name: p.company_name,
+    avatar_url: p.avatar_url,
+    bio: p.bio,
+    verified: p.verified,
+    tier: p.tier,
+    tier_expires_at: p.tier_expires_at,
+    county: p.county,
+    town: p.town,
+    services: p.services ?? [],
+    specialties: p.specialties ?? [],
+    service_areas: p.service_areas ?? [],
+    languages: p.languages ?? [],
+    years_experience: p.years_experience,
+    agent_verification_status: p.agent_verification_status,
     subscribed:
       !!p.tier &&
       p.tier !== "free" &&
       (!p.tier_expires_at || new Date(p.tier_expires_at).getTime() > now),
   })) as PublicAgent[];
 });
+
 
 
 const ROLES = ["admin", "agent", "user", "owner", "buyer", "tenant", "developer"] as const;
