@@ -31,7 +31,7 @@ export function PropertyCard({ p }: { p: Property }) {
       </div>
       <Link to="/properties/$id" params={{ id: p.slug ?? p.id }} aria-label={`View details for ${p.title}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
-          <img src={p.image} alt={p.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <img src={p.image} alt={p.title} loading="lazy" decoding="async" width={640} height={480} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
           <div className="absolute top-3 left-3 flex gap-2 flex-wrap max-w-[70%]">
             <span className="rounded-full bg-secondary text-secondary-foreground text-xs font-semibold px-3 py-1">{p.category}</span>
             {p.featured && <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-semibold px-3 py-1 shadow-md"><Star className="h-3 w-3 fill-current" /> Featured</span>}
