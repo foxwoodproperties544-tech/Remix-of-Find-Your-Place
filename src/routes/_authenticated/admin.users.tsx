@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { listUsers, setUserRole } from "@/lib/users.functions";
 import { decideAccountVerification } from "@/lib/admin.functions";
-import { ShieldCheck, Search, BadgeCheck, X, ThumbsUp, ThumbsDown } from "lucide-react";
+import { ShieldCheck, Search, BadgeCheck, X, ThumbsUp, ThumbsDown, Download } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/users")({
