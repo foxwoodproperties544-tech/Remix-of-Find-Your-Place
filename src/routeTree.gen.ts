@@ -76,6 +76,7 @@ import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminTierPlansRouteImport } from './routes/_authenticated/admin.tier-plans'
+import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
 import { Route as AuthenticatedAdminScanRunsRouteImport } from './routes/_authenticated/admin.scan-runs'
 import { Route as AuthenticatedAdminPwaAnalyticsRouteImport } from './routes/_authenticated/admin.pwa-analytics'
@@ -98,6 +99,7 @@ import { Route as AuthenticatedDashboardInvoiceIdRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_authenticated/dashboard.feature.$id'
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 import { Route as AuthenticatedDashboardBlogNewRouteImport } from './routes/_authenticated/dashboard.blog.new'
+import { Route as AuthenticatedAdminSettingsSupportRouteImport } from './routes/_authenticated/admin.settings.support'
 import { Route as AuthenticatedAdminPackagesPreviewRouteImport } from './routes/_authenticated/admin.packages.preview'
 import { Route as AuthenticatedDashboardBlogIdPayRouteImport } from './routes/_authenticated/dashboard.blog.$id.pay'
 import { Route as AuthenticatedDashboardBlogIdEditRouteImport } from './routes/_authenticated/dashboard.blog.$id.edit'
@@ -458,6 +460,12 @@ const AuthenticatedAdminTierPlansRoute =
     path: '/tier-plans',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminSupportRoute =
+  AuthenticatedAdminSupportRouteImport.update({
+    id: '/support',
+    path: '/support',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSubscriptionsRoute =
   AuthenticatedAdminSubscriptionsRouteImport.update({
     id: '/subscriptions',
@@ -586,6 +594,12 @@ const AuthenticatedDashboardBlogNewRoute =
     path: '/new',
     getParentRoute: () => AuthenticatedDashboardBlogRoute,
   } as any)
+const AuthenticatedAdminSettingsSupportRoute =
+  AuthenticatedAdminSettingsSupportRouteImport.update({
+    id: '/settings/support',
+    path: '/settings/support',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminPackagesPreviewRoute =
   AuthenticatedAdminPackagesPreviewRouteImport.update({
     id: '/preview',
@@ -659,6 +673,7 @@ export interface FileRoutesByFullPath {
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
+  '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -685,6 +700,7 @@ export interface FileRoutesByFullPath {
   '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
@@ -752,6 +768,7 @@ export interface FileRoutesByTo {
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
+  '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -777,6 +794,7 @@ export interface FileRoutesByTo {
   '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
@@ -846,6 +864,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/_authenticated/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
+  '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
@@ -872,6 +891,7 @@ export interface FileRoutesById {
   '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/_authenticated/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
   '/_authenticated/dashboard/feature/$id': typeof AuthenticatedDashboardFeatureIdRoute
@@ -941,6 +961,7 @@ export interface FileRouteTypes {
     | '/admin/pwa-analytics'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
+    | '/admin/support'
     | '/admin/tier-plans'
     | '/admin/users'
     | '/admin/verifications'
@@ -967,6 +988,7 @@ export interface FileRouteTypes {
     | '/locations/$county/$town'
     | '/dashboard/'
     | '/admin/packages/preview'
+    | '/admin/settings/support'
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
@@ -1034,6 +1056,7 @@ export interface FileRouteTypes {
     | '/admin/pwa-analytics'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
+    | '/admin/support'
     | '/admin/tier-plans'
     | '/admin/users'
     | '/admin/verifications'
@@ -1059,6 +1082,7 @@ export interface FileRouteTypes {
     | '/locations/$county/$town'
     | '/dashboard'
     | '/admin/packages/preview'
+    | '/admin/settings/support'
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
     | '/dashboard/feature/$id'
@@ -1127,6 +1151,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pwa-analytics'
     | '/_authenticated/admin/scan-runs'
     | '/_authenticated/admin/subscriptions'
+    | '/_authenticated/admin/support'
     | '/_authenticated/admin/tier-plans'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
@@ -1153,6 +1178,7 @@ export interface FileRouteTypes {
     | '/locations/$county/$town'
     | '/_authenticated/dashboard/'
     | '/_authenticated/admin/packages/preview'
+    | '/_authenticated/admin/settings/support'
     | '/_authenticated/dashboard/blog/new'
     | '/_authenticated/dashboard/edit/$id'
     | '/_authenticated/dashboard/feature/$id'
@@ -1684,6 +1710,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTierPlansRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/support': {
+      id: '/_authenticated/admin/support'
+      path: '/support'
+      fullPath: '/admin/support'
+      preLoaderRoute: typeof AuthenticatedAdminSupportRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/subscriptions': {
       id: '/_authenticated/admin/subscriptions'
       path: '/subscriptions'
@@ -1838,6 +1871,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBlogNewRouteImport
       parentRoute: typeof AuthenticatedDashboardBlogRoute
     }
+    '/_authenticated/admin/settings/support': {
+      id: '/_authenticated/admin/settings/support'
+      path: '/settings/support'
+      fullPath: '/admin/settings/support'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsSupportRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/packages/preview': {
       id: '/_authenticated/admin/packages/preview'
       path: '/preview'
@@ -1890,9 +1930,11 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminPwaAnalyticsRoute: typeof AuthenticatedAdminPwaAnalyticsRoute
   AuthenticatedAdminScanRunsRoute: typeof AuthenticatedAdminScanRunsRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
+  AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedAdminTierPlansRoute: typeof AuthenticatedAdminTierPlansRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
+  AuthenticatedAdminSettingsSupportRoute: typeof AuthenticatedAdminSettingsSupportRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
@@ -1908,9 +1950,12 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminPwaAnalyticsRoute: AuthenticatedAdminPwaAnalyticsRoute,
   AuthenticatedAdminScanRunsRoute: AuthenticatedAdminScanRunsRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
+  AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedAdminTierPlansRoute: AuthenticatedAdminTierPlansRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
+  AuthenticatedAdminSettingsSupportRoute:
+    AuthenticatedAdminSettingsSupportRoute,
 }
 
 const AuthenticatedAdminRouteWithChildren =
@@ -2080,13 +2125,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
