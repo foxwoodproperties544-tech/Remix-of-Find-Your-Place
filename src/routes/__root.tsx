@@ -142,6 +142,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col">
+        <TosAcceptBanner />
         <Header />
         <main className="flex-1"><Outlet /></main>
         <Footer />
