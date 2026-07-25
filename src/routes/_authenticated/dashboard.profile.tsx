@@ -141,14 +141,18 @@ function ProfilePage() {
     name: form.full_name.trim().length > 1,
     bio: form.bio.trim().length >= 60,
     phone: form.phone.trim().length > 6,
+    phone_verified: !!(data as any)?.phone_verified,
     location: !!form.county && !!form.town,
     services: form.services.length > 0,
     areas: form.service_areas.length > 0,
     avatar: !!form.avatar_url,
   };
-  const complete = checks.name && checks.bio && checks.phone && checks.location && checks.services && checks.areas;
+  const complete = checks.name && checks.bio && checks.phone && checks.phone_verified && checks.location && checks.services && checks.areas;
+  const verificationStatus = ((data as any)?.agent_verification_status ?? "none") as "none" | "pending" | "approved" | "rejected";
+  const isVerified = !!(data as any)?.verified;
 
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading…</div>;
+
 
   return (
     <div className="max-w-4xl">
