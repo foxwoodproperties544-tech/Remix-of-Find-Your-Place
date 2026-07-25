@@ -52,8 +52,7 @@ function AuditPage() {
         data: {
           q: q || undefined,
           actions: activeActions.length ? activeActions : undefined,
-          actorId: agentId || undefined,
-          entityId: agentId || undefined,
+          agentId: agentId || undefined,
           startDate: startDate ? new Date(startDate).toISOString() : undefined,
           endDate: endDate ? new Date(endDate + "T23:59:59").toISOString() : undefined,
           limit: 400,
