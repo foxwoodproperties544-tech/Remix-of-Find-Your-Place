@@ -9,7 +9,12 @@ export const listAuditLogs = createServerFn({ method: "GET" })
       .object({
         q: z.string().optional(),
         action: z.string().optional(),
+        actions: z.array(z.string()).optional(),
         entityType: z.string().optional(),
+        actorId: z.string().uuid().optional(),
+        entityId: z.string().uuid().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
         limit: z.number().int().min(1).max(500).optional(),
       })
       .parse(d ?? {}),
@@ -28,7 +33,12 @@ export const listAuditLogs = createServerFn({ method: "GET" })
       .limit(data.limit ?? 200);
 
     if (data.action) q = q.eq("action", data.action);
+    if (data.actions?.length) q = q.in("action", data.actions);
     if (data.entityType) q = q.eq("entity_type", data.entityType);
+    if (data.actorId) q = q.eq("actor_id", data.actorId);
+    if (data.entityId) q = q.eq("entity_id", data.entityId);
+    if (data.startDate) q = q.gte("created_at", data.startDate);
+    if (data.endDate) q = q.lte("created_at", data.endDate);
 
     const { data: rows, error } = await q;
     if (error) throw error;
