@@ -17,6 +17,7 @@ import { CookieBanner } from "../components/site/CookieBanner";
 import { InstallAppBanner } from "../components/site/InstallAppBanner";
 import { FloatingWhatsApp } from "../components/site/FloatingWhatsApp";
 import { LiveChatWidget } from "../components/site/LiveChatWidget";
+import { TosAcceptBanner } from "../components/site/TosAcceptBanner";
 
 function NotFoundComponent() {
   return (
@@ -141,6 +142,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col">
+        <TosAcceptBanner />
         <Header />
         <main className="flex-1"><Outlet /></main>
         <Footer />

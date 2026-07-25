@@ -58,6 +58,7 @@ import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
+import { Route as AuthenticatedDashboardSecurityRouteImport } from './routes/_authenticated/dashboard.security'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardPaymentHistoryRouteImport } from './routes/_authenticated/dashboard.payment-history'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
@@ -352,6 +353,12 @@ const AuthenticatedDashboardSubscriptionRoute =
   AuthenticatedDashboardSubscriptionRouteImport.update({
     id: '/dashboard/subscription',
     path: '/dashboard/subscription',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardSecurityRoute =
+  AuthenticatedDashboardSecurityRouteImport.update({
+    id: '/dashboard/security',
+    path: '/dashboard/security',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardProfileRoute =
@@ -700,6 +707,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
@@ -795,6 +803,7 @@ export interface FileRoutesByTo {
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
@@ -893,6 +902,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
   '/_authenticated/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/_authenticated/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
@@ -991,6 +1001,7 @@ export interface FileRouteTypes {
     | '/dashboard/new'
     | '/dashboard/payment-history'
     | '/dashboard/profile'
+    | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
@@ -1086,6 +1097,7 @@ export interface FileRouteTypes {
     | '/dashboard/new'
     | '/dashboard/payment-history'
     | '/dashboard/profile'
+    | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
@@ -1183,6 +1195,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/new'
     | '/_authenticated/dashboard/payment-history'
     | '/_authenticated/dashboard/profile'
+    | '/_authenticated/dashboard/security'
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
@@ -1595,6 +1608,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/subscription'
       fullPath: '/dashboard/subscription'
       preLoaderRoute: typeof AuthenticatedDashboardSubscriptionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/security': {
+      id: '/_authenticated/dashboard/security'
+      path: '/dashboard/security'
+      fullPath: '/dashboard/security'
+      preLoaderRoute: typeof AuthenticatedDashboardSecurityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/profile': {
@@ -2038,6 +2058,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
   AuthenticatedDashboardPaymentHistoryRoute: typeof AuthenticatedDashboardPaymentHistoryRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
+  AuthenticatedDashboardSecurityRoute: typeof AuthenticatedDashboardSecurityRoute
   AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
@@ -2073,6 +2094,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardPaymentHistoryRoute:
     AuthenticatedDashboardPaymentHistoryRoute,
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
+  AuthenticatedDashboardSecurityRoute: AuthenticatedDashboardSecurityRoute,
   AuthenticatedDashboardSubscriptionRoute:
     AuthenticatedDashboardSubscriptionRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,

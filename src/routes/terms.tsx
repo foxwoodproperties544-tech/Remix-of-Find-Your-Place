@@ -20,7 +20,7 @@ export const Route = createFileRoute("/terms")({
 });
 
 const md = `
-Last updated: 19 July 2026.
+Last updated: 25 July 2026 (version 2026-07-25).
 
 These Terms and Conditions ("Terms") govern your access to and use of the **Foxwood Properties** website, mobile applications and services ("Services"). By using the Services you agree to these Terms.
 

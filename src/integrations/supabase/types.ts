@@ -1325,6 +1325,8 @@ export type Database = {
           subscription_suspended: boolean
           tier: string
           tier_expires_at: string | null
+          tos_accepted_at: string | null
+          tos_version_accepted: string | null
           updated_at: string
           verified: boolean
           whatsapp: string | null
@@ -1349,6 +1351,8 @@ export type Database = {
           subscription_suspended?: boolean
           tier?: string
           tier_expires_at?: string | null
+          tos_accepted_at?: string | null
+          tos_version_accepted?: string | null
           updated_at?: string
           verified?: boolean
           whatsapp?: string | null
@@ -1373,6 +1377,8 @@ export type Database = {
           subscription_suspended?: boolean
           tier?: string
           tier_expires_at?: string | null
+          tos_accepted_at?: string | null
+          tos_version_accepted?: string | null
           updated_at?: string
           verified?: boolean
           whatsapp?: string | null
