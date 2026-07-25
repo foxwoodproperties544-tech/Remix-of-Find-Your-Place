@@ -238,8 +238,19 @@ function NewListing() {
         toast.success("Draft saved");
         navigate({ to: "/dashboard" });
       } else {
-        toast.success("Listing created — choose a package to publish");
-        navigate({ to: "/dashboard/pay/$id", params: { id: inserted!.id } });
+        // Comp / founding-tier agents skip payment and go straight to admin review
+        const { data: prof } = await supabase
+          .from("profiles").select("tier, tier_expires_at").eq("id", user.id).maybeSingle();
+        const compActive = prof?.tier === "founding" &&
+          (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
+        if (compActive) {
+          await supabase.from("properties").update({ status: "pending" }).eq("id", inserted!.id);
+          toast.success("Listing submitted — awaiting admin approval (no payment required)");
+          navigate({ to: "/dashboard" });
+        } else {
+          toast.success("Listing created — choose a package to publish");
+          navigate({ to: "/dashboard/pay/$id", params: { id: inserted!.id } });
+        }
       }
     } catch (err: any) {
       toast.error(err.message ?? "Failed to save");
