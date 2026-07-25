@@ -341,3 +341,19 @@ export function Header() {
     </header>
   );
 }
+
+function LanguageToggle() {
+  const { lang, setLang } = useLanguage();
+  return (
+    <button
+      onClick={() => setLang(lang === "en" ? "sw" : "en")}
+      aria-label={`Switch language to ${lang === "en" ? "Swahili" : "English"}`}
+      title={lang === "en" ? "Badilisha lugha — Kiswahili" : "Switch language — English"}
+      className="hidden md:inline-flex items-center gap-1 h-10 px-3 rounded-full border border-border text-xs font-semibold text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"
+    >
+      <span className={lang === "en" ? "text-primary" : ""}>EN</span>
+      <span className="text-muted-foreground">/</span>
+      <span className={lang === "sw" ? "text-primary" : ""}>SW</span>
+    </button>
+  );
+}
