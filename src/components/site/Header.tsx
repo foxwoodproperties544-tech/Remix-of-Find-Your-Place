@@ -123,7 +123,7 @@ export function Header() {
               className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
               activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
               activeProps={{ className: "text-primary bg-primary-soft" }}
-            >{n.label}</Link>
+            >{navLabel(n.label)}</Link>
           ))}
           {/* Agents dropdown */}
           <div
@@ -274,7 +274,7 @@ export function Header() {
           <nav className="container-page flex flex-col py-3">
             {nav.map((n, i) => (
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{n.label}</Link>
+                className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{navLabel(n.label)}</Link>
             ))}
             {/* Mobile Agents accordion */}
             <button
