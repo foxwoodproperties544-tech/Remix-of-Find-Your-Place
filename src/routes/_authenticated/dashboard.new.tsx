@@ -72,15 +72,17 @@ function NewListing() {
   const [foundingStatus, setFoundingStatus] = useState<{
     isFounding: boolean; quota: number; used: number; remaining: number; atQuota: boolean;
   } | null>(null);
+  const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data: prof } = await supabase
         .from("profiles")
-        .select("tier, tier_expires_at, listing_quota")
+        .select("tier, tier_expires_at, listing_quota, profile_completed_at")
         .eq("id", user.id)
         .maybeSingle();
+      setProfileComplete(!!(prof as any)?.profile_completed_at);
       const active =
         prof?.tier === "founding" &&
         (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
@@ -101,6 +103,7 @@ function NewListing() {
       });
     })();
   }, [user]);
+
 
 
   function upd<K extends keyof typeof form>(k: K, v: string) {
@@ -343,7 +346,21 @@ function NewListing() {
         <SupportBanner context="dashboard" whatsappMessage="Hello Foxwood Properties, I need help posting a listing." />
       </div>
 
+      {profileComplete === false && (
+        <div className="mt-4 rounded-2xl border border-secondary/40 bg-secondary/10 p-4 flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-secondary mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <div className="font-semibold text-secondary">Complete your public agent profile first</div>
+            <p className="text-sm text-foreground/80 mt-1">
+              Buyers need to see who they're dealing with. Add your bio, location, contact and services so your listings look trustworthy.
+            </p>
+            <Link to="/dashboard/profile" className="btn-primary btn-primary-hover text-sm mt-3 inline-flex">Complete profile</Link>
+          </div>
+        </div>
+      )}
+
       {foundingStatus?.atQuota && (
+
         <div className="mt-4 rounded-2xl border border-secondary/30 bg-secondary/10 p-4 flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 text-secondary mt-0.5 shrink-0" />
           <div className="flex-1">

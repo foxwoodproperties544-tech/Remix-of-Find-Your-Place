@@ -1306,97 +1306,151 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address_line: string | null
           avatar_url: string | null
           bio: string | null
           comp_granted_at: string | null
           comp_granted_by: string | null
           comp_reason: string | null
           company_name: string | null
+          county: string | null
           created_at: string
+          email_public: string | null
+          facebook_url: string | null
           full_name: string | null
           id: string
+          instagram_url: string | null
           kyc_status: Database["public"]["Enums"]["kyc_status"]
           kyc_verified_at: string | null
+          languages: string[]
           last_expiry_reminder_days: number | null
+          license_number: string | null
+          linkedin_url: string | null
           listing_quota: number
+          office_hours: string | null
           pending_tier: string | null
           phone: string | null
           phone_verified: boolean
           phone_verified_at: string | null
+          profile_completed_at: string | null
           referral_code: string | null
           referred_by: string | null
           role_primary: string | null
+          service_areas: string[]
+          services: string[]
+          specialties: string[]
           subscription_started_at: string | null
           subscription_suspended: boolean
           tier: string
           tier_expires_at: string | null
+          tiktok_url: string | null
           tos_accepted_at: string | null
           tos_version_accepted: string | null
+          town: string | null
+          twitter_url: string | null
           updated_at: string
           verified: boolean
+          website: string | null
           whatsapp: string | null
+          years_experience: number | null
         }
         Insert: {
+          address_line?: string | null
           avatar_url?: string | null
           bio?: string | null
           comp_granted_at?: string | null
           comp_granted_by?: string | null
           comp_reason?: string | null
           company_name?: string | null
+          county?: string | null
           created_at?: string
+          email_public?: string | null
+          facebook_url?: string | null
           full_name?: string | null
           id: string
+          instagram_url?: string | null
           kyc_status?: Database["public"]["Enums"]["kyc_status"]
           kyc_verified_at?: string | null
+          languages?: string[]
           last_expiry_reminder_days?: number | null
+          license_number?: string | null
+          linkedin_url?: string | null
           listing_quota?: number
+          office_hours?: string | null
           pending_tier?: string | null
           phone?: string | null
           phone_verified?: boolean
           phone_verified_at?: string | null
+          profile_completed_at?: string | null
           referral_code?: string | null
           referred_by?: string | null
           role_primary?: string | null
+          service_areas?: string[]
+          services?: string[]
+          specialties?: string[]
           subscription_started_at?: string | null
           subscription_suspended?: boolean
           tier?: string
           tier_expires_at?: string | null
+          tiktok_url?: string | null
           tos_accepted_at?: string | null
           tos_version_accepted?: string | null
+          town?: string | null
+          twitter_url?: string | null
           updated_at?: string
           verified?: boolean
+          website?: string | null
           whatsapp?: string | null
+          years_experience?: number | null
         }
         Update: {
+          address_line?: string | null
           avatar_url?: string | null
           bio?: string | null
           comp_granted_at?: string | null
           comp_granted_by?: string | null
           comp_reason?: string | null
           company_name?: string | null
+          county?: string | null
           created_at?: string
+          email_public?: string | null
+          facebook_url?: string | null
           full_name?: string | null
           id?: string
+          instagram_url?: string | null
           kyc_status?: Database["public"]["Enums"]["kyc_status"]
           kyc_verified_at?: string | null
+          languages?: string[]
           last_expiry_reminder_days?: number | null
+          license_number?: string | null
+          linkedin_url?: string | null
           listing_quota?: number
+          office_hours?: string | null
           pending_tier?: string | null
           phone?: string | null
           phone_verified?: boolean
           phone_verified_at?: string | null
+          profile_completed_at?: string | null
           referral_code?: string | null
           referred_by?: string | null
           role_primary?: string | null
+          service_areas?: string[]
+          services?: string[]
+          specialties?: string[]
           subscription_started_at?: string | null
           subscription_suspended?: boolean
           tier?: string
           tier_expires_at?: string | null
+          tiktok_url?: string | null
           tos_accepted_at?: string | null
           tos_version_accepted?: string | null
+          town?: string | null
+          twitter_url?: string | null
           updated_at?: string
           verified?: boolean
+          website?: string | null
           whatsapp?: string | null
+          years_experience?: number | null
         }
         Relationships: [
           {
@@ -2105,6 +2159,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_profile_complete: {
+        Args: { _p: Database["public"]["Tables"]["profiles"]["Row"] }
         Returns: boolean
       }
       run_saved_search_alerts: { Args: never; Returns: number }
