@@ -12,6 +12,7 @@ import {
   trackSupportClick,
   whatsappUrl,
 } from "@/lib/support";
+import { checkRateLimit, rateLimitKey } from "@/lib/rate-limit";
 
 const TITLE = "Support Center — Foxwood Properties";
 const DESC = "Submit a support ticket, track your open issues, or reach the Foxwood team by phone and WhatsApp.";
@@ -116,6 +117,8 @@ function HelpCenterPage() {
     if (body.trim().length < 10) { setErr("Please describe your issue in more detail."); return; }
     setSubmitting(true);
     try {
+      const allowed = await checkRateLimit("support_ticket", rateLimitKey(userId), 5, 60 * 60);
+      if (!allowed) throw new Error("You've submitted several tickets recently. Please wait an hour before opening another.");
       let screenshotPath: string | null = null;
       if (file) {
         if (file.size > 5 * 1024 * 1024) throw new Error("Screenshot must be 5MB or smaller.");
