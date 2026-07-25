@@ -49,6 +49,7 @@ export const Route = createFileRoute("/agents/$id")({
 
 function AgentPage() {
   const { profile, listings } = Route.useLoaderData();
+  const { user } = useAuth();
   const p: any = profile;
   const name = p.full_name ?? "Foxwood Agent";
   const initials = name.split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
@@ -62,6 +63,19 @@ function AgentPage() {
   const areas: string[] = p.service_areas ?? [];
   const languages: string[] = p.languages ?? [];
 
+  const isOwner = user?.id === p.id;
+  const checks = {
+    name: (p.full_name ?? "").trim().length > 1,
+    avatar: !!p.avatar_url,
+    bio: (p.bio ?? "").trim().length >= 60,
+    phone: (p.phone ?? "").trim().length > 6,
+    phone_verified: !!p.phone_verified,
+    location: !!p.county && !!p.town,
+    services: services.length > 0,
+    areas: areas.length > 0,
+  };
+  const missing = Object.entries(checks).filter(([, ok]) => !ok);
+
   const socials = [
     { url: p.website, icon: Globe, label: "Website" },
     { url: p.facebook_url, icon: Facebook, label: "Facebook" },
@@ -71,13 +85,41 @@ function AgentPage() {
     { url: p.tiktok_url, icon: Music2, label: "TikTok" },
   ].filter((s) => s.url);
 
+  const labels: Record<string, string> = {
+    name: "Full name", avatar: "Profile photo", bio: "Bio (60+ characters)", phone: "Phone number",
+    phone_verified: "Verified phone (SMS)", location: "County & town", services: "At least one service", areas: "At least one area served",
+  };
+
   return (
     <>
+      {isOwner && missing.length > 0 && (
+        <div className="container-page pt-6">
+          <div className="rounded-2xl border border-secondary/40 bg-secondary/10 p-4 flex items-start gap-3">
+            <AlertCircle className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
+            <div className="flex-1 text-sm">
+              <div className="font-semibold">Your profile is hidden from the public directory</div>
+              <p className="text-xs text-muted-foreground mt-1">Complete the following to appear in search results and be eligible for verification:</p>
+              <ul className="mt-2 grid gap-1 sm:grid-cols-2 text-xs">
+                {Object.entries(checks).map(([k, ok]) => (
+                  <li key={k} className={`flex items-center gap-1.5 ${ok ? "text-emerald-700 dark:text-emerald-400" : "text-foreground/80"}`}>
+                    <CheckCircle2 className={`h-3.5 w-3.5 ${ok ? "" : "opacity-30"}`} /> {labels[k]}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/dashboard/profile" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+                Complete my profile →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       <section className="bg-primary-soft border-b border-border">
         <div className="container-page py-10 md:py-14 flex items-start gap-6 flex-wrap">
           {p.avatar_url ? (
             <img src={p.avatar_url} alt={name} className="h-24 w-24 rounded-full object-cover ring-4 ring-background shadow-glow" />
           ) : (
+
             <div className="grid h-24 w-24 place-items-center rounded-full bg-primary text-primary-foreground font-bold text-3xl ring-4 ring-background shadow-glow">{initials || "FA"}</div>
           )}
           <div className="flex-1 min-w-[240px]">
