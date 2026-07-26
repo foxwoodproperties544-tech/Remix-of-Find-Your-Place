@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useServerFn } from "@tanstack/react-start";
+import { submitDueDiligenceRequest } from "@/lib/due-diligence.functions";
 import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
 import { PageHero } from "@/components/site/PageHero";
 import heroTools from "@/assets/hero-tools.jpg";
@@ -53,11 +53,11 @@ const schema = z.object({
   county: z.string().trim().max(60).optional().or(z.literal("")),
   property_ref: z.string().trim().max(120).optional().or(z.literal("")),
   message: z.string().trim().max(1000).optional().or(z.literal("")),
-  service: z.string().min(1),
+  service: z.enum(["land_search", "title_verification", "survey", "valuation"]),
 });
 
 function DueDiligence() {
-  const { user } = useAuth();
+  const submitRequest = useServerFn(submitDueDiligenceRequest);
   const [service, setService] = useState(SERVICES[0].key);
   const [form, setForm] = useState({ name: "", phone: "", email: "", county: "", property_ref: "", message: "" });
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
@@ -65,17 +65,7 @@ function DueDiligence() {
   const submit = useMutation({
     mutationFn: async () => {
       const parsed = schema.parse({ ...form, service });
-      const { error } = await supabase.from("due_diligence_requests").insert({
-        user_id: user?.id ?? null,
-        name: parsed.name,
-        phone: parsed.phone,
-        email: parsed.email || null,
-        county: parsed.county || null,
-        property_ref: parsed.property_ref || null,
-        message: parsed.message || null,
-        service: parsed.service,
-      });
-      if (error) throw error;
+      await submitRequest({ data: parsed });
     },
     onSuccess: () => {
       toast.success("Request received — our team will contact you shortly");

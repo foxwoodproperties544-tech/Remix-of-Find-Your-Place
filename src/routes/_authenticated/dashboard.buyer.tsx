@@ -8,6 +8,13 @@ import { toProperty, type DbPropertyRow } from "@/lib/properties";
 import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
 import { CATEGORIES, ALL_TYPES } from "@/lib/taxonomy";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import {
+  saveMatchPreferences,
+  createPropertyAlert,
+  updatePropertyAlert,
+  deletePropertyAlert,
+} from "@/lib/buyer.functions";
 import { Sparkles, Bell, ListChecks, Check, Plus, Trash2, Heart } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/buyer")({
@@ -52,12 +59,14 @@ function BuyerDashboard() {
   const [draft, setDraft] = useState<Prefs | null>(null);
   const form = draft ?? prefs;
 
+  const savePrefsFn = useServerFn(saveMatchPreferences);
+  const createAlertFn = useServerFn(createPropertyAlert);
+  const updateAlertFn = useServerFn(updatePropertyAlert);
+  const deleteAlertFn = useServerFn(deletePropertyAlert);
+
   const savePrefs = useMutation({
     mutationFn: async (p: Prefs) => {
-      const { error } = await supabase
-        .from("match_preferences")
-        .upsert({ user_id: user!.id, prefs: p as any }, { onConflict: "user_id" });
-      if (error) throw error;
+      await savePrefsFn({ data: { prefs: p } });
     },
     onSuccess: () => {
       toast.success("Preferences saved — matches updated");
@@ -95,6 +104,7 @@ function BuyerDashboard() {
       const { data, error } = await supabase
         .from("property_alerts")
         .select("*")
+        .eq("user_id", user!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
@@ -104,12 +114,7 @@ function BuyerDashboard() {
   const createAlert = useMutation({
     mutationFn: async () => {
       const name = [form.county, form.type, form.category].filter(Boolean).join(" · ") || "All new listings";
-      const { error } = await supabase.from("property_alerts").insert({
-        user_id: user!.id,
-        name,
-        filters: form as any,
-      });
-      if (error) throw error;
+      await createAlertFn({ data: { name, filters: form } });
     },
     onSuccess: () => {
       toast.success("Alert created");
@@ -120,16 +125,15 @@ function BuyerDashboard() {
 
   const updateAlert = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Record<string, boolean> }) => {
-      const { error } = await supabase.from("property_alerts").update(patch as any).eq("id", id);
-      if (error) throw error;
+      await updateAlertFn({ data: { id, patch } });
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["property-alerts"] }),
+    onError: (e: any) => toast.error(e?.message ?? "Could not update alert"),
   });
 
   const deleteAlert = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("property_alerts").delete().eq("id", id);
-      if (error) throw error;
+      await deleteAlertFn({ data: { id } });
     },
     onSuccess: () => {
       toast.success("Alert removed");
@@ -144,7 +148,7 @@ function BuyerDashboard() {
     queryFn: async () => {
       const [tpl, prog] = await Promise.all([
         supabase.from("buyer_checklist_templates").select("*").eq("active", true).order("sort_order"),
-        supabase.from("buyer_checklist_progress").select("template_id, done"),
+        supabase.from("buyer_checklist_progress").select("template_id, done").eq("user_id", user!.id),
       ]);
       if (tpl.error) throw tpl.error;
       const done = new Set((prog.data ?? []).filter((r: any) => r.done).map((r: any) => r.template_id));
