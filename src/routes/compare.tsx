@@ -11,7 +11,19 @@ import heroTools from "@/assets/hero-tools.jpg";
 import { PageHero } from "@/components/site/PageHero";
 import { absoluteUrl } from "@/lib/site-url";
 
-const searchSchema = z.object({ ids: z.string().optional() });
+// Bound the shared-comparison payload: max 4 slug/uuid-safe ids, 60 chars each.
+const ID_RE = /^[a-zA-Z0-9-]{1,60}$/;
+const searchSchema = z.object({
+  ids: z
+    .string()
+    .max(300)
+    .optional()
+    .transform((v) =>
+      v
+        ? v.split(",").map((s) => s.trim()).filter((s) => ID_RE.test(s)).slice(0, 4).join(",")
+        : v,
+    ),
+});
 
 const OG_IMAGE = absoluteUrl(heroTools);
 const TITLE = "Compare Properties — Foxwood Properties";

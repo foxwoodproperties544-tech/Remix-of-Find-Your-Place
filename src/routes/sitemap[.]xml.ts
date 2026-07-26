@@ -101,6 +101,36 @@ export const Route = createFileRoute("/sitemap.xml")({
           // ignore
         }
 
+        // Area guide pages (published neighbourhood/county guides)
+        try {
+          const { data: guides } = await supabase
+            .from("area_guides")
+            .select("slug, level, county, town, updated_at")
+            .eq("published", true)
+            .limit(1000);
+          const seen = new Set<string>();
+          for (const g of guides ?? []) {
+            const county = (g as any).county ? toSlug((g as any).county) : null;
+            const town = (g as any).town ? toSlug((g as any).town) : null;
+            const path =
+              (g as any).level === "town" && county && town
+                ? `/locations/${county}/${town}`
+                : county
+                  ? `/locations/${county}`
+                  : null;
+            if (!path || seen.has(path)) continue;
+            seen.add(path);
+            entries.push({
+              path,
+              lastmod: (g as any).updated_at ? new Date((g as any).updated_at).toISOString() : undefined,
+              changefreq: "weekly",
+              priority: "0.6",
+            });
+          }
+        } catch {
+          // ignore
+        }
+
         try {
           const { data: posts } = await supabase
             .from("blog_posts")
