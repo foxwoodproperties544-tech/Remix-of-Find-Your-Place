@@ -119,10 +119,8 @@ export function Footer() {
             <li><Link to="/cookies" className="hover:text-secondary">Cookie Policy</Link></li>
           </ul>
           <h4 className="font-semibold mb-3 mt-6 text-sm">Newsletter</h4>
-          <form className="flex gap-2" onSubmit={(e)=>e.preventDefault()}>
-            <input type="email" placeholder="Your email" className="flex-1 min-w-0 rounded-full border border-primary-foreground/30 bg-background/10 backdrop-blur px-4 py-2 text-sm text-primary-foreground placeholder:text-primary-foreground/60 outline-none focus:border-secondary" />
-            <button className="btn-secondary !py-2 !px-4 text-sm">Join</button>
-          </form>
+          <NewsletterSignup />
+
         </div>
       </div>
       <div className="border-t border-primary-foreground/20">
