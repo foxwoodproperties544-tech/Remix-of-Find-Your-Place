@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Building2, Search, X, ShieldCheck, Sparkles } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
+import heroTools from "@/assets/hero-tools.jpg";
 import { BusinessCard } from "@/components/site/BusinessCard";
 import { fetchBusinesses, fetchCategories } from "@/lib/directory";
 import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
@@ -85,6 +86,8 @@ function CompaniesPage() {
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHero
+        image={heroTools}
+        imageAlt="Kenyan property professionals"
         eyebrow="Business directory"
         title="Property companies across Kenya"
         subtitle="Discover agencies, developers, land sellers and property managers — then enquire directly through Foxwood Properties."
