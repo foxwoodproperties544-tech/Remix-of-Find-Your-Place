@@ -148,7 +148,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col pb-14 md:pb-0">
           <TosAcceptBanner />
           <Header />
           <main className="flex-1"><Outlet /></main>
@@ -157,7 +157,9 @@ function RootComponent() {
           <InstallAppBanner />
           <FloatingWhatsApp />
           <LiveChatWidget />
+          <MobileTabBar />
         </div>
+
       </LanguageProvider>
     </QueryClientProvider>
   );
