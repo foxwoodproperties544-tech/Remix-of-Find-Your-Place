@@ -3,6 +3,8 @@ import { Logo } from "./Logo";
 import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import footerBg from "@/assets/footer-realestate.jpg";
 import { SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, trackSupportClick, whatsappUrl } from "@/lib/support";
+import { NewsletterSignup } from "./NewsletterSignup";
+
 
 export function Footer() {
   return (
