@@ -20,6 +20,7 @@ import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 import { setSupportOverride } from "@/lib/support";
 import { SimilarProperties } from "@/components/site/SimilarProperties";
+import { ReportListingButton } from "@/components/site/ReportListingButton";
 import { VerificationScoreCard } from "@/components/property/VerificationScoreCard";
 import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
 import { PropertyTimeline } from "@/components/property/PropertyTimeline";
@@ -585,6 +586,7 @@ function Detail() {
           <MortgageMini price={p.price} />
           <AppointmentBookingForm propertyId={propertyKey} propertyTitle={p.title} />
           <InquiryForm propertyKey={propertyKey} ownerId={ownerId} propertyTitle={p.title} />
+          <ReportListingButton propertyId={p.id} />
         </aside>
       </section>
 

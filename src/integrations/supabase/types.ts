@@ -2130,6 +2130,56 @@ export type Database = {
           },
         ]
       }
+      property_reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          property_id: string
+          reason: string
+          reporter_id: string | null
+          resolution: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          property_id: string
+          reason: string
+          reporter_id?: string | null
+          resolution?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          property_id?: string
+          reason?: string
+          reporter_id?: string | null
+          resolution?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_reports_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_verification_checks: {
         Row: {
           checked_at: string | null
