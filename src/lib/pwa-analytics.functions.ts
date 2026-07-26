@@ -25,29 +25,29 @@ export const getPwaInstallAnalytics = createServerFn({ method: "GET" })
 
     const { data: rows, error } = await supabaseAdmin
       .from("pwa_install_events")
-      .select("event_type,platform,created_at")
+      .select("event_type,platform,source,campaign,created_at")
       .gte("created_at", from)
       .lte("created_at", to)
       .limit(50000);
     if (error) throw new Error(error.message);
 
-    const totals: Record<string, number> = {
-      impression: 0,
-      install_click: 0,
-      installed: 0,
-      dismiss: 0,
-      ios_hint_shown: 0,
-    };
+    const blank = () => ({ impression: 0, install_click: 0, installed: 0, dismiss: 0, ios_hint_shown: 0, page_view: 0, share_click: 0, share_whatsapp: 0, copy_link: 0, qr_shown: 0 }) as Record<string, number>;
+
+    const totals: Record<string, number> = blank();
     const byPlatform: Record<string, Record<string, number>> = {};
     const byDay: Record<string, Record<string, number>> = {};
+    const bySource: Record<string, Record<string, number>> = {};
 
     for (const r of rows ?? []) {
       totals[r.event_type] = (totals[r.event_type] ?? 0) + 1;
       const p = r.platform ?? "unknown";
-      byPlatform[p] ??= { impression: 0, install_click: 0, installed: 0, dismiss: 0, ios_hint_shown: 0 };
+      byPlatform[p] ??= blank();
       byPlatform[p][r.event_type] = (byPlatform[p][r.event_type] ?? 0) + 1;
+      const s = (r as { source?: string | null }).source ?? "unknown";
+      bySource[s] ??= blank();
+      bySource[s][r.event_type] = (bySource[s][r.event_type] ?? 0) + 1;
       const day = new Date(r.created_at).toISOString().slice(0, 10);
-      byDay[day] ??= { impression: 0, install_click: 0, installed: 0, dismiss: 0, ios_hint_shown: 0 };
+      byDay[day] ??= blank();
       byDay[day][r.event_type] = (byDay[day][r.event_type] ?? 0) + 1;
     }
 
@@ -60,6 +60,8 @@ export const getPwaInstallAnalytics = createServerFn({ method: "GET" })
       clickRate: Number(clickRate.toFixed(2)),
       installRate: Number(installRate.toFixed(2)),
       byPlatform,
+      bySource,
+
       byDay: Object.entries(byDay)
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([day, counts]) => ({ day, ...counts })),

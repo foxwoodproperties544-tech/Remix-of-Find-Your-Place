@@ -6,6 +6,10 @@ import { BRAND, v } from "@/lib/branding";
 import { SITE_URL } from "@/lib/site-url";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { trackPwaEvent as track } from "@/lib/pwa-track";
+
+const SURFACE = "get-app";
+
 
 const SHARE_URL = `${SITE_URL}/get-app`;
 const TITLE = "Download the Foxwood Properties App";
@@ -42,12 +46,16 @@ function GetApp() {
   const [deferred, setDeferred] = useState<BIPEvent | null>(null);
 
   useEffect(() => {
+    track("page_view", SURFACE);
     QRCode.toDataURL(SHARE_URL, {
       width: 512,
       margin: 1,
       color: { dark: "#0F766E", light: "#ffffff" },
     })
-      .then(setQr)
+      .then((url) => {
+        setQr(url);
+        track("qr_shown", SURFACE);
+      })
       .catch(() => setQr(null));
   }, []);
 
@@ -55,14 +63,21 @@ function GetApp() {
     const onPrompt = (e: Event) => {
       e.preventDefault();
       setDeferred(e as BIPEvent);
+      track("impression", SURFACE);
     };
+    const onInstalled = () => track("installed", SURFACE);
     window.addEventListener("beforeinstallprompt", onPrompt);
-    return () => window.removeEventListener("beforeinstallprompt", onPrompt);
+    window.addEventListener("appinstalled", onInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
   }, []);
 
-  const copy = async () => {
+  const copy = async (fromShare = false) => {
+    if (!fromShare) track("copy_link", SURFACE);
     try {
-      await navigator.clipboard.writeText(SHARE_URL);
+      await navigator.clipboard.writeText(`${SHARE_URL}?src=${fromShare ? "share" : "copy"}`);
       setCopied(true);
       toast.success("Link copied — paste it anywhere to share");
       setTimeout(() => setCopied(false), 2000);
@@ -72,7 +87,12 @@ function GetApp() {
   };
 
   const share = async () => {
-    const data = { title: TITLE, text: `${BRAND.name} — ${BRAND.tagline}. Install the app:`, url: SHARE_URL };
+    track("share_click", SURFACE);
+    const data = {
+      title: TITLE,
+      text: `${BRAND.name} — ${BRAND.tagline}. Install the app:`,
+      url: `${SHARE_URL}?src=share`,
+    };
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share(data);
@@ -81,22 +101,28 @@ function GetApp() {
         /* user cancelled */
       }
     }
-    copy();
+    copy(true);
   };
 
+
   const install = async () => {
+    track("install_click", SURFACE);
     if (!deferred) {
+      track("ios_hint_shown", SURFACE);
       toast.info("Use your browser menu → “Install app” / “Add to Home Screen”.");
       return;
     }
     await deferred.prompt();
-    await deferred.userChoice;
+    const choice = await deferred.userChoice;
+    if (choice?.outcome === "dismissed") track("dismiss", SURFACE);
     setDeferred(null);
   };
 
+
   const whatsapp = `https://wa.me/?text=${encodeURIComponent(
-    `${BRAND.name} — ${BRAND.tagline}. Install the app: ${SHARE_URL}`,
+    `${BRAND.name} — ${BRAND.tagline}. Install the app: ${SHARE_URL}?src=whatsapp`,
   )}`;
+
 
   return (
     <main className="bg-background">
@@ -119,7 +145,7 @@ function GetApp() {
                 <Share2 className="mr-2 h-4 w-4" /> Share link
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+                <a href={whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => track("share_whatsapp", SURFACE)}>
                   <MessageCircle className="mr-2 h-4 w-4" /> Share on WhatsApp
                 </a>
               </Button>
@@ -129,7 +155,7 @@ function GetApp() {
               <p className="text-xs font-medium text-muted-foreground">Shareable download link</p>
               <div className="mt-2 flex items-center gap-2">
                 <code className="flex-1 truncate rounded bg-muted px-2 py-1.5 text-sm">{SHARE_URL}</code>
-                <Button size="sm" variant="outline" onClick={copy} aria-label="Copy download link">
+                <Button size="sm" variant="outline" onClick={() => copy()} aria-label="Copy download link">
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 </Button>
               </div>
