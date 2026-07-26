@@ -19,6 +19,7 @@ import { FloatingWhatsApp } from "../components/site/FloatingWhatsApp";
 import { LiveChatWidget } from "../components/site/LiveChatWidget";
 import { TosAcceptBanner } from "../components/site/TosAcceptBanner";
 import { LanguageProvider } from "../components/site/LanguageProvider";
+import { BRAND, v } from "../lib/branding";
 
 function NotFoundComponent() {
   return (
