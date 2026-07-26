@@ -8,6 +8,15 @@ export const VERIFICATION_SUB_DAYS = 30;
 /** Marker stored in mpesa_transactions.tier so the callback can route the payment. */
 export const VERIFICATION_SUB_MARKER = "agent_verification_sub";
 
+export type VerificationPayment = {
+  id: string;
+  amount: number;
+  status: string;
+  receipt: string | null;
+  phone: string | null;
+  paidAt: string | null;
+};
+
 export type VerificationSubscription = {
   active: boolean;
   startedAt: string | null;
@@ -15,6 +24,8 @@ export type VerificationSubscription = {
   daysRemaining: number | null;
   price: number;
   durationDays: number;
+  lastRenewedAt: string | null;
+  payments: VerificationPayment[];
 };
 
 export const getVerificationSubscription = createServerFn({ method: "GET" })
@@ -26,6 +37,23 @@ export const getVerificationSubscription = createServerFn({ method: "GET" })
       .eq("id", context.userId)
       .maybeSingle();
 
+    const { data: txns } = await context.supabase
+      .from("mpesa_transactions")
+      .select("id, amount, status, mpesa_receipt, phone_number, created_at, updated_at")
+      .eq("user_id", context.userId)
+      .eq("tier", VERIFICATION_SUB_MARKER)
+      .order("created_at", { ascending: false })
+      .limit(24);
+
+    const payments: VerificationPayment[] = (txns ?? []).map((t: any) => ({
+      id: t.id,
+      amount: Number(t.amount ?? 0),
+      status: t.status,
+      receipt: t.mpesa_receipt ?? null,
+      phone: t.phone_number ?? null,
+      paidAt: t.updated_at ?? t.created_at ?? null,
+    }));
+
     const expiresAt = (prof as any)?.verification_sub_expires_at ?? null;
     const ms = expiresAt ? new Date(expiresAt).getTime() - Date.now() : null;
     return {
@@ -35,8 +63,11 @@ export const getVerificationSubscription = createServerFn({ method: "GET" })
       daysRemaining: ms === null ? null : Math.ceil(ms / 86400_000),
       price: VERIFICATION_SUB_PRICE,
       durationDays: VERIFICATION_SUB_DAYS,
+      lastRenewedAt: payments.find((p) => p.status === "success")?.paidAt ?? null,
+      payments,
     };
   });
+
 
 const paySchema = z.object({ phone: z.string().min(9).max(15) });
 
