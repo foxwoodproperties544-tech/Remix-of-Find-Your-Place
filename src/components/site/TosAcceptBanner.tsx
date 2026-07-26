@@ -6,15 +6,20 @@ import { CURRENT_TOS_VERSION, CURRENT_TOS_LABEL } from "@/lib/tos";
 import { toast } from "sonner";
 import { ShieldCheck, X } from "lucide-react";
 
+const dismissKey = (userId: string) => `foxwood:tos-dismissed:${userId}:${CURRENT_TOS_VERSION}`;
+
 export function TosAcceptBanner() {
   const { user } = useAuth();
   const [needsAccept, setNeedsAccept] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    if (!user) { setNeedsAccept(false); return; }
+    if (!user) { setNeedsAccept(false); setDismissed(true); return; }
+    try {
+      setDismissed(window.localStorage.getItem(dismissKey(user.id)) === "1");
+    } catch { setDismissed(false); }
     (async () => {
       const { data } = await supabase
         .from("profiles")
@@ -27,6 +32,12 @@ export function TosAcceptBanner() {
     return () => { cancelled = true; };
   }, [user?.id]);
 
+  function dismiss() {
+    setDismissed(true);
+    if (!user) return;
+    try { window.localStorage.setItem(dismissKey(user.id), "1"); } catch { /* ignore */ }
+  }
+
   async function accept() {
     if (!user) return;
     setSaving(true);
@@ -38,9 +49,11 @@ export function TosAcceptBanner() {
     if (error) { toast.error(error.message); return; }
     toast.success("Thanks — updated terms accepted.");
     setNeedsAccept(false);
+    try { window.localStorage.setItem(dismissKey(user.id), "1"); } catch { /* ignore */ }
   }
 
   if (!user || !needsAccept || dismissed) return null;
+
 
   return (
     <div className="sticky top-0 z-40 border-b border-primary/20 bg-primary text-primary-foreground">
@@ -66,7 +79,7 @@ export function TosAcceptBanner() {
         <button
           type="button"
           aria-label="Dismiss for now"
-          onClick={() => setDismissed(true)}
+          onClick={dismiss}
           className="rounded-md p-1 hover:bg-white/10"
         >
           <X className="h-4 w-4" />
