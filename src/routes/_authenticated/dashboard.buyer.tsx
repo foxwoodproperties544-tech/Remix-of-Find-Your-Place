@@ -120,7 +120,7 @@ function BuyerDashboard() {
 
   const updateAlert = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Record<string, boolean> }) => {
-      const { error } = await supabase.from("property_alerts").update(patch).eq("id", id);
+      const { error } = await supabase.from("property_alerts").update(patch as any).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["property-alerts"] }),
@@ -187,19 +187,20 @@ function BuyerDashboard() {
           <Field label="Category">
             <select className="input" value={form.category ?? ""} onChange={(e) => setDraft({ ...form, category: e.target.value || undefined })}>
               <option value="">Any</option>
-              {CATEGORIES.map((c: any) => <option key={c.value ?? c} value={c.value ?? c}>{c.label ?? c}</option>)}
+              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </Field>
           <Field label="Property type">
             <select className="input" value={form.type ?? ""} onChange={(e) => setDraft({ ...form, type: e.target.value || undefined })}>
               <option value="">Any</option>
-              {PROPERTY_TYPES.map((t: any) => <option key={t.value ?? t} value={t.value ?? t}>{t.label ?? t}</option>)}
+              {ALL_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           </Field>
           <Field label="County">
             <select className="input" value={form.county ?? ""} onChange={(e) => setDraft({ ...form, county: e.target.value || undefined })}>
               <option value="">Any</option>
-              {COUNTIES.map((c) => <option key={c} value={c}>{c}</option>)}
+              {KENYA_COUNTIES.map((c) => <option key={c} value={c}>{c}</option>)}
+
             </select>
           </Field>
           <Field label="Min price (KES)">
