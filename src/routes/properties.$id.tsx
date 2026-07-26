@@ -585,6 +585,7 @@ function Detail() {
           <MortgageMini price={p.price} />
           <AppointmentBookingForm propertyId={propertyKey} propertyTitle={p.title} />
           <InquiryForm propertyKey={propertyKey} ownerId={ownerId} propertyTitle={p.title} />
+          <ReportListingButton propertyId={p.id} />
         </aside>
       </section>
 
