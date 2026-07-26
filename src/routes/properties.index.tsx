@@ -55,7 +55,7 @@ const searchSchema = z.object({
   purpose: fallback(short, "").default(""),
   lat: fallback(coord, "").default(""),
   lng: fallback(coord, "").default(""),
-  radius: fallback(numeric, "").default(""),
+  radius: fallback(radiusNum, "").default(""),
   nearLabel: fallback(short, "").default(""),
   sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc", "distance", "ppsf-asc"]), "newest").default("newest"),
   page: fallback(z.number().int().min(1).max(1000), 1).default(1),
