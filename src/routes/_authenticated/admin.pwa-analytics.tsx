@@ -116,9 +116,17 @@ function PwaAnalytics() {
           <h1 className="text-3xl font-bold mt-2">Install banner analytics</h1>
           <p className="text-sm text-muted-foreground mt-1">Impressions, install clicks, and successful installs from the PWA banner.</p>
         </div>
-        <button onClick={exportCsv} disabled={!data} className="btn-primary btn-primary-hover text-sm inline-flex items-center gap-2 disabled:opacity-50">
-          <Download className="h-4 w-4" /> Export CSV
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button onClick={exportCsv} disabled={!data} className="btn-primary btn-primary-hover text-sm inline-flex items-center gap-2 disabled:opacity-50">
+            <Download className="h-4 w-4" /> Daily CSV
+          </button>
+          <button onClick={exportPlatformCsv} disabled={!data} className="btn-ghost text-sm inline-flex items-center gap-2 disabled:opacity-50">
+            <Download className="h-4 w-4" /> Platform CSV
+          </button>
+          <button onClick={exportEngagementCsv} disabled={!data} className="btn-ghost text-sm inline-flex items-center gap-2 disabled:opacity-50">
+            <Download className="h-4 w-4" /> Engagement CSV
+          </button>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-3 md:grid-cols-2">
