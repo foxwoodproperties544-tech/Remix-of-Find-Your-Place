@@ -9,18 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MortgageRouteImport } from './routes/mortgage'
 import { Route as ListingPackagesRouteImport } from './routes/listing-packages'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HelpCenterRouteImport } from './routes/help-center'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as GetAppRouteImport } from './routes/get-app'
 import { Route as ForAgentsRouteImport } from './routes/for-agents'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DueDiligenceRouteImport } from './routes/due-diligence'
+import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
@@ -118,6 +122,11 @@ import { Route as AuthenticatedAdminPackagesPreviewRouteImport } from './routes/
 import { Route as AuthenticatedDashboardBlogIdPayRouteImport } from './routes/_authenticated/dashboard.blog.$id.pay'
 import { Route as AuthenticatedDashboardBlogIdEditRouteImport } from './routes/_authenticated/dashboard.blog.$id.edit'
 
+const TestimonialsRoute = TestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -126,6 +135,11 @@ const TermsRoute = TermsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertySitemapDotxmlRoute = PropertySitemapDotxmlRouteImport.update({
@@ -146,6 +160,11 @@ const MortgageRoute = MortgageRouteImport.update({
 const ListingPackagesRoute = ListingPackagesRouteImport.update({
   id: '/listing-packages',
   path: '/listing-packages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpCenterRoute = HelpCenterRouteImport.update({
@@ -176,6 +195,11 @@ const FaqRoute = FaqRouteImport.update({
 const DueDiligenceRoute = DueDiligenceRouteImport.update({
   id: '/due-diligence',
   path: '/due-diligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DisclaimerRoute = DisclaimerRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CookiesRoute = CookiesRouteImport.update({
@@ -725,18 +749,22 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -834,18 +862,22 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -944,18 +976,22 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/disclaimer': typeof DisclaimerRoute
   '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -1055,18 +1091,22 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/disclaimer'
     | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/get-app'
     | '/help'
     | '/help-center'
+    | '/how-it-works'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
+    | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
+    | '/testimonials'
     | '/admin'
     | '/favorites'
     | '/saved-searches'
@@ -1164,18 +1204,22 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/disclaimer'
     | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/get-app'
     | '/help'
     | '/help-center'
+    | '/how-it-works'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
+    | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
+    | '/testimonials'
     | '/admin'
     | '/favorites'
     | '/saved-searches'
@@ -1273,18 +1317,22 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/disclaimer'
     | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/get-app'
     | '/help'
     | '/help-center'
+    | '/how-it-works'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
+    | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
+    | '/testimonials'
     | '/_authenticated/admin'
     | '/_authenticated/favorites'
     | '/_authenticated/saved-searches'
@@ -1384,18 +1432,22 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
+  DisclaimerRoute: typeof DisclaimerRoute
   DueDiligenceRoute: typeof DueDiligenceRoute
   FaqRoute: typeof FaqRoute
   ForAgentsRoute: typeof ForAgentsRoute
   GetAppRoute: typeof GetAppRoute
   HelpRoute: typeof HelpRoute
   HelpCenterRoute: typeof HelpCenterRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   ListingPackagesRoute: typeof ListingPackagesRoute
   MortgageRoute: typeof MortgageRoute
   PrivacyRoute: typeof PrivacyRoute
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  TestimonialsRoute: typeof TestimonialsRoute
   AgentsIdRoute: typeof AgentsIdRoute
   AgentsBecomeRoute: typeof AgentsBecomeRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -1422,6 +1474,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/testimonials': {
+      id: '/testimonials'
+      path: '/testimonials'
+      fullPath: '/testimonials'
+      preLoaderRoute: typeof TestimonialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -1434,6 +1493,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/property-sitemap.xml': {
@@ -1462,6 +1528,13 @@ declare module '@tanstack/react-router' {
       path: '/listing-packages'
       fullPath: '/listing-packages'
       preLoaderRoute: typeof ListingPackagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help-center': {
@@ -1504,6 +1577,13 @@ declare module '@tanstack/react-router' {
       path: '/due-diligence'
       fullPath: '/due-diligence'
       preLoaderRoute: typeof DueDiligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cookies': {
@@ -2394,18 +2474,22 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
+  DisclaimerRoute: DisclaimerRoute,
   DueDiligenceRoute: DueDiligenceRoute,
   FaqRoute: FaqRoute,
   ForAgentsRoute: ForAgentsRoute,
   GetAppRoute: GetAppRoute,
   HelpRoute: HelpRoute,
   HelpCenterRoute: HelpCenterRoute,
+  HowItWorksRoute: HowItWorksRoute,
   ListingPackagesRoute: ListingPackagesRoute,
   MortgageRoute: MortgageRoute,
   PrivacyRoute: PrivacyRoute,
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  TestimonialsRoute: TestimonialsRoute,
   AgentsIdRoute: AgentsIdRoute,
   AgentsBecomeRoute: AgentsBecomeRoute,
   BlogSlugRoute: BlogSlugRoute,
@@ -2432,13 +2516,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
