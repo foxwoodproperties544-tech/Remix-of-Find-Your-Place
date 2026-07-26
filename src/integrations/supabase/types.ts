@@ -1613,6 +1613,8 @@ export type Database = {
           town: string | null
           twitter_url: string | null
           updated_at: string
+          verification_sub_expires_at: string | null
+          verification_sub_started_at: string | null
           verified: boolean
           website: string | null
           whatsapp: string | null
@@ -1669,6 +1671,8 @@ export type Database = {
           town?: string | null
           twitter_url?: string | null
           updated_at?: string
+          verification_sub_expires_at?: string | null
+          verification_sub_started_at?: string | null
           verified?: boolean
           website?: string | null
           whatsapp?: string | null
@@ -1725,6 +1729,8 @@ export type Database = {
           town?: string | null
           twitter_url?: string | null
           updated_at?: string
+          verification_sub_expires_at?: string | null
+          verification_sub_started_at?: string | null
           verified?: boolean
           website?: string | null
           whatsapp?: string | null

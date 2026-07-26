@@ -114,6 +114,23 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
               user_id: txn.user_id,
               notes: `Verification fee paid (${receipt ?? "unknown"})`,
             });
+          } else if (txn.purpose === "other" && txn.tier === "agent_verification_sub") {
+            // Monthly agent verification subscription (KSh 1,000 / 30 days).
+            const days = txn.duration_days ?? 30;
+            const { data: cur } = await supabaseAdmin
+              .from("profiles")
+              .select("verification_sub_expires_at, verification_sub_started_at")
+              .eq("id", txn.user_id).maybeSingle();
+            const curExp = (cur as any)?.verification_sub_expires_at;
+            const base = curExp && new Date(curExp).getTime() > Date.now()
+              ? new Date(curExp).getTime() : Date.now();
+            await supabaseAdmin.from("profiles").update({
+              verification_sub_started_at: (cur as any)?.verification_sub_started_at ?? new Date().toISOString(),
+              verification_sub_expires_at: new Date(base + days * 86400_000).toISOString(),
+              verified: true,
+              agent_verification_status: "approved",
+              agent_verification_reviewed_at: new Date().toISOString(),
+            } as any).eq("id", txn.user_id);
           } else if (txn.purpose === "listing_package" && txn.property_id && txn.package_id) {
             const { data: pkg } = await supabaseAdmin
               .from("listing_packages").select("*").eq("id", txn.package_id).maybeSingle();
