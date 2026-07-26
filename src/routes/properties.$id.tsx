@@ -20,6 +20,10 @@ import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 import { setSupportOverride } from "@/lib/support";
 import { SimilarProperties } from "@/components/site/SimilarProperties";
+import { VerificationScoreCard } from "@/components/property/VerificationScoreCard";
+import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
+import { PropertyTimeline } from "@/components/property/PropertyTimeline";
+import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { AppointmentBookingForm } from "@/components/site/AppointmentBookingForm";
 import { useQuery } from "@tanstack/react-query";
 
