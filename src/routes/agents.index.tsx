@@ -116,6 +116,10 @@ function OurAgentsPage() {
           ))}
         </div>
 
+        <TopAgents />
+
+
+
         <div className="text-center max-w-2xl mx-auto mb-8">
           <h2 className="text-2xl md:text-3xl font-semibold">Find an agent</h2>
           <p className="text-sm text-muted-foreground mt-2">
