@@ -16,6 +16,8 @@ import { Footer } from "../components/site/Footer";
 import { CookieBanner } from "../components/site/CookieBanner";
 import { InstallAppBanner } from "../components/site/InstallAppBanner";
 import { FloatingWhatsApp } from "../components/site/FloatingWhatsApp";
+import { MobileTabBar } from "../components/site/MobileTabBar";
+
 import { LiveChatWidget } from "../components/site/LiveChatWidget";
 import { TosAcceptBanner } from "../components/site/TosAcceptBanner";
 import { LanguageProvider } from "../components/site/LanguageProvider";
