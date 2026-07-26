@@ -20,6 +20,10 @@ import { trackRecentlyViewed } from "@/hooks/use-recently-viewed";
 import { RecentlyViewedRail } from "@/components/site/RecentlyViewedRail";
 import { setSupportOverride } from "@/lib/support";
 import { SimilarProperties } from "@/components/site/SimilarProperties";
+import { VerificationScoreCard } from "@/components/property/VerificationScoreCard";
+import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
+import { PropertyTimeline } from "@/components/property/PropertyTimeline";
+import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { AppointmentBookingForm } from "@/components/site/AppointmentBookingForm";
 import { useQuery } from "@tanstack/react-query";
 
@@ -513,8 +517,21 @@ function Detail() {
             <p className="mt-2 text-xs text-muted-foreground">Approximate location — {p.area ? `${p.area}, ` : ""}{p.town}, {p.county}. Contact the agent for the exact address.</p>
           </div>
 
+          {/* Foxwood Verification Score */}
+          <VerificationScoreCard propertyId={propertyKey} propertyType={p.type} />
+
+          {/* Investment Score */}
+          <InvestmentScoreCard propertyId={propertyKey} />
+
+          {/* Property history timeline */}
+          <PropertyTimeline propertyId={propertyKey} propertyKey={propertyKey} />
+
+          {/* Agent performance */}
+          {ownerId && <AgentPerformanceCard agentId={ownerId} />}
+
           {/* Reviews (lightweight placeholder) */}
           <ReviewsSection propertyKey={propertyKey} />
+
 
           {/* Final CTA */}
           <div className="rounded-2xl overflow-hidden relative p-6 md:p-8 text-white"

@@ -19,6 +19,7 @@ import { Route as HelpCenterRouteImport } from './routes/help-center'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForAgentsRouteImport } from './routes/for-agents'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as DueDiligenceRouteImport } from './routes/due-diligence'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
@@ -70,6 +71,7 @@ import { Route as AuthenticatedDashboardKycRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardInsightsRouteImport } from './routes/_authenticated/dashboard.insights'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
+import { Route as AuthenticatedDashboardBuyerRouteImport } from './routes/_authenticated/dashboard.buyer'
 import { Route as AuthenticatedDashboardBulkImportRouteImport } from './routes/_authenticated/dashboard.bulk-import'
 import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authenticated/dashboard.blog'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
@@ -157,6 +159,11 @@ const ForAgentsRoute = ForAgentsRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DueDiligenceRoute = DueDiligenceRouteImport.update({
+  id: '/due-diligence',
+  path: '/due-diligence',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CookiesRoute = CookiesRouteImport.update({
@@ -430,6 +437,12 @@ const AuthenticatedDashboardCrmRoute =
     path: '/dashboard/crm',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardBuyerRoute =
+  AuthenticatedDashboardBuyerRouteImport.update({
+    id: '/dashboard/buyer',
+    path: '/dashboard/buyer',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardBulkImportRoute =
   AuthenticatedDashboardBulkImportRouteImport.update({
     id: '/dashboard/bulk-import',
@@ -664,6 +677,7 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
@@ -719,6 +733,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
+  '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
@@ -764,6 +779,7 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
@@ -818,6 +834,7 @@ export interface FileRoutesByTo {
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
+  '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
@@ -865,6 +882,7 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
@@ -920,6 +938,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/_authenticated/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
+  '/_authenticated/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
@@ -967,6 +986,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/help'
@@ -1022,6 +1042,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments'
     | '/dashboard/blog'
     | '/dashboard/bulk-import'
+    | '/dashboard/buyer'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/insights'
@@ -1067,6 +1088,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/help'
@@ -1121,6 +1143,7 @@ export interface FileRouteTypes {
     | '/dashboard/advertise'
     | '/dashboard/appointments'
     | '/dashboard/bulk-import'
+    | '/dashboard/buyer'
     | '/dashboard/crm'
     | '/dashboard/inquiries'
     | '/dashboard/insights'
@@ -1167,6 +1190,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/help'
@@ -1222,6 +1246,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/blog'
     | '/_authenticated/dashboard/bulk-import'
+    | '/_authenticated/dashboard/buyer'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/insights'
@@ -1269,6 +1294,7 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
+  DueDiligenceRoute: typeof DueDiligenceRoute
   FaqRoute: typeof FaqRoute
   ForAgentsRoute: typeof ForAgentsRoute
   HelpRoute: typeof HelpRoute
@@ -1373,6 +1399,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/due-diligence': {
+      id: '/due-diligence'
+      path: '/due-diligence'
+      fullPath: '/due-diligence'
+      preLoaderRoute: typeof DueDiligenceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cookies': {
@@ -1730,6 +1763,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/crm'
       fullPath: '/dashboard/crm'
       preLoaderRoute: typeof AuthenticatedDashboardCrmRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/buyer': {
+      id: '/_authenticated/dashboard/buyer'
+      path: '/dashboard/buyer'
+      fullPath: '/dashboard/buyer'
+      preLoaderRoute: typeof AuthenticatedDashboardBuyerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/bulk-import': {
@@ -2111,6 +2151,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardBlogRoute: typeof AuthenticatedDashboardBlogRouteWithChildren
   AuthenticatedDashboardBulkImportRoute: typeof AuthenticatedDashboardBulkImportRoute
+  AuthenticatedDashboardBuyerRoute: typeof AuthenticatedDashboardBuyerRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardInsightsRoute: typeof AuthenticatedDashboardInsightsRoute
@@ -2145,6 +2186,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedDashboardAppointmentsRoute,
   AuthenticatedDashboardBlogRoute: AuthenticatedDashboardBlogRouteWithChildren,
   AuthenticatedDashboardBulkImportRoute: AuthenticatedDashboardBulkImportRoute,
+  AuthenticatedDashboardBuyerRoute: AuthenticatedDashboardBuyerRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardInsightsRoute: AuthenticatedDashboardInsightsRoute,
@@ -2198,6 +2240,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
+  DueDiligenceRoute: DueDiligenceRoute,
   FaqRoute: FaqRoute,
   ForAgentsRoute: ForAgentsRoute,
   HelpRoute: HelpRoute,

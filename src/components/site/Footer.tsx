@@ -94,6 +94,7 @@ export function Footer() {
           <h4 className="font-semibold mb-3 text-sm">Tools</h4>
           <ul className="space-y-2 text-sm text-primary-foreground/85">
             <li><Link to="/mortgage" className="hover:text-secondary">Mortgage Calculator</Link></li>
+            <li><Link to="/due-diligence" className="hover:text-secondary">Land Due Diligence</Link></li>
             <li><Link to="/compare" className="hover:text-secondary">Compare Properties</Link></li>
             <li><Link to="/favorites" className="hover:text-secondary">My Favorites</Link></li>
             <li><Link to="/saved-searches" className="hover:text-secondary">Saved Searches</Link></li>

@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchPropertiesByOwner } from "@/lib/properties";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { ProfileReviews } from "@/components/site/ProfileReviews";
+import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { useAuth } from "@/hooks/use-auth";
 import {
   Phone, MessageCircle, MapPin, Home, BadgeCheck, Building2, Mail, Globe, Facebook, Instagram,
@@ -191,7 +192,10 @@ function AgentPage() {
             </div>
           )}
 
+          <AgentPerformanceCard agentId={p.id} />
+
           <div>
+
             <h2 className="text-2xl font-bold">Listings by {name}</h2>
             {listings.length === 0 ? (
               <div className="mt-6 rounded-2xl border border-dashed border-border p-12 text-center">
