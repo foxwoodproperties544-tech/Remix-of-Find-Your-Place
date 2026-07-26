@@ -1774,10 +1774,12 @@ export type Database = {
           featured: boolean
           featured_until: string | null
           features: string[]
+          freshness_reminder_at: string | null
           id: string
           images: string[]
           investment_note: string | null
           is_featured: boolean
+          last_confirmed_at: string | null
           lat: number | null
           listing_type: string | null
           lng: number | null
@@ -1818,10 +1820,12 @@ export type Database = {
           featured?: boolean
           featured_until?: string | null
           features?: string[]
+          freshness_reminder_at?: string | null
           id?: string
           images?: string[]
           investment_note?: string | null
           is_featured?: boolean
+          last_confirmed_at?: string | null
           lat?: number | null
           listing_type?: string | null
           lng?: number | null
@@ -1862,10 +1866,12 @@ export type Database = {
           featured?: boolean
           featured_until?: string | null
           features?: string[]
+          freshness_reminder_at?: string | null
           id?: string
           images?: string[]
           investment_note?: string | null
           is_featured?: boolean
+          last_confirmed_at?: string | null
           lat?: number | null
           listing_type?: string | null
           lng?: number | null
@@ -2307,6 +2313,9 @@ export type Database = {
           comment: string | null
           created_at: string
           id: string
+          moderated_at: string | null
+          moderated_by: string | null
+          moderation_note: string | null
           rating: number
           status: string
           target_id: string
@@ -2318,6 +2327,9 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_note?: string | null
           rating: number
           status?: string
           target_id: string
@@ -2329,6 +2341,9 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_note?: string | null
           rating?: number
           status?: string
           target_id?: string
@@ -2850,6 +2865,7 @@ export type Database = {
         }[]
       }
       run_saved_search_alerts: { Args: never; Returns: number }
+      send_listing_freshness_reminders: { Args: never; Returns: number }
       send_subscription_reminders: { Args: never; Returns: number }
       send_verification_sub_reminders: { Args: never; Returns: number }
     }
