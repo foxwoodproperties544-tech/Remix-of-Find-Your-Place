@@ -1747,6 +1747,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "profiles_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       properties: {
@@ -2647,7 +2654,108 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          address_line: string | null
+          agent_verification_status: string | null
+          avatar_url: string | null
+          bio: string | null
+          company_name: string | null
+          county: string | null
+          created_at: string | null
+          email_public: string | null
+          facebook_url: string | null
+          full_name: string | null
+          id: string | null
+          instagram_url: string | null
+          kyc_verified: boolean | null
+          languages: string[] | null
+          license_number: string | null
+          linkedin_url: string | null
+          office_hours: string | null
+          phone: string | null
+          phone_verified: boolean | null
+          profile_completed_at: string | null
+          role_primary: string | null
+          service_areas: string[] | null
+          services: string[] | null
+          specialties: string[] | null
+          tiktok_url: string | null
+          town: string | null
+          twitter_url: string | null
+          verified: boolean | null
+          website: string | null
+          whatsapp: string | null
+          years_experience: number | null
+        }
+        Insert: {
+          address_line?: string | null
+          agent_verification_status?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          company_name?: string | null
+          county?: string | null
+          created_at?: string | null
+          email_public?: string | null
+          facebook_url?: string | null
+          full_name?: string | null
+          id?: string | null
+          instagram_url?: string | null
+          kyc_verified?: never
+          languages?: string[] | null
+          license_number?: string | null
+          linkedin_url?: string | null
+          office_hours?: string | null
+          phone?: string | null
+          phone_verified?: boolean | null
+          profile_completed_at?: string | null
+          role_primary?: string | null
+          service_areas?: string[] | null
+          services?: string[] | null
+          specialties?: string[] | null
+          tiktok_url?: string | null
+          town?: string | null
+          twitter_url?: string | null
+          verified?: boolean | null
+          website?: string | null
+          whatsapp?: string | null
+          years_experience?: number | null
+        }
+        Update: {
+          address_line?: string | null
+          agent_verification_status?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          company_name?: string | null
+          county?: string | null
+          created_at?: string | null
+          email_public?: string | null
+          facebook_url?: string | null
+          full_name?: string | null
+          id?: string | null
+          instagram_url?: string | null
+          kyc_verified?: never
+          languages?: string[] | null
+          license_number?: string | null
+          linkedin_url?: string | null
+          office_hours?: string | null
+          phone?: string | null
+          phone_verified?: boolean | null
+          profile_completed_at?: string | null
+          role_primary?: string | null
+          service_areas?: string[] | null
+          services?: string[] | null
+          specialties?: string[] | null
+          tiktok_url?: string | null
+          town?: string | null
+          twitter_url?: string | null
+          verified?: boolean | null
+          website?: string | null
+          whatsapp?: string | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       agent_performance: { Args: { _agent_id: string }; Returns: Json }
