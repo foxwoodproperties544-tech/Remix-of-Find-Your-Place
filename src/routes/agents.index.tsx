@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import heroTools from "@/assets/hero-tools.jpg";
 import { absoluteUrl } from "@/lib/site-url";
-import { listPublicAgents } from "@/lib/users.functions";
+import { listPublicAgents, listTopAgents } from "@/lib/users.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { SERVICES, ALL_TYPES } from "@/lib/taxonomy";
 import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
@@ -19,7 +19,10 @@ import {
   BadgeCheck,
   Search,
   X,
+  Trophy,
+  Star,
 } from "lucide-react";
+
 
 const TITLE = "Our Agents — Foxwood Properties";
 const DESC =
@@ -115,6 +118,10 @@ function OurAgentsPage() {
             </div>
           ))}
         </div>
+
+        <TopAgents />
+
+
 
         <div className="text-center max-w-2xl mx-auto mb-8">
           <h2 className="text-2xl md:text-3xl font-semibold">Find an agent</h2>
@@ -265,6 +272,68 @@ function OurAgentsPage() {
     </>
   );
 }
+
+function TopAgents() {
+  const { data: top = [], isLoading } = useQuery({
+    queryKey: ["top-agents"],
+    queryFn: () => listTopAgents(),
+  });
+
+  if (isLoading || top.length === 0) return null;
+
+  return (
+    <div className="mb-14">
+      <div className="text-center max-w-2xl mx-auto mb-6">
+        <h2 className="text-2xl md:text-3xl font-semibold inline-flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-secondary" aria-hidden="true" /> Top agents this month
+        </h2>
+        <p className="text-sm text-muted-foreground mt-2">
+          Ranked by verification, active listings and client reviews.
+        </p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {top.map((a: any, i: number) => (
+          <Link
+            key={a.id}
+            to="/agents/$id"
+            params={{ id: a.id }}
+            className="group relative rounded-xl border border-border bg-card p-5 hover:border-primary/40 hover:shadow-sm transition-all flex items-start gap-4"
+          >
+            <span className="absolute top-3 right-3 text-xs font-bold text-muted-foreground">#{i + 1}</span>
+            <div className="h-12 w-12 rounded-full bg-primary-soft text-primary overflow-hidden flex items-center justify-center flex-shrink-0">
+              {a.avatar_url ? (
+                <img src={a.avatar_url} alt={a.full_name ?? "Agent"} loading="lazy" className="h-full w-full object-cover" />
+              ) : (
+                <Building2 className="h-5 w-5" />
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-semibold truncate group-hover:text-primary">{a.full_name || "Agent"}</h3>
+                {a.verified && <BadgeCheck className="h-4 w-4 text-primary flex-shrink-0" aria-label="Verified" />}
+              </div>
+              {(a.company_name || a.county) && (
+                <p className="text-xs text-muted-foreground truncate">
+                  {a.company_name || [a.town, a.county].filter(Boolean).join(", ")}
+                </p>
+              )}
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                <span className="font-medium text-foreground">{a.listings} active listing{a.listings === 1 ? "" : "s"}</span>
+                {a.rating != null && (
+                  <span className="inline-flex items-center gap-1">
+                    <Star className="h-3.5 w-3.5 text-secondary fill-secondary" aria-hidden="true" />
+                    {a.rating} ({a.reviews})
+                  </span>
+                )}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 
 function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: readonly string[] }) {
   return (

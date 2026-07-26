@@ -22,7 +22,77 @@ export type PublicAgent = {
   agent_verification_status: string | null;
 };
 
-/** Public: list users with an 'agent' role and a complete profile, verified first. */
+export type LeaderboardAgent = {
+  id: string;
+  full_name: string | null;
+  company_name: string | null;
+  avatar_url: string | null;
+  county: string | null;
+  town: string | null;
+  verified: boolean | null;
+  listings: number;
+  rating: number | null;
+  reviews: number;
+};
+
+/** Public: top agents ranked by active listings, rating and verification. */
+export const listTopAgents = createServerFn({ method: "GET" }).handler(async () => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const { data: roleRows } = await supabaseAdmin
+    .from("user_roles").select("user_id").eq("role", "agent");
+  const ids = Array.from(new Set((roleRows ?? []).map((r) => r.user_id)));
+  if (!ids.length) return [] as LeaderboardAgent[];
+
+  const [{ data: profs }, { data: props }, { data: revs }] = await Promise.all([
+    supabaseAdmin
+      .from("profiles")
+      .select("id, full_name, company_name, avatar_url, county, town, verified")
+      .in("id", ids)
+      .not("profile_completed_at", "is", null),
+    supabaseAdmin.from("properties").select("owner_id").eq("status", "published").in("owner_id", ids),
+    supabaseAdmin.from("reviews").select("target_id, rating").in("target_id", ids),
+  ]);
+
+  const listingCount = new Map<string, number>();
+  for (const p of props ?? []) {
+    if (!p.owner_id) continue;
+    listingCount.set(p.owner_id, (listingCount.get(p.owner_id) ?? 0) + 1);
+  }
+  const ratings = new Map<string, { sum: number; n: number }>();
+  for (const r of revs ?? []) {
+    if (!r.target_id || typeof r.rating !== "number") continue;
+    const cur = ratings.get(r.target_id) ?? { sum: 0, n: 0 };
+    ratings.set(r.target_id, { sum: cur.sum + r.rating, n: cur.n + 1 });
+  }
+
+  const rows: LeaderboardAgent[] = (profs ?? []).map((p: any) => {
+    const r = ratings.get(p.id);
+    return {
+      id: p.id,
+      full_name: p.full_name,
+      company_name: p.company_name,
+      avatar_url: p.avatar_url,
+      county: p.county,
+      town: p.town,
+      verified: p.verified,
+      listings: listingCount.get(p.id) ?? 0,
+      rating: r && r.n ? Math.round((r.sum / r.n) * 10) / 10 : null,
+      reviews: r?.n ?? 0,
+    };
+  });
+
+  return rows
+    .filter((a) => a.listings > 0 || a.verified)
+    .sort(
+      (a, b) =>
+        Number(b.verified) - Number(a.verified) ||
+        b.listings - a.listings ||
+        (b.rating ?? 0) - (a.rating ?? 0),
+    )
+    .slice(0, 6);
+});
+
 export const listPublicAgents = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: roleRows, error: rErr } = await supabaseAdmin
