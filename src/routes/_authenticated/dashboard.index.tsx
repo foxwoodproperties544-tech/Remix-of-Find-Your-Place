@@ -244,7 +244,10 @@ function Dashboard() {
                     )}
                     <button onClick={() => confirm("Delete this listing?") && del.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                   </div>
+                 </div>
+                 {isStale(p as any) && <FreshnessPrompt property={p} />}
                 </div>
+
               );
             })}
           </div>
