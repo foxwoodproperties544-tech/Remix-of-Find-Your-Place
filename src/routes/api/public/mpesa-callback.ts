@@ -51,25 +51,64 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
           return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
         }
 
-        const success = stk.ResultCode === 0;
+        let success = stk.ResultCode === 0;
         let receipt: string | undefined;
+        let paidAmount: number | undefined;
+        let paidPhone: string | undefined;
         if (success && stk.CallbackMetadata?.Item) {
           for (const it of stk.CallbackMetadata.Item) {
             if (it.Name === "MpesaReceiptNumber") receipt = String(it.Value);
+            if (it.Name === "Amount") paidAmount = Number(it.Value);
+            if (it.Name === "PhoneNumber") paidPhone = String(it.Value).replace(/\D/g, "");
           }
         }
 
+        // Stricter verification of a "successful" callback before we grant
+        // anything. A forged or mismatched payload is recorded as failed so it
+        // can never activate or extend a plan.
+        let rejectReason: string | null = null;
+        if (success) {
+          if (!receipt) {
+            rejectReason = "Missing M-Pesa receipt number";
+          } else if (paidAmount === undefined || !Number.isFinite(paidAmount)) {
+            rejectReason = "Missing payment amount";
+          } else if (Math.abs(paidAmount - Number(txn.amount)) > 0.5) {
+            rejectReason = `Amount mismatch: expected ${txn.amount}, received ${paidAmount}`;
+          } else if (
+            paidPhone &&
+            txn.phone_number &&
+            paidPhone.slice(-9) !== String(txn.phone_number).replace(/\D/g, "").slice(-9)
+          ) {
+            rejectReason = "Payer phone number does not match the initiating number";
+          } else {
+            // Receipt numbers are unique per M-Pesa payment. If we've already
+            // recorded this receipt against another transaction, the callback
+            // is a replay — never apply its effect twice.
+            const { data: dupe } = await supabaseAdmin
+              .from("mpesa_transactions")
+              .select("id")
+              .eq("mpesa_receipt", receipt)
+              .neq("id", txn.id)
+              .maybeSingle();
+            if (dupe) rejectReason = "Duplicate M-Pesa receipt (replayed callback)";
+          }
+        }
+        if (rejectReason) success = false;
+
         // Guarded update: only flip from `pending` → terminal. If a concurrent
         // callback beat us to it, `updated` will be null and we skip effects.
-        const { data: updated } = await supabaseAdmin.from("mpesa_transactions").update({
+        const { data: updated, error: updErr } = await supabaseAdmin.from("mpesa_transactions").update({
           status: success ? "success" : stk.ResultCode === 1032 ? "cancelled" : "failed",
           result_code: stk.ResultCode,
-          result_desc: stk.ResultDesc,
-          mpesa_receipt: receipt,
+          result_desc: rejectReason ?? stk.ResultDesc,
+          mpesa_receipt: success ? receipt : null,
           raw_callback: JSON.parse(JSON.stringify(payload)),
         }).eq("id", txn.id).eq("status", "pending").select("id").maybeSingle();
 
-        if (!updated) return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
+        // A unique-violation on mpesa_receipt means another row already claimed
+        // this payment — treat as a replay and apply nothing.
+        if (updErr || !updated) return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
+
 
         if (success && txn) {
           // Apply the purchase effect
