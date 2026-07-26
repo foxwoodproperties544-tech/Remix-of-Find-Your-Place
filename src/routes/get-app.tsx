@@ -6,6 +6,10 @@ import { BRAND, v } from "@/lib/branding";
 import { SITE_URL } from "@/lib/site-url";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { trackPwaEvent as track } from "@/lib/pwa-track";
+
+const SURFACE = "get-app";
+
 
 const SHARE_URL = `${SITE_URL}/get-app`;
 const TITLE = "Download the Foxwood Properties App";
