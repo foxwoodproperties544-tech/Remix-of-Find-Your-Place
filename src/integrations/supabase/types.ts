@@ -1588,6 +1588,7 @@ export type Database = {
           kyc_verified_at: string | null
           languages: string[]
           last_expiry_reminder_days: number | null
+          last_verif_reminder_days: number | null
           license_number: string | null
           linkedin_url: string | null
           listing_quota: number
@@ -1646,6 +1647,7 @@ export type Database = {
           kyc_verified_at?: string | null
           languages?: string[]
           last_expiry_reminder_days?: number | null
+          last_verif_reminder_days?: number | null
           license_number?: string | null
           linkedin_url?: string | null
           listing_quota?: number
@@ -1704,6 +1706,7 @@ export type Database = {
           kyc_verified_at?: string | null
           languages?: string[]
           last_expiry_reminder_days?: number | null
+          last_verif_reminder_days?: number | null
           license_number?: string | null
           linkedin_url?: string | null
           listing_quota?: number
@@ -2654,6 +2657,7 @@ export type Database = {
       }
       claim_referral: { Args: { _code: string }; Returns: boolean }
       expire_listing_packages: { Args: never; Returns: undefined }
+      expire_verification_subscriptions: { Args: never; Returns: number }
       generate_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {
@@ -2680,6 +2684,7 @@ export type Database = {
       }
       run_saved_search_alerts: { Args: never; Returns: number }
       send_subscription_reminders: { Args: never; Returns: number }
+      send_verification_sub_reminders: { Args: never; Returns: number }
     }
     Enums: {
       agent_tier: "free" | "basic" | "pro" | "elite"
