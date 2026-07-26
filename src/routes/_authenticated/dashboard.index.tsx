@@ -13,6 +13,8 @@ import { RenewPackageDialog } from "@/components/site/RenewPackageDialog";
 import { listMyActiveListingPurchases } from "@/lib/renewals.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { FoundingTierWidget } from "@/components/dashboard/FoundingTierWidget";
+import { FreshnessPrompt, isStale } from "@/components/dashboard/FreshnessPrompt";
+
 import heroTools from "@/assets/hero-tools.jpg";
 
 
@@ -199,8 +201,10 @@ function Dashboard() {
               const v = insights.data?.viewsByProp[p.id] ?? 0;
               const f = insights.data?.favsByProp[p.id] ?? 0;
               return (
-                <div key={p.id} className="rounded-xl border border-border bg-card p-4 flex items-center gap-4 hover:shadow-soft hover:border-primary/30 transition-all">
+                <div key={p.id} className="rounded-xl border border-border bg-card p-4 hover:shadow-soft hover:border-primary/30 transition-all">
+                 <div className="flex items-center gap-4">
                   <img src={p.images[0] ?? "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200"} alt="" className="h-16 w-24 rounded-lg object-cover shrink-0" />
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold truncate">{p.title}</h3>
@@ -242,7 +246,10 @@ function Dashboard() {
                     )}
                     <button onClick={() => confirm("Delete this listing?") && del.mutate(p.id)} className="btn-ghost !px-3 !py-2 text-destructive" title="Delete"><Trash2 className="h-4 w-4" /></button>
                   </div>
+                 </div>
+                 {isStale(p as any) && <FreshnessPrompt property={p} />}
                 </div>
+
               );
             })}
           </div>

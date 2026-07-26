@@ -85,6 +85,7 @@ import { Route as AuthenticatedAdminTierPlansRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
 import { Route as AuthenticatedAdminScanRunsRouteImport } from './routes/_authenticated/admin.scan-runs'
+import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authenticated/admin.reports'
 import { Route as AuthenticatedAdminQueueRouteImport } from './routes/_authenticated/admin.queue'
 import { Route as AuthenticatedAdminPwaAnalyticsRouteImport } from './routes/_authenticated/admin.pwa-analytics'
@@ -523,6 +524,12 @@ const AuthenticatedAdminScanRunsRoute =
     path: '/scan-runs',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminReviewsRoute =
+  AuthenticatedAdminReviewsRouteImport.update({
+    id: '/reviews',
+    path: '/reviews',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminReportsRoute =
   AuthenticatedAdminReportsRouteImport.update({
     id: '/reports',
@@ -752,6 +759,7 @@ export interface FileRoutesByFullPath {
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -858,6 +866,7 @@ export interface FileRoutesByTo {
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -965,6 +974,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/_authenticated/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
+  '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -1073,6 +1083,7 @@ export interface FileRouteTypes {
     | '/admin/pwa-analytics'
     | '/admin/queue'
     | '/admin/reports'
+    | '/admin/reviews'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
     | '/admin/support'
@@ -1179,6 +1190,7 @@ export interface FileRouteTypes {
     | '/admin/pwa-analytics'
     | '/admin/queue'
     | '/admin/reports'
+    | '/admin/reviews'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
     | '/admin/support'
@@ -1285,6 +1297,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pwa-analytics'
     | '/_authenticated/admin/queue'
     | '/_authenticated/admin/reports'
+    | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/scan-runs'
     | '/_authenticated/admin/subscriptions'
     | '/_authenticated/admin/support'
@@ -1915,6 +1928,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminScanRunsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/reviews': {
+      id: '/_authenticated/admin/reviews'
+      path: '/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/reports': {
       id: '/_authenticated/admin/reports'
       path: '/reports'
@@ -2152,6 +2172,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminPwaAnalyticsRoute: typeof AuthenticatedAdminPwaAnalyticsRoute
   AuthenticatedAdminQueueRoute: typeof AuthenticatedAdminQueueRoute
   AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
+  AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
   AuthenticatedAdminScanRunsRoute: typeof AuthenticatedAdminScanRunsRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
@@ -2177,6 +2198,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminPwaAnalyticsRoute: AuthenticatedAdminPwaAnalyticsRoute,
   AuthenticatedAdminQueueRoute: AuthenticatedAdminQueueRoute,
   AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,
+  AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
   AuthenticatedAdminScanRunsRoute: AuthenticatedAdminScanRunsRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,

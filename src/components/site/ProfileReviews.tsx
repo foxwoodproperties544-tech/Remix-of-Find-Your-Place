@@ -28,7 +28,7 @@ export function ProfileReviews({ targetId }: { targetId: string }) {
         .select("id, user_id, rating, comment, created_at")
         .eq("target_type", "agent")
         .eq("target_id", targetId)
-        .eq("status", "published")
+        .eq("status", "approved")
         .order("created_at", { ascending: false });
       if (error) throw error;
       const ids = Array.from(new Set((reviews ?? []).map((r) => r.user_id)));
@@ -50,11 +50,13 @@ export function ProfileReviews({ targetId }: { targetId: string }) {
         user_id: user.id,
         rating,
         comment: comment.trim() || null,
+        status: "pending",
+
       });
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Review posted");
+      toast.success("Review submitted — it will appear once our team approves it");
       setComment("");
       setRating(5);
       qc.invalidateQueries({ queryKey: ["reviews", "agent", targetId] });
