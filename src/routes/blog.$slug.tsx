@@ -207,7 +207,11 @@ function PostPage() {
         subtitle={post.excerpt ?? undefined}
       >
         <div className="flex flex-wrap items-center gap-4 text-sm text-white/85">
-          {author && <span className="flex items-center gap-1.5"><User className="h-4 w-4" />{author.full_name}</span>}
+          {author && (
+            <Link to="/blog/author/$id" params={{ id: author.id }} className="flex items-center gap-1.5 hover:underline">
+              <User className="h-4 w-4" />{author.full_name}
+            </Link>
+          )}
           {date && <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4" />{date}</span>}
           <span className="flex items-center gap-1.5"><Clock className="h-4 w-4" />{post.reading_minutes} min read</span>
         </div>
@@ -269,9 +273,14 @@ function PostPage() {
                   <div className="text-lg font-bold">{author.full_name ?? "Foxwood Team"}</div>
                   {author.company_name && <div className="text-sm text-muted-foreground">{author.company_name}</div>}
                   {author.bio && <p className="mt-2 text-sm text-foreground/90">{author.bio}</p>}
-                  <Link to="/agents/$id" params={{ id: author.id }} className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
-                    View all articles &amp; listings →
-                  </Link>
+                  <div className="mt-3 flex flex-wrap gap-4">
+                    <Link to="/blog/author/$id" params={{ id: author.id }} className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+                      All articles by this author →
+                    </Link>
+                    <Link to="/agents/$id" params={{ id: author.id }} className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+                      View listings →
+                    </Link>
+                  </div>
                 </div>
               </div>
             </section>
