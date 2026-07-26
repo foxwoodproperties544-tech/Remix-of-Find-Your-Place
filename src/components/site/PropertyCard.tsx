@@ -45,13 +45,23 @@ export function PropertyCard({ p, distanceKm }: { p: Property; distanceKm?: numb
           <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" /> {p.area}, {p.town}
           </div>
-          <div className="mt-3 text-lg font-bold text-primary">
-            {formatKsh(p.price)}<span className="text-xs font-medium text-muted-foreground">{p.priceSuffix ?? ""}</span>
+          <div className="mt-3 flex items-baseline gap-2 flex-wrap">
+            <span className="text-lg font-bold text-primary">
+              {formatKsh(p.price)}<span className="text-xs font-medium text-muted-foreground">{p.priceSuffix ?? ""}</span>
+            </span>
+            {perUnit && (
+              <span className="rounded-full bg-muted text-[11px] font-semibold px-2 py-0.5 text-muted-foreground" title="Normalized price for like-for-like comparison">
+                {perUnit.label}
+              </span>
+            )}
           </div>
-          <div className="mt-3 pt-3 border-t border-border/70 flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="mt-3 pt-3 border-t border-border/70 flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
             {p.bedrooms > 0 && <span className="flex items-center gap-1"><Bed className="h-4 w-4" /> {p.bedrooms}</span>}
             {p.bathrooms > 0 && <span className="flex items-center gap-1"><Bath className="h-4 w-4" /> {p.bathrooms}</span>}
             {p.size && <span className="flex items-center gap-1"><Maximize className="h-4 w-4" /> {p.size}</span>}
+            {typeof distanceKm === "number" && (
+              <span className="flex items-center gap-1 text-primary font-semibold"><Compass className="h-4 w-4" /> {distanceKm < 1 ? "<1" : distanceKm.toFixed(1)} km</span>
+            )}
           </div>
         </div>
       </Link>
