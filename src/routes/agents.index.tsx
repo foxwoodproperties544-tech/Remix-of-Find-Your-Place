@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import heroTools from "@/assets/hero-tools.jpg";
 import { absoluteUrl } from "@/lib/site-url";
-import { listPublicAgents } from "@/lib/users.functions";
+import { listPublicAgents, listTopAgents } from "@/lib/users.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { SERVICES, ALL_TYPES } from "@/lib/taxonomy";
 import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
@@ -19,7 +19,10 @@ import {
   BadgeCheck,
   Search,
   X,
+  Trophy,
+  Star,
 } from "lucide-react";
+
 
 const TITLE = "Our Agents — Foxwood Properties";
 const DESC =
