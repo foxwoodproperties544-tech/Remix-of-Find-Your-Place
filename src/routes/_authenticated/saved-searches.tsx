@@ -16,6 +16,7 @@ interface SavedSearch {
   name: string;
   filters: Record<string, any>;
   notify_email: boolean;
+  notify_whatsapp: boolean;
   created_at: string;
 }
 
@@ -29,7 +30,7 @@ function SavedSearches() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("saved_searches")
-        .select("id, name, filters, notify_email, created_at")
+        .select("id, name, filters, notify_email, notify_whatsapp, created_at")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -46,8 +47,8 @@ function SavedSearches() {
   });
 
   const toggleNotify = useMutation({
-    mutationFn: async ({ id, on }: { id: string; on: boolean }) => {
-      const { error } = await supabase.from("saved_searches").update({ notify_email: on }).eq("id", id);
+    mutationFn: async ({ id, channel, on }: { id: string; channel: "notify_email" | "notify_whatsapp"; on: boolean }) => {
+      const { error } = await supabase.from("saved_searches").update({ [channel]: on }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["saved-searches"] }),
