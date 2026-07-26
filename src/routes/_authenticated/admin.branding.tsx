@@ -14,9 +14,9 @@ type IconState = { path: string; ok: boolean | null };
 
 function BrandingPage() {
   const { loading } = useAdminGuard();
-  const [name, setName] = useState(BRAND.name);
-  const [shortName, setShortName] = useState(BRAND.shortName);
-  const [tagline, setTagline] = useState(BRAND.tagline);
+  const [name, setName] = useState<string>(BRAND.name);
+  const [shortName, setShortName] = useState<string>(BRAND.shortName);
+  const [tagline, setTagline] = useState<string>(BRAND.tagline);
   const [saved, setSaved] = useState(false);
   const [icons, setIcons] = useState<IconState[]>(BRAND_ICONS.map((i) => ({ path: i.path, ok: null })));
   const [manifest, setManifest] = useState<any>(null);
