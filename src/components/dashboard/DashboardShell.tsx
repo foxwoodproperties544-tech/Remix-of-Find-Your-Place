@@ -33,7 +33,6 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/dashboard/blog", label: "My blog posts", icon: FileText, end: true },
       { to: "/dashboard/security", label: "Security & 2FA", icon: ShieldCheck },
       { to: "/dashboard/referrals", label: "Refer & earn", icon: Users2 },
-      { to: "/dashboard/business", label: "My company", icon: Building2 },
 
     ],
   });
