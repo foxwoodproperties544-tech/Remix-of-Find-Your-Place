@@ -86,14 +86,14 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         try {
           const { data: agents } = await supabase
-            .from("profiles")
-            .select("id, updated_at")
+            .from("public_profiles")
+            .select("id, created_at")
             .in("role_primary", ["agent", "developer"])
             .limit(1000);
           for (const a of agents ?? []) {
             entries.push({
               path: `/agents/${a.id}`,
-              lastmod: a.updated_at ? new Date(a.updated_at).toISOString() : undefined,
+              lastmod: a.created_at ? new Date(a.created_at).toISOString() : undefined,
               changefreq: "weekly",
               priority: "0.5",
             });
