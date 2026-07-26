@@ -79,7 +79,7 @@ export function TosAcceptBanner() {
         <button
           type="button"
           aria-label="Dismiss for now"
-          onClick={() => setDismissed(true)}
+          onClick={dismiss}
           className="rounded-md p-1 hover:bg-white/10"
         >
           <X className="h-4 w-4" />
