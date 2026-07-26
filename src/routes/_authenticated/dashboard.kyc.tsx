@@ -165,17 +165,6 @@ function VerificationSubscriptionPage() {
           </div>
 
 
-          {!active && sub?.expiresAt && (
-            <div className="mt-6 rounded-xl border border-destructive/30 bg-destructive/5 p-5 flex items-start gap-3">
-              <Clock className="h-5 w-5 text-destructive mt-0.5" />
-              <div>
-                <h2 className="font-semibold">Your verification expired</h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Expired on {new Date(sub.expiresAt).toLocaleDateString()}. Renew below to restore your badge.
-                </p>
-              </div>
-            </div>
-          )}
 
           <div className="mt-6 rounded-xl border border-border bg-card p-6">
             <div className="flex items-baseline gap-2">
