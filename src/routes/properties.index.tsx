@@ -20,6 +20,9 @@ import { AdSlot } from "@/components/site/AdSlot";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import { fuzzySearch } from "@/lib/fuzzy";
 import { checkRateLimit, rateLimitKey } from "@/lib/rate-limit";
+import { RadiusFilter } from "@/components/site/RadiusFilter";
+import { distanceKm as haversineKm, propertyCoords } from "@/lib/geo";
+import { parseSizeToSqft } from "@/lib/measure";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
 const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
@@ -28,6 +31,7 @@ const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) 
 // push oversized or malformed input into the search + fuzzy matching pipeline.
 const short = z.string().trim().max(60);
 const numeric = z.string().trim().regex(/^\d{0,12}$/);
+const coord = z.string().trim().regex(/^-?\d{0,3}(\.\d{0,6})?$/);
 const csv = z.string().trim().max(300).regex(/^[a-zA-Z0-9 ,._/&'-]*$/);
 
 const searchSchema = z.object({
@@ -47,7 +51,11 @@ const searchSchema = z.object({
   status: fallback(short, "").default(""),
   listingType: fallback(short, "").default(""),
   purpose: fallback(short, "").default(""),
-  sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc"]), "newest").default("newest"),
+  lat: fallback(coord, "").default(""),
+  lng: fallback(coord, "").default(""),
+  radius: fallback(numeric, "").default(""),
+  nearLabel: fallback(short, "").default(""),
+  sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc", "distance", "ppsf-asc"]), "newest").default("newest"),
   page: fallback(z.number().int().min(1).max(1000), 1).default(1),
   favs: fallback(z.boolean(), false).default(false),
   view: fallback(z.enum(["list", "map"]), "list").default("list"),
