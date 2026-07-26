@@ -15,6 +15,7 @@ import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sit
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MortgageRouteImport } from './routes/mortgage'
 import { Route as ListingPackagesRouteImport } from './routes/listing-packages'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HelpCenterRouteImport } from './routes/help-center'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as GetAppRouteImport } from './routes/get-app'
@@ -146,6 +147,11 @@ const MortgageRoute = MortgageRouteImport.update({
 const ListingPackagesRoute = ListingPackagesRouteImport.update({
   id: '/listing-packages',
   path: '/listing-packages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpCenterRoute = HelpCenterRouteImport.update({
@@ -731,6 +737,7 @@ export interface FileRoutesByFullPath {
   '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
@@ -840,6 +847,7 @@ export interface FileRoutesByTo {
   '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
@@ -950,6 +958,7 @@ export interface FileRoutesById {
   '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
@@ -1061,6 +1070,7 @@ export interface FileRouteTypes {
     | '/get-app'
     | '/help'
     | '/help-center'
+    | '/how-it-works'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
@@ -1170,6 +1180,7 @@ export interface FileRouteTypes {
     | '/get-app'
     | '/help'
     | '/help-center'
+    | '/how-it-works'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
@@ -1279,6 +1290,7 @@ export interface FileRouteTypes {
     | '/get-app'
     | '/help'
     | '/help-center'
+    | '/how-it-works'
     | '/listing-packages'
     | '/mortgage'
     | '/privacy'
@@ -1390,6 +1402,7 @@ export interface RootRouteChildren {
   GetAppRoute: typeof GetAppRoute
   HelpRoute: typeof HelpRoute
   HelpCenterRoute: typeof HelpCenterRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   ListingPackagesRoute: typeof ListingPackagesRoute
   MortgageRoute: typeof MortgageRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -1462,6 +1475,13 @@ declare module '@tanstack/react-router' {
       path: '/listing-packages'
       fullPath: '/listing-packages'
       preLoaderRoute: typeof ListingPackagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help-center': {
@@ -2400,6 +2420,7 @@ const rootRouteChildren: RootRouteChildren = {
   GetAppRoute: GetAppRoute,
   HelpRoute: HelpRoute,
   HelpCenterRoute: HelpCenterRoute,
+  HowItWorksRoute: HowItWorksRoute,
   ListingPackagesRoute: ListingPackagesRoute,
   MortgageRoute: MortgageRoute,
   PrivacyRoute: PrivacyRoute,
@@ -2432,13 +2453,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
