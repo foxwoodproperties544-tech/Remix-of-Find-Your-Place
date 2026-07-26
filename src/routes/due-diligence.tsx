@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
 import { PageHero } from "@/components/site/PageHero";
+import heroTools from "@/assets/hero-tools.jpg";
 import { FileSearch, Landmark, Ruler, ScrollText, ShieldAlert, Check } from "lucide-react";
 
 export const Route = createFileRoute("/due-diligence")({
