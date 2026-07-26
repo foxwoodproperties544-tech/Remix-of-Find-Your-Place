@@ -808,6 +808,45 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_templates: {
+        Row: {
+          active: boolean
+          body: string
+          channel: string
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          sort_order: number
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          body: string
+          channel?: string
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          sort_order?: number
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          body?: string
+          channel?: string
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          sort_order?: number
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       due_diligence_requests: {
         Row: {
           admin_notes: string | null
@@ -1177,6 +1216,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      lead_routing_rules: {
+        Row: {
+          active: boolean
+          assign_to: string | null
+          created_at: string
+          id: string
+          match_category: string | null
+          match_county: string | null
+          match_source: Database["public"]["Enums"]["lead_source"] | null
+          match_town: string | null
+          min_budget: number | null
+          name: string
+          owner_id: string
+          priority: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          assign_to?: string | null
+          created_at?: string
+          id?: string
+          match_category?: string | null
+          match_county?: string | null
+          match_source?: Database["public"]["Enums"]["lead_source"] | null
+          match_town?: string | null
+          min_budget?: number | null
+          name: string
+          owner_id: string
+          priority?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          assign_to?: string | null
+          created_at?: string
+          id?: string
+          match_category?: string | null
+          match_county?: string | null
+          match_source?: Database["public"]["Enums"]["lead_source"] | null
+          match_town?: string | null
+          min_budget?: number | null
+          name?: string
+          owner_id?: string
+          priority?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       leads: {
         Row: {
