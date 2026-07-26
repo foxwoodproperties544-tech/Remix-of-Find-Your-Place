@@ -32,7 +32,8 @@ const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) 
 const short = z.string().trim().max(60);
 // Router parses bare numbers in the URL as numbers, so coerce before validating.
 const numeric = z.coerce.string().trim().regex(/^\d{0,12}$/);
-const coord = z.coerce.string().trim().regex(/^-?\d{0,3}(\.\d{0,6})?$/);
+const coord = z.union([z.literal(""), z.coerce.number().min(-180).max(180)]);
+const radiusNum = z.union([z.literal(""), z.coerce.number().min(1).max(100)]);
 const csv = z.string().trim().max(300).regex(/^[a-zA-Z0-9 ,._/&'-]*$/);
 
 const searchSchema = z.object({
