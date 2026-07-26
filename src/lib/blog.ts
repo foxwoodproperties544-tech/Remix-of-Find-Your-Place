@@ -129,6 +129,44 @@ export async function getAuthor(id: string | null): Promise<AuthorProfile | null
   return (data as AuthorProfile | null) ?? null;
 }
 
+/** Published posts written by one author, newest first. */
+export async function listPostsByAuthor(authorId: string, limit = 60): Promise<BlogPost[]> {
+  const { data, error } = await supabase.from("blog_posts").select("*")
+    .eq("status", "published").eq("author_id", authorId)
+    .order("published_at", { ascending: false }).limit(limit);
+  if (error) throw error;
+  return (data ?? []) as BlogPost[];
+}
+
+export interface AuthorSummary extends AuthorProfile {
+  post_count: number;
+  latest_at: string | null;
+}
+
+/** All authors that have at least one published post, with post counts. */
+export async function listAuthorsWithCounts(): Promise<AuthorSummary[]> {
+  const { data } = await supabase.from("blog_posts")
+    .select("author_id, published_at").eq("status", "published");
+  const stats = new Map<string, { count: number; latest: string | null }>();
+  for (const r of (data ?? []) as { author_id: string | null; published_at: string | null }[]) {
+    if (!r.author_id) continue;
+    const cur = stats.get(r.author_id) ?? { count: 0, latest: null };
+    cur.count += 1;
+    if (r.published_at && (!cur.latest || r.published_at > cur.latest)) cur.latest = r.published_at;
+    stats.set(r.author_id, cur);
+  }
+  const ids = [...stats.keys()];
+  if (ids.length === 0) return [];
+  const { data: profiles } = await supabase.from("public_profiles")
+    .select("id,full_name,avatar_url,bio,company_name").in("id", ids);
+  return (profiles ?? []).map((p) => ({
+    ...(p as AuthorProfile),
+    post_count: stats.get((p as AuthorProfile).id)?.count ?? 0,
+    latest_at: stats.get((p as AuthorProfile).id)?.latest ?? null,
+  })).sort((a, b) => b.post_count - a.post_count);
+}
+
+
 export async function incrementPostView(_id: string): Promise<void> {
   // Best-effort; requires an RPC or admin write. Silent no-op on RLS block.
   return;
