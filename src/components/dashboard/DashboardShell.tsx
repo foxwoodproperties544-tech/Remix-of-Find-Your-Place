@@ -65,7 +65,9 @@ function useNav(): { section: string; items: NavItem[] }[] {
       items: [
         { to: "/admin", label: "Moderation", icon: ShieldCheck, end: true },
         { to: "/admin/queue", label: "Approval queue", icon: CheckCircle2 },
+        { to: "/admin/marketplace", label: "Scores & guides", icon: ShieldCheck },
         { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
+
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
         { to: "/admin/agents", label: "Invite agents", icon: UserCog },
         { to: "/admin/verifications", label: "Listing verifications", icon: ShieldCheck },
