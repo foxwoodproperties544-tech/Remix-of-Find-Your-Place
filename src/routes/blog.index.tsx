@@ -67,6 +67,9 @@ function Blog() {
         subtitle="News, guides and market updates from Kenya's real estate scene."
       />
       <section className="container-page py-14">
+        <div className="mb-6 text-sm">
+          <Link to="/blog/authors" className="text-primary font-semibold hover:underline">Browse our authors →</Link>
+        </div>
         {posts.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">No posts published yet.</div>
         ) : (
