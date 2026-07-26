@@ -24,7 +24,7 @@ function ReferralsPage() {
       const { data: me } = await supabase.from("profiles").select("referral_code").eq("id", uid).maybeSingle();
       setCode((me as any)?.referral_code ?? null);
       const { data: refs } = await supabase
-        .from("public_profiles").select("id, full_name, created_at")
+        .from("profiles").select("id, full_name, created_at")
         .eq("referred_by", uid).order("created_at", { ascending: false });
       setReferred((refs as any) ?? []);
       setLoading(false);
