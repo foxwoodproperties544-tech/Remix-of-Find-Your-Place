@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
@@ -119,6 +120,11 @@ import { Route as AuthenticatedAdminPackagesPreviewRouteImport } from './routes/
 import { Route as AuthenticatedDashboardBlogIdPayRouteImport } from './routes/_authenticated/dashboard.blog.$id.pay'
 import { Route as AuthenticatedDashboardBlogIdEditRouteImport } from './routes/_authenticated/dashboard.blog.$id.edit'
 
+const TestimonialsRoute = TestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -744,6 +750,7 @@ export interface FileRoutesByFullPath {
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -854,6 +861,7 @@ export interface FileRoutesByTo {
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -965,6 +973,7 @@ export interface FileRoutesById {
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
@@ -1077,6 +1086,7 @@ export interface FileRouteTypes {
     | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
+    | '/testimonials'
     | '/admin'
     | '/favorites'
     | '/saved-searches'
@@ -1187,6 +1197,7 @@ export interface FileRouteTypes {
     | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
+    | '/testimonials'
     | '/admin'
     | '/favorites'
     | '/saved-searches'
@@ -1297,6 +1308,7 @@ export interface FileRouteTypes {
     | '/property-sitemap.xml'
     | '/sitemap.xml'
     | '/terms'
+    | '/testimonials'
     | '/_authenticated/admin'
     | '/_authenticated/favorites'
     | '/_authenticated/saved-searches'
@@ -1409,6 +1421,7 @@ export interface RootRouteChildren {
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
+  TestimonialsRoute: typeof TestimonialsRoute
   AgentsIdRoute: typeof AgentsIdRoute
   AgentsBecomeRoute: typeof AgentsBecomeRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -1435,6 +1448,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/testimonials': {
+      id: '/testimonials'
+      path: '/testimonials'
+      fullPath: '/testimonials'
+      preLoaderRoute: typeof TestimonialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -2427,6 +2447,7 @@ const rootRouteChildren: RootRouteChildren = {
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
+  TestimonialsRoute: TestimonialsRoute,
   AgentsIdRoute: AgentsIdRoute,
   AgentsBecomeRoute: AgentsBecomeRoute,
   BlogSlugRoute: BlogSlugRoute,
