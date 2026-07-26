@@ -23,6 +23,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/dashboard/account", label: "Overview", icon: LayoutDashboard },
       { to: "/dashboard/profile", label: "My profile", icon: UserCog },
       { to: "/dashboard/kyc", label: "Verify identity", icon: ShieldCheck },
+      { to: "/dashboard/buyer", label: "Buyer tools", icon: Search },
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
