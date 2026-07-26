@@ -54,17 +54,55 @@ function PwaAnalytics() {
   }, [data]);
 
 
-  function exportCsv() {
-    if (!data) return;
-    const header = ["date", "impression", "install_click", "installed", "dismiss", "ios_hint_shown"];
-    const rows = byDay.map((r: any) => [r.day, r.impression, r.install_click, r.installed, r.dismiss, r.ios_hint_shown]);
-    const csv = [header, ...rows].map((r) => r.join(",")).join("\n");
+  const EVENTS = ["impression", "install_click", "installed", "dismiss", "ios_hint_shown", "page_view", "share_click", "share_whatsapp", "copy_link", "qr_shown"] as const;
+
+  function csvCell(v: unknown) {
+    const s = String(v ?? "");
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  }
+
+  function downloadCsv(name: string, lines: (string | number)[][]) {
+    const csv = lines.map((r) => r.map(csvCell).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url;
-    a.download = `pwa-install-analytics_${from}_to_${to}.csv`;
+    a.download = `${name}_${from}_to_${to}.csv`;
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   }
+
+  function exportCsv() {
+    if (!data) return;
+    downloadCsv("pwa-install-analytics-daily", [
+      ["date", ...EVENTS],
+      ...byDay.map((r: any) => ["" + r.day, ...EVENTS.map((e) => r[e] ?? 0)]),
+    ]);
+  }
+
+  function exportPlatformCsv() {
+    if (!data) return;
+    downloadCsv("pwa-analytics-by-platform", [
+      ["platform", ...EVENTS, "ctr_percent"],
+      ...platformRows.map((r: any) => [
+        r.platform,
+        ...EVENTS.map((e) => r[e] ?? 0),
+        r.impression > 0 ? ((r.install_click / r.impression) * 100).toFixed(2) : "0.00",
+      ]),
+    ]);
+  }
+
+  function exportEngagementCsv() {
+    if (!data) return;
+    downloadCsv("pwa-engagement-by-source", [
+      ["source", ...EVENTS, "shares_total", "install_conversion_percent"],
+      ...sourceRows.map((r: any) => [
+        r.source,
+        ...EVENTS.map((e) => r[e] ?? 0),
+        (r.share_click ?? 0) + (r.share_whatsapp ?? 0) + (r.copy_link ?? 0),
+        r.install_click > 0 ? ((r.installed / r.install_click) * 100).toFixed(2) : "0.00",
+      ]),
+    ]);
+  }
+
 
   const t = data?.totals ?? { impression: 0, install_click: 0, installed: 0, dismiss: 0, ios_hint_shown: 0 };
 
