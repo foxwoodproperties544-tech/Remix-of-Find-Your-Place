@@ -5,8 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { toProperty, type DbPropertyRow } from "@/lib/properties";
-import { COUNTIES } from "@/lib/kenya-locations";
-import { CATEGORIES, PROPERTY_TYPES } from "@/lib/taxonomy";
+import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
+import { CATEGORIES, ALL_TYPES } from "@/lib/taxonomy";
 import { toast } from "sonner";
 import { Sparkles, Bell, ListChecks, Check, Plus, Trash2, Heart } from "lucide-react";
 
