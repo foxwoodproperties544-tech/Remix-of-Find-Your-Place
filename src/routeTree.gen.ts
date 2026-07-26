@@ -57,6 +57,7 @@ import { Route as AgentsIdRouteImport } from './routes/agents.$id'
 import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authenticated/saved-searches'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as BlogAuthorsIndexRouteImport } from './routes/blog.authors.index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as LocationsCountyTownRouteImport } from './routes/locations.$county.$town'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
@@ -362,6 +363,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const BlogAuthorsIndexRoute = BlogAuthorsIndexRouteImport.update({
+  id: '/blog/authors/',
+  path: '/blog/authors/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
@@ -836,6 +842,7 @@ export interface FileRoutesByFullPath {
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/blog/authors/': typeof BlogAuthorsIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -948,6 +955,7 @@ export interface FileRoutesByTo {
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/blog/authors': typeof BlogAuthorsIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -1063,6 +1071,7 @@ export interface FileRoutesById {
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/locations/$county/$town': typeof LocationsCountyTownRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/blog/authors/': typeof BlogAuthorsIndexRoute
   '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/_authenticated/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
@@ -1178,6 +1187,7 @@ export interface FileRouteTypes {
     | '/blog/tag/$tag'
     | '/locations/$county/$town'
     | '/dashboard/'
+    | '/blog/authors/'
     | '/admin/packages/preview'
     | '/admin/settings/support'
     | '/dashboard/blog/new'
@@ -1290,6 +1300,7 @@ export interface FileRouteTypes {
     | '/blog/tag/$tag'
     | '/locations/$county/$town'
     | '/dashboard'
+    | '/blog/authors'
     | '/admin/packages/preview'
     | '/admin/settings/support'
     | '/dashboard/blog/new'
@@ -1404,6 +1415,7 @@ export interface FileRouteTypes {
     | '/blog/tag/$tag'
     | '/locations/$county/$town'
     | '/_authenticated/dashboard/'
+    | '/blog/authors/'
     | '/_authenticated/admin/packages/preview'
     | '/_authenticated/admin/settings/support'
     | '/_authenticated/dashboard/blog/new'
@@ -1469,6 +1481,7 @@ export interface RootRouteChildren {
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
+  BlogAuthorsIndexRoute: typeof BlogAuthorsIndexRoute
   ApiPublicHooksSubscriptionScanRoute: typeof ApiPublicHooksSubscriptionScanRoute
 }
 
@@ -1809,6 +1822,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/blog/authors/': {
+      id: '/blog/authors/'
+      path: '/blog/authors'
+      fullPath: '/blog/authors/'
+      preLoaderRoute: typeof BlogAuthorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard/': {
       id: '/_authenticated/dashboard/'
@@ -2511,6 +2531,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
   BlogTagTagRoute: BlogTagTagRoute,
+  BlogAuthorsIndexRoute: BlogAuthorsIndexRoute,
   ApiPublicHooksSubscriptionScanRoute: ApiPublicHooksSubscriptionScanRoute,
 }
 export const routeTree = rootRouteImport
