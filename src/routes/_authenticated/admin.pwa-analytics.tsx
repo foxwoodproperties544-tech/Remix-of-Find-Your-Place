@@ -46,6 +46,14 @@ function PwaAnalytics() {
     return Object.entries(data.byPlatform).map(([platform, counts]) => ({ platform, ...(counts as Record<string, number>) })) as any;
   }, [data]);
 
+  const sourceRows = useMemo(() => {
+    if (!data?.bySource) return [] as any[];
+    return Object.entries(data.bySource)
+      .map(([source, counts]) => ({ source, ...(counts as Record<string, number>) }))
+      .sort((a: any, b: any) => (b.installed ?? 0) - (a.installed ?? 0) || (b.page_view ?? 0) - (a.page_view ?? 0)) as any[];
+  }, [data]);
+
+
   function exportCsv() {
     if (!data) return;
     const header = ["date", "impression", "install_click", "installed", "dismiss", "ios_hint_shown"];
