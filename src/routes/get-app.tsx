@@ -149,7 +149,7 @@ function GetApp() {
               <p className="text-xs font-medium text-muted-foreground">Shareable download link</p>
               <div className="mt-2 flex items-center gap-2">
                 <code className="flex-1 truncate rounded bg-muted px-2 py-1.5 text-sm">{SHARE_URL}</code>
-                <Button size="sm" variant="outline" onClick={copy} aria-label="Copy download link">
+                <Button size="sm" variant="outline" onClick={() => copy()} aria-label="Copy download link">
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 </Button>
               </div>
