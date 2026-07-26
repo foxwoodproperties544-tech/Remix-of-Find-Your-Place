@@ -243,7 +243,7 @@ function List() {
     (state.minSize ? 1 : 0) + (state.maxSize ? 1 : 0) +
     state.features.size + state.nearby.size +
     (state.status ? 1 : 0) + (state.listingType ? 1 : 0) + (state.purpose ? 1 : 0) +
-    (favsOnly ? 1 : 0) + (q ? 1 : 0);
+    (center ? 1 : 0) + (favsOnly ? 1 : 0) + (q ? 1 : 0);
 
   function currentFilters() {
     const f: Record<string, any> = {};
@@ -260,6 +260,7 @@ function List() {
     if (state.features.size) f.features = [...state.features];
     if (state.nearby.size) f.nearby = [...state.nearby];
     if (state.status) f.status = state.status;
+    if (center) { f.lat = params.lat; f.lng = params.lng; f.radius = params.radius || "10"; f.nearLabel = params.nearLabel; }
     return f;
   }
 
@@ -268,7 +269,9 @@ function List() {
     const name = savingName.trim() || summarize(currentFilters()) || "My search";
     setSaving(true);
     try {
-      const { error } = await supabase.from("saved_searches").insert({ user_id: user.id, name, filters: currentFilters() });
+      const { error } = await supabase.from("saved_searches").insert({
+        user_id: user.id, name, filters: currentFilters(), notify_whatsapp: waAlerts,
+      });
       if (error) throw error;
       toast.success("Search saved");
       setShowSave(false); setSavingName("");
@@ -284,7 +287,17 @@ function List() {
     setFavsOnly(!favsOnly);
   }
 
-  const sidebar = <FiltersSidebar state={state} townOptions={townOptions} onChange={patch} onClear={clearAll} />;
+  const sidebar = (
+    <div className="space-y-2">
+      <RadiusFilter
+        value={{ lat: params.lat, lng: params.lng, radius: params.radius, nearLabel: params.nearLabel }}
+        onChange={(v) => updateSearch(v)}
+        matchCount={center ? sorted.length : undefined}
+      />
+      <FiltersSidebar state={state} townOptions={townOptions} onChange={patch} onClear={clearAll} />
+    </div>
+  );
+
 
   return (
     <>
