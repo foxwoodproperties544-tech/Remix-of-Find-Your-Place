@@ -28,7 +28,6 @@ import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
-import { Route as CompanySitemapDotxmlRouteImport } from './routes/company-sitemap[.]xml'
 import { Route as BlogSubmissionPackagesRouteImport } from './routes/blog-submission-packages'
 import { Route as BlogSitemapDotxmlRouteImport } from './routes/blog-sitemap[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -39,7 +38,6 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
-import { Route as CompaniesIndexRouteImport } from './routes/companies.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as ServicesValuationRouteImport } from './routes/services.valuation'
@@ -53,7 +51,6 @@ import { Route as ServicesInvestmentRouteImport } from './routes/services.invest
 import { Route as ServicesBuyRouteImport } from './routes/services.buy'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
-import { Route as CompaniesSlugRouteImport } from './routes/companies.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AgentsBecomeRouteImport } from './routes/agents.become'
 import { Route as AgentsIdRouteImport } from './routes/agents.$id'
@@ -83,7 +80,6 @@ import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardCrmSettingsRouteImport } from './routes/_authenticated/dashboard.crm-settings'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardBuyerRouteImport } from './routes/_authenticated/dashboard.buyer'
-import { Route as AuthenticatedDashboardBusinessRouteImport } from './routes/_authenticated/dashboard.business'
 import { Route as AuthenticatedDashboardBulkImportRouteImport } from './routes/_authenticated/dashboard.bulk-import'
 import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authenticated/dashboard.blog'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
@@ -104,7 +100,6 @@ import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminMarketplaceRouteImport } from './routes/_authenticated/admin.marketplace'
 import { Route as AuthenticatedAdminKycRouteImport } from './routes/_authenticated/admin.kyc'
-import { Route as AuthenticatedAdminDirectoryRouteImport } from './routes/_authenticated/admin.directory'
 import { Route as AuthenticatedAdminDeletionRequestsRouteImport } from './routes/_authenticated/admin.deletion-requests'
 import { Route as AuthenticatedAdminBrandingRouteImport } from './routes/_authenticated/admin.branding'
 import { Route as AuthenticatedAdminBlogPackagesRouteImport } from './routes/_authenticated/admin.blog-packages'
@@ -224,11 +219,6 @@ const CompareRoute = CompareRouteImport.update({
   path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompanySitemapDotxmlRoute = CompanySitemapDotxmlRouteImport.update({
-  id: '/company-sitemap.xml',
-  path: '/company-sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BlogSubmissionPackagesRoute = BlogSubmissionPackagesRouteImport.update({
   id: '/blog-submission-packages',
   path: '/blog-submission-packages',
@@ -277,11 +267,6 @@ const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
 const LocationsIndexRoute = LocationsIndexRouteImport.update({
   id: '/locations/',
   path: '/locations/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompaniesIndexRoute = CompaniesIndexRouteImport.update({
-  id: '/companies/',
-  path: '/companies/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -347,11 +332,6 @@ const PropertiesIdRoute = PropertiesIdRouteImport.update({
 const LocationsCountyRoute = LocationsCountyRouteImport.update({
   id: '/locations/$county',
   path: '/locations/$county',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompaniesSlugRoute = CompaniesSlugRouteImport.update({
-  id: '/companies/$slug',
-  path: '/companies/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -517,12 +497,6 @@ const AuthenticatedDashboardBuyerRoute =
     path: '/dashboard/buyer',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedDashboardBusinessRoute =
-  AuthenticatedDashboardBusinessRouteImport.update({
-    id: '/dashboard/business',
-    path: '/dashboard/business',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedDashboardBulkImportRoute =
   AuthenticatedDashboardBulkImportRouteImport.update({
     id: '/dashboard/bulk-import',
@@ -640,12 +614,6 @@ const AuthenticatedAdminKycRoute = AuthenticatedAdminKycRouteImport.update({
   path: '/kyc',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
-const AuthenticatedAdminDirectoryRoute =
-  AuthenticatedAdminDirectoryRouteImport.update({
-    id: '/directory',
-    path: '/directory',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
 const AuthenticatedAdminDeletionRequestsRoute =
   AuthenticatedAdminDeletionRequestsRouteImport.update({
     id: '/deletion-requests',
@@ -790,7 +758,6 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
   '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
-  '/company-sitemap.xml': typeof CompanySitemapDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
@@ -816,7 +783,6 @@ export interface FileRoutesByFullPath {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/companies/$slug': typeof CompaniesSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/services/buy': typeof ServicesBuyRoute
@@ -830,7 +796,6 @@ export interface FileRoutesByFullPath {
   '/services/valuation': typeof ServicesValuationRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/companies/': typeof CompaniesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
@@ -842,7 +807,6 @@ export interface FileRoutesByFullPath {
   '/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
   '/admin/branding': typeof AuthenticatedAdminBrandingRoute
   '/admin/deletion-requests': typeof AuthenticatedAdminDeletionRequestsRoute
-  '/admin/directory': typeof AuthenticatedAdminDirectoryRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -863,7 +827,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
-  '/dashboard/business': typeof AuthenticatedDashboardBusinessRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
@@ -910,7 +873,6 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
   '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
-  '/company-sitemap.xml': typeof CompanySitemapDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
@@ -936,7 +898,6 @@ export interface FileRoutesByTo {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/companies/$slug': typeof CompaniesSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/services/buy': typeof ServicesBuyRoute
@@ -950,7 +911,6 @@ export interface FileRoutesByTo {
   '/services/valuation': typeof ServicesValuationRoute
   '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
-  '/companies': typeof CompaniesIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
@@ -962,7 +922,6 @@ export interface FileRoutesByTo {
   '/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
   '/admin/branding': typeof AuthenticatedAdminBrandingRoute
   '/admin/deletion-requests': typeof AuthenticatedAdminDeletionRequestsRoute
-  '/admin/directory': typeof AuthenticatedAdminDirectoryRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -982,7 +941,6 @@ export interface FileRoutesByTo {
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
-  '/dashboard/business': typeof AuthenticatedDashboardBusinessRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
@@ -1031,7 +989,6 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
   '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
-  '/company-sitemap.xml': typeof CompanySitemapDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
@@ -1057,7 +1014,6 @@ export interface FileRoutesById {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/companies/$slug': typeof CompaniesSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/services/buy': typeof ServicesBuyRoute
@@ -1071,7 +1027,6 @@ export interface FileRoutesById {
   '/services/valuation': typeof ServicesValuationRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
-  '/companies/': typeof CompaniesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/_authenticated/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
@@ -1083,7 +1038,6 @@ export interface FileRoutesById {
   '/_authenticated/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
   '/_authenticated/admin/branding': typeof AuthenticatedAdminBrandingRoute
   '/_authenticated/admin/deletion-requests': typeof AuthenticatedAdminDeletionRequestsRoute
-  '/_authenticated/admin/directory': typeof AuthenticatedAdminDirectoryRoute
   '/_authenticated/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/_authenticated/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -1104,7 +1058,6 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/_authenticated/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
-  '/_authenticated/dashboard/business': typeof AuthenticatedDashboardBusinessRoute
   '/_authenticated/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
@@ -1153,7 +1106,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog-sitemap.xml'
     | '/blog-submission-packages'
-    | '/company-sitemap.xml'
     | '/compare'
     | '/contact'
     | '/cookies'
@@ -1179,7 +1131,6 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
-    | '/companies/$slug'
     | '/locations/$county'
     | '/properties/$id'
     | '/services/buy'
@@ -1193,7 +1144,6 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/agents/'
     | '/blog/'
-    | '/companies/'
     | '/locations/'
     | '/properties/'
     | '/admin/ad-campaigns'
@@ -1205,7 +1155,6 @@ export interface FileRouteTypes {
     | '/admin/blog-packages'
     | '/admin/branding'
     | '/admin/deletion-requests'
-    | '/admin/directory'
     | '/admin/kyc'
     | '/admin/marketplace'
     | '/admin/notifications'
@@ -1226,7 +1175,6 @@ export interface FileRouteTypes {
     | '/dashboard/appointments'
     | '/dashboard/blog'
     | '/dashboard/bulk-import'
-    | '/dashboard/business'
     | '/dashboard/buyer'
     | '/dashboard/crm'
     | '/dashboard/crm-settings'
@@ -1273,7 +1221,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog-sitemap.xml'
     | '/blog-submission-packages'
-    | '/company-sitemap.xml'
     | '/compare'
     | '/contact'
     | '/cookies'
@@ -1299,7 +1246,6 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
-    | '/companies/$slug'
     | '/locations/$county'
     | '/properties/$id'
     | '/services/buy'
@@ -1313,7 +1259,6 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/agents'
     | '/blog'
-    | '/companies'
     | '/locations'
     | '/properties'
     | '/admin/ad-campaigns'
@@ -1325,7 +1270,6 @@ export interface FileRouteTypes {
     | '/admin/blog-packages'
     | '/admin/branding'
     | '/admin/deletion-requests'
-    | '/admin/directory'
     | '/admin/kyc'
     | '/admin/marketplace'
     | '/admin/notifications'
@@ -1345,7 +1289,6 @@ export interface FileRouteTypes {
     | '/dashboard/advertise'
     | '/dashboard/appointments'
     | '/dashboard/bulk-import'
-    | '/dashboard/business'
     | '/dashboard/buyer'
     | '/dashboard/crm'
     | '/dashboard/crm-settings'
@@ -1393,7 +1336,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog-sitemap.xml'
     | '/blog-submission-packages'
-    | '/company-sitemap.xml'
     | '/compare'
     | '/contact'
     | '/cookies'
@@ -1419,7 +1361,6 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
-    | '/companies/$slug'
     | '/locations/$county'
     | '/properties/$id'
     | '/services/buy'
@@ -1433,7 +1374,6 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/agents/'
     | '/blog/'
-    | '/companies/'
     | '/locations/'
     | '/properties/'
     | '/_authenticated/admin/ad-campaigns'
@@ -1445,7 +1385,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/blog-packages'
     | '/_authenticated/admin/branding'
     | '/_authenticated/admin/deletion-requests'
-    | '/_authenticated/admin/directory'
     | '/_authenticated/admin/kyc'
     | '/_authenticated/admin/marketplace'
     | '/_authenticated/admin/notifications'
@@ -1466,7 +1405,6 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/blog'
     | '/_authenticated/dashboard/bulk-import'
-    | '/_authenticated/dashboard/business'
     | '/_authenticated/dashboard/buyer'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/crm-settings'
@@ -1515,7 +1453,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogSitemapDotxmlRoute: typeof BlogSitemapDotxmlRoute
   BlogSubmissionPackagesRoute: typeof BlogSubmissionPackagesRoute
-  CompanySitemapDotxmlRoute: typeof CompanySitemapDotxmlRoute
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
@@ -1538,7 +1475,6 @@ export interface RootRouteChildren {
   AgentsIdRoute: typeof AgentsIdRoute
   AgentsBecomeRoute: typeof AgentsBecomeRoute
   BlogSlugRoute: typeof BlogSlugRoute
-  CompaniesSlugRoute: typeof CompaniesSlugRoute
   LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
@@ -1552,7 +1488,6 @@ export interface RootRouteChildren {
   ServicesValuationRoute: typeof ServicesValuationRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
-  CompaniesIndexRoute: typeof CompaniesIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
@@ -1698,13 +1633,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/company-sitemap.xml': {
-      id: '/company-sitemap.xml'
-      path: '/company-sitemap.xml'
-      fullPath: '/company-sitemap.xml'
-      preLoaderRoute: typeof CompanySitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/blog-submission-packages': {
       id: '/blog-submission-packages'
       path: '/blog-submission-packages'
@@ -1773,13 +1701,6 @@ declare module '@tanstack/react-router' {
       path: '/locations'
       fullPath: '/locations/'
       preLoaderRoute: typeof LocationsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/companies/': {
-      id: '/companies/'
-      path: '/companies'
-      fullPath: '/companies/'
-      preLoaderRoute: typeof CompaniesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -1871,13 +1792,6 @@ declare module '@tanstack/react-router' {
       path: '/locations/$county'
       fullPath: '/locations/$county'
       preLoaderRoute: typeof LocationsCountyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/companies/$slug': {
-      id: '/companies/$slug'
-      path: '/companies/$slug'
-      fullPath: '/companies/$slug'
-      preLoaderRoute: typeof CompaniesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -2083,13 +1997,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBuyerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/dashboard/business': {
-      id: '/_authenticated/dashboard/business'
-      path: '/dashboard/business'
-      fullPath: '/dashboard/business'
-      preLoaderRoute: typeof AuthenticatedDashboardBusinessRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/dashboard/bulk-import': {
       id: '/_authenticated/dashboard/bulk-import'
       path: '/dashboard/bulk-import'
@@ -2228,13 +2135,6 @@ declare module '@tanstack/react-router' {
       path: '/kyc'
       fullPath: '/admin/kyc'
       preLoaderRoute: typeof AuthenticatedAdminKycRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/directory': {
-      id: '/_authenticated/admin/directory'
-      path: '/directory'
-      fullPath: '/admin/directory'
-      preLoaderRoute: typeof AuthenticatedAdminDirectoryRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/deletion-requests': {
@@ -2426,7 +2326,6 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminBlogPackagesRoute: typeof AuthenticatedAdminBlogPackagesRoute
   AuthenticatedAdminBrandingRoute: typeof AuthenticatedAdminBrandingRoute
   AuthenticatedAdminDeletionRequestsRoute: typeof AuthenticatedAdminDeletionRequestsRoute
-  AuthenticatedAdminDirectoryRoute: typeof AuthenticatedAdminDirectoryRoute
   AuthenticatedAdminKycRoute: typeof AuthenticatedAdminKycRoute
   AuthenticatedAdminMarketplaceRoute: typeof AuthenticatedAdminMarketplaceRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
@@ -2455,7 +2354,6 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBrandingRoute: AuthenticatedAdminBrandingRoute,
   AuthenticatedAdminDeletionRequestsRoute:
     AuthenticatedAdminDeletionRequestsRoute,
-  AuthenticatedAdminDirectoryRoute: AuthenticatedAdminDirectoryRoute,
   AuthenticatedAdminKycRoute: AuthenticatedAdminKycRoute,
   AuthenticatedAdminMarketplaceRoute: AuthenticatedAdminMarketplaceRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
@@ -2524,7 +2422,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardBlogRoute: typeof AuthenticatedDashboardBlogRouteWithChildren
   AuthenticatedDashboardBulkImportRoute: typeof AuthenticatedDashboardBulkImportRoute
-  AuthenticatedDashboardBusinessRoute: typeof AuthenticatedDashboardBusinessRoute
   AuthenticatedDashboardBuyerRoute: typeof AuthenticatedDashboardBuyerRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardCrmSettingsRoute: typeof AuthenticatedDashboardCrmSettingsRoute
@@ -2561,7 +2458,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedDashboardAppointmentsRoute,
   AuthenticatedDashboardBlogRoute: AuthenticatedDashboardBlogRouteWithChildren,
   AuthenticatedDashboardBulkImportRoute: AuthenticatedDashboardBulkImportRoute,
-  AuthenticatedDashboardBusinessRoute: AuthenticatedDashboardBusinessRoute,
   AuthenticatedDashboardBuyerRoute: AuthenticatedDashboardBuyerRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardCrmSettingsRoute:
@@ -2615,7 +2511,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogSitemapDotxmlRoute: BlogSitemapDotxmlRoute,
   BlogSubmissionPackagesRoute: BlogSubmissionPackagesRoute,
-  CompanySitemapDotxmlRoute: CompanySitemapDotxmlRoute,
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
@@ -2638,7 +2533,6 @@ const rootRouteChildren: RootRouteChildren = {
   AgentsIdRoute: AgentsIdRoute,
   AgentsBecomeRoute: AgentsBecomeRoute,
   BlogSlugRoute: BlogSlugRoute,
-  CompaniesSlugRoute: CompaniesSlugRoute,
   LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
   ServicesBuyRoute: ServicesBuyRoute,
@@ -2652,7 +2546,6 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesValuationRoute: ServicesValuationRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
-  CompaniesIndexRoute: CompaniesIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
