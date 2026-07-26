@@ -135,7 +135,9 @@ export async function incrementPostView(_id: string): Promise<void> {
 }
 
 export async function listComments(postId: string): Promise<BlogComment[]> {
-  const { data } = await supabase.from("blog_comments").select("*")
+  // author_email is intentionally excluded — commenter emails are not public.
+  const { data } = await supabase.from("blog_comments")
+    .select("id,post_id,parent_id,author_id,author_name,body,status,like_count,report_count,created_at,updated_at")
     .eq("post_id", postId).eq("status", "approved")
     .order("created_at", { ascending: true });
   return (data ?? []) as BlogComment[];

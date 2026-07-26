@@ -20,6 +20,9 @@ import { AdSlot } from "@/components/site/AdSlot";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import { fuzzySearch } from "@/lib/fuzzy";
 import { checkRateLimit, rateLimitKey } from "@/lib/rate-limit";
+import { RadiusFilter } from "@/components/site/RadiusFilter";
+import { distanceKm as haversineKm, propertyCoords } from "@/lib/geo";
+import { parseSizeToSqft } from "@/lib/measure";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
 const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
@@ -27,7 +30,10 @@ const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) 
 // Every query param is length/format bounded so crafted URLs can't be used to
 // push oversized or malformed input into the search + fuzzy matching pipeline.
 const short = z.string().trim().max(60);
-const numeric = z.string().trim().regex(/^\d{0,12}$/);
+// Router parses bare numbers in the URL as numbers, so coerce before validating.
+const numeric = z.coerce.string().trim().regex(/^\d{0,12}$/);
+const coord = z.union([z.literal(""), z.coerce.number().min(-180).max(180)]);
+const radiusNum = z.union([z.literal(""), z.coerce.number().min(1).max(100)]);
 const csv = z.string().trim().max(300).regex(/^[a-zA-Z0-9 ,._/&'-]*$/);
 
 const searchSchema = z.object({
@@ -47,7 +53,11 @@ const searchSchema = z.object({
   status: fallback(short, "").default(""),
   listingType: fallback(short, "").default(""),
   purpose: fallback(short, "").default(""),
-  sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc"]), "newest").default("newest"),
+  lat: fallback(coord, "").default(""),
+  lng: fallback(coord, "").default(""),
+  radius: fallback(radiusNum, "").default(""),
+  nearLabel: fallback(short, "").default(""),
+  sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc", "distance", "ppsf-asc"]), "newest").default("newest"),
   page: fallback(z.number().int().min(1).max(1000), 1).default(1),
   favs: fallback(z.boolean(), false).default(false),
   view: fallback(z.enum(["list", "map"]), "list").default("list"),
@@ -110,7 +120,7 @@ function List() {
 
   const q = params.q;
   const favsOnly = params.favs;
-  const sortBy = params.sort as "newest" | "price-asc" | "price-desc" | "beds-desc";
+  const sortBy = params.sort;
   const page = params.page;
   const view = params.view as "list" | "map";
 
@@ -147,6 +157,7 @@ function List() {
   const [saving, setSaving] = useState(false);
   const [savingName, setSavingName] = useState("");
   const [mobileFilters, setMobileFilters] = useState(false);
+  const [waAlerts, setWaAlerts] = useState(false);
 
   function clearAll() {
     navigate({ search: () => ({}) as any });
@@ -186,14 +197,40 @@ function List() {
     return true;
   });
 
-  const filtered = q
+  const fuzzyFiltered = q
     ? fuzzySearch(preFiltered, q, (p) => `${p.title} ${p.area} ${p.town} ${p.type} ${p.category}`, 500).map((r) => r.item)
     : preFiltered;
+
+  // Radius ("near me") search — distance from the chosen centre point.
+  const center = params.lat && params.lng ? { lat: Number(params.lat), lng: Number(params.lng) } : null;
+  const radiusKm = center ? Number(params.radius || 10) : null;
+
+  const distances = useMemo(() => {
+    const m = new Map<string, number>();
+    if (!center) return m;
+    for (const p of fuzzyFiltered) {
+      const c = propertyCoords(p as any);
+      if (c) m.set(p.id, haversineKm(center, c));
+    }
+    return m;
+  }, [fuzzyFiltered, params.lat, params.lng]);
+
+  const filtered = center && radiusKm
+    ? fuzzyFiltered.filter((p) => {
+        const d = distances.get(p.id);
+        return d != null && d <= radiusKm;
+      })
+    : fuzzyFiltered;
 
   const sorted = [...filtered].sort((a, b) => {
     if (sortBy === "price-asc") return a.price - b.price;
     if (sortBy === "price-desc") return b.price - a.price;
     if (sortBy === "beds-desc") return b.bedrooms - a.bedrooms;
+    if (sortBy === "distance") return (distances.get(a.id) ?? Infinity) - (distances.get(b.id) ?? Infinity);
+    if (sortBy === "ppsf-asc") {
+      const pa = pricePerSqft(a), pb = pricePerSqft(b);
+      return (pa ?? Infinity) - (pb ?? Infinity);
+    }
     return 0;
   });
 
@@ -209,7 +246,7 @@ function List() {
     (state.minSize ? 1 : 0) + (state.maxSize ? 1 : 0) +
     state.features.size + state.nearby.size +
     (state.status ? 1 : 0) + (state.listingType ? 1 : 0) + (state.purpose ? 1 : 0) +
-    (favsOnly ? 1 : 0) + (q ? 1 : 0);
+    (center ? 1 : 0) + (favsOnly ? 1 : 0) + (q ? 1 : 0);
 
   function currentFilters() {
     const f: Record<string, any> = {};
@@ -226,6 +263,7 @@ function List() {
     if (state.features.size) f.features = [...state.features];
     if (state.nearby.size) f.nearby = [...state.nearby];
     if (state.status) f.status = state.status;
+    if (center) { f.lat = params.lat; f.lng = params.lng; f.radius = params.radius || "10"; f.nearLabel = params.nearLabel; }
     return f;
   }
 
@@ -234,7 +272,9 @@ function List() {
     const name = savingName.trim() || summarize(currentFilters()) || "My search";
     setSaving(true);
     try {
-      const { error } = await supabase.from("saved_searches").insert({ user_id: user.id, name, filters: currentFilters() });
+      const { error } = await supabase.from("saved_searches").insert({
+        user_id: user.id, name, filters: currentFilters(), notify_whatsapp: waAlerts,
+      });
       if (error) throw error;
       toast.success("Search saved");
       setShowSave(false); setSavingName("");
@@ -250,7 +290,17 @@ function List() {
     setFavsOnly(!favsOnly);
   }
 
-  const sidebar = <FiltersSidebar state={state} townOptions={townOptions} onChange={patch} onClear={clearAll} />;
+  const sidebar = (
+    <div className="space-y-2">
+      <RadiusFilter
+        value={{ lat: params.lat, lng: params.lng, radius: params.radius, nearLabel: params.nearLabel }}
+        onChange={(v) => updateSearch(v)}
+        matchCount={center ? sorted.length : undefined}
+      />
+      <FiltersSidebar state={state} townOptions={townOptions} onChange={patch} onClear={clearAll} />
+    </div>
+  );
+
 
   return (
     <>
@@ -305,6 +355,8 @@ function List() {
                   <option value="price-asc">Price: Low to High</option>
                   <option value="price-desc">Price: High to Low</option>
                   <option value="beds-desc">Most bedrooms</option>
+                  <option value="ppsf-asc">Best value (price/sqft)</option>
+                  {center && <option value="distance">Closest first</option>}
                 </select>
                 <div className="inline-flex rounded-full border border-border overflow-hidden text-xs">
                   <button onClick={() => setView("list")} aria-pressed={view === "list"}
@@ -339,6 +391,7 @@ function List() {
                 {state.status && <Chip label={state.status} onRemove={() => patch({ status: "" })} />}
                 {state.listingType && <Chip label={state.listingType} onRemove={() => patch({ listingType: "" })} />}
                 {state.purpose && <Chip label={state.purpose} onRemove={() => patch({ purpose: "" })} />}
+                {center && <Chip label={`Within ${params.radius || 10} km of ${params.nearLabel || "point"}`} onRemove={() => updateSearch({ lat: "", lng: "", nearLabel: "" })} />}
                 {favsOnly && <Chip label="Favorites" onRemove={() => setFavsOnly(false)} />}
               </div>
             )}
@@ -381,7 +434,7 @@ function List() {
             ) : (
               <>
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {pageItems.map((p) => <PropertyCard key={p.id} p={p} />)}
+                  {pageItems.map((p) => <PropertyCard key={p.id} p={p} distanceKm={center ? distances.get(p.id) ?? null : null} />)}
                 </div>
                 {totalPages > 1 && (
                   <div className="mt-10 flex items-center justify-center gap-2">
@@ -416,6 +469,12 @@ function List() {
               <label className="text-xs font-medium">Name</label>
               <input value={savingName} onChange={(e) => setSavingName(e.target.value)} placeholder={summarize(currentFilters()) || "My search"} className="mt-1 w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
             </div>
+            <label className="mt-4 flex items-start gap-2 text-xs cursor-pointer">
+              <input type="checkbox" checked={waAlerts} onChange={(e) => setWaAlerts(e.target.checked)} className="mt-0.5 accent-primary" />
+              <span className="text-muted-foreground">
+                Also send me a <span className="font-semibold text-foreground">WhatsApp alert</span> for new matches (uses the phone number on your profile).
+              </span>
+            </label>
             <div className="mt-6 flex justify-end gap-2">
               <button onClick={() => setShowSave(false)} className="btn-ghost">Cancel</button>
               <button disabled={saving} onClick={saveSearch} className="btn-primary btn-primary-hover">{saving ? "Saving…" : "Save alert"}</button>
@@ -460,16 +519,9 @@ function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   );
 }
 
-function parseSizeToSqft(size?: string): number | null {
-  if (!size) return null;
-  const s = size.toLowerCase().replace(/,/g, "");
-  const numMatch = s.match(/([\d.]+)(?:\s*\/\s*([\d.]+))?/);
-  if (!numMatch) return null;
-  let n = parseFloat(numMatch[1]);
-  if (numMatch[2]) n = n / parseFloat(numMatch[2]);
-  if (!isFinite(n)) return null;
-  if (s.includes("acre")) return Math.round(n * 43560);
-  if (s.includes("hectare") || s.includes("ha")) return Math.round(n * 107639);
-  if (s.includes("sqm") || s.includes("sq m") || s.includes("m²") || s.includes("m2")) return Math.round(n * 10.7639);
-  return Math.round(n);
+function pricePerSqft(p: { price: number; size?: string }): number | null {
+  const sqft = parseSizeToSqft(p.size);
+  if (!sqft || !p.price) return null;
+  return p.price / sqft;
 }
+

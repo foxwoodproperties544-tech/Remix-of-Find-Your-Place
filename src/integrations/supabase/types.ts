@@ -2361,6 +2361,7 @@ export type Database = {
           last_notified_at: string | null
           name: string
           notify_email: boolean
+          notify_whatsapp: boolean
           updated_at: string
           user_id: string
         }
@@ -2371,6 +2372,7 @@ export type Database = {
           last_notified_at?: string | null
           name: string
           notify_email?: boolean
+          notify_whatsapp?: boolean
           updated_at?: string
           user_id: string
         }
@@ -2381,6 +2383,7 @@ export type Database = {
           last_notified_at?: string | null
           name?: string
           notify_email?: boolean
+          notify_whatsapp?: boolean
           updated_at?: string
           user_id?: string
         }
