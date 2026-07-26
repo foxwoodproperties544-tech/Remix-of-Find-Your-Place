@@ -2190,26 +2190,35 @@ export type Database = {
       }
       pwa_install_events: {
         Row: {
+          campaign: string | null
           created_at: string
           event_type: string
           id: string
           platform: string | null
+          referrer: string | null
+          source: string | null
           user_agent: string | null
           user_id: string | null
         }
         Insert: {
+          campaign?: string | null
           created_at?: string
           event_type: string
           id?: string
           platform?: string | null
+          referrer?: string | null
+          source?: string | null
           user_agent?: string | null
           user_id?: string | null
         }
         Update: {
+          campaign?: string | null
           created_at?: string
           event_type?: string
           id?: string
           platform?: string | null
+          referrer?: string | null
+          source?: string | null
           user_agent?: string | null
           user_id?: string | null
         }
