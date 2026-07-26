@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { LEAD_STATUSES, LEAD_STATUS_LABEL, type LeadStatus, type LeadActivityType } from "@/lib/leads";
 import { LeadStatusBadge } from "@/components/site/LeadStatusBadge";
-import { ArrowLeft, Mail, Phone, MessageCircle, Calendar, Trash2, CheckCircle2, Home, User as UserIcon, StickyNote, PhoneCall, Send } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MessageCircle, Calendar, Trash2, CheckCircle2, Home, User as UserIcon, StickyNote, PhoneCall, Send, MessageSquareText } from "lucide-react";
+import { fillTemplate, type CrmTemplateRow } from "@/lib/crm-templates";
 import { useState } from "react";
 import { toast } from "sonner";
 
