@@ -71,6 +71,7 @@ import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardKycRouteImport } from './routes/_authenticated/dashboard.kyc'
 import { Route as AuthenticatedDashboardInsightsRouteImport } from './routes/_authenticated/dashboard.insights'
 import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_authenticated/dashboard.inquiries'
+import { Route as AuthenticatedDashboardCrmSettingsRouteImport } from './routes/_authenticated/dashboard.crm-settings'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardBuyerRouteImport } from './routes/_authenticated/dashboard.buyer'
 import { Route as AuthenticatedDashboardBulkImportRouteImport } from './routes/_authenticated/dashboard.bulk-import'
@@ -441,6 +442,12 @@ const AuthenticatedDashboardInquiriesRoute =
     path: '/dashboard/inquiries',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardCrmSettingsRoute =
+  AuthenticatedDashboardCrmSettingsRouteImport.update({
+    id: '/dashboard/crm-settings',
+    path: '/dashboard/crm-settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardCrmRoute =
   AuthenticatedDashboardCrmRouteImport.update({
     id: '/dashboard/crm',
@@ -774,6 +781,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
@@ -880,6 +888,7 @@ export interface FileRoutesByTo {
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
   '/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
@@ -989,6 +998,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/_authenticated/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
+  '/_authenticated/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
   '/_authenticated/dashboard/inquiries': typeof AuthenticatedDashboardInquiriesRoute
   '/_authenticated/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/_authenticated/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
@@ -1098,6 +1108,7 @@ export interface FileRouteTypes {
     | '/dashboard/bulk-import'
     | '/dashboard/buyer'
     | '/dashboard/crm'
+    | '/dashboard/crm-settings'
     | '/dashboard/inquiries'
     | '/dashboard/insights'
     | '/dashboard/kyc'
@@ -1204,6 +1215,7 @@ export interface FileRouteTypes {
     | '/dashboard/bulk-import'
     | '/dashboard/buyer'
     | '/dashboard/crm'
+    | '/dashboard/crm-settings'
     | '/dashboard/inquiries'
     | '/dashboard/insights'
     | '/dashboard/kyc'
@@ -1312,6 +1324,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/bulk-import'
     | '/_authenticated/dashboard/buyer'
     | '/_authenticated/dashboard/crm'
+    | '/_authenticated/dashboard/crm-settings'
     | '/_authenticated/dashboard/inquiries'
     | '/_authenticated/dashboard/insights'
     | '/_authenticated/dashboard/kyc'
@@ -1830,6 +1843,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardInquiriesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/crm-settings': {
+      id: '/_authenticated/dashboard/crm-settings'
+      path: '/dashboard/crm-settings'
+      fullPath: '/dashboard/crm-settings'
+      preLoaderRoute: typeof AuthenticatedDashboardCrmSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/crm': {
       id: '/_authenticated/dashboard/crm'
       path: '/dashboard/crm'
@@ -2261,6 +2281,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardBulkImportRoute: typeof AuthenticatedDashboardBulkImportRoute
   AuthenticatedDashboardBuyerRoute: typeof AuthenticatedDashboardBuyerRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
+  AuthenticatedDashboardCrmSettingsRoute: typeof AuthenticatedDashboardCrmSettingsRoute
   AuthenticatedDashboardInquiriesRoute: typeof AuthenticatedDashboardInquiriesRoute
   AuthenticatedDashboardInsightsRoute: typeof AuthenticatedDashboardInsightsRoute
   AuthenticatedDashboardKycRoute: typeof AuthenticatedDashboardKycRoute
@@ -2296,6 +2317,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardBulkImportRoute: AuthenticatedDashboardBulkImportRoute,
   AuthenticatedDashboardBuyerRoute: AuthenticatedDashboardBuyerRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
+  AuthenticatedDashboardCrmSettingsRoute:
+    AuthenticatedDashboardCrmSettingsRoute,
   AuthenticatedDashboardInquiriesRoute: AuthenticatedDashboardInquiriesRoute,
   AuthenticatedDashboardInsightsRoute: AuthenticatedDashboardInsightsRoute,
   AuthenticatedDashboardKycRoute: AuthenticatedDashboardKycRoute,

@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { LEAD_STATUSES, LEAD_STATUS_LABEL, type LeadStatus, type LeadActivityType } from "@/lib/leads";
 import { LeadStatusBadge } from "@/components/site/LeadStatusBadge";
-import { ArrowLeft, Mail, Phone, MessageCircle, Calendar, Trash2, CheckCircle2, Home, User as UserIcon, StickyNote, PhoneCall, Send } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MessageCircle, Calendar, Trash2, CheckCircle2, Home, User as UserIcon, StickyNote, PhoneCall, Send, MessageSquareText } from "lucide-react";
+import { fillTemplate, type CrmTemplateRow } from "@/lib/crm-templates";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -166,7 +167,10 @@ function LeadDetail() {
           </div>
 
           {/* Log communication */}
-          <LogCommForm onSubmit={(type, body) => addActivity.mutate({ type, body })} />
+          <LogCommForm
+            lead={lead}
+            onSubmit={(type, body) => addActivity.mutate({ type, body })}
+          />
 
           {/* Follow-ups */}
           <FollowUpsSection
@@ -270,20 +274,75 @@ function LeadDetail() {
   );
 }
 
-function LogCommForm({ onSubmit }: { onSubmit: (type: LeadActivityType, body: string) => void }) {
+function LogCommForm({ lead, onSubmit }: { lead: any; onSubmit: (type: LeadActivityType, body: string) => void }) {
   const [type, setType] = useState<LeadActivityType>("note");
   const [body, setBody] = useState("");
+  const { user } = useAuth();
   const icons: Record<string, any> = { note: StickyNote, call: PhoneCall, whatsapp: MessageCircle, email: Mail };
   const Icon = icons[type] ?? StickyNote;
+
+  const templatesQ = useQuery({
+    queryKey: ["crm-templates", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("crm_templates")
+        .select("*").eq("owner_id", user!.id).eq("active", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as CrmTemplateRow[];
+    },
+  });
+
+  const propertyQ = useQuery({
+    queryKey: ["lead-property-title", lead?.property_id],
+    enabled: !!lead?.property_id,
+    queryFn: async () => {
+      const { data } = await supabase.from("properties")
+        .select("title, price, town, slug").eq("id", lead.property_id).maybeSingle();
+      return data;
+    },
+  });
+
+  const templates = (templatesQ.data ?? []).filter(t => t.channel === type || type === "note");
+
+  const applyTemplate = (t: CrmTemplateRow) => {
+    const p = propertyQ.data;
+    const filled = fillTemplate(t.body, {
+      contact_name: lead?.contact_name?.split(" ")[0] ?? "there",
+      agent_name: user?.user_metadata?.full_name ?? "Foxwood Properties",
+      property_title: p?.title ?? "your property enquiry",
+      property_url: p?.slug ? `${typeof window !== "undefined" ? window.location.origin : ""}/properties/${p.slug}` : "",
+      property_price: p?.price ? `KES ${Number(p.price).toLocaleString()}` : "",
+      town: p?.town ?? "",
+    });
+    setBody(prev => (prev.trim() ? `${prev}\n\n${filled}` : filled));
+  };
+
   return (
     <div className="rounded-2xl border border-border bg-card p-5">
-      <h2 className="font-semibold mb-3">Log activity</h2>
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <h2 className="font-semibold">Log activity</h2>
+        <Link to="/dashboard/crm-settings" className="text-xs text-primary hover:underline">Manage templates</Link>
+      </div>
       <div className="flex gap-1 mb-3 flex-wrap">
         {(["note", "call", "whatsapp", "email"] as const).map(t => (
           <button key={t} onClick={() => setType(t)}
             className={`rounded-full px-3 py-1.5 text-xs font-semibold capitalize ${type === t ? "bg-primary text-primary-foreground" : "bg-muted text-foreground/70"}`}>{t}</button>
         ))}
       </div>
+      {templates.length > 0 && (
+        <div className="mb-3 flex flex-wrap items-center gap-1.5">
+          <span className="text-xs text-muted-foreground inline-flex items-center gap-1">
+            <MessageSquareText className="h-3.5 w-3.5" /> Templates:
+          </span>
+          {templates.map(t => (
+            <button key={t.id} onClick={() => applyTemplate(t)}
+              className="rounded-full border border-border px-2.5 py-1 text-xs hover:bg-muted">
+              {t.name}
+            </button>
+          ))}
+        </div>
+      )}
       <textarea value={body} onChange={e => setBody(e.target.value)} rows={3}
         placeholder={type === "note" ? "Add a note…" : `Log ${type} details…`}
         className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
