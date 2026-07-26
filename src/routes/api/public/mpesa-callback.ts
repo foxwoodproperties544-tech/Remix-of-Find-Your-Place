@@ -169,6 +169,8 @@ export const Route = createFileRoute("/api/public/mpesa-callback")({
               verified: true,
               agent_verification_status: "approved",
               agent_verification_reviewed_at: new Date().toISOString(),
+              last_verif_reminder_days: null,
+
             } as any).eq("id", txn.user_id);
           } else if (txn.purpose === "listing_package" && txn.property_id && txn.package_id) {
             const { data: pkg } = await supabaseAdmin
