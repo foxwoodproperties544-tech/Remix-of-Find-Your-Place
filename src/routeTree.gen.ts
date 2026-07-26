@@ -62,6 +62,7 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as LocationsCountyTownRouteImport } from './routes/locations.$county.$town'
 import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category.$category'
+import { Route as BlogAuthorIdRouteImport } from './routes/blog.author.$id'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
@@ -388,6 +389,11 @@ const BlogTagTagRoute = BlogTagTagRouteImport.update({
 const BlogCategoryCategoryRoute = BlogCategoryCategoryRouteImport.update({
   id: '/blog/category/$category',
   path: '/blog/category/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogAuthorIdRoute = BlogAuthorIdRouteImport.update({
+  id: '/blog/author/$id',
+  path: '/blog/author/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
@@ -838,6 +844,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
+  '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/locations/$county/$town': typeof LocationsCountyTownRoute
@@ -951,6 +958,7 @@ export interface FileRoutesByTo {
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
+  '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/locations/$county/$town': typeof LocationsCountyTownRoute
@@ -1067,6 +1075,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
+  '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
   '/blog/tag/$tag': typeof BlogTagTagRoute
   '/locations/$county/$town': typeof LocationsCountyTownRoute
@@ -1183,6 +1192,7 @@ export interface FileRouteTypes {
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
+    | '/blog/author/$id'
     | '/blog/category/$category'
     | '/blog/tag/$tag'
     | '/locations/$county/$town'
@@ -1296,6 +1306,7 @@ export interface FileRouteTypes {
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
     | '/api/public/mpesa-callback'
+    | '/blog/author/$id'
     | '/blog/category/$category'
     | '/blog/tag/$tag'
     | '/locations/$county/$town'
@@ -1411,6 +1422,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/upgrade'
     | '/api/public/mpesa-callback'
+    | '/blog/author/$id'
     | '/blog/category/$category'
     | '/blog/tag/$tag'
     | '/locations/$county/$town'
@@ -1479,6 +1491,7 @@ export interface RootRouteChildren {
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
+  BlogAuthorIdRoute: typeof BlogAuthorIdRoute
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
   BlogAuthorsIndexRoute: typeof BlogAuthorsIndexRoute
@@ -1856,6 +1869,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/category/$category'
       fullPath: '/blog/category/$category'
       preLoaderRoute: typeof BlogCategoryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/author/$id': {
+      id: '/blog/author/$id'
+      path: '/blog/author/$id'
+      fullPath: '/blog/author/$id'
+      preLoaderRoute: typeof BlogAuthorIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/mpesa-callback': {
@@ -2529,6 +2549,7 @@ const rootRouteChildren: RootRouteChildren = {
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
+  BlogAuthorIdRoute: BlogAuthorIdRoute,
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
   BlogTagTagRoute: BlogTagTagRoute,
   BlogAuthorsIndexRoute: BlogAuthorsIndexRoute,

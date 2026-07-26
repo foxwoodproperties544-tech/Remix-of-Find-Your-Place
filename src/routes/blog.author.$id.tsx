@@ -113,7 +113,7 @@ function AuthorPage() {
           <p className="mt-4 text-muted-foreground">No published articles yet.</p>
         ) : (
           <div className="mt-5 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((p) => <Card key={p.id} p={p} />)}
+            {posts.map((p: BlogPost) => <Card key={p.id} p={p} />)}
           </div>
         )}
       </section>
