@@ -705,6 +705,454 @@ export type Database = {
           },
         ]
       }
+      business_categories: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      business_claims: {
+        Row: {
+          admin_notes: string | null
+          business_id: string
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          note: string | null
+          phone: string | null
+          proof_urls: string[]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          role_at_company: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          business_id: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          note?: string | null
+          phone?: string | null
+          proof_urls?: string[]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role_at_company?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          business_id?: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          note?: string | null
+          phone?: string | null
+          proof_urls?: string[]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role_at_company?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_claims_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_enquiries: {
+        Row: {
+          business_id: string | null
+          created_at: string
+          email: string | null
+          id: string
+          message: string | null
+          name: string
+          phone: string | null
+          property_id: string | null
+          source: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          business_id?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          property_id?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          business_id?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          property_id?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_enquiries_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_enquiries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_plans: {
+        Row: {
+          active: boolean
+          analytics_access: boolean
+          created_at: string
+          duration_days: number
+          featured_placement: boolean
+          id: string
+          listing_limit: number
+          name: string
+          perks: string[]
+          price: number
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          analytics_access?: boolean
+          created_at?: string
+          duration_days?: number
+          featured_placement?: boolean
+          id?: string
+          listing_limit?: number
+          name: string
+          perks?: string[]
+          price?: number
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          analytics_access?: boolean
+          created_at?: string
+          duration_days?: number
+          featured_placement?: boolean
+          id?: string
+          listing_limit?: number
+          name?: string
+          perks?: string[]
+          price?: number
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      business_reviews: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          body: string | null
+          business_id: string
+          created_at: string
+          id: string
+          rating: number
+          replied_at: string | null
+          reply: string | null
+          status: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          body?: string | null
+          business_id: string
+          created_at?: string
+          id?: string
+          rating: number
+          replied_at?: string | null
+          reply?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          body?: string | null
+          business_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+          replied_at?: string | null
+          reply?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_reviews_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_staff: {
+        Row: {
+          business_id: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_staff_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_views: {
+        Row: {
+          business_id: string
+          created_at: string
+          id: string
+          viewer_id: string | null
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          id?: string
+          viewer_id?: string | null
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          id?: string
+          viewer_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_views_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      businesses: {
+        Row: {
+          address: string | null
+          business_hours: Json
+          category_id: string | null
+          claimed_at: string | null
+          counties: string[]
+          county: string | null
+          cover_url: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          email: string | null
+          enquiry_count: number
+          featured: boolean
+          featured_until: string | null
+          id: string
+          lat: number | null
+          lng: number | null
+          logo_url: string | null
+          name: string
+          owner_id: string | null
+          phone: string | null
+          plan_expires_at: string | null
+          plan_slug: string | null
+          property_types: string[]
+          services: string[]
+          short_description: string | null
+          slug: string
+          socials: Json
+          status: string
+          town: string | null
+          towns: string[]
+          updated_at: string
+          verified: boolean
+          view_count: number
+          website: string | null
+          whatsapp: string | null
+          years_in_business: number | null
+        }
+        Insert: {
+          address?: string | null
+          business_hours?: Json
+          category_id?: string | null
+          claimed_at?: string | null
+          counties?: string[]
+          county?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          email?: string | null
+          enquiry_count?: number
+          featured?: boolean
+          featured_until?: string | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          logo_url?: string | null
+          name: string
+          owner_id?: string | null
+          phone?: string | null
+          plan_expires_at?: string | null
+          plan_slug?: string | null
+          property_types?: string[]
+          services?: string[]
+          short_description?: string | null
+          slug: string
+          socials?: Json
+          status?: string
+          town?: string | null
+          towns?: string[]
+          updated_at?: string
+          verified?: boolean
+          view_count?: number
+          website?: string | null
+          whatsapp?: string | null
+          years_in_business?: number | null
+        }
+        Update: {
+          address?: string | null
+          business_hours?: Json
+          category_id?: string | null
+          claimed_at?: string | null
+          counties?: string[]
+          county?: string | null
+          cover_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          email?: string | null
+          enquiry_count?: number
+          featured?: boolean
+          featured_until?: string | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          logo_url?: string | null
+          name?: string
+          owner_id?: string | null
+          phone?: string | null
+          plan_expires_at?: string | null
+          plan_slug?: string | null
+          property_types?: string[]
+          services?: string[]
+          short_description?: string | null
+          slug?: string
+          socials?: Json
+          status?: string
+          town?: string | null
+          towns?: string[]
+          updated_at?: string
+          verified?: boolean
+          view_count?: number
+          website?: string | null
+          whatsapp?: string | null
+          years_in_business?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "businesses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "business_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       buyer_checklist_progress: {
         Row: {
           created_at: string
@@ -1886,6 +2334,7 @@ export type Database = {
           availability_status: string
           bathrooms: number
           bedrooms: number
+          business_id: string | null
           category: string
           contact_phone: string | null
           contact_whatsapp: string | null
@@ -1932,6 +2381,7 @@ export type Database = {
           availability_status?: string
           bathrooms?: number
           bedrooms?: number
+          business_id?: string | null
           category: string
           contact_phone?: string | null
           contact_whatsapp?: string | null
@@ -1978,6 +2428,7 @@ export type Database = {
           availability_status?: string
           bathrooms?: number
           bedrooms?: number
+          business_id?: string | null
           category?: string
           contact_phone?: string | null
           contact_whatsapp?: string | null
@@ -2018,7 +2469,15 @@ export type Database = {
           verified_by?: string | null
           video_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "properties_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_alerts: {
         Row: {
@@ -2953,6 +3412,10 @@ export type Database = {
       bump_ad_daily_stat: {
         Args: { _campaign: string; _kind: string }
         Returns: undefined
+      }
+      can_manage_business: {
+        Args: { _business_id: string; _user_id: string }
+        Returns: boolean
       }
       check_and_hit_rate_limit: {
         Args: {

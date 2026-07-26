@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
   Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
-  Phone, MessageCircle, LifeBuoy, SlidersHorizontal, CheckCircle2,
+  Phone, MessageCircle, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -33,6 +33,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/dashboard/blog", label: "My blog posts", icon: FileText, end: true },
       { to: "/dashboard/security", label: "Security & 2FA", icon: ShieldCheck },
       { to: "/dashboard/referrals", label: "Refer & earn", icon: Users2 },
+      { to: "/dashboard/business", label: "My company", icon: Building2 },
 
     ],
   });
