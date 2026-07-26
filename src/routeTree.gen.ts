@@ -38,6 +38,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
+import { Route as CompaniesIndexRouteImport } from './routes/companies.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as ServicesValuationRouteImport } from './routes/services.valuation'
@@ -267,6 +268,11 @@ const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
 const LocationsIndexRoute = LocationsIndexRouteImport.update({
   id: '/locations/',
   path: '/locations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompaniesIndexRoute = CompaniesIndexRouteImport.update({
+  id: '/companies/',
+  path: '/companies/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -796,6 +802,7 @@ export interface FileRoutesByFullPath {
   '/services/valuation': typeof ServicesValuationRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/companies/': typeof CompaniesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
@@ -911,6 +918,7 @@ export interface FileRoutesByTo {
   '/services/valuation': typeof ServicesValuationRoute
   '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/companies': typeof CompaniesIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
@@ -1027,6 +1035,7 @@ export interface FileRoutesById {
   '/services/valuation': typeof ServicesValuationRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/companies/': typeof CompaniesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/_authenticated/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
@@ -1144,6 +1153,7 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/agents/'
     | '/blog/'
+    | '/companies/'
     | '/locations/'
     | '/properties/'
     | '/admin/ad-campaigns'
@@ -1259,6 +1269,7 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/agents'
     | '/blog'
+    | '/companies'
     | '/locations'
     | '/properties'
     | '/admin/ad-campaigns'
@@ -1374,6 +1385,7 @@ export interface FileRouteTypes {
     | '/services/valuation'
     | '/agents/'
     | '/blog/'
+    | '/companies/'
     | '/locations/'
     | '/properties/'
     | '/_authenticated/admin/ad-campaigns'
@@ -1488,6 +1500,7 @@ export interface RootRouteChildren {
   ServicesValuationRoute: typeof ServicesValuationRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  CompaniesIndexRoute: typeof CompaniesIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
@@ -1701,6 +1714,13 @@ declare module '@tanstack/react-router' {
       path: '/locations'
       fullPath: '/locations/'
       preLoaderRoute: typeof LocationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companies/': {
+      id: '/companies/'
+      path: '/companies'
+      fullPath: '/companies/'
+      preLoaderRoute: typeof CompaniesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -2546,6 +2566,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesValuationRoute: ServicesValuationRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  CompaniesIndexRoute: CompaniesIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
