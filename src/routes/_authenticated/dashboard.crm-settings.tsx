@@ -11,7 +11,7 @@ import {
   STARTER_TEMPLATES,
   type CrmTemplateRow,
 } from "@/lib/crm-templates";
-import { KENYA_COUNTIES } from "@/lib/kenya-locations";
+import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
 import { Plus, Trash2, MessageSquareText, Route as RouteIcon, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/crm-settings")({
