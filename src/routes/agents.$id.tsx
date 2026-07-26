@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchPropertiesByOwner } from "@/lib/properties";
 import { PropertyCard } from "@/components/site/PropertyCard";
 import { ProfileReviews } from "@/components/site/ProfileReviews";
+import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { useAuth } from "@/hooks/use-auth";
 import {
   Phone, MessageCircle, MapPin, Home, BadgeCheck, Building2, Mail, Globe, Facebook, Instagram,
