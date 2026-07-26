@@ -151,6 +151,44 @@ function PwaAnalytics() {
         </table>
       </div>
 
+      <div className="mt-4 rounded-2xl border border-border bg-card p-4 overflow-x-auto">
+        <div className="font-semibold mb-3">Installs by source</div>
+        <p className="text-xs text-muted-foreground mb-3">Source is “surface:origin” — e.g. <code>get-app:whatsapp</code> or <code>banner:direct</code>.</p>
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left text-xs text-muted-foreground border-b border-border">
+              <th className="py-2 pr-3">Source</th>
+              <th className="py-2 pr-3">Page views</th>
+              <th className="py-2 pr-3">Shares</th>
+              <th className="py-2 pr-3">Clicks</th>
+              <th className="py-2 pr-3">Installed</th>
+              <th className="py-2 pr-3">Conv.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sourceRows.length === 0 && (
+              <tr><td colSpan={6} className="py-4 text-muted-foreground">No source data yet in this range.</td></tr>
+            )}
+            {sourceRows.map((r: any) => {
+              const shares = (r.share_click ?? 0) + (r.share_whatsapp ?? 0) + (r.copy_link ?? 0);
+              const conv = r.install_click > 0 ? ((r.installed / r.install_click) * 100).toFixed(2) : "0.00";
+              return (
+                <tr key={r.source} className="border-b border-border/60">
+                  <td className="py-2 pr-3 font-medium">{r.source}</td>
+                  <td className="py-2 pr-3">{r.page_view ?? 0}</td>
+                  <td className="py-2 pr-3">{shares}</td>
+                  <td className="py-2 pr-3">{r.install_click ?? 0}</td>
+                  <td className="py-2 pr-3">{r.installed ?? 0}</td>
+                  <td className="py-2 pr-3">{conv}%</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+
+
       {query.isLoading && <div className="mt-4 text-sm text-muted-foreground">Loading…</div>}
       {query.error && <div className="mt-4 text-sm text-destructive">Failed to load analytics.</div>}
     </div>
