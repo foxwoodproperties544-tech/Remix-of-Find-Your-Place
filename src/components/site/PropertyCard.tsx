@@ -1,14 +1,16 @@
 import { Link } from "@tanstack/react-router";
-import { Bed, Bath, Maximize, MapPin, Heart, GitCompare, ShieldCheck, Star } from "lucide-react";
+import { Bed, Bath, Maximize, MapPin, Heart, GitCompare, ShieldCheck, Star, Compass } from "lucide-react";
 import { formatKsh, type Property } from "@/lib/mock-data";
 import { useFavorites } from "@/hooks/use-favorites";
 import { useCompare } from "@/hooks/use-compare";
+import { normalizedPrice } from "@/lib/measure";
 
-export function PropertyCard({ p }: { p: Property }) {
+export function PropertyCard({ p, distanceKm }: { p: Property; distanceKm?: number | null }) {
   const { isFavorite, toggle } = useFavorites();
   const { has, toggle: toggleCompare } = useCompare();
   const fav = isFavorite(p.id);
   const cmp = has(p.id);
+  const perUnit = normalizedPrice(p.price, p.size, p.priceSuffix);
   return (
     <div className="group relative rounded-2xl overflow-hidden bg-card border border-border shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all">
       <div className="absolute top-3 right-3 z-10 flex flex-col gap-2">
