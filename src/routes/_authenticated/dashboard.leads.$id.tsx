@@ -166,7 +166,10 @@ function LeadDetail() {
           </div>
 
           {/* Log communication */}
-          <LogCommForm onSubmit={(type, body) => addActivity.mutate({ type, body })} />
+          <LogCommForm
+            lead={lead}
+            onSubmit={(type, body) => addActivity.mutate({ type, body })}
+          />
 
           {/* Follow-ups */}
           <FollowUpsSection
