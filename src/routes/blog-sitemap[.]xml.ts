@@ -33,6 +33,25 @@ export const Route = createFileRoute("/blog-sitemap.xml")({
                 .join("\n"),
             );
           }
+          // Author profile pages (one per author with published posts).
+          const { data: authorRows } = await supabase
+            .from("blog_posts")
+            .select("author_id")
+            .eq("status", "published")
+            .not("author_id", "is", null)
+            .limit(2000);
+          const authorIds = [...new Set((authorRows ?? []).map((r) => r.author_id).filter(Boolean) as string[])];
+          for (const id of authorIds) {
+            urls.push(
+              [
+                `  <url>`,
+                `    <loc>${BASE_URL}/blog/author/${id}</loc>`,
+                `    <changefreq>weekly</changefreq>`,
+                `    <priority>0.5</priority>`,
+                `  </url>`,
+              ].join("\n"),
+            );
+          }
         } catch {
           // still return an empty valid sitemap
         }
@@ -44,6 +63,11 @@ export const Route = createFileRoute("/blog-sitemap.xml")({
             `    <loc>${BASE_URL}/blog</loc>`,
             `    <changefreq>daily</changefreq>`,
             `    <priority>0.8</priority>`,
+            `  </url>`,
+            `  <url>`,
+            `    <loc>${BASE_URL}/blog/authors</loc>`,
+            `    <changefreq>weekly</changefreq>`,
+            `    <priority>0.6</priority>`,
             `  </url>`,
           ].join("\n"),
         );
