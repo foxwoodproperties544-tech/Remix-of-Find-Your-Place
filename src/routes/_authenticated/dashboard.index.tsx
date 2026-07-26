@@ -13,6 +13,8 @@ import { RenewPackageDialog } from "@/components/site/RenewPackageDialog";
 import { listMyActiveListingPurchases } from "@/lib/renewals.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { FoundingTierWidget } from "@/components/dashboard/FoundingTierWidget";
+import { FreshnessPrompt, isStale } from "@/components/dashboard/FreshnessPrompt";
+
 import heroTools from "@/assets/hero-tools.jpg";
 
 
