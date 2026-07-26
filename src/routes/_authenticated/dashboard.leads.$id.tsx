@@ -351,7 +351,7 @@ function AssignmentPanel({ leadId, currentAssignee, onAssign }: {
       const { data } = await supabase.from("user_roles").select("user_id").in("role", ["agent", "admin"]);
       const ids = Array.from(new Set((data ?? []).map(r => r.user_id)));
       if (!ids.length) return [];
-      const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", ids);
+      const { data: profs } = await supabase.from("public_profiles").select("id, full_name, avatar_url").in("id", ids);
       return profs ?? [];
     },
   });

@@ -127,7 +127,7 @@ function TicketsPanel() {
     setTickets(rows);
     if (rows.length) {
       const ids = Array.from(new Set(rows.map((r) => r.user_id)));
-      const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", ids);
+      const { data: profs } = await supabase.from("public_profiles").select("id, full_name").in("id", ids);
       const map: Record<string, string> = {};
       (profs ?? []).forEach((p: any) => { map[p.id] = p.full_name ?? "Unknown"; });
       setNames(map);
@@ -306,7 +306,7 @@ function ChatsPanel({ adminUserId }: { adminUserId: string }) {
     setSessions(rows);
     if (rows.length) {
       const ids = Array.from(new Set(rows.map((r) => r.user_id)));
-      const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", ids);
+      const { data: profs } = await supabase.from("public_profiles").select("id, full_name").in("id", ids);
       const map: Record<string, string> = {};
       (profs ?? []).forEach((p: any) => { map[p.id] = p.full_name ?? "Unknown"; });
       setNames(map);
