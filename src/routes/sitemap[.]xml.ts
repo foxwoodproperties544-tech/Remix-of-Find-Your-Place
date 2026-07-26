@@ -150,7 +150,13 @@ export const Route = createFileRoute("/sitemap.xml")({
           // ignore
         }
 
-        const urls = entries.map((e) =>
+        // De-duplicate paths (area guides can overlap generated location pages)
+        const byPath = new Map<string, SitemapEntry>();
+        for (const e of entries) {
+          const existing = byPath.get(e.path);
+          if (!existing || (e.lastmod && !existing.lastmod)) byPath.set(e.path, e);
+        }
+        const urls = [...byPath.values()].map((e) =>
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
