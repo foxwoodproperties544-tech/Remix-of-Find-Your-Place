@@ -17,6 +17,7 @@ import { Route as MortgageRouteImport } from './routes/mortgage'
 import { Route as ListingPackagesRouteImport } from './routes/listing-packages'
 import { Route as HelpCenterRouteImport } from './routes/help-center'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as GetAppRouteImport } from './routes/get-app'
 import { Route as ForAgentsRouteImport } from './routes/for-agents'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DueDiligenceRouteImport } from './routes/due-diligence'
@@ -151,6 +152,11 @@ const HelpCenterRoute = HelpCenterRouteImport.update({
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetAppRoute = GetAppRouteImport.update({
+  id: '/get-app',
+  path: '/get-app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForAgentsRoute = ForAgentsRouteImport.update({
@@ -694,6 +700,7 @@ export interface FileRoutesByFullPath {
   '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
+  '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
   '/listing-packages': typeof ListingPackagesRoute
@@ -798,6 +805,7 @@ export interface FileRoutesByTo {
   '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
+  '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
   '/listing-packages': typeof ListingPackagesRoute
@@ -903,6 +911,7 @@ export interface FileRoutesById {
   '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
+  '/get-app': typeof GetAppRoute
   '/help': typeof HelpRoute
   '/help-center': typeof HelpCenterRoute
   '/listing-packages': typeof ListingPackagesRoute
@@ -1009,6 +1018,7 @@ export interface FileRouteTypes {
     | '/due-diligence'
     | '/faq'
     | '/for-agents'
+    | '/get-app'
     | '/help'
     | '/help-center'
     | '/listing-packages'
@@ -1113,6 +1123,7 @@ export interface FileRouteTypes {
     | '/due-diligence'
     | '/faq'
     | '/for-agents'
+    | '/get-app'
     | '/help'
     | '/help-center'
     | '/listing-packages'
@@ -1217,6 +1228,7 @@ export interface FileRouteTypes {
     | '/due-diligence'
     | '/faq'
     | '/for-agents'
+    | '/get-app'
     | '/help'
     | '/help-center'
     | '/listing-packages'
@@ -1323,6 +1335,7 @@ export interface RootRouteChildren {
   DueDiligenceRoute: typeof DueDiligenceRoute
   FaqRoute: typeof FaqRoute
   ForAgentsRoute: typeof ForAgentsRoute
+  GetAppRoute: typeof GetAppRoute
   HelpRoute: typeof HelpRoute
   HelpCenterRoute: typeof HelpCenterRoute
   ListingPackagesRoute: typeof ListingPackagesRoute
@@ -1411,6 +1424,13 @@ declare module '@tanstack/react-router' {
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-app': {
+      id: '/get-app'
+      path: '/get-app'
+      fullPath: '/get-app'
+      preLoaderRoute: typeof GetAppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/for-agents': {
@@ -2287,6 +2307,7 @@ const rootRouteChildren: RootRouteChildren = {
   DueDiligenceRoute: DueDiligenceRoute,
   FaqRoute: FaqRoute,
   ForAgentsRoute: ForAgentsRoute,
+  GetAppRoute: GetAppRoute,
   HelpRoute: HelpRoute,
   HelpCenterRoute: HelpCenterRoute,
   ListingPackagesRoute: ListingPackagesRoute,
