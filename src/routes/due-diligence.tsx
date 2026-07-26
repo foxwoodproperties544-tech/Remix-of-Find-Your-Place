@@ -86,7 +86,9 @@ function DueDiligence() {
   return (
     <div>
       <PageHero
-        eyebrow="Buy land with confidence"
+        image={heroTools}
+        size="sm"
+        eyebrow={<><FileSearch className="h-3.5 w-3.5" /> Buy land with confidence</>}
         title="Land Due Diligence Hub"
         subtitle="Land searches, title verification, surveys and valuations — plus the checks every Kenyan buyer should complete before paying a deposit."
       />
