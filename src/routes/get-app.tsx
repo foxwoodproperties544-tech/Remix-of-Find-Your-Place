@@ -77,7 +77,7 @@ function GetApp() {
   const copy = async (fromShare = false) => {
     if (!fromShare) track("copy_link", SURFACE);
     try {
-      await navigator.clipboard.writeText(SHARE_URL);
+      await navigator.clipboard.writeText(`${SHARE_URL}?src=${fromShare ? "share" : "copy"}`);
       setCopied(true);
       toast.success("Link copied — paste it anywhere to share");
       setTimeout(() => setCopied(false), 2000);
@@ -88,7 +88,11 @@ function GetApp() {
 
   const share = async () => {
     track("share_click", SURFACE);
-    const data = { title: TITLE, text: `${BRAND.name} — ${BRAND.tagline}. Install the app:`, url: SHARE_URL };
+    const data = {
+      title: TITLE,
+      text: `${BRAND.name} — ${BRAND.tagline}. Install the app:`,
+      url: `${SHARE_URL}?src=share`,
+    };
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
         await navigator.share(data);
@@ -99,6 +103,7 @@ function GetApp() {
     }
     copy(true);
   };
+
 
   const install = async () => {
     track("install_click", SURFACE);
