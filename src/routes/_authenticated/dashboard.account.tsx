@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Heart, Search, CalendarDays, Bell, User, Home, ShieldCheck } from "lucide-react";
 import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
 import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist";
+import { PrivacyDataCard } from "@/components/dashboard/PrivacyDataCard";
 
 export const Route = createFileRoute("/_authenticated/dashboard/account")({
   component: Account,
@@ -188,6 +189,8 @@ function Account() {
           )}
         </div>
       </section>
+
+      <PrivacyDataCard />
     </div>
   );
 }
