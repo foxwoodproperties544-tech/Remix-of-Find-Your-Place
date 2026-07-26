@@ -19,6 +19,7 @@ import { Route as HelpCenterRouteImport } from './routes/help-center'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as ForAgentsRouteImport } from './routes/for-agents'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as DueDiligenceRouteImport } from './routes/due-diligence'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
@@ -158,6 +159,11 @@ const ForAgentsRoute = ForAgentsRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DueDiligenceRoute = DueDiligenceRouteImport.update({
+  id: '/due-diligence',
+  path: '/due-diligence',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CookiesRoute = CookiesRouteImport.update({
@@ -671,6 +677,7 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
@@ -772,6 +779,7 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
@@ -874,6 +882,7 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
+  '/due-diligence': typeof DueDiligenceRoute
   '/faq': typeof FaqRoute
   '/for-agents': typeof ForAgentsRoute
   '/help': typeof HelpRoute
@@ -977,6 +986,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/help'
@@ -1078,6 +1088,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/help'
@@ -1179,6 +1190,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/contact'
     | '/cookies'
+    | '/due-diligence'
     | '/faq'
     | '/for-agents'
     | '/help'
@@ -1282,6 +1294,7 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
+  DueDiligenceRoute: typeof DueDiligenceRoute
   FaqRoute: typeof FaqRoute
   ForAgentsRoute: typeof ForAgentsRoute
   HelpRoute: typeof HelpRoute
@@ -1386,6 +1399,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/due-diligence': {
+      id: '/due-diligence'
+      path: '/due-diligence'
+      fullPath: '/due-diligence'
+      preLoaderRoute: typeof DueDiligenceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cookies': {
@@ -2220,6 +2240,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
+  DueDiligenceRoute: DueDiligenceRoute,
   FaqRoute: FaqRoute,
   ForAgentsRoute: ForAgentsRoute,
   HelpRoute: HelpRoute,
