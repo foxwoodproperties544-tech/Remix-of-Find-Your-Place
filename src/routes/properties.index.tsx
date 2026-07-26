@@ -118,7 +118,7 @@ function List() {
 
   const q = params.q;
   const favsOnly = params.favs;
-  const sortBy = params.sort as "newest" | "price-asc" | "price-desc" | "beds-desc";
+  const sortBy = params.sort;
   const page = params.page;
   const view = params.view as "list" | "map";
 
@@ -494,16 +494,9 @@ function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   );
 }
 
-function parseSizeToSqft(size?: string): number | null {
-  if (!size) return null;
-  const s = size.toLowerCase().replace(/,/g, "");
-  const numMatch = s.match(/([\d.]+)(?:\s*\/\s*([\d.]+))?/);
-  if (!numMatch) return null;
-  let n = parseFloat(numMatch[1]);
-  if (numMatch[2]) n = n / parseFloat(numMatch[2]);
-  if (!isFinite(n)) return null;
-  if (s.includes("acre")) return Math.round(n * 43560);
-  if (s.includes("hectare") || s.includes("ha")) return Math.round(n * 107639);
-  if (s.includes("sqm") || s.includes("sq m") || s.includes("m²") || s.includes("m2")) return Math.round(n * 10.7639);
-  return Math.round(n);
+function pricePerSqft(p: { price: number; size?: string }): number | null {
+  const sqft = parseSizeToSqft(p.size);
+  if (!sqft || !p.price) return null;
+  return p.price / sqft;
 }
+
