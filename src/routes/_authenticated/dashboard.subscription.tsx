@@ -5,6 +5,8 @@ import { getMySubscription, cancelPendingDowngrade } from "@/lib/subscriptions.f
 import { listActiveTierPlans } from "@/lib/tier-plans.functions";
 import { AlertTriangle, CalendarClock, CheckCircle2, Crown, Receipt, RefreshCw, TrendingDown, TrendingUp, XCircle } from "lucide-react";
 import { toast } from "sonner";
+import VerificationSubscriptionPanel from "@/components/dashboard/VerificationSubscriptionPanel";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard/subscription")({
   component: MySubscription,
@@ -128,9 +130,12 @@ function MySubscription() {
           </ul>
         </aside>
       </div>
+
+      <VerificationSubscriptionPanel />
     </div>
   );
 }
+
 
 function Stat({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (

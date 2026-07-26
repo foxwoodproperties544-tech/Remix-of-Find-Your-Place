@@ -98,33 +98,73 @@ function VerificationSubscriptionPage() {
         <div className="mt-8 text-sm text-muted-foreground">Loading…</div>
       ) : (
         <>
-          {active && (
-            <div className="mt-6 rounded-xl border border-primary/30 bg-primary-soft p-5">
+          {/* Always-visible subscription status + renewal date banner */}
+          <div
+            className={`mt-6 rounded-xl border p-5 ${
+              active
+                ? (sub?.daysRemaining ?? 99) <= 7
+                  ? "border-secondary/40 bg-secondary/10"
+                  : "border-primary/30 bg-primary-soft"
+                : sub?.expiresAt
+                  ? "border-destructive/30 bg-destructive/5"
+                  : "border-border bg-muted/40"
+            }`}
+          >
+            <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                {active ? (
+                  <CheckCircle2 className="h-5 w-5 text-primary mt-0.5" />
+                ) : (
+                  <Clock className={`h-5 w-5 mt-0.5 ${sub?.expiresAt ? "text-destructive" : "text-muted-foreground"}`} />
+                )}
                 <div>
-                  <h2 className="font-semibold">You are verified ✅</h2>
+                  <h2 className="font-semibold">
+                    {active
+                      ? (sub?.daysRemaining ?? 99) <= 7
+                        ? "Verified — renewal due soon"
+                        : "You are verified ✅"
+                      : sub?.expiresAt
+                        ? "Verification expired"
+                        : "Not subscribed yet"}
+                  </h2>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Active until{" "}
-                    <strong>{sub?.expiresAt ? new Date(sub.expiresAt).toLocaleDateString() : "—"}</strong>
-                    {typeof sub?.daysRemaining === "number" && <> · {Math.max(0, sub.daysRemaining)} days remaining</>}
+                    {active ? (
+                      <>
+                        Your KSh {(sub?.price ?? 1000).toLocaleString()}/month plan renews on{" "}
+                        <strong>
+                          {sub?.expiresAt
+                            ? new Date(sub.expiresAt).toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })
+                            : "—"}
+                        </strong>
+                        {typeof sub?.daysRemaining === "number" && <> · {Math.max(0, sub.daysRemaining)} days remaining</>}
+                      </>
+                    ) : sub?.expiresAt ? (
+                      <>
+                        Expired on{" "}
+                        <strong>
+                          {new Date(sub.expiresAt).toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" })}
+                        </strong>
+                        . Renew below to restore your badge.
+                      </>
+                    ) : (
+                      <>Subscribe below to activate your Verified badge for {sub?.durationDays ?? 30} days.</>
+                    )}
                   </p>
+                  {sub?.startedAt && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      First activated {new Date(sub.startedAt).toLocaleDateString()}
+                      {sub.lastRenewedAt && <> · last payment {new Date(sub.lastRenewedAt).toLocaleDateString()}</>}
+                    </p>
+                  )}
                 </div>
               </div>
+              <Link to="/dashboard/subscription" className="btn-ghost text-xs whitespace-nowrap">
+                Manage subscription
+              </Link>
             </div>
-          )}
+          </div>
 
-          {!active && sub?.expiresAt && (
-            <div className="mt-6 rounded-xl border border-destructive/30 bg-destructive/5 p-5 flex items-start gap-3">
-              <Clock className="h-5 w-5 text-destructive mt-0.5" />
-              <div>
-                <h2 className="font-semibold">Your verification expired</h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Expired on {new Date(sub.expiresAt).toLocaleDateString()}. Renew below to restore your badge.
-                </p>
-              </div>
-            </div>
-          )}
+
 
           <div className="mt-6 rounded-xl border border-border bg-card p-6">
             <div className="flex items-baseline gap-2">
