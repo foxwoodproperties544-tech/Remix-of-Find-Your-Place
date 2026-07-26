@@ -42,12 +42,16 @@ function GetApp() {
   const [deferred, setDeferred] = useState<BIPEvent | null>(null);
 
   useEffect(() => {
+    track("page_view", SURFACE);
     QRCode.toDataURL(SHARE_URL, {
       width: 512,
       margin: 1,
       color: { dark: "#0F766E", light: "#ffffff" },
     })
-      .then(setQr)
+      .then((url) => {
+        setQr(url);
+        track("qr_shown", SURFACE);
+      })
       .catch(() => setQr(null));
   }, []);
 
@@ -55,12 +59,19 @@ function GetApp() {
     const onPrompt = (e: Event) => {
       e.preventDefault();
       setDeferred(e as BIPEvent);
+      track("impression", SURFACE);
     };
+    const onInstalled = () => track("installed", SURFACE);
     window.addEventListener("beforeinstallprompt", onPrompt);
-    return () => window.removeEventListener("beforeinstallprompt", onPrompt);
+    window.addEventListener("appinstalled", onInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
   }, []);
 
-  const copy = async () => {
+  const copy = async (fromShare = false) => {
+    if (!fromShare) track("copy_link", SURFACE);
     try {
       await navigator.clipboard.writeText(SHARE_URL);
       setCopied(true);
@@ -72,6 +83,7 @@ function GetApp() {
   };
 
   const share = async () => {
+    track("share_click", SURFACE);
     const data = { title: TITLE, text: `${BRAND.name} — ${BRAND.tagline}. Install the app:`, url: SHARE_URL };
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
@@ -81,18 +93,22 @@ function GetApp() {
         /* user cancelled */
       }
     }
-    copy();
+    copy(true);
   };
 
   const install = async () => {
+    track("install_click", SURFACE);
     if (!deferred) {
+      track("ios_hint_shown", SURFACE);
       toast.info("Use your browser menu → “Install app” / “Add to Home Screen”.");
       return;
     }
     await deferred.prompt();
-    await deferred.userChoice;
+    const choice = await deferred.userChoice;
+    if (choice?.outcome === "dismissed") track("dismiss", SURFACE);
     setDeferred(null);
   };
+
 
   const whatsapp = `https://wa.me/?text=${encodeURIComponent(
     `${BRAND.name} — ${BRAND.tagline}. Install the app: ${SHARE_URL}`,
