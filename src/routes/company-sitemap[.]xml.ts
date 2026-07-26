@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const BASE_URL = "https://find-joy-list.lovable.app";
 
-export const Route = createFileRoute("/company-sitemap/xml")({
+export const Route = createFileRoute("/company-sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {

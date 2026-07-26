@@ -28,6 +28,7 @@ import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as CompanySitemapDotxmlRouteImport } from './routes/company-sitemap[.]xml'
 import { Route as BlogSubmissionPackagesRouteImport } from './routes/blog-submission-packages'
 import { Route as BlogSitemapDotxmlRouteImport } from './routes/blog-sitemap[.]xml'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -221,6 +222,11 @@ const ContactRoute = ContactRouteImport.update({
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanySitemapDotxmlRoute = CompanySitemapDotxmlRouteImport.update({
+  id: '/company-sitemap.xml',
+  path: '/company-sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSubmissionPackagesRoute = BlogSubmissionPackagesRouteImport.update({
@@ -784,6 +790,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
   '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
+  '/company-sitemap.xml': typeof CompanySitemapDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
@@ -903,6 +910,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
   '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
+  '/company-sitemap.xml': typeof CompanySitemapDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
@@ -1023,6 +1031,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog-sitemap.xml': typeof BlogSitemapDotxmlRoute
   '/blog-submission-packages': typeof BlogSubmissionPackagesRoute
+  '/company-sitemap.xml': typeof CompanySitemapDotxmlRoute
   '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
@@ -1144,6 +1153,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog-sitemap.xml'
     | '/blog-submission-packages'
+    | '/company-sitemap.xml'
     | '/compare'
     | '/contact'
     | '/cookies'
@@ -1263,6 +1273,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog-sitemap.xml'
     | '/blog-submission-packages'
+    | '/company-sitemap.xml'
     | '/compare'
     | '/contact'
     | '/cookies'
@@ -1382,6 +1393,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog-sitemap.xml'
     | '/blog-submission-packages'
+    | '/company-sitemap.xml'
     | '/compare'
     | '/contact'
     | '/cookies'
@@ -1503,6 +1515,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogSitemapDotxmlRoute: typeof BlogSitemapDotxmlRoute
   BlogSubmissionPackagesRoute: typeof BlogSubmissionPackagesRoute
+  CompanySitemapDotxmlRoute: typeof CompanySitemapDotxmlRoute
   CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
@@ -1683,6 +1696,13 @@ declare module '@tanstack/react-router' {
       path: '/compare'
       fullPath: '/compare'
       preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company-sitemap.xml': {
+      id: '/company-sitemap.xml'
+      path: '/company-sitemap.xml'
+      fullPath: '/company-sitemap.xml'
+      preLoaderRoute: typeof CompanySitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog-submission-packages': {
@@ -2595,6 +2615,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogSitemapDotxmlRoute: BlogSitemapDotxmlRoute,
   BlogSubmissionPackagesRoute: BlogSubmissionPackagesRoute,
+  CompanySitemapDotxmlRoute: CompanySitemapDotxmlRoute,
   CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
