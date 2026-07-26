@@ -2938,6 +2938,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      image_hash_used_elsewhere: { Args: { _hash: string }; Returns: boolean }
       is_profile_complete: {
         Args: { _p: Database["public"]["Tables"]["profiles"]["Row"] }
         Returns: boolean
