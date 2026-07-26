@@ -30,8 +30,9 @@ const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) 
 // Every query param is length/format bounded so crafted URLs can't be used to
 // push oversized or malformed input into the search + fuzzy matching pipeline.
 const short = z.string().trim().max(60);
-const numeric = z.string().trim().regex(/^\d{0,12}$/);
-const coord = z.string().trim().regex(/^-?\d{0,3}(\.\d{0,6})?$/);
+// Router parses bare numbers in the URL as numbers, so coerce before validating.
+const numeric = z.coerce.string().trim().regex(/^\d{0,12}$/);
+const coord = z.coerce.string().trim().regex(/^-?\d{0,3}(\.\d{0,6})?$/);
 const csv = z.string().trim().max(300).regex(/^[a-zA-Z0-9 ,._/&'-]*$/);
 
 const searchSchema = z.object({
