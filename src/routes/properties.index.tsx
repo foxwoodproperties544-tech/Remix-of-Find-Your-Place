@@ -194,14 +194,40 @@ function List() {
     return true;
   });
 
-  const filtered = q
+  const fuzzyFiltered = q
     ? fuzzySearch(preFiltered, q, (p) => `${p.title} ${p.area} ${p.town} ${p.type} ${p.category}`, 500).map((r) => r.item)
     : preFiltered;
+
+  // Radius ("near me") search — distance from the chosen centre point.
+  const center = params.lat && params.lng ? { lat: Number(params.lat), lng: Number(params.lng) } : null;
+  const radiusKm = center ? Number(params.radius || 10) : null;
+
+  const distances = useMemo(() => {
+    const m = new Map<string, number>();
+    if (!center) return m;
+    for (const p of fuzzyFiltered) {
+      const c = propertyCoords(p as any);
+      if (c) m.set(p.id, haversineKm(center, c));
+    }
+    return m;
+  }, [fuzzyFiltered, params.lat, params.lng]);
+
+  const filtered = center && radiusKm
+    ? fuzzyFiltered.filter((p) => {
+        const d = distances.get(p.id);
+        return d != null && d <= radiusKm;
+      })
+    : fuzzyFiltered;
 
   const sorted = [...filtered].sort((a, b) => {
     if (sortBy === "price-asc") return a.price - b.price;
     if (sortBy === "price-desc") return b.price - a.price;
     if (sortBy === "beds-desc") return b.bedrooms - a.bedrooms;
+    if (sortBy === "distance") return (distances.get(a.id) ?? Infinity) - (distances.get(b.id) ?? Infinity);
+    if (sortBy === "ppsf-asc") {
+      const pa = pricePerSqft(a), pb = pricePerSqft(b);
+      return (pa ?? Infinity) - (pb ?? Infinity);
+    }
     return 0;
   });
 
