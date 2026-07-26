@@ -19,6 +19,7 @@ import { FloatingWhatsApp } from "../components/site/FloatingWhatsApp";
 import { LiveChatWidget } from "../components/site/LiveChatWidget";
 import { TosAcceptBanner } from "../components/site/TosAcceptBanner";
 import { LanguageProvider } from "../components/site/LanguageProvider";
+import { BRAND, v } from "../lib/branding";
 
 function NotFoundComponent() {
   return (
@@ -54,8 +55,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 const SITE_URL = "https://find-joy-list.lovable.app";
-const SITE_NAME = "Foxwood Properties";
-const SITE_DESC = "Browse trusted properties for sale, rent and lease across Kenya. Search homes, land, apartments, Airbnbs and commercial spaces.";
+const SITE_NAME = BRAND.name;
+const SITE_DESC = BRAND.description;
 const SITE_OG = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/354431d1-41e3-4865-b0bc-ba59288bf311/id-preview-678a380e--617adacd-c42c-4316-910d-675f77d3209f.lovable.app-1784143550437.png";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -63,18 +64,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#0F766E" },
+      { name: "theme-color", content: BRAND.themeColor },
+      { name: "application-name", content: BRAND.name },
       { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "Foxwood" },
-      { title: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
+      { name: "apple-mobile-web-app-title", content: BRAND.appleTitle },
+      { name: "msapplication-TileColor", content: BRAND.themeColor },
+      { name: "msapplication-TileImage", content: v("/favicon-192.png") },
+      { title: `${SITE_NAME} — ${BRAND.tagline} in Kenya` },
       { name: "description", content: SITE_DESC },
-      { property: "og:title", content: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
+      { property: "og:title", content: `${SITE_NAME} — ${BRAND.tagline} in Kenya` },
       { property: "og:description", content: SITE_DESC },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: SITE_NAME },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: `${SITE_NAME} — Your gateway to prime deals in Kenya` },
+      { name: "twitter:title", content: `${SITE_NAME} — ${BRAND.tagline} in Kenya` },
       { name: "twitter:description", content: SITE_DESC },
       { property: "og:image", content: SITE_OG },
       { name: "twitter:image", content: SITE_OG },
@@ -84,13 +89,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" },
-      { rel: "icon", href: "/favicon.ico", sizes: "any" },
-      { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16.png" },
-      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32.png" },
-      { rel: "icon", type: "image/png", sizes: "192x192", href: "/favicon-192.png" },
-      { rel: "icon", type: "image/png", sizes: "512x512", href: "/favicon-512.png" },
-      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
-      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "icon", href: v("/favicon.ico"), sizes: "any" },
+      { rel: "icon", type: "image/png", sizes: "16x16", href: v("/favicon-16.png") },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: v("/favicon-32.png") },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: v("/favicon-192.png") },
+      { rel: "icon", type: "image/png", sizes: "512x512", href: v("/favicon-512.png") },
+      { rel: "apple-touch-icon", sizes: "180x180", href: v("/apple-touch-icon.png") },
+      { rel: "manifest", href: v("/manifest.webmanifest") },
     ],
     scripts: [
       {

@@ -90,6 +90,7 @@ import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminMarketplaceRouteImport } from './routes/_authenticated/admin.marketplace'
 import { Route as AuthenticatedAdminKycRouteImport } from './routes/_authenticated/admin.kyc'
+import { Route as AuthenticatedAdminBrandingRouteImport } from './routes/_authenticated/admin.branding'
 import { Route as AuthenticatedAdminBlogPackagesRouteImport } from './routes/_authenticated/admin.blog-packages'
 import { Route as AuthenticatedAdminBlogRouteImport } from './routes/_authenticated/admin.blog'
 import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated/admin.audit'
@@ -549,6 +550,12 @@ const AuthenticatedAdminKycRoute = AuthenticatedAdminKycRouteImport.update({
   path: '/kyc',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminBrandingRoute =
+  AuthenticatedAdminBrandingRouteImport.update({
+    id: '/branding',
+    path: '/branding',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminBlogPackagesRoute =
   AuthenticatedAdminBlogPackagesRouteImport.update({
     id: '/blog-packages',
@@ -723,6 +730,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
+  '/admin/branding': typeof AuthenticatedAdminBrandingRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -826,6 +834,7 @@ export interface FileRoutesByTo {
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
+  '/admin/branding': typeof AuthenticatedAdminBrandingRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -930,6 +939,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/_authenticated/admin/blog': typeof AuthenticatedAdminBlogRoute
   '/_authenticated/admin/blog-packages': typeof AuthenticatedAdminBlogPackagesRoute
+  '/_authenticated/admin/branding': typeof AuthenticatedAdminBrandingRoute
   '/_authenticated/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/_authenticated/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
@@ -1035,6 +1045,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/blog'
     | '/admin/blog-packages'
+    | '/admin/branding'
     | '/admin/kyc'
     | '/admin/marketplace'
     | '/admin/notifications'
@@ -1138,6 +1149,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/blog'
     | '/admin/blog-packages'
+    | '/admin/branding'
     | '/admin/kyc'
     | '/admin/marketplace'
     | '/admin/notifications'
@@ -1241,6 +1253,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/audit'
     | '/_authenticated/admin/blog'
     | '/_authenticated/admin/blog-packages'
+    | '/_authenticated/admin/branding'
     | '/_authenticated/admin/kyc'
     | '/_authenticated/admin/marketplace'
     | '/_authenticated/admin/notifications'
@@ -1911,6 +1924,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminKycRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/branding': {
+      id: '/_authenticated/admin/branding'
+      path: '/branding'
+      fullPath: '/admin/branding'
+      preLoaderRoute: typeof AuthenticatedAdminBrandingRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/blog-packages': {
       id: '/_authenticated/admin/blog-packages'
       path: '/blog-packages'
@@ -2084,6 +2104,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAuditRoute: typeof AuthenticatedAdminAuditRoute
   AuthenticatedAdminBlogRoute: typeof AuthenticatedAdminBlogRoute
   AuthenticatedAdminBlogPackagesRoute: typeof AuthenticatedAdminBlogPackagesRoute
+  AuthenticatedAdminBrandingRoute: typeof AuthenticatedAdminBrandingRoute
   AuthenticatedAdminKycRoute: typeof AuthenticatedAdminKycRoute
   AuthenticatedAdminMarketplaceRoute: typeof AuthenticatedAdminMarketplaceRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
@@ -2107,6 +2128,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAuditRoute: AuthenticatedAdminAuditRoute,
   AuthenticatedAdminBlogRoute: AuthenticatedAdminBlogRoute,
   AuthenticatedAdminBlogPackagesRoute: AuthenticatedAdminBlogPackagesRoute,
+  AuthenticatedAdminBrandingRoute: AuthenticatedAdminBrandingRoute,
   AuthenticatedAdminKycRoute: AuthenticatedAdminKycRoute,
   AuthenticatedAdminMarketplaceRoute: AuthenticatedAdminMarketplaceRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,

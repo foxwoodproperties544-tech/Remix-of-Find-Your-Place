@@ -87,6 +87,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
        { to: "/admin/audit", label: "Audit logs", icon: ShieldCheck },
        { to: "/admin/scan-runs", label: "Subscription scan runs", icon: RefreshCw },
        { to: "/admin/pwa-analytics", label: "PWA install analytics", icon: LayoutDashboard },
+       { to: "/admin/branding", label: "App branding & icons", icon: SlidersHorizontal },
       ],
     });
   }
