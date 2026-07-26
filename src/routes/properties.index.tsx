@@ -353,6 +353,8 @@ function List() {
                   <option value="price-asc">Price: Low to High</option>
                   <option value="price-desc">Price: High to Low</option>
                   <option value="beds-desc">Most bedrooms</option>
+                  <option value="ppsf-asc">Best value (price/sqft)</option>
+                  {center && <option value="distance">Closest first</option>}
                 </select>
                 <div className="inline-flex rounded-full border border-border overflow-hidden text-xs">
                   <button onClick={() => setView("list")} aria-pressed={view === "list"}
@@ -387,6 +389,7 @@ function List() {
                 {state.status && <Chip label={state.status} onRemove={() => patch({ status: "" })} />}
                 {state.listingType && <Chip label={state.listingType} onRemove={() => patch({ listingType: "" })} />}
                 {state.purpose && <Chip label={state.purpose} onRemove={() => patch({ purpose: "" })} />}
+                {center && <Chip label={`Within ${params.radius || 10} km of ${params.nearLabel || "point"}`} onRemove={() => updateSearch({ lat: "", lng: "", nearLabel: "" })} />}
                 {favsOnly && <Chip label="Favorites" onRemove={() => setFavsOnly(false)} />}
               </div>
             )}
