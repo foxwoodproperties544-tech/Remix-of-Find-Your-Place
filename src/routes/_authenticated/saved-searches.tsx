@@ -48,7 +48,8 @@ function SavedSearches() {
 
   const toggleNotify = useMutation({
     mutationFn: async ({ id, channel, on }: { id: string; channel: "notify_email" | "notify_whatsapp"; on: boolean }) => {
-      const { error } = await supabase.from("saved_searches").update({ [channel]: on }).eq("id", id);
+      const patch = channel === "notify_email" ? { notify_email: on } : { notify_whatsapp: on };
+      const { error } = await supabase.from("saved_searches").update(patch).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["saved-searches"] }),
@@ -92,10 +93,14 @@ function SavedSearches() {
                     ))}
                     {Object.keys(s.filters).length === 0 && <span className="text-xs text-muted-foreground">Any property</span>}
                   </div>
-                  <div className="mt-3 flex items-center gap-2 text-xs">
+                  <div className="mt-3 flex items-center gap-4 text-xs flex-wrap">
                     <label className="inline-flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" checked={s.notify_email} onChange={e => toggleNotify.mutate({ id: s.id, on: e.target.checked })} className="accent-primary" />
+                      <input type="checkbox" checked={s.notify_email} onChange={e => toggleNotify.mutate({ id: s.id, channel: "notify_email", on: e.target.checked })} className="accent-primary" />
                       <span className="text-muted-foreground">Email me new matches</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" checked={s.notify_whatsapp} onChange={e => toggleNotify.mutate({ id: s.id, channel: "notify_whatsapp", on: e.target.checked })} className="accent-primary" />
+                      <span className="text-muted-foreground">WhatsApp alerts</span>
                     </label>
                   </div>
                 </div>
