@@ -33,7 +33,7 @@ export const confirmListingFreshness = createServerFn({ method: "POST" })
       if (!isAdmin) throw new Error("Forbidden");
     }
 
-    const patch: Record<string, unknown> = {
+    const patch: any = {
       last_confirmed_at: new Date().toISOString(),
       freshness_reminder_at: null,
     };
@@ -44,6 +44,7 @@ export const confirmListingFreshness = createServerFn({ method: "POST" })
     }
 
     const { error } = await context.supabase.from("properties").update(patch).eq("id", data.propertyId);
+
     if (error) throw new Error(error.message);
 
     return { ok: true, stillAvailable: data.stillAvailable };
