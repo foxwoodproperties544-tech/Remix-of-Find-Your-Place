@@ -120,8 +120,9 @@ function GetApp() {
 
 
   const whatsapp = `https://wa.me/?text=${encodeURIComponent(
-    `${BRAND.name} — ${BRAND.tagline}. Install the app: ${SHARE_URL}`,
+    `${BRAND.name} — ${BRAND.tagline}. Install the app: ${SHARE_URL}?src=whatsapp`,
   )}`;
+
 
   return (
     <main className="bg-background">
