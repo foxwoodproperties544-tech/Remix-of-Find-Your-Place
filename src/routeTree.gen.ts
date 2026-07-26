@@ -82,6 +82,7 @@ import { Route as AuthenticatedDashboardInquiriesRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardCrmSettingsRouteImport } from './routes/_authenticated/dashboard.crm-settings'
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardBuyerRouteImport } from './routes/_authenticated/dashboard.buyer'
+import { Route as AuthenticatedDashboardBusinessRouteImport } from './routes/_authenticated/dashboard.business'
 import { Route as AuthenticatedDashboardBulkImportRouteImport } from './routes/_authenticated/dashboard.bulk-import'
 import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authenticated/dashboard.blog'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
@@ -510,6 +511,12 @@ const AuthenticatedDashboardBuyerRoute =
     path: '/dashboard/buyer',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardBusinessRoute =
+  AuthenticatedDashboardBusinessRouteImport.update({
+    id: '/dashboard/business',
+    path: '/dashboard/business',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardBulkImportRoute =
   AuthenticatedDashboardBulkImportRouteImport.update({
     id: '/dashboard/bulk-import',
@@ -849,6 +856,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
+  '/dashboard/business': typeof AuthenticatedDashboardBusinessRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
@@ -966,6 +974,7 @@ export interface FileRoutesByTo {
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
+  '/dashboard/business': typeof AuthenticatedDashboardBusinessRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
@@ -1086,6 +1095,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
   '/_authenticated/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
+  '/_authenticated/dashboard/business': typeof AuthenticatedDashboardBusinessRoute
   '/_authenticated/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
   '/_authenticated/dashboard/crm-settings': typeof AuthenticatedDashboardCrmSettingsRoute
@@ -1206,6 +1216,7 @@ export interface FileRouteTypes {
     | '/dashboard/appointments'
     | '/dashboard/blog'
     | '/dashboard/bulk-import'
+    | '/dashboard/business'
     | '/dashboard/buyer'
     | '/dashboard/crm'
     | '/dashboard/crm-settings'
@@ -1323,6 +1334,7 @@ export interface FileRouteTypes {
     | '/dashboard/advertise'
     | '/dashboard/appointments'
     | '/dashboard/bulk-import'
+    | '/dashboard/business'
     | '/dashboard/buyer'
     | '/dashboard/crm'
     | '/dashboard/crm-settings'
@@ -1442,6 +1454,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/blog'
     | '/_authenticated/dashboard/bulk-import'
+    | '/_authenticated/dashboard/business'
     | '/_authenticated/dashboard/buyer'
     | '/_authenticated/dashboard/crm'
     | '/_authenticated/dashboard/crm-settings'
@@ -2050,6 +2063,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBuyerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/business': {
+      id: '/_authenticated/dashboard/business'
+      path: '/dashboard/business'
+      fullPath: '/dashboard/business'
+      preLoaderRoute: typeof AuthenticatedDashboardBusinessRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/bulk-import': {
       id: '/_authenticated/dashboard/bulk-import'
       path: '/dashboard/bulk-import'
@@ -2484,6 +2504,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardBlogRoute: typeof AuthenticatedDashboardBlogRouteWithChildren
   AuthenticatedDashboardBulkImportRoute: typeof AuthenticatedDashboardBulkImportRoute
+  AuthenticatedDashboardBusinessRoute: typeof AuthenticatedDashboardBusinessRoute
   AuthenticatedDashboardBuyerRoute: typeof AuthenticatedDashboardBuyerRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
   AuthenticatedDashboardCrmSettingsRoute: typeof AuthenticatedDashboardCrmSettingsRoute
@@ -2520,6 +2541,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedDashboardAppointmentsRoute,
   AuthenticatedDashboardBlogRoute: AuthenticatedDashboardBlogRouteWithChildren,
   AuthenticatedDashboardBulkImportRoute: AuthenticatedDashboardBulkImportRoute,
+  AuthenticatedDashboardBusinessRoute: AuthenticatedDashboardBusinessRoute,
   AuthenticatedDashboardBuyerRoute: AuthenticatedDashboardBuyerRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
   AuthenticatedDashboardCrmSettingsRoute:
