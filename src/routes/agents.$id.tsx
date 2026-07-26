@@ -14,7 +14,7 @@ import {
 export const Route = createFileRoute("/agents/$id")({
   loader: async ({ params }) => {
     const { data: profile } = await supabase
-      .from("profiles")
+      .from("public_profiles")
       .select("*")
       .eq("id", params.id)
       .maybeSingle();
@@ -131,7 +131,7 @@ function AgentPage() {
                   <BadgeCheck className="h-3.5 w-3.5" /> Foxwood Verified Agent
                 </span>
               )}
-              {p.kyc_status === "approved" && (
+              {p.kyc_verified && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 text-[10px]">
                   <ShieldCheck className="h-3 w-3" /> KYC verified
                 </span>

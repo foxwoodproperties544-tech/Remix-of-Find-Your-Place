@@ -124,7 +124,7 @@ export async function listAllTags(): Promise<string[]> {
 
 export async function getAuthor(id: string | null): Promise<AuthorProfile | null> {
   if (!id) return null;
-  const { data } = await supabase.from("profiles")
+  const { data } = await supabase.from("public_profiles")
     .select("id,full_name,avatar_url,bio,company_name").eq("id", id).maybeSingle();
   return (data as AuthorProfile | null) ?? null;
 }

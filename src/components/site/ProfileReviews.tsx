@@ -34,7 +34,7 @@ export function ProfileReviews({ targetId }: { targetId: string }) {
       const ids = Array.from(new Set((reviews ?? []).map((r) => r.user_id)));
       let profilesMap: Record<string, { full_name: string | null; avatar_url: string | null }> = {};
       if (ids.length) {
-        const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", ids);
+        const { data: profs } = await supabase.from("public_profiles").select("id, full_name, avatar_url").in("id", ids);
         (profs ?? []).forEach((p) => (profilesMap[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url }));
       }
       return (reviews ?? []).map((r) => ({ ...r, reviewer: profilesMap[r.user_id] ?? null })) as Review[];
