@@ -432,7 +432,7 @@ function List() {
             ) : (
               <>
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {pageItems.map((p) => <PropertyCard key={p.id} p={p} />)}
+                  {pageItems.map((p) => <PropertyCard key={p.id} p={p} distanceKm={center ? distances.get(p.id) ?? null : null} />)}
                 </div>
                 {totalPages > 1 && (
                   <div className="mt-10 flex items-center justify-center gap-2">
@@ -467,6 +467,12 @@ function List() {
               <label className="text-xs font-medium">Name</label>
               <input value={savingName} onChange={(e) => setSavingName(e.target.value)} placeholder={summarize(currentFilters()) || "My search"} className="mt-1 w-full rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary" />
             </div>
+            <label className="mt-4 flex items-start gap-2 text-xs cursor-pointer">
+              <input type="checkbox" checked={waAlerts} onChange={(e) => setWaAlerts(e.target.checked)} className="mt-0.5 accent-primary" />
+              <span className="text-muted-foreground">
+                Also send me a <span className="font-semibold text-foreground">WhatsApp alert</span> for new matches (uses the phone number on your profile).
+              </span>
+            </label>
             <div className="mt-6 flex justify-end gap-2">
               <button onClick={() => setShowSave(false)} className="btn-ghost">Cancel</button>
               <button disabled={saving} onClick={saveSearch} className="btn-primary btn-primary-hover">{saving ? "Saving…" : "Save alert"}</button>
