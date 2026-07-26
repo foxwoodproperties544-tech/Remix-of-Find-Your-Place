@@ -50,6 +50,8 @@ export function ProfileReviews({ targetId }: { targetId: string }) {
         user_id: user.id,
         rating,
         comment: comment.trim() || null,
+        status: "pending",
+
       });
       if (error) throw error;
     },
