@@ -128,9 +128,12 @@ function MySubscription() {
           </ul>
         </aside>
       </div>
+
+      <VerificationSubscriptionPanel />
     </div>
   );
 }
+
 
 function Stat({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
