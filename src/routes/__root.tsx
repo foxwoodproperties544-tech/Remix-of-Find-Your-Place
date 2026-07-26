@@ -16,6 +16,8 @@ import { Footer } from "../components/site/Footer";
 import { CookieBanner } from "../components/site/CookieBanner";
 import { InstallAppBanner } from "../components/site/InstallAppBanner";
 import { FloatingWhatsApp } from "../components/site/FloatingWhatsApp";
+import { MobileTabBar } from "../components/site/MobileTabBar";
+
 import { LiveChatWidget } from "../components/site/LiveChatWidget";
 import { TosAcceptBanner } from "../components/site/TosAcceptBanner";
 import { LanguageProvider } from "../components/site/LanguageProvider";
@@ -148,7 +150,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col pb-14 md:pb-0">
           <TosAcceptBanner />
           <Header />
           <main className="flex-1"><Outlet /></main>
@@ -157,7 +159,9 @@ function RootComponent() {
           <InstallAppBanner />
           <FloatingWhatsApp />
           <LiveChatWidget />
+          <MobileTabBar />
         </div>
+
       </LanguageProvider>
     </QueryClientProvider>
   );

@@ -133,18 +133,14 @@ function NewListing() {
             setUploading((n) => n - 1);
             continue;
           }
-          const { data: dup } = await supabase
-            .from("property_image_hashes")
-            .select("owner_id, property_id")
-            .eq("image_hash", hash)
-            .limit(3);
-          if (dup && dup.length) {
-            const others = dup.filter((d: any) => d.owner_id !== user.id);
-            if (others.length) {
-              setDuplicateWarnings((w) => [...w, `${file.name} matches a photo already used on another listing.`]);
-              toast.warning(`Duplicate photo detected — ${file.name} is used elsewhere on Foxwood`);
-            }
+          const { data: usedElsewhere } = await supabase.rpc("image_hash_used_elsewhere", {
+            _hash: hash,
+          });
+          if (usedElsewhere) {
+            setDuplicateWarnings((w) => [...w, `${file.name} matches a photo already used on another listing.`]);
+            toast.warning(`Duplicate photo detected — ${file.name} is used elsewhere on Foxwood`);
           }
+
         } catch { /* hashing best-effort */ }
 
         const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
