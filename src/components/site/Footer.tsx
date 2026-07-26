@@ -113,6 +113,7 @@ export function Footer() {
             <li><Link to="/blog" className="hover:text-secondary">Blog & News</Link></li>
             <li><Link to="/faq" className="hover:text-secondary">FAQ</Link></li>
             <li><Link to="/help" className="hover:text-secondary">Help Centre</Link></li>
+            <li><Link to="/get-app" className="hover:text-secondary">Download the App</Link></li>
             <li><Link to="/privacy" className="hover:text-secondary">Privacy Policy</Link></li>
             <li><Link to="/terms" className="hover:text-secondary">Terms & Conditions</Link></li>
             <li><Link to="/cookies" className="hover:text-secondary">Cookie Policy</Link></li>
