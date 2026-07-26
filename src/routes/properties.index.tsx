@@ -19,31 +19,38 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AdSlot } from "@/components/site/AdSlot";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import { fuzzySearch } from "@/lib/fuzzy";
+import { checkRateLimit, rateLimitKey } from "@/lib/rate-limit";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
 const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
 
+// Every query param is length/format bounded so crafted URLs can't be used to
+// push oversized or malformed input into the search + fuzzy matching pipeline.
+const short = z.string().trim().max(60);
+const numeric = z.string().trim().regex(/^\d{0,12}$/);
+const csv = z.string().trim().max(300).regex(/^[a-zA-Z0-9 ,._/&'-]*$/);
+
 const searchSchema = z.object({
-  category: fallback(z.string(), "").default(""),
-  type: fallback(z.string(), "").default(""),
-  county: fallback(z.string(), "").default(""),
-  town: fallback(z.string(), "").default(""),
-  q: fallback(z.string(), "").default(""),
-  minPrice: fallback(z.string(), "").default(""),
-  maxPrice: fallback(z.string(), "").default(""),
-  minBeds: fallback(z.string(), "").default(""),
-  minBaths: fallback(z.string(), "").default(""),
-  minSize: fallback(z.string(), "").default(""),
-  maxSize: fallback(z.string(), "").default(""),
-  features: fallback(z.string(), "").default(""),
-  nearby: fallback(z.string(), "").default(""),
-  status: fallback(z.string(), "").default(""),
-  listingType: fallback(z.string(), "").default(""),
-  purpose: fallback(z.string(), "").default(""),
-  sort: fallback(z.string(), "newest").default("newest"),
-  page: fallback(z.number().int(), 1).default(1),
+  category: fallback(short, "").default(""),
+  type: fallback(short, "").default(""),
+  county: fallback(short, "").default(""),
+  town: fallback(short, "").default(""),
+  q: fallback(z.string().trim().max(120), "").default(""),
+  minPrice: fallback(numeric, "").default(""),
+  maxPrice: fallback(numeric, "").default(""),
+  minBeds: fallback(numeric, "").default(""),
+  minBaths: fallback(numeric, "").default(""),
+  minSize: fallback(numeric, "").default(""),
+  maxSize: fallback(numeric, "").default(""),
+  features: fallback(csv, "").default(""),
+  nearby: fallback(csv, "").default(""),
+  status: fallback(short, "").default(""),
+  listingType: fallback(short, "").default(""),
+  purpose: fallback(short, "").default(""),
+  sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc"]), "newest").default("newest"),
+  page: fallback(z.number().int().min(1).max(1000), 1).default(1),
   favs: fallback(z.boolean(), false).default(false),
-  view: fallback(z.string(), "list").default("list"),
+  view: fallback(z.enum(["list", "map"]), "list").default("list"),
 });
 
 const PAGE_SIZE = 12;
@@ -116,12 +123,26 @@ function List() {
     if (p.nearby) out.nearby = joinCsv(p.nearby);
     updateSearch(out);
   }
-  function setQ(v: string) { updateSearch({ q: v }); }
+  function setQ(v: string) {
+    const value = v.slice(0, 120);
+    updateSearch({ q: value });
+    // Soft abuse guard: throttle scripted/rapid-fire query submissions.
+    if (value.trim().length >= 2 && !searchThrottled) {
+      void checkRateLimit("property_search", rateLimitKey(user?.id), 120, 60).then((ok) => {
+        if (!ok) {
+          setSearchThrottled(true);
+          toast.error("Too many searches — please wait a moment before searching again.");
+          setTimeout(() => setSearchThrottled(false), 15_000);
+        }
+      });
+    }
+  }
   function setSortBy(v: string) { updateSearch({ sort: v }); }
   function setPage(n: number) { navigate({ search: (prev: any) => ({ ...prev, page: n }) }); }
   function setFavsOnly(v: boolean) { updateSearch({ favs: v }); }
   function setView(v: "list" | "map") { navigate({ search: (prev: any) => ({ ...prev, view: v }) }); }
 
+  const [searchThrottled, setSearchThrottled] = useState(false);
   const [showSave, setShowSave] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savingName, setSavingName] = useState("");
@@ -243,7 +264,7 @@ function List() {
         <div className="rounded-2xl bg-background text-foreground p-3 shadow-lift ring-1 ring-border/60">
           <div className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 focus-within:border-primary/50 transition-colors">
             <Search className="h-4 w-4 text-muted-foreground" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by title, area, town..." className="w-full bg-transparent text-sm outline-none" />
+            <input value={q} maxLength={120} disabled={searchThrottled} onChange={(e) => setQ(e.target.value)} placeholder="Search by title, area, town..." className="w-full bg-transparent text-sm outline-none" />
           </div>
         </div>
       </PageHero>

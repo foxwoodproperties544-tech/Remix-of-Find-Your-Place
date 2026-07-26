@@ -34,6 +34,7 @@ export const Route = createFileRoute("/properties/$id")({
       p: mock, ownerId: null as string | null, propertyKey: params.id,
       ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null },
       videoUrl: null as string | null, tourUrl: null as string | null, documents: [] as Array<{ name: string; url: string }>,
+      verificationScore: null as number | null, investmentScore: null as number | null,
       latOverride: null as number | null, lngOverride: null as number | null,
       contactPhone: null as string | null, contactWhatsapp: null as string | null,
       createdAt: null as string | null, verified: !!mock.verified, featured: !!mock.featured,
@@ -44,6 +45,12 @@ export const Route = createFileRoute("/properties/$id")({
       .from("profiles")
       .select("full_name, avatar_url, phone, company")
       .eq("id", row.owner_id).maybeSingle();
+    const [{ data: vScore }, { data: iScore }] = await Promise.all([
+      supabase.rpc("property_verification_score", { _property_id: row.id }),
+      supabase.rpc("property_investment_score", { _property_id: row.id }),
+    ]);
+    const verificationScore = Array.isArray(vScore) ? ((vScore[0] as any)?.score ?? null) : null;
+    const investmentScore = iScore != null ? Number(iScore) : null;
     const docsRaw = Array.isArray(row.documents) ? row.documents : [];
     const documents = docsRaw
       .filter((d: any) => d && typeof d === "object" && typeof d.url === "string")
@@ -57,6 +64,8 @@ export const Route = createFileRoute("/properties/$id")({
       lngOverride: row.lng != null ? Number(row.lng) : null,
       createdAt: row.created_at ?? null,
       verified: !!row.verified, featured: !!(row.is_featured ?? row.featured),
+      verificationScore: verificationScore as number | null,
+      investmentScore: investmentScore as number | null,
     };
   },
   head: ({ params, loaderData }) => {
@@ -85,6 +94,29 @@ export const Route = createFileRoute("/properties/$id")({
           category: `${p.category} — ${p.type}`,
           offers: { "@type": "Offer", price: p.price, priceCurrency: "KES", availability: "https://schema.org/InStock", url },
           brand: { "@type": "Organization", name: "Foxwood Properties" },
+          additionalProperty: [
+            loaderData.verificationScore != null
+              ? { "@type": "PropertyValue", name: "Foxwood Verification Score", value: loaderData.verificationScore, maxValue: 100, unitText: "percent" }
+              : null,
+            loaderData.investmentScore != null
+              ? { "@type": "PropertyValue", name: "Foxwood Investment Score", value: loaderData.investmentScore, maxValue: 10 }
+              : null,
+          ].filter(Boolean),
+          ...(loaderData.verificationScore != null
+            ? {
+                review: {
+                  "@type": "Review",
+                  name: "Foxwood verification assessment",
+                  author: { "@type": "Organization", name: "Foxwood Properties" },
+                  reviewRating: {
+                    "@type": "Rating",
+                    ratingValue: Math.round((loaderData.verificationScore / 10) * 10) / 10,
+                    bestRating: 10,
+                    worstRating: 0,
+                  },
+                },
+              }
+            : {}),
         }) },
         { type: "application/ld+json", children: JSON.stringify({
           "@context": "https://schema.org",
