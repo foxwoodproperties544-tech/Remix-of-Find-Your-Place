@@ -155,6 +155,7 @@ function List() {
   const [saving, setSaving] = useState(false);
   const [savingName, setSavingName] = useState("");
   const [mobileFilters, setMobileFilters] = useState(false);
+  const [waAlerts, setWaAlerts] = useState(false);
 
   function clearAll() {
     navigate({ search: () => ({}) as any });
