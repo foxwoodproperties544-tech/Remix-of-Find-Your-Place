@@ -139,7 +139,7 @@ function GetApp() {
                 <Share2 className="mr-2 h-4 w-4" /> Share link
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+                <a href={whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => track("share_whatsapp", SURFACE)}>
                   <MessageCircle className="mr-2 h-4 w-4" /> Share on WhatsApp
                 </a>
               </Button>
