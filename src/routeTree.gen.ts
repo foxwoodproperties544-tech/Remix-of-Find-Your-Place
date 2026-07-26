@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MortgageRouteImport } from './routes/mortgage'
@@ -134,6 +135,11 @@ const TermsRoute = TermsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertySitemapDotxmlRoute = PropertySitemapDotxmlRouteImport.update({
@@ -755,6 +761,7 @@ export interface FileRoutesByFullPath {
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -867,6 +874,7 @@ export interface FileRoutesByTo {
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -980,6 +988,7 @@ export interface FileRoutesById {
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -1094,6 +1103,7 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
+    | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
@@ -1206,6 +1216,7 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
+    | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
@@ -1318,6 +1329,7 @@ export interface FileRouteTypes {
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
+    | '/refund-policy'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
@@ -1432,6 +1444,7 @@ export interface RootRouteChildren {
   MortgageRoute: typeof MortgageRoute
   PrivacyRoute: typeof PrivacyRoute
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   TestimonialsRoute: typeof TestimonialsRoute
@@ -1480,6 +1493,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/property-sitemap.xml': {
@@ -2466,6 +2486,7 @@ const rootRouteChildren: RootRouteChildren = {
   MortgageRoute: MortgageRoute,
   PrivacyRoute: PrivacyRoute,
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   TestimonialsRoute: TestimonialsRoute,
