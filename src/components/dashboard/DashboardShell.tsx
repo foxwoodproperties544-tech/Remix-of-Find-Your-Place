@@ -48,6 +48,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/inquiries", label: "Inquiries", icon: Inbox },
         { to: "/dashboard/leads", label: "CRM · Leads", icon: Users2 },
         { to: "/dashboard/crm", label: "CRM board", icon: LayoutDashboard },
+        { to: "/dashboard/crm-settings", label: "CRM settings", icon: FileText },
         { to: "/dashboard/appointments", label: "Appointments", icon: CalendarCheck },
         { to: "/dashboard/upgrade", label: "Upgrade", icon: Star },
         { to: "/dashboard/advertise", label: "Advertise", icon: PlusCircle },
