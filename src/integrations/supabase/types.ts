@@ -178,6 +178,84 @@ export type Database = {
         }
         Relationships: []
       }
+      area_guides: {
+        Row: {
+          attractions: string | null
+          average_prices: string | null
+          county: string | null
+          created_at: string
+          faqs: Json
+          hero_image: string | null
+          hospitals: string | null
+          id: string
+          internet: string | null
+          level: string
+          lifestyle: string | null
+          market_overview: string | null
+          name: string
+          overview: string | null
+          published: boolean
+          schools: string | null
+          security: string | null
+          shopping: string | null
+          slug: string
+          town: string | null
+          transport: string | null
+          updated_at: string
+          utilities: string | null
+        }
+        Insert: {
+          attractions?: string | null
+          average_prices?: string | null
+          county?: string | null
+          created_at?: string
+          faqs?: Json
+          hero_image?: string | null
+          hospitals?: string | null
+          id?: string
+          internet?: string | null
+          level?: string
+          lifestyle?: string | null
+          market_overview?: string | null
+          name: string
+          overview?: string | null
+          published?: boolean
+          schools?: string | null
+          security?: string | null
+          shopping?: string | null
+          slug: string
+          town?: string | null
+          transport?: string | null
+          updated_at?: string
+          utilities?: string | null
+        }
+        Update: {
+          attractions?: string | null
+          average_prices?: string | null
+          county?: string | null
+          created_at?: string
+          faqs?: Json
+          hero_image?: string | null
+          hospitals?: string | null
+          id?: string
+          internet?: string | null
+          level?: string
+          lifestyle?: string | null
+          market_overview?: string | null
+          name?: string
+          overview?: string | null
+          published?: boolean
+          schools?: string | null
+          security?: string | null
+          shopping?: string | null
+          slug?: string
+          town?: string | null
+          transport?: string | null
+          updated_at?: string
+          utilities?: string | null
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -591,6 +669,77 @@ export type Database = {
           },
         ]
       }
+      buyer_checklist_progress: {
+        Row: {
+          created_at: string
+          done: boolean
+          done_at: string | null
+          id: string
+          notes: string | null
+          template_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          done_at?: string | null
+          id?: string
+          notes?: string | null
+          template_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          done_at?: string | null
+          id?: string
+          notes?: string | null
+          template_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "buyer_checklist_progress_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "buyer_checklist_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      buyer_checklist_templates: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          id: string
+          label: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          label: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           body: string
@@ -656,6 +805,54 @@ export type Database = {
           subject?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      due_diligence_requests: {
+        Row: {
+          admin_notes: string | null
+          county: string | null
+          created_at: string
+          email: string | null
+          id: string
+          message: string | null
+          name: string
+          phone: string | null
+          property_ref: string | null
+          service: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          county?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          property_ref?: string | null
+          service: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          county?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          property_ref?: string | null
+          service?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -791,6 +988,42 @@ export type Database = {
           sender_user_id?: string | null
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      investment_factors: {
+        Row: {
+          active: boolean
+          created_at: string
+          explanation: string | null
+          id: string
+          key: string
+          label: string
+          sort_order: number
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          key: string
+          label: string
+          sort_order?: number
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          key?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+          weight?: number
         }
         Relationships: []
       }
@@ -1123,6 +1356,30 @@ export type Database = {
           sort_order?: number
           updated_at?: string
           whatsapp_button?: boolean
+        }
+        Relationships: []
+      }
+      match_preferences: {
+        Row: {
+          created_at: string
+          id: string
+          prefs: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prefs?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prefs?: Json
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1503,6 +1760,7 @@ export type Database = {
           features: string[]
           id: string
           images: string[]
+          investment_note: string | null
           is_featured: boolean
           lat: number | null
           listing_type: string | null
@@ -1546,6 +1804,7 @@ export type Database = {
           features?: string[]
           id?: string
           images?: string[]
+          investment_note?: string | null
           is_featured?: boolean
           lat?: number | null
           listing_type?: string | null
@@ -1589,6 +1848,7 @@ export type Database = {
           features?: string[]
           id?: string
           images?: string[]
+          investment_note?: string | null
           is_featured?: boolean
           lat?: number | null
           listing_type?: string | null
@@ -1614,6 +1874,101 @@ export type Database = {
           video_url?: string | null
         }
         Relationships: []
+      }
+      property_alerts: {
+        Row: {
+          active: boolean
+          created_at: string
+          filters: Json
+          id: string
+          last_notified_at: string | null
+          name: string
+          notify_email: boolean
+          notify_in_app: boolean
+          on_agent_new_listing: boolean
+          on_new_match: boolean
+          on_price_drop: boolean
+          on_relisted: boolean
+          on_status_change: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_notified_at?: string | null
+          name?: string
+          notify_email?: boolean
+          notify_in_app?: boolean
+          on_agent_new_listing?: boolean
+          on_new_match?: boolean
+          on_price_drop?: boolean
+          on_relisted?: boolean
+          on_status_change?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_notified_at?: string | null
+          name?: string
+          notify_email?: boolean
+          notify_in_app?: boolean
+          on_agent_new_listing?: boolean
+          on_new_match?: boolean
+          on_price_drop?: boolean
+          on_relisted?: boolean
+          on_status_change?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      property_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          detail: string | null
+          id: string
+          metadata: Json | null
+          property_id: string
+          title: string
+          type: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          detail?: string | null
+          id?: string
+          metadata?: Json | null
+          property_id: string
+          title: string
+          type: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          detail?: string | null
+          id?: string
+          metadata?: Json | null
+          property_id?: string
+          title?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_events_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_image_hashes: {
         Row: {
@@ -1643,6 +1998,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "property_image_hashes_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_investment_ratings: {
+        Row: {
+          created_at: string
+          factor_key: string
+          id: string
+          property_id: string
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          factor_key: string
+          id?: string
+          property_id: string
+          updated_at?: string
+          value?: number
+        }
+        Update: {
+          created_at?: string
+          factor_key?: string
+          id?: string
+          property_id?: string
+          updated_at?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_investment_ratings_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
@@ -1717,6 +2107,50 @@ export type Database = {
           },
           {
             foreignKeyName: "property_package_purchases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_verification_checks: {
+        Row: {
+          checked_at: string | null
+          checked_by: string | null
+          created_at: string
+          criterion_key: string
+          id: string
+          notes: string | null
+          passed: boolean
+          property_id: string
+          updated_at: string
+        }
+        Insert: {
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          criterion_key: string
+          id?: string
+          notes?: string | null
+          passed?: boolean
+          property_id: string
+          updated_at?: string
+        }
+        Update: {
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          criterion_key?: string
+          id?: string
+          notes?: string | null
+          passed?: boolean
+          property_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_verification_checks_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
@@ -2033,6 +2467,45 @@ export type Database = {
         }
         Relationships: []
       }
+      verification_criteria: {
+        Row: {
+          active: boolean
+          created_at: string
+          explanation: string | null
+          id: string
+          key: string
+          label: string
+          land_only: boolean
+          sort_order: number
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          key: string
+          label: string
+          land_only?: boolean
+          sort_order?: number
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          key?: string
+          label?: string
+          land_only?: boolean
+          sort_order?: number
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: []
+      }
       verification_requests: {
         Row: {
           additional_docs: Json
@@ -2159,6 +2632,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      agent_performance: { Args: { _agent_id: string }; Returns: Json }
       bump_ad_daily_stat: {
         Args: { _campaign: string; _kind: string }
         Returns: undefined
@@ -2185,6 +2659,18 @@ export type Database = {
       is_profile_complete: {
         Args: { _p: Database["public"]["Tables"]["profiles"]["Row"] }
         Returns: boolean
+      }
+      property_investment_score: {
+        Args: { _property_id: string }
+        Returns: number
+      }
+      property_verification_score: {
+        Args: { _property_id: string }
+        Returns: {
+          earned: number
+          score: number
+          total: number
+        }[]
       }
       run_saved_search_alerts: { Args: never; Returns: number }
       send_subscription_reminders: { Args: never; Returns: number }
