@@ -2146,6 +2146,7 @@ export type Database = {
           open_house_at: string | null
           owner_id: string
           price: number
+          price_change_reason: string | null
           price_previous: number | null
           price_reduced_from: number | null
           price_suffix: string | null
@@ -2194,6 +2195,7 @@ export type Database = {
           open_house_at?: string | null
           owner_id: string
           price: number
+          price_change_reason?: string | null
           price_previous?: number | null
           price_reduced_from?: number | null
           price_suffix?: string | null
@@ -2242,6 +2244,7 @@ export type Database = {
           open_house_at?: string | null
           owner_id?: string
           price?: number
+          price_change_reason?: string | null
           price_previous?: number | null
           price_reduced_from?: number | null
           price_suffix?: string | null
@@ -2495,6 +2498,65 @@ export type Database = {
           },
           {
             foreignKeyName: "property_package_purchases_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_price_history: {
+        Row: {
+          amount_changed: number | null
+          changed_by: string | null
+          created_at: string
+          id: string
+          is_initial: boolean
+          new_price: number
+          percent_changed: number | null
+          previous_price: number | null
+          property_id: string
+          reason: string | null
+          reverted: boolean
+          reverted_at: string | null
+          reverted_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_changed?: number | null
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          is_initial?: boolean
+          new_price: number
+          percent_changed?: number | null
+          previous_price?: number | null
+          property_id: string
+          reason?: string | null
+          reverted?: boolean
+          reverted_at?: string | null
+          reverted_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_changed?: number | null
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          is_initial?: boolean
+          new_price?: number
+          percent_changed?: number | null
+          previous_price?: number | null
+          property_id?: string
+          reason?: string | null
+          reverted?: boolean
+          reverted_at?: string | null
+          reverted_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_price_history_property_id_fkey"
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
@@ -3760,6 +3822,7 @@ export type Database = {
         Args: { _property_id: string }
         Returns: number
       }
+      property_price_summary: { Args: { _property_id: string }; Returns: Json }
       property_verification_score: {
         Args: { _property_id: string }
         Returns: {

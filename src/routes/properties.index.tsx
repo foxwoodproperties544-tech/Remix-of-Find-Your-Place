@@ -23,6 +23,7 @@ import { checkRateLimit, rateLimitKey } from "@/lib/rate-limit";
 import { RadiusFilter } from "@/components/site/RadiusFilter";
 import { distanceKm as haversineKm, propertyCoords } from "@/lib/geo";
 import { parseSizeToSqft } from "@/lib/measure";
+import { fetchLatestChanges } from "@/lib/price-history";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
 const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
@@ -57,7 +58,8 @@ const searchSchema = z.object({
   lng: fallback(coord, "").default(""),
   radius: fallback(radiusNum, "").default(""),
   nearLabel: fallback(short, "").default(""),
-  sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc", "distance", "ppsf-asc"]), "newest").default("newest"),
+  priceChange: fallback(z.enum(["", "reduced", "increased", "reduced-week", "reduced-month", "none"]), "").default(""),
+  sort: fallback(z.enum(["newest", "price-asc", "price-desc", "beds-desc", "distance", "ppsf-asc", "biggest-drop"]), "newest").default("newest"),
   page: fallback(z.number().int().min(1).max(1000), 1).default(1),
   favs: fallback(z.boolean(), false).default(false),
   view: fallback(z.enum(["list", "map"]), "list").default("list"),
@@ -205,6 +207,13 @@ function List() {
   const center = params.lat && params.lng ? { lat: Number(params.lat), lng: Number(params.lng) } : null;
   const radiusKm = center ? Number(params.radius || 10) : null;
 
+  const latestChanges = useQuery({
+    queryKey: ["latest-price-changes"],
+    staleTime: 120_000,
+    queryFn: () => fetchLatestChanges(all.map((p) => p.id)),
+    enabled: all.length > 0,
+  });
+
   const distances = useMemo(() => {
     const m = new Map<string, number>();
     if (!center) return m;
@@ -222,7 +231,24 @@ function List() {
       })
     : fuzzyFiltered;
 
-  const sorted = [...filtered].sort((a, b) => {
+  const priceChanged = filtered.filter((p) => {
+    if (!params.priceChange) return true;
+    const c = latestChanges.data?.get(p.id) ?? null;
+    if (params.priceChange === "none") return !c;
+    if (!c) return false;
+    const amt = c.amount_changed ?? 0;
+    const age = Date.now() - +new Date(c.created_at);
+    if (params.priceChange === "reduced") return amt < 0;
+    if (params.priceChange === "increased") return amt > 0;
+    if (params.priceChange === "reduced-week") return amt < 0 && age <= 7 * 86_400_000;
+    if (params.priceChange === "reduced-month") return amt < 0 && age <= 30 * 86_400_000;
+    return true;
+  });
+
+  const sorted = [...priceChanged].sort((a, b) => {
+    if (sortBy === "biggest-drop") {
+      return (latestChanges.data?.get(a.id)?.amount_changed ?? 0) - (latestChanges.data?.get(b.id)?.amount_changed ?? 0);
+    }
     if (sortBy === "price-asc") return a.price - b.price;
     if (sortBy === "price-desc") return b.price - a.price;
     if (sortBy === "beds-desc") return b.bedrooms - a.bedrooms;
@@ -356,7 +382,21 @@ function List() {
                   <option value="price-desc">Price: High to Low</option>
                   <option value="beds-desc">Most bedrooms</option>
                   <option value="ppsf-asc">Best value (price/sqft)</option>
+                  <option value="biggest-drop">Biggest price drop</option>
                   {center && <option value="distance">Closest first</option>}
+                </select>
+                <select
+                  value={params.priceChange}
+                  onChange={(e) => updateSearch({ priceChange: e.target.value })}
+                  aria-label="Filter by price change"
+                  className="rounded-full border border-border px-3 py-2 text-xs bg-background font-medium"
+                >
+                  <option value="">Any price change</option>
+                  <option value="reduced">Recently reduced</option>
+                  <option value="increased">Recently increased</option>
+                  <option value="reduced-week">Price reduced this week</option>
+                  <option value="reduced-month">Price reduced this month</option>
+                  <option value="none">No price changes</option>
                 </select>
                 <div className="inline-flex rounded-full border border-border overflow-hidden text-xs">
                   <button onClick={() => setView("list")} aria-pressed={view === "list"}

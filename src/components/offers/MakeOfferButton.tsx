@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { X, Handshake, ChevronRight, ChevronLeft, Loader2, Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { OfferPriceHistoryContext } from "./OfferPriceHistoryContext";
 import { formatKsh } from "@/lib/mock-data";
 import { submitOffer, getOfferCaptcha } from "@/lib/offers.functions";
 import { TIMELINES, priceDiff } from "@/lib/offers";
@@ -179,6 +180,7 @@ function OfferDialog({
                   <div className="flex justify-between"><span className="text-muted-foreground">Asking price</span><span className="font-semibold">{formatKsh(askingPrice)}</span></div>
                   <div className="mt-1 flex justify-between"><span className="text-muted-foreground">Difference</span><span className={`font-semibold ${diff.tone}`}>{numericAmount ? diff.label : "—"}</span></div>
                 </div>
+                <OfferPriceHistoryContext propertyId={propertyId} currentPrice={askingPrice} />
                 <Field label="Your offer">
                   <div className="flex gap-2">
                     <span className="inline-flex items-center rounded-lg border border-border px-3 text-xs font-semibold text-muted-foreground">{currency}</span>

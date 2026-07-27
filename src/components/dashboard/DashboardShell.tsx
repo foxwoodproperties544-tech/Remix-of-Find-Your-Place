@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
   Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
-  Phone, MessageCircle, Handshake, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2,
+  Phone, MessageCircle, Handshake, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2, LineChart,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -83,6 +83,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/deletion-requests", label: "Deletion requests", icon: ShieldCheck },
 
         { to: "/admin/marketplace", label: "Scores & guides", icon: ShieldCheck },
+        { to: "/admin/price-history", label: "Price history", icon: LineChart },
         { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
 
         { to: "/admin/users", label: "Users & roles", icon: UserCog },

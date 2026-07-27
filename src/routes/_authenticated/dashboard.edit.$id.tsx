@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { ArrowLeft, X, Loader2, UploadCloud, FileText } from "lucide-react";
 import { fetchPropertyRowById } from "@/lib/properties";
+import { ListingPriceManager } from "@/components/dashboard/ListingPriceManager";
 import { CATEGORIES as CATS, ALL_TYPES, TYPE_GROUPS } from "@/lib/taxonomy";
 
 const CATEGORIES = [...CATS];
@@ -147,6 +148,15 @@ function EditListing() {
       <Link to="/dashboard" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="h-4 w-4" /> Back</Link>
       <h1 className="text-3xl font-bold mt-2">Edit listing</h1>
       <p className="text-sm text-muted-foreground mt-1">Current status: <span className="font-semibold text-foreground">{form.status}</span></p>
+
+      <div className="mt-6">
+        <ListingPriceManager
+          propertyId={row.id}
+          propertyKey={row.id}
+          currentPrice={Number(row.price)}
+          listedAt={(row as any).published_at ?? row.created_at}
+        />
+      </div>
 
       <div className="mt-8 space-y-6">
         <div><label className={label}>Title</label><input value={form.title} onChange={e => upd("title", e.target.value)} className={input} /></div>
