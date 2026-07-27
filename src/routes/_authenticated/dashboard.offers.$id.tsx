@@ -13,6 +13,8 @@ import {
 } from "@/lib/offers";
 import { OfferTimeline } from "@/components/offers/OfferTimeline";
 import { OfferChat } from "@/components/offers/OfferChat";
+import { OfferExpiry } from "@/components/offers/OfferExpiry";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard/offers/$id")({
   head: () => ({
@@ -81,8 +83,10 @@ function OfferDetail() {
           <header className="rounded-2xl border border-border bg-card p-5">
             <div className="flex flex-wrap items-center gap-2">
               <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_CLASS[offer.status as OfferStatus]}`}>{STATUS_LABEL[offer.status as OfferStatus]}</span>
+              <OfferExpiry expiresAt={offer.expires_at} status={offer.status} />
               <span className="font-mono text-xs text-muted-foreground">{offer.offer_ref}</span>
             </div>
+
             <h1 className="mt-3 text-2xl font-bold">{offer.property?.title ?? "Listing"}</h1>
             <div className="mt-3 grid gap-3 sm:grid-cols-3 text-sm">
               <Cell label="Asking price" value={formatKsh(Number(offer.asking_price))} />
@@ -113,7 +117,7 @@ function OfferDetail() {
             </section>
           )}
 
-          <OfferTimeline events={events} />
+          <OfferTimeline events={events} offerStatus={offer.status} offerExpiresAt={offer.expires_at} />
           <OfferChat offerId={offer.id} messages={messages} meId={user?.id ?? ""} disabled={!open && offer.status !== "accepted"} />
         </div>
 
