@@ -95,6 +95,7 @@ import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes
 import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
 import { Route as AuthenticatedDashboardAdAnalyticsRouteImport } from './routes/_authenticated/dashboard.ad-analytics'
 import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
+import { Route as AuthenticatedAdminViewingsRouteImport } from './routes/_authenticated/admin.viewings'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminTierPlansRouteImport } from './routes/_authenticated/admin.tier-plans'
@@ -602,6 +603,12 @@ const AuthenticatedDashboardAccountRoute =
     path: '/dashboard/account',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminViewingsRoute =
+  AuthenticatedAdminViewingsRouteImport.update({
+    id: '/viewings',
+    path: '/viewings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminVerificationsRoute =
   AuthenticatedAdminVerificationsRouteImport.update({
     id: '/verifications',
@@ -943,6 +950,7 @@ export interface FileRoutesByFullPath {
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
@@ -1075,6 +1083,7 @@ export interface FileRoutesByTo {
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
@@ -1205,6 +1214,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/_authenticated/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/_authenticated/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
@@ -1339,6 +1349,7 @@ export interface FileRouteTypes {
     | '/admin/tier-plans'
     | '/admin/users'
     | '/admin/verifications'
+    | '/admin/viewings'
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
@@ -1471,6 +1482,7 @@ export interface FileRouteTypes {
     | '/admin/tier-plans'
     | '/admin/users'
     | '/admin/verifications'
+    | '/admin/viewings'
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
@@ -1600,6 +1612,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/tier-plans'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
+    | '/_authenticated/admin/viewings'
     | '/_authenticated/dashboard/account'
     | '/_authenticated/dashboard/ad-analytics'
     | '/_authenticated/dashboard/advertise'
@@ -2317,6 +2330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/viewings': {
+      id: '/_authenticated/admin/viewings'
+      path: '/viewings'
+      fullPath: '/admin/viewings'
+      preLoaderRoute: typeof AuthenticatedAdminViewingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/verifications': {
       id: '/_authenticated/admin/verifications'
       path: '/verifications'
@@ -2676,6 +2696,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminTierPlansRoute: typeof AuthenticatedAdminTierPlansRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
+  AuthenticatedAdminViewingsRoute: typeof AuthenticatedAdminViewingsRoute
   AuthenticatedAdminSettingsSupportRoute: typeof AuthenticatedAdminSettingsSupportRoute
 }
 
@@ -2706,6 +2727,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminTierPlansRoute: AuthenticatedAdminTierPlansRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
+  AuthenticatedAdminViewingsRoute: AuthenticatedAdminViewingsRoute,
   AuthenticatedAdminSettingsSupportRoute:
     AuthenticatedAdminSettingsSupportRoute,
 }
