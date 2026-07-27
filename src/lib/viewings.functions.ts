@@ -12,7 +12,7 @@ import {
 
 type Ctx = { supabase: any; userId: string; claims: any };
 
-const PROPERTY_COLS = "id,title,slug,price,images,county,town,address_line,category,owner_id,open_house_at,contact_phone,contact_whatsapp";
+const PROPERTY_COLS = "id,title,slug,price,images,county,town,area,category,owner_id,open_house_at,contact_phone,contact_whatsapp";
 
 async function isAdmin(ctx: Ctx) {
   const { data } = await ctx.supabase.rpc("has_role", { _user_id: ctx.userId, _role: "admin" });
@@ -95,7 +95,7 @@ export const getBookingContext = createServerFn({ method: "GET" })
         id: property.id,
         title: property.title,
         slug: property.slug,
-        address: property.address_line,
+        address: property.area,
         town: property.town,
         county: property.county,
         open_house_at: property.open_house_at,
@@ -207,7 +207,7 @@ export const bookViewing = createServerFn({ method: "POST" })
         visitor_count: data.visitorCount,
         duration_minutes: availability.slot_minutes,
         meeting_location: data.viewingType === "in_person"
-          ? (availability.default_location || property.address_line || [property.town, property.county].filter(Boolean).join(", ") || null)
+          ? (availability.default_location || property.area || [property.town, property.county].filter(Boolean).join(", ") || null)
           : null,
         notes: data.notes || null,
         status: "pending",
@@ -241,7 +241,7 @@ async function attachProperties(ctx: Ctx, rows: any[]) {
   const ids = [...new Set(rows.map((r) => r.property_id))];
   if (!ids.length) return rows;
   const { data: props } = await ctx.supabase
-    .from("properties").select("id,title,slug,images,price,county,town,address_line,owner_id").in("id", ids);
+    .from("properties").select("id,title,slug,images,price,county,town,area,owner_id").in("id", ids);
   const byId = Object.fromEntries((props ?? []).map((p: any) => [p.id, p]));
   return rows.map((r) => ({ ...r, property: byId[r.property_id] ?? null }));
 }
