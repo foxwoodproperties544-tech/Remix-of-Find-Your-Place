@@ -263,6 +263,16 @@ function Detail() {
 
   const { p, ownerId, propertyKey, ownerProfile, contactPhone, contactWhatsapp, videoUrl, tourUrl, documents, createdAt, verified, featured } = loaderData;
   const gallery = (p.images && p.images.length ? p.images : [p.image]);
+  const waContext = listingContext({ category: p.category, propertyType: p.type });
+  const waDetails = {
+    propertyTitle: p.title,
+    reference: propertyReference(propertyKey),
+    propertyType: p.type,
+    town: p.town,
+    county: p.county,
+    agentName: ownerProfile?.full_name ?? null,
+    companyName: ownerProfile?.company ?? null,
+  };
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
   const { isFavorite, toggle: toggleFav } = useFavorites();
