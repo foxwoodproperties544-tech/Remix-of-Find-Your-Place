@@ -71,6 +71,24 @@ export const Route = createFileRoute("/sitemap.xml")({
           }
         }
 
+        try {
+          const { data: reqs } = await supabase
+            .from("property_requests" as any)
+            .select("id, slug, updated_at")
+            .eq("status", "active")
+            .order("updated_at", { ascending: false })
+            .limit(1000);
+          for (const r of (reqs ?? []) as any[]) {
+            entries.push({
+              path: `/property-requests/${r.slug ?? r.id}`,
+              lastmod: r.updated_at?.slice(0, 10),
+              changefreq: "daily",
+              priority: "0.6",
+            });
+          }
+        } catch { /* ignore */ }
+
+
 
         try {
           const { data: props } = await supabase
