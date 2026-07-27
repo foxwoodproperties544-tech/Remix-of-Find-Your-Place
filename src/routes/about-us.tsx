@@ -323,15 +323,19 @@ function AboutUs() {
         <div className="container-page">
           <SectionTitle eyebrow="Our services" title="What we do" subtitle="A complete marketplace — not just a listing website." />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.map(({ i: Icon, t, d }, idx) => (
-              <Reveal key={t} delay={(idx % 3) * 80}>
-                <div className="h-full rounded-2xl border border-border bg-background p-6 hover:border-primary/40 hover:shadow-lg transition-all">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-primary"><Icon className="h-5 w-5" /></div>
-                  <h3 className="mt-4 font-bold">{t}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{d}</p>
-                </div>
-              </Reveal>
-            ))}
+            {services.map((s, idx) => {
+              const Icon = iconFor(s.icon);
+              return (
+                <Reveal key={`${s.title}-${idx}`} delay={(idx % 3) * 80}>
+                  <div className="h-full rounded-2xl border border-border bg-background p-6 hover:border-primary/40 hover:shadow-lg transition-all">
+                    <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-primary"><Icon className="h-5 w-5" /></div>
+                    <h3 className="mt-4 font-bold">{s.title}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
+                  </div>
+                </Reveal>
+              );
+            })}
+
           </div>
         </div>
       </section>
