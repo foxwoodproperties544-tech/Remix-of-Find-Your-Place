@@ -65,7 +65,7 @@ export function RequestCard({ r, matchPct }: { r: PropertyRequest; matchPct?: nu
         <span className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => toggle(r.id)}
+            onClick={onToggleSaved}
             aria-pressed={saved}
             aria-label={saved ? "Remove from saved requests" : "Save this request"}
             title={saved ? "Saved" : "Save request"}
