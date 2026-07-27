@@ -13,6 +13,7 @@ import { ViewingAuditLog } from "@/components/viewings/ViewingAuditLog";
 import { ViewingCalendarActions } from "@/components/viewings/ViewingCalendarActions";
 import { ViewingStatusBadge } from "@/components/viewings/ViewingStatusBadge";
 import { formatViewingTime, VIEWING_TYPE_LABEL } from "@/lib/viewings";
+import { whatsappLink, propertyReference } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/_authenticated/dashboard/viewings/$id")({
   head: () => ({

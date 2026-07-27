@@ -158,7 +158,7 @@ function LeadDetail() {
                 <div className="mt-4 flex flex-wrap gap-3 text-sm">
                   {lead.contact_email && <a href={`mailto:${lead.contact_email}`} className="inline-flex items-center gap-1.5 text-foreground/80 hover:text-primary"><Mail className="h-4 w-4" />{lead.contact_email}</a>}
                   {lead.contact_phone && <a href={`tel:${lead.contact_phone}`} className="inline-flex items-center gap-1.5 text-foreground/80 hover:text-primary"><Phone className="h-4 w-4" />{lead.contact_phone}</a>}
-                  {lead.contact_whatsapp && <a href={whatsappLink(lead.contact_whatsapp, "property", { propertyTitle: lead.property_title ?? null, agentName: null })} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-foreground/80 hover:text-primary"><MessageCircle className="h-4 w-4" />WhatsApp</a>}
+                  {lead.contact_whatsapp && <a href={whatsappLink(lead.contact_whatsapp, "property", { agentName: null })} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-foreground/80 hover:text-primary"><MessageCircle className="h-4 w-4" />WhatsApp</a>}
                 </div>
                 {lead.message && <p className="mt-4 text-sm text-foreground/80 whitespace-pre-wrap bg-muted/40 p-3 rounded-lg">{lead.message}</p>}
               </div>
