@@ -200,8 +200,9 @@ function ViewingDetail() {
           )}
 
           <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
-            <button
-              onClick={() => downloadIcs({
+            <p className="text-sm font-semibold">Add to your calendar</p>
+            <ViewingCalendarActions
+              viewing={{
                 booking_ref: viewing.booking_ref,
                 requested_at: when,
                 duration_minutes: viewing.duration_minutes ?? 30,
@@ -209,11 +210,8 @@ function ViewingDetail() {
                 meeting_location: viewing.meeting_location,
                 virtual_link: viewing.virtual_link,
                 propertyTitle: viewing.property?.title ?? "Property",
-              })}
-              className="btn-ghost w-full justify-center"
-            >
-              <CalendarPlus className="h-4 w-4" /> Add to calendar
-            </button>
+              }}
+            />
             {viewing.property && (
               <Link to="/properties/$id" params={{ id: viewing.property.slug ?? viewing.property.id }} className="btn-ghost w-full justify-center">
                 <MapPin className="h-4 w-4" /> View listing
