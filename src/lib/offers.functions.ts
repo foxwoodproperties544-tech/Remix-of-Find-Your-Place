@@ -126,7 +126,17 @@ const submitSchema = z.object({
   buyerEmail: z.string().trim().email().max(255),
   buyerPhone: z.string().trim().min(7).max(30),
   acceptTerms: z.literal(true),
+  captchaToken: z.string().max(500).optional(),
+  captchaAnswer: z.string().trim().max(10).optional(),
 });
+
+/** Issues a signed arithmetic challenge used as a spam fallback once a buyer is rate-limited. */
+export const getOfferCaptcha = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
+    const { issueCaptcha } = await import("./captcha.server");
+    return issueCaptcha();
+  });
 
 export const submitOffer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -136,14 +146,29 @@ export const submitOffer = createServerFn({ method: "POST" })
     const settings = await getSettings(ctx);
     if (!settings.enabled) throw new Error("Offers are currently disabled");
 
-    // Spam / abuse protection
+    // Spam / abuse protection. Once the daily limit is hit, a solved CAPTCHA
+    // buys a limited grace window instead of a hard block.
+    const dailyLimit = Number(settings.max_offers_per_day) || 10;
     const { data: allowed } = await ctx.supabase.rpc("check_and_hit_rate_limit", {
       _bucket: "offer_submit",
       _key: `u:${ctx.userId}`,
-      _limit: Number(settings.max_offers_per_day) || 10,
+      _limit: dailyLimit,
       _window_seconds: 86400,
     });
-    if (allowed === false) throw new Error("Daily offer limit reached. Try again tomorrow.");
+    if (allowed === false) {
+      const { verifyCaptcha } = await import("./captcha.server");
+      if (!verifyCaptcha(data.captchaToken, data.captchaAnswer)) {
+        throw new Error("CAPTCHA_REQUIRED: Please complete the verification below to continue.");
+      }
+      const { data: graceOk } = await ctx.supabase.rpc("check_and_hit_rate_limit", {
+        _bucket: "offer_submit_captcha",
+        _key: `u:${ctx.userId}`,
+        _limit: dailyLimit,
+        _window_seconds: 86400,
+      });
+      if (graceOk === false) throw new Error("Daily offer limit reached. Try again tomorrow.");
+    }
+
 
     const { data: property, error: pErr } = await ctx.supabase
       .from("properties")

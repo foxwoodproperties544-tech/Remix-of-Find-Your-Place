@@ -1,5 +1,7 @@
 import { formatKsh } from "@/lib/mock-data";
 import { eventLabel, type OfferEvent } from "@/lib/offers";
+import { OfferExpiry, formatRemaining } from "./OfferExpiry";
+
 import { Handshake, ArrowLeftRight, Check, X, Undo2, Clock, HelpCircle } from "lucide-react";
 
 const ICONS: Record<string, any> = {
@@ -12,11 +14,23 @@ const ICONS: Record<string, any> = {
   info_request: HelpCircle,
 };
 
-export function OfferTimeline({ events }: { events: OfferEvent[] }) {
+export function OfferTimeline({
+  events,
+  offerStatus,
+  offerExpiresAt,
+}: {
+  events: OfferEvent[];
+  offerStatus?: string;
+  offerExpiresAt?: string | null;
+}) {
   return (
     <section className="rounded-2xl border border-border bg-card p-5">
-      <h2 className="text-lg font-bold">Negotiation history</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-lg font-bold">Negotiation history</h2>
+        {offerStatus && <OfferExpiry expiresAt={offerExpiresAt} status={offerStatus} compact />}
+      </div>
       <ol className="mt-4 space-y-4">
+
         {events.map((e) => {
           const Icon = ICONS[e.type] ?? Clock;
           return (
@@ -34,7 +48,13 @@ export function OfferTimeline({ events }: { events: OfferEvent[] }) {
                 </div>
                 {e.amount != null && <p className="mt-0.5 text-sm font-bold text-primary">{formatKsh(Number(e.amount))}</p>}
                 {e.body && <p className="mt-1 whitespace-pre-wrap text-sm text-muted-foreground">{e.body}</p>}
-                {e.expires_at && <p className="mt-1 text-xs text-muted-foreground">Valid until {new Date(e.expires_at).toLocaleString()}</p>}
+                {e.expires_at && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Valid until {new Date(e.expires_at).toLocaleString()}
+                    <span className="ml-1 font-medium">({formatRemaining(e.expires_at)})</span>
+                  </p>
+                )}
+
               </div>
             </li>
           );
