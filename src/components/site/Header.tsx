@@ -17,7 +17,7 @@ const nav = [
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
   { to: "/blog", label: "Blog" },
 
-  { to: "/about", label: "About Us" },
+  { to: "/about-us", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ];
 
