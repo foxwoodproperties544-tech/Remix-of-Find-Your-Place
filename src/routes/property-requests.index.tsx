@@ -9,6 +9,8 @@ import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
 import { absoluteUrl } from "@/lib/site-url";
 import { PlusCircle, SlidersHorizontal, Loader2 } from "lucide-react";
 import { RequestStats } from "@/components/requests/RequestStats";
+import heroTools from "@/assets/hero-tools.jpg";
+
 
 const TITLE = "Property Requests in Kenya — Buyers & Tenants | Foxwood Properties";
 const DESC = "Browse live property requests from verified buyers and tenants across Kenya. Agents, developers and owners can respond with matching listings.";
