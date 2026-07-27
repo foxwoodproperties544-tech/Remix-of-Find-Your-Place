@@ -148,6 +148,15 @@ function EditListing() {
       <h1 className="text-3xl font-bold mt-2">Edit listing</h1>
       <p className="text-sm text-muted-foreground mt-1">Current status: <span className="font-semibold text-foreground">{form.status}</span></p>
 
+      <div className="mt-6">
+        <ListingPriceManager
+          propertyId={row.id}
+          propertyKey={row.id}
+          currentPrice={Number(row.price)}
+          listedAt={(row as any).published_at ?? row.created_at}
+        />
+      </div>
+
       <div className="mt-8 space-y-6">
         <div><label className={label}>Title</label><input value={form.title} onChange={e => upd("title", e.target.value)} className={input} /></div>
         <div><label className={label}>Description</label><textarea value={form.description} onChange={e => upd("description", e.target.value)} className={`${input} min-h-32`} /></div>
