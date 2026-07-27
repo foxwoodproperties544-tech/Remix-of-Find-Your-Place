@@ -607,7 +607,15 @@ function Detail() {
               />
             </div>
           )}
-          <AppointmentBookingForm propertyId={propertyKey} propertyTitle={p.title} />
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <h3 className="font-bold">See it in person</h3>
+            <p className="mt-1 text-xs text-muted-foreground">Pick a slot that suits you — in person, virtual or at the next open house.</p>
+            <BookViewingButton
+              propertyId={propertyKey}
+              propertyTitle={p.title}
+              className="btn-secondary mt-3 w-full justify-center"
+            />
+          </div>
           <InquiryForm propertyKey={propertyKey} ownerId={ownerId} propertyTitle={p.title} />
           <ReportListingButton propertyId={p.id} />
         </aside>
