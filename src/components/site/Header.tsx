@@ -52,6 +52,10 @@ export function Header() {
   const [mobileAgentsOpen, setMobileAgentsOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
   const agentsRef = useRef<HTMLDivElement>(null);
+  const [requestsOpen, setRequestsOpen] = useState(false);
+  const [mobileRequestsOpen, setMobileRequestsOpen] = useState(false);
+  const requestsRef = useRef<HTMLDivElement>(null);
+
   const { user } = useAuth();
   const { isAdmin } = useRoles();
   const navigate = useNavigate();
