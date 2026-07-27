@@ -23,6 +23,7 @@ import { checkRateLimit, rateLimitKey } from "@/lib/rate-limit";
 import { RadiusFilter } from "@/components/site/RadiusFilter";
 import { distanceKm as haversineKm, propertyCoords } from "@/lib/geo";
 import { parseSizeToSqft } from "@/lib/measure";
+import { fetchLatestChanges } from "@/lib/price-history";
 
 const MapFilter = lazy(() => import("@/components/site/MapFilter").then((m) => ({ default: m.MapFilter })));
 const PropertyMap = lazy(() => import("@/components/site/PropertyMap").then((m) => ({ default: m.PropertyMap })));
