@@ -48,7 +48,13 @@ export function OfferTimeline({
                 </div>
                 {e.amount != null && <p className="mt-0.5 text-sm font-bold text-primary">{formatKsh(Number(e.amount))}</p>}
                 {e.body && <p className="mt-1 whitespace-pre-wrap text-sm text-muted-foreground">{e.body}</p>}
-                {e.expires_at && <p className="mt-1 text-xs text-muted-foreground">Valid until {new Date(e.expires_at).toLocaleString()}</p>}
+                {e.expires_at && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Valid until {new Date(e.expires_at).toLocaleString()}
+                    <span className="ml-1 font-medium">({formatRemaining(e.expires_at)})</span>
+                  </p>
+                )}
+
               </div>
             </li>
           );
