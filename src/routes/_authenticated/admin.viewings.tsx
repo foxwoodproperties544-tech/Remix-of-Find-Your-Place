@@ -84,15 +84,20 @@ function AdminViewings() {
         </div>
       </div>
 
-      <div className="mt-3 flex justify-end">
+      <div className="mt-3 flex flex-wrap justify-end gap-2">
+        <button onClick={() => downloadCsv(exportName("csv"), exportRows())} className="btn-ghost">
+          <Download className="h-4 w-4" /> Export CSV
+        </button>
         <button
-          onClick={() => downloadCsv("foxwood-admin-viewings.csv", rows.map((r: any) => ({
-            ref: r.booking_ref, property: r.property?.title ?? "", agent: r.agent_name ?? "",
-            status: r.status, type: r.viewing_type, when: r.proposed_at ?? r.requested_at,
-            buyer: r.requester_name, phone: r.requester_phone, email: r.requester_email,
-          })))}
+          onClick={() => downloadExcel(exportName("xls"), [
+            { name: "Bookings", rows: exportRows() },
+            { name: "Status breakdown", rows: statusBreakdown() },
+            { name: "Filters", rows: filterSummary() },
+          ])}
           className="btn-ghost"
-        ><Download className="h-4 w-4" /> Export CSV</button>
+        >
+          <FileSpreadsheet className="h-4 w-4" /> Export Excel
+        </button>
       </div>
 
       {a && (
