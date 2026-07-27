@@ -1,6 +1,7 @@
 import { TrendingDown, TrendingUp, Minus } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { formatKsh } from "@/lib/mock-data";
-import { formatDate, type PriceHistoryRow } from "@/lib/price-history";
+import { fetchPriceHistory, formatDate, UUID_RE, type PriceHistoryRow } from "@/lib/price-history";
 
 /**
  * "Price reduced" / "Price updated" badge derived from the latest recorded change.
@@ -46,4 +47,17 @@ export function NoPriceChangeBadge({ className = "" }: { className?: string }) {
       <Minus className="h-3.5 w-3.5" /> No price changes
     </span>
   );
+}
+
+/** Self-fetching badge for use anywhere a listing price is displayed. */
+export function LatestPriceChangeBadge({ propertyId, compact, className }: { propertyId: string; compact?: boolean; className?: string }) {
+  const { data } = useQuery({
+    queryKey: ["price-history", propertyId],
+    enabled: UUID_RE.test(propertyId),
+    staleTime: 60_000,
+    queryFn: () => fetchPriceHistory(propertyId),
+  });
+  const changes = (data ?? []).filter((r) => !r.is_initial);
+  const last = changes.length ? changes[changes.length - 1] : null;
+  return <PriceChangeBadge change={last} compact={compact} className={className} />;
 }
