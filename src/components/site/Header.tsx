@@ -351,7 +351,29 @@ export function Header() {
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{navLabel(n.label)}</Link>
             ))}
+            {/* Mobile Property Requests accordion */}
+            <button
+              type="button"
+              aria-expanded={mobileRequestsOpen}
+              onClick={() => setMobileRequestsOpen((v) => !v)}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${requestsActive ? "text-primary" : ""}`}
+            >
+              <span>Property Requests</span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${mobileRequestsOpen ? "rotate-180" : ""}`} />
+            </button>
+            {mobileRequestsOpen && (
+              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+                {visibleRequestsItems.map((m) => (
+                  <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileRequestsOpen(false); }}
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    activeProps={{ className: "text-primary bg-primary-soft" }}>
+                    {m.label}
+                  </Link>
+                ))}
+              </div>
+            )}
             {/* Mobile Agents accordion */}
+
             <button
               type="button"
               aria-expanded={mobileAgentsOpen}
