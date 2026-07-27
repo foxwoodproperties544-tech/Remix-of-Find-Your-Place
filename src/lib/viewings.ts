@@ -252,3 +252,57 @@ export function downloadCsv(filename: string, rows: Record<string, unknown>[]) {
   a.click();
   URL.revokeObjectURL(url);
 }
+
+/** One-click "Add to Google Calendar" URL for a viewing. */
+export function googleCalendarUrl(v: Parameters<typeof buildIcs>[0]): string {
+  const start = new Date(v.requested_at);
+  const end = new Date(start.getTime() + (v.duration_minutes || 30) * 60000);
+  const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  const location = v.viewing_type === "virtual" ? (v.virtual_link ?? "Online") : (v.meeting_location ?? "");
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: `Property viewing — ${v.propertyTitle ?? "Foxwood listing"}`,
+    dates: `${fmt(start)}/${fmt(end)}`,
+    details: `Foxwood Properties booking ${v.booking_ref} (${VIEWING_TYPE_LABEL[v.viewing_type] ?? v.viewing_type})${v.virtual_link ? `\nJoin: ${v.virtual_link}` : ""}`,
+    location: String(location),
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function xmlEscape(v: unknown): string {
+  return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/**
+ * Build a SpreadsheetML 2003 workbook (opens natively in Excel / Sheets / Numbers)
+ * without pulling in a spreadsheet dependency.
+ */
+export function buildExcelXml(sheets: { name: string; rows: Record<string, unknown>[] }[]): string {
+  const sheetXml = sheets
+    .filter((s) => s.rows.length)
+    .map((s) => {
+      const cols = Object.keys(s.rows[0]);
+      const header = `<Row>${cols.map((c) => `<Cell><Data ss:Type="String">${xmlEscape(c)}</Data></Cell>`).join("")}</Row>`;
+      const body = s.rows
+        .map((r) => `<Row>${cols.map((c) => {
+          const val = r[c];
+          const numeric = typeof val === "number" && Number.isFinite(val);
+          return `<Cell><Data ss:Type="${numeric ? "Number" : "String"}">${xmlEscape(val)}</Data></Cell>`;
+        }).join("")}</Row>`)
+        .join("");
+      return `<Worksheet ss:Name="${xmlEscape(s.name).slice(0, 31)}"><Table>${header}${body}</Table></Worksheet>`;
+    })
+    .join("");
+  return `<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">${sheetXml}</Workbook>`;
+}
+
+export function downloadExcel(filename: string, sheets: { name: string; rows: Record<string, unknown>[] }[]) {
+  const blob = new Blob([buildExcelXml(sheets)], { type: "application/vnd.ms-excel;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
