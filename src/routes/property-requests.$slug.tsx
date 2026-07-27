@@ -61,7 +61,7 @@ export const Route = createFileRoute("/property-requests/$slug")({
 });
 
 function RequestDetail() {
-  const { request } = Route.useLoaderData();
+  const { request } = Route.useLoaderData() as { request: PropertyRequest };
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   const left = daysLeft(request.expires_at);

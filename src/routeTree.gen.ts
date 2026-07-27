@@ -50,6 +50,7 @@ import { Route as ServicesListRouteImport } from './routes/services.list'
 import { Route as ServicesLeaseRouteImport } from './routes/services.lease'
 import { Route as ServicesInvestmentRouteImport } from './routes/services.investment'
 import { Route as ServicesBuyRouteImport } from './routes/services.buy'
+import { Route as PropertyRequestsSlugRouteImport } from './routes/property-requests.$slug'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -328,6 +329,11 @@ const ServicesInvestmentRoute = ServicesInvestmentRouteImport.update({
 const ServicesBuyRoute = ServicesBuyRouteImport.update({
   id: '/services/buy',
   path: '/services/buy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertyRequestsSlugRoute = PropertyRequestsSlugRouteImport.update({
+  id: '/property-requests/$slug',
+  path: '/property-requests/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
@@ -791,6 +797,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/property-requests/$slug': typeof PropertyRequestsSlugRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
   '/services/lease': typeof ServicesLeaseRoute
@@ -907,6 +914,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/property-requests/$slug': typeof PropertyRequestsSlugRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
   '/services/lease': typeof ServicesLeaseRoute
@@ -1024,6 +1032,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/property-requests/$slug': typeof PropertyRequestsSlugRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
   '/services/lease': typeof ServicesLeaseRoute
@@ -1142,6 +1151,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
+    | '/property-requests/$slug'
     | '/services/buy'
     | '/services/investment'
     | '/services/lease'
@@ -1258,6 +1268,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
+    | '/property-requests/$slug'
     | '/services/buy'
     | '/services/investment'
     | '/services/lease'
@@ -1374,6 +1385,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
+    | '/property-requests/$slug'
     | '/services/buy'
     | '/services/investment'
     | '/services/lease'
@@ -1489,6 +1501,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
+  PropertyRequestsSlugRoute: typeof PropertyRequestsSlugRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
   ServicesInvestmentRoute: typeof ServicesInvestmentRoute
   ServicesLeaseRoute: typeof ServicesLeaseRoute
@@ -1798,6 +1811,13 @@ declare module '@tanstack/react-router' {
       path: '/services/buy'
       fullPath: '/services/buy'
       preLoaderRoute: typeof ServicesBuyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/property-requests/$slug': {
+      id: '/property-requests/$slug'
+      path: '/property-requests/$slug'
+      fullPath: '/property-requests/$slug'
+      preLoaderRoute: typeof PropertyRequestsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/properties/$id': {
@@ -2555,6 +2575,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
+  PropertyRequestsSlugRoute: PropertyRequestsSlugRoute,
   ServicesBuyRoute: ServicesBuyRoute,
   ServicesInvestmentRoute: ServicesInvestmentRoute,
   ServicesLeaseRoute: ServicesLeaseRoute,
