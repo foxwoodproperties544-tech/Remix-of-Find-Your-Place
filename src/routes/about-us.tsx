@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   ShieldCheck, Eye, Sparkles, Users, Award, HeartHandshake, Scale, BadgeCheck,
-  Landmark, Home, Building2, Warehouse, Store, KeyRound, FileSearch, Megaphone,
-  UsersRound, BookOpen, MapPinned, Search, CalendarCheck, Handshake, MessageSquare,
+  Megaphone, UsersRound, MapPinned, Search, CalendarCheck, Handshake, MessageSquare,
   LineChart, LifeBuoy, ChevronDown, Phone, Mail, Clock, MessageCircle, Star, Quote,
   ArrowRight, Compass,
 } from "lucide-react";
@@ -16,6 +15,12 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, trackSupportClick, whatsappUrl, supportMessageFor,
 } from "@/lib/support";
+import {
+  DEFAULT_PARTNERS, DEFAULT_PROCESS, DEFAULT_SERVICES, DEFAULT_STATS, DEFAULT_TESTIMONIALS,
+  PARTNER_CATEGORIES, PARTNER_CATEGORY_LABEL, SETTINGS_KEYS, iconFor, itemsOr,
+  type PartnerItem, type ProcessStep, type ServiceCard, type Testimonial,
+} from "@/lib/about-content";
+import { buildAboutPage, buildBreadcrumbs, buildOrganization } from "@/lib/structured-data";
 
 const TITLE = "About Us — Foxwood Properties Ltd | Trusted Property Marketplace in Kenya";
 const DESC =
@@ -25,14 +30,6 @@ const CANONICAL = `${SITE_URL}/about-us`;
 const SUPPORT_EMAIL = "foxwoodproperties544@gmail.com";
 const ABOUT_WA_MESSAGE = supportMessageFor("generic", "I would like to learn more about your services.");
 
-const DEFAULT_STATS = [
-  { label: "Properties listed", value: 1200, suffix: "+" },
-  { label: "Counties covered", value: 47, suffix: "" },
-  { label: "Trusted agents", value: 180, suffix: "+" },
-  { label: "Happy customers", value: 3500, suffix: "+" },
-  { label: "Successful connections", value: 5200, suffix: "+" },
-  { label: "Monthly visitors", value: 42000, suffix: "+" },
-];
 
 export const Route = createFileRoute("/about-us")({
   head: () => ({
@@ -51,39 +48,19 @@ export const Route = createFileRoute("/about-us")({
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
+      { type: "application/ld+json", children: JSON.stringify(buildAboutPage()) },
+      { type: "application/ld+json", children: JSON.stringify(buildOrganization()) },
       {
         type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "AboutPage",
-          name: "About Foxwood Properties Ltd",
-          url: CANONICAL,
-          description: DESC,
-          mainEntity: {
-            "@type": "RealEstateAgent",
-            name: "Foxwood Properties Ltd",
-            url: SITE_URL,
-            image: OG_IMAGE,
-            telephone: SUPPORT_PHONE_TEL,
-            email: SUPPORT_EMAIL,
-            areaServed: "Kenya",
-            address: { "@type": "PostalAddress", addressCountry: "KE", addressLocality: "Nairobi" },
-            openingHours: "Mo-Sa 08:00-18:00",
-          },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-            { "@type": "ListItem", position: 2, name: "About Us", item: CANONICAL },
-          ],
-        }),
+        children: JSON.stringify(
+          buildBreadcrumbs([
+            { name: "Home", url: SITE_URL },
+            { name: "About Us", url: CANONICAL },
+          ]),
+        ),
       },
     ],
+
   }),
   component: AboutUs,
 });
@@ -165,20 +142,6 @@ const VALUES = [
   { i: Users, t: "Accountability", d: "We own our promises from first search to handover." },
 ];
 
-const SERVICES = [
-  { i: Landmark, t: "Land & plot sales", d: "Verified plots and land parcels across Kenya." },
-  { i: Home, t: "Residential sales", d: "Houses, apartments and family homes for sale." },
-  { i: KeyRound, t: "Rental listings", d: "Long-term rentals with genuine landlords." },
-  { i: FileSearch, t: "Lease listings", d: "Commercial and residential lease opportunities." },
-  { i: Building2, t: "Airbnb listings", d: "Short-stay and holiday homes for travellers." },
-  { i: Store, t: "Commercial properties", d: "Shops, offices and retail spaces." },
-  { i: Warehouse, t: "Property marketplace", d: "One place to browse, compare and connect." },
-  { i: Megaphone, t: "Property request marketplace", d: "Post what you need and let owners come to you." },
-  { i: LineChart, t: "Property marketing", d: "Featured placement and campaign packages." },
-  { i: UsersRound, t: "Agent & developer directory", d: "Discover verified professionals near you." },
-  { i: BookOpen, t: "Property blogs & guides", d: "Market insight and buyer education." },
-];
-
 const WHY = [
   { i: BadgeCheck, t: "Verified property listings", d: "Every listing is checked before publishing." },
   { i: UsersRound, t: "Trusted agents & developers", d: "Profiles, KYC and verification badges." },
@@ -192,39 +155,31 @@ const WHY = [
   { i: LifeBuoy, t: "Fast customer support", d: "Call, chat or WhatsApp — we reply quickly." },
 ];
 
-const STEPS = [
-  { i: Search, t: "Search or request a property", d: "Browse verified listings or post a property request." },
-  { i: UsersRound, t: "Connect with trusted agents or owners", d: "Message verified professionals directly." },
-  { i: CalendarCheck, t: "Book a viewing or make an offer", d: "Schedule visits and negotiate in-platform." },
-  { i: Handshake, t: "Complete your property journey", d: "Close with guidance from search to signing." },
-];
-
-const PARTNERS = [
-  "Kenya Property Developers Association",
-  "Estate Agents Registration Board",
-  "Ministry of Lands e-Citizen",
-  "Kenya Bankers Mortgage Partners",
-  "Safaricom M-Pesa",
-  "Institution of Surveyors of Kenya",
-];
-
 /* ---------------- page ---------------- */
 
-function AboutUs() {
-  const { data: stats } = useQuery({
-    queryKey: ["about-stats"],
+function useSetting<T>(key: string, fallback: T[]) {
+  return useQuery({
+    queryKey: ["platform-setting", key],
     queryFn: async () => {
-      const { data } = await supabase.from("platform_settings").select("value").eq("key", "about_stats").maybeSingle();
-      const rows = (data?.value as any)?.items;
-      return Array.isArray(rows) && rows.length ? (rows as typeof DEFAULT_STATS) : DEFAULT_STATS;
+      const { data } = await supabase.from("platform_settings").select("value").eq("key", key).maybeSingle();
+      return itemsOr<T>(data?.value, fallback);
     },
-    initialData: DEFAULT_STATS,
+    initialData: fallback,
     staleTime: 5 * 60_000,
   });
+}
 
-  const { data: testimonials } = useQuery({
+function AboutUs() {
+  const { data: stats } = useSetting(SETTINGS_KEYS.stats, DEFAULT_STATS);
+  const { data: services } = useSetting<ServiceCard>(SETTINGS_KEYS.services, DEFAULT_SERVICES);
+  const { data: steps } = useSetting<ProcessStep>(SETTINGS_KEYS.process, DEFAULT_PROCESS);
+  const { data: partners } = useSetting<PartnerItem>(SETTINGS_KEYS.partners, DEFAULT_PARTNERS);
+  const { data: curated } = useSetting<Testimonial>(SETTINGS_KEYS.testimonials, DEFAULT_TESTIMONIALS);
+
+  const { data: reviewTestimonials } = useQuery({
     queryKey: ["about-testimonials"],
-    queryFn: async () => {
+    enabled: curated.length === 0,
+    queryFn: async (): Promise<Testimonial[]> => {
       const { data } = await supabase
         .from("reviews")
         .select("id, rating, comment, created_at, user_id")
@@ -239,10 +194,19 @@ function AboutUs() {
         const { data: profs } = await supabase.from("public_profiles").select("id, full_name, avatar_url").in("id", ids);
         (profs ?? []).forEach((p: any) => (map[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url }));
       }
-      return rows.map((r: any) => ({ ...r, reviewer: map[r.user_id] ?? null }));
+      return rows.map((r: any) => ({
+        name: map[r.user_id]?.full_name ?? "Foxwood customer",
+        location: "",
+        rating: r.rating ?? 5,
+        text: r.comment ?? "",
+        photo_url: map[r.user_id]?.avatar_url ?? undefined,
+      }));
     },
     staleTime: 5 * 60_000,
   });
+
+  const testimonials: Testimonial[] = curated.length ? curated : (reviewTestimonials ?? []);
+
 
   return (
     <>
@@ -343,15 +307,19 @@ function AboutUs() {
         <div className="container-page">
           <SectionTitle eyebrow="Our services" title="What we do" subtitle="A complete marketplace — not just a listing website." />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.map(({ i: Icon, t, d }, idx) => (
-              <Reveal key={t} delay={(idx % 3) * 80}>
-                <div className="h-full rounded-2xl border border-border bg-background p-6 hover:border-primary/40 hover:shadow-lg transition-all">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-primary"><Icon className="h-5 w-5" /></div>
-                  <h3 className="mt-4 font-bold">{t}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{d}</p>
-                </div>
-              </Reveal>
-            ))}
+            {services.map((s, idx) => {
+              const Icon = iconFor(s.icon);
+              return (
+                <Reveal key={`${s.title}-${idx}`} delay={(idx % 3) * 80}>
+                  <div className="h-full rounded-2xl border border-border bg-background p-6 hover:border-primary/40 hover:shadow-lg transition-all">
+                    <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-primary"><Icon className="h-5 w-5" /></div>
+                    <h3 className="mt-4 font-bold">{s.title}</h3>
+                    <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
+                  </div>
+                </Reveal>
+              );
+            })}
+
           </div>
         </div>
       </section>
@@ -394,18 +362,22 @@ function AboutUs() {
         <SectionTitle eyebrow="Simple process" title="How Foxwood works" />
         <div className="mt-12 grid gap-6 md:grid-cols-4 relative">
           <div className="hidden md:block absolute top-7 left-[12%] right-[12%] h-px bg-border" aria-hidden="true" />
-          {STEPS.map(({ i: Icon, t, d }, idx) => (
-            <Reveal key={t} delay={idx * 120} className="relative">
-              <div className="text-center">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-secondary text-white shadow-soft ring-8 ring-background">
-                  <Icon className="h-6 w-6" />
+          {steps.map((s, idx) => {
+            const Icon = iconFor(s.icon);
+            return (
+              <Reveal key={`${s.title}-${idx}`} delay={idx * 120} className="relative">
+                <div className="text-center">
+                  <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-secondary text-white shadow-soft ring-8 ring-background">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div className="mt-4 text-xs font-semibold uppercase tracking-wider text-secondary">Step {idx + 1}</div>
+                  <h3 className="mt-1 font-bold">{s.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
                 </div>
-                <div className="mt-4 text-xs font-semibold uppercase tracking-wider text-secondary">Step {idx + 1}</div>
-                <h3 className="mt-1 font-bold">{t}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{d}</p>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
+
         </div>
       </section>
 
@@ -445,22 +417,23 @@ function AboutUs() {
       {/* Testimonials */}
       <section className="container-page py-16 md:py-24">
         <SectionTitle eyebrow="Customer stories" title="What our customers say" />
-        {testimonials && testimonials.length > 0 ? (
+        {testimonials.length > 0 ? (
           <div className="mt-10 flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4">
-            {testimonials.map((t: any) => (
-              <figure key={t.id} className="snap-start shrink-0 w-[85%] sm:w-[45%] lg:w-[31%] rounded-2xl border border-border bg-card p-6">
+            {testimonials.map((t, idx) => (
+              <figure key={`${t.name}-${idx}`} className="snap-start shrink-0 w-[85%] sm:w-[45%] lg:w-[31%] rounded-2xl border border-border bg-card p-6">
                 <Quote className="h-6 w-6 text-secondary" />
-                <blockquote className="mt-3 text-sm text-muted-foreground line-clamp-6">{t.comment}</blockquote>
+                <blockquote className="mt-3 text-sm text-muted-foreground line-clamp-6">{t.text}</blockquote>
                 <div className="mt-4 flex items-center gap-3">
-                  {t.reviewer?.avatar_url ? (
-                    <img src={t.reviewer.avatar_url} alt="" loading="lazy" className="h-10 w-10 rounded-full object-cover" />
+                  {t.photo_url ? (
+                    <img src={t.photo_url} alt="" loading="lazy" className="h-10 w-10 rounded-full object-cover" />
                   ) : (
                     <div className="h-10 w-10 rounded-full bg-primary-soft text-primary grid place-items-center text-sm font-bold">
-                      {(t.reviewer?.full_name ?? "F").charAt(0)}
+                      {(t.name || "F").charAt(0)}
                     </div>
                   )}
                   <figcaption className="text-sm">
-                    <div className="font-semibold">{t.reviewer?.full_name ?? "Foxwood customer"}</div>
+                    <div className="font-semibold">{t.name || "Foxwood customer"}</div>
+                    {t.location && <div className="text-xs text-muted-foreground">{t.location}</div>}
                     <div className="flex items-center gap-0.5 text-secondary" aria-label={`${t.rating} out of 5`}>
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} className={`h-3.5 w-3.5 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
@@ -479,19 +452,33 @@ function AboutUs() {
         )}
       </section>
 
+
       {/* Awards & partners */}
       <section className="bg-muted/40 border-y border-border py-16">
         <div className="container-page">
-          <SectionTitle eyebrow="Credibility" title="Certifications, memberships & partners" subtitle="Organisations and platforms we work alongside." />
-          <div className="mt-10 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-            {PARTNERS.map((p) => (
-              <div key={p} className="rounded-2xl border border-border bg-background px-4 py-6 text-center text-xs font-semibold text-muted-foreground grid place-items-center min-h-[96px]">
-                {p}
+          <SectionTitle eyebrow="Credibility" title="Certifications, memberships, partners & awards" subtitle="Organisations and platforms we work alongside." />
+          <div className="mt-10 space-y-10">
+            {PARTNER_CATEGORIES.filter((c) => partners.some((p) => p.category === c)).map((cat) => (
+              <div key={cat}>
+                <h3 className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {PARTNER_CATEGORY_LABEL[cat]}
+                </h3>
+                <div className="mt-4 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+                  {partners.filter((p) => p.category === cat).map((p, i) => (
+                    <div key={`${p.name}-${i}`} className="rounded-2xl border border-border bg-background px-4 py-6 text-center grid place-items-center gap-2 min-h-[96px]">
+                      {p.logo_url ? (
+                        <img src={p.logo_url} alt={`${p.name} logo`} loading="lazy" className="h-10 w-auto max-w-[120px] object-contain" />
+                      ) : null}
+                      <span className="text-xs font-semibold text-muted-foreground">{p.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className="relative overflow-hidden bg-primary py-16 text-primary-foreground">

@@ -141,6 +141,7 @@ import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 import { Route as AuthenticatedDashboardBlogNewRouteImport } from './routes/_authenticated/dashboard.blog.new'
 import { Route as AuthenticatedAdminSettingsSupportRouteImport } from './routes/_authenticated/admin.settings.support'
+import { Route as AuthenticatedAdminSettingsAboutContentRouteImport } from './routes/_authenticated/admin.settings.about-content'
 import { Route as AuthenticatedAdminSettingsAboutRouteImport } from './routes/_authenticated/admin.settings.about'
 import { Route as AuthenticatedAdminPackagesPreviewRouteImport } from './routes/_authenticated/admin.packages.preview'
 import { Route as AuthenticatedDashboardBlogIdPayRouteImport } from './routes/_authenticated/dashboard.blog.$id.pay'
@@ -875,6 +876,12 @@ const AuthenticatedAdminSettingsSupportRoute =
     path: '/settings/support',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminSettingsAboutContentRoute =
+  AuthenticatedAdminSettingsAboutContentRouteImport.update({
+    id: '/settings/about-content',
+    path: '/settings/about-content',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSettingsAboutRoute =
   AuthenticatedAdminSettingsAboutRouteImport.update({
     id: '/settings/about',
@@ -1017,6 +1024,7 @@ export interface FileRoutesByFullPath {
   '/blog/authors/': typeof BlogAuthorsIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/admin/settings/about': typeof AuthenticatedAdminSettingsAboutRoute
+  '/admin/settings/about-content': typeof AuthenticatedAdminSettingsAboutContentRoute
   '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
@@ -1150,6 +1158,7 @@ export interface FileRoutesByTo {
   '/blog/authors': typeof BlogAuthorsIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/admin/settings/about': typeof AuthenticatedAdminSettingsAboutRoute
+  '/admin/settings/about-content': typeof AuthenticatedAdminSettingsAboutContentRoute
   '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
@@ -1289,6 +1298,7 @@ export interface FileRoutesById {
   '/blog/authors/': typeof BlogAuthorsIndexRoute
   '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
   '/_authenticated/admin/settings/about': typeof AuthenticatedAdminSettingsAboutRoute
+  '/_authenticated/admin/settings/about-content': typeof AuthenticatedAdminSettingsAboutContentRoute
   '/_authenticated/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
@@ -1428,6 +1438,7 @@ export interface FileRouteTypes {
     | '/blog/authors/'
     | '/admin/packages/preview'
     | '/admin/settings/about'
+    | '/admin/settings/about-content'
     | '/admin/settings/support'
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
@@ -1561,6 +1572,7 @@ export interface FileRouteTypes {
     | '/blog/authors'
     | '/admin/packages/preview'
     | '/admin/settings/about'
+    | '/admin/settings/about-content'
     | '/admin/settings/support'
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
@@ -1699,6 +1711,7 @@ export interface FileRouteTypes {
     | '/blog/authors/'
     | '/_authenticated/admin/packages/preview'
     | '/_authenticated/admin/settings/about'
+    | '/_authenticated/admin/settings/about-content'
     | '/_authenticated/admin/settings/support'
     | '/_authenticated/dashboard/blog/new'
     | '/_authenticated/dashboard/edit/$id'
@@ -2704,6 +2717,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSettingsSupportRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/settings/about-content': {
+      id: '/_authenticated/admin/settings/about-content'
+      path: '/settings/about-content'
+      fullPath: '/admin/settings/about-content'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsAboutContentRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/settings/about': {
       id: '/_authenticated/admin/settings/about'
       path: '/settings/about'
@@ -2779,6 +2799,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
   AuthenticatedAdminViewingsRoute: typeof AuthenticatedAdminViewingsRoute
   AuthenticatedAdminSettingsAboutRoute: typeof AuthenticatedAdminSettingsAboutRoute
+  AuthenticatedAdminSettingsAboutContentRoute: typeof AuthenticatedAdminSettingsAboutContentRoute
   AuthenticatedAdminSettingsSupportRoute: typeof AuthenticatedAdminSettingsSupportRoute
 }
 
@@ -2812,6 +2833,8 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
   AuthenticatedAdminViewingsRoute: AuthenticatedAdminViewingsRoute,
   AuthenticatedAdminSettingsAboutRoute: AuthenticatedAdminSettingsAboutRoute,
+  AuthenticatedAdminSettingsAboutContentRoute:
+    AuthenticatedAdminSettingsAboutContentRoute,
   AuthenticatedAdminSettingsSupportRoute:
     AuthenticatedAdminSettingsSupportRoute,
 }
