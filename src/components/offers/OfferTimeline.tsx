@@ -1,5 +1,7 @@
 import { formatKsh } from "@/lib/mock-data";
 import { eventLabel, type OfferEvent } from "@/lib/offers";
+import { OfferExpiry, formatRemaining } from "./OfferExpiry";
+
 import { Handshake, ArrowLeftRight, Check, X, Undo2, Clock, HelpCircle } from "lucide-react";
 
 const ICONS: Record<string, any> = {
