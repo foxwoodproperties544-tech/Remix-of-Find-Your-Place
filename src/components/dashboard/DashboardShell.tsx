@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
   Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
-  Phone, MessageCircle, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2,
+  Phone, MessageCircle, Handshake, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,6 +29,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
+      { to: "/dashboard/offers", label: "Offer Center", icon: Handshake, end: true },
       { to: "/dashboard/subscription", label: "My subscription", icon: Crown },
       { to: "/dashboard/payment-history", label: "Payment history", icon: Receipt },
       { to: "/dashboard/blog/new", label: "Write a blog", icon: FileText, end: true },
@@ -52,6 +53,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/crm", label: "CRM board", icon: LayoutDashboard },
         { to: "/dashboard/crm-settings", label: "CRM settings", icon: FileText },
         { to: "/dashboard/appointments", label: "Appointments", icon: CalendarCheck },
+        { to: "/dashboard/offers", label: "Offers received", icon: Handshake, end: true },
         { to: "/dashboard/upgrade", label: "Upgrade", icon: Star },
         { to: "/dashboard/advertise", label: "Advertise", icon: PlusCircle },
         { to: "/dashboard/my-ads", label: "My ads", icon: Star },
@@ -70,6 +72,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin", label: "Moderation", icon: ShieldCheck, end: true },
         { to: "/admin/queue", label: "Approval queue", icon: CheckCircle2 },
         { to: "/admin/requests", label: "Property requests", icon: Search },
+        { to: "/admin/offers", label: "Offer management", icon: Handshake },
         { to: "/admin/reports", label: "Flagged listings", icon: ShieldCheck },
         { to: "/admin/reviews", label: "Review moderation", icon: ShieldCheck },
         { to: "/admin/deletion-requests", label: "Deletion requests", icon: ShieldCheck },
