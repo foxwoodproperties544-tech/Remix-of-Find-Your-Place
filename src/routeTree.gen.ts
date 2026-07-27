@@ -67,6 +67,7 @@ import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category.$category'
 import { Route as BlogAuthorIdRouteImport } from './routes/blog.author.$id'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
+import { Route as AuthenticatedDashboardViewingsRouteImport } from './routes/_authenticated/dashboard.viewings'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
 import { Route as AuthenticatedDashboardSecurityRouteImport } from './routes/_authenticated/dashboard.security'
@@ -429,6 +430,12 @@ const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
   path: '/api/public/mpesa-callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardViewingsRoute =
+  AuthenticatedDashboardViewingsRouteImport.update({
+    id: '/dashboard/viewings',
+    path: '/dashboard/viewings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardUpgradeRoute =
   AuthenticatedDashboardUpgradeRouteImport.update({
     id: '/dashboard/upgrade',
@@ -933,6 +940,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
+  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1057,6 +1065,7 @@ export interface FileRoutesByTo {
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
+  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1186,6 +1195,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
+  '/_authenticated/dashboard/viewings': typeof AuthenticatedDashboardViewingsRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1315,6 +1325,7 @@ export interface FileRouteTypes {
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
+    | '/dashboard/viewings'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1439,6 +1450,7 @@ export interface FileRouteTypes {
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
+    | '/dashboard/viewings'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1567,6 +1579,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/security'
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/upgrade'
+    | '/_authenticated/dashboard/viewings'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -2057,6 +2070,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/mpesa-callback'
       preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard/viewings': {
+      id: '/_authenticated/dashboard/viewings'
+      path: '/dashboard/viewings'
+      fullPath: '/dashboard/viewings'
+      preLoaderRoute: typeof AuthenticatedDashboardViewingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/upgrade': {
       id: '/_authenticated/dashboard/upgrade'
@@ -2717,6 +2737,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardSecurityRoute: typeof AuthenticatedDashboardSecurityRoute
   AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
+  AuthenticatedDashboardViewingsRoute: typeof AuthenticatedDashboardViewingsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
   AuthenticatedDashboardFeatureIdRoute: typeof AuthenticatedDashboardFeatureIdRoute
@@ -2765,6 +2786,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardSubscriptionRoute:
     AuthenticatedDashboardSubscriptionRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
+  AuthenticatedDashboardViewingsRoute: AuthenticatedDashboardViewingsRoute,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
   AuthenticatedDashboardFeatureIdRoute: AuthenticatedDashboardFeatureIdRoute,
