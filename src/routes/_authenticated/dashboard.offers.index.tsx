@@ -10,6 +10,8 @@ import {
   OPEN_STATUSES, STATUS_CLASS, STATUS_LABEL, offerAmount, priceDiff, toCsv,
   type Offer, type OfferStatus,
 } from "@/lib/offers";
+import { OfferExpiry } from "@/components/offers/OfferExpiry";
+
 
 export const Route = createFileRoute("/_authenticated/dashboard/offers/")({
   head: () => ({
