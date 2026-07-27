@@ -70,6 +70,7 @@ import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
 import { Route as AuthenticatedDashboardSecurityRouteImport } from './routes/_authenticated/dashboard.security'
 import { Route as AuthenticatedDashboardRequestsRouteImport } from './routes/_authenticated/dashboard.requests'
+import { Route as AuthenticatedDashboardRequestResponsesRouteImport } from './routes/_authenticated/dashboard.request-responses'
 import { Route as AuthenticatedDashboardReferralsRouteImport } from './routes/_authenticated/dashboard.referrals'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardPaymentHistoryRouteImport } from './routes/_authenticated/dashboard.payment-history'
@@ -438,6 +439,12 @@ const AuthenticatedDashboardRequestsRoute =
   AuthenticatedDashboardRequestsRouteImport.update({
     id: '/dashboard/requests',
     path: '/dashboard/requests',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardRequestResponsesRoute =
+  AuthenticatedDashboardRequestResponsesRouteImport.update({
+    id: '/dashboard/request-responses',
+    path: '/dashboard/request-responses',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardReferralsRoute =
@@ -875,6 +882,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
+  '/dashboard/request-responses': typeof AuthenticatedDashboardRequestResponsesRoute
   '/dashboard/requests': typeof AuthenticatedDashboardRequestsRouteWithChildren
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
@@ -994,6 +1002,7 @@ export interface FileRoutesByTo {
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
+  '/dashboard/request-responses': typeof AuthenticatedDashboardRequestResponsesRoute
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
@@ -1115,6 +1124,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
+  '/_authenticated/dashboard/request-responses': typeof AuthenticatedDashboardRequestResponsesRoute
   '/_authenticated/dashboard/requests': typeof AuthenticatedDashboardRequestsRouteWithChildren
   '/_authenticated/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
@@ -1237,6 +1247,7 @@ export interface FileRouteTypes {
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
+    | '/dashboard/request-responses'
     | '/dashboard/requests'
     | '/dashboard/security'
     | '/dashboard/subscription'
@@ -1356,6 +1367,7 @@ export interface FileRouteTypes {
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
+    | '/dashboard/request-responses'
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
@@ -1476,6 +1488,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/payment-history'
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/referrals'
+    | '/_authenticated/dashboard/request-responses'
     | '/_authenticated/dashboard/requests'
     | '/_authenticated/dashboard/security'
     | '/_authenticated/dashboard/subscription'
@@ -1988,6 +2001,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/requests'
       fullPath: '/dashboard/requests'
       preLoaderRoute: typeof AuthenticatedDashboardRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/request-responses': {
+      id: '/_authenticated/dashboard/request-responses'
+      path: '/dashboard/request-responses'
+      fullPath: '/dashboard/request-responses'
+      preLoaderRoute: typeof AuthenticatedDashboardRequestResponsesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/referrals': {
@@ -2551,6 +2571,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardPaymentHistoryRoute: typeof AuthenticatedDashboardPaymentHistoryRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
   AuthenticatedDashboardReferralsRoute: typeof AuthenticatedDashboardReferralsRoute
+  AuthenticatedDashboardRequestResponsesRoute: typeof AuthenticatedDashboardRequestResponsesRoute
   AuthenticatedDashboardRequestsRoute: typeof AuthenticatedDashboardRequestsRouteWithChildren
   AuthenticatedDashboardSecurityRoute: typeof AuthenticatedDashboardSecurityRoute
   AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
@@ -2592,6 +2613,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedDashboardPaymentHistoryRoute,
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
   AuthenticatedDashboardReferralsRoute: AuthenticatedDashboardReferralsRoute,
+  AuthenticatedDashboardRequestResponsesRoute:
+    AuthenticatedDashboardRequestResponsesRoute,
   AuthenticatedDashboardRequestsRoute:
     AuthenticatedDashboardRequestsRouteWithChildren,
   AuthenticatedDashboardSecurityRoute: AuthenticatedDashboardSecurityRoute,
