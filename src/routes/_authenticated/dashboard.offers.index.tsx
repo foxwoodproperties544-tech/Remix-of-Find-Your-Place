@@ -150,7 +150,11 @@ function OfferRow({ o, showBuyer }: { o: Offer; showBuyer: boolean }) {
         <p className="font-bold text-primary">{formatKsh(offerAmount(o))}</p>
         <p className={`text-xs ${d.tone}`}>{d.label}</p>
       </div>
-      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_CLASS[o.status as OfferStatus]}`}>{STATUS_LABEL[o.status as OfferStatus]}</span>
+      <div className="flex flex-col items-end gap-1">
+        <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_CLASS[o.status as OfferStatus]}`}>{STATUS_LABEL[o.status as OfferStatus]}</span>
+        <OfferExpiry expiresAt={o.expires_at} status={o.status} compact />
+      </div>
+
     </Link>
   );
 }
