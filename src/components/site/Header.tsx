@@ -15,12 +15,18 @@ const nav = [
   { to: "/properties", label: "Rent", search: { category: "For Rent" } as const },
   { to: "/properties", label: "Lease", search: { category: "For Lease" } as const },
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
-  { to: "/property-requests", label: "Requests" },
   { to: "/blog", label: "Blog" },
 
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ];
+
+const requestsItems = [
+  { to: "/property-requests", label: "Browse Requests", icon: Search, desc: "See what buyers and tenants are looking for", auth: false },
+  { to: "/dashboard/requests/new", label: "Submit a Request", icon: PlusCircle, desc: "Tell agents exactly what you need", auth: false },
+  { to: "/dashboard/requests", label: "My Requests", icon: Inbox, desc: "Manage the requests you posted", auth: true },
+  { to: "/saved-requests", label: "Saved Requests", icon: Bookmark, desc: "Requests you bookmarked to respond later", auth: false },
+] as const;
 
 const agentsItems = [
   { to: "/agents", label: "Our Agents", icon: UsersIcon, desc: "Meet verified agents and developers on Foxwood" },
@@ -33,6 +39,7 @@ const moreItems = [
   { to: "/blog-submission-packages", label: "Blog Submission Packages", icon: PenSquare, desc: "Publish articles to Kenya's property audience" },
   { to: "/agent-developer-subscriptions", label: "Agent & Developer Subscriptions", icon: Building2, desc: "Grow your agency with monthly plans" },
 ] as const;
+
 
 
 export function Header() {
