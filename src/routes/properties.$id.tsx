@@ -414,6 +414,15 @@ function Detail() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 md:justify-end">
+            {ownerId && (
+              <MakeOfferButton
+                propertyId={propertyKey}
+                propertyTitle={p.title}
+                askingPrice={p.price}
+                category={p.category}
+                className="btn-primary"
+              />
+            )}
             <button onClick={() => toggleFav(propertyKey)} className={`btn-ghost ${isFavorite(propertyKey) ? "text-secondary" : ""}`} aria-pressed={isFavorite(propertyKey)}>
               <Heart className={`h-4 w-4 ${isFavorite(propertyKey) ? "fill-current" : ""}`} /> {isFavorite(propertyKey) ? "Saved" : "Save"}
             </button>
