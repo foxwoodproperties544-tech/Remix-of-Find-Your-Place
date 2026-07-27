@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { X, Handshake, ChevronRight, ChevronLeft, Loader2, Check } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import { OfferPriceHistoryContext } from "./OfferPriceHistoryContext";
 import { formatKsh } from "@/lib/mock-data";
 import { submitOffer, getOfferCaptcha } from "@/lib/offers.functions";
 import { TIMELINES, priceDiff } from "@/lib/offers";
