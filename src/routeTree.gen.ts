@@ -118,6 +118,7 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminAgentsRouteImport } from './routes/_authenticated/admin.agents'
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
+import { Route as AuthenticatedDashboardViewingsIndexRouteImport } from './routes/_authenticated/dashboard.viewings.index'
 import { Route as AuthenticatedDashboardRequestsIndexRouteImport } from './routes/_authenticated/dashboard.requests.index'
 import { Route as AuthenticatedDashboardOffersIndexRouteImport } from './routes/_authenticated/dashboard.offers.index'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
@@ -730,6 +731,12 @@ const AuthenticatedAdminAdCampaignsRoute =
     path: '/ad-campaigns',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedDashboardViewingsIndexRoute =
+  AuthenticatedDashboardViewingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardViewingsRoute,
+  } as any)
 const AuthenticatedDashboardRequestsIndexRoute =
   AuthenticatedDashboardRequestsIndexRouteImport.update({
     id: '/',
@@ -940,7 +947,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
-  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsRoute
+  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsRouteWithChildren
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -964,6 +971,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
+  '/dashboard/viewings/': typeof AuthenticatedDashboardViewingsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1065,7 +1073,6 @@ export interface FileRoutesByTo {
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
-  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1089,6 +1096,7 @@ export interface FileRoutesByTo {
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/offers': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests': typeof AuthenticatedDashboardRequestsIndexRoute
+  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1195,7 +1203,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
-  '/_authenticated/dashboard/viewings': typeof AuthenticatedDashboardViewingsRoute
+  '/_authenticated/dashboard/viewings': typeof AuthenticatedDashboardViewingsRouteWithChildren
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1219,6 +1227,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/_authenticated/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/_authenticated/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
+  '/_authenticated/dashboard/viewings/': typeof AuthenticatedDashboardViewingsIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1349,6 +1358,7 @@ export interface FileRouteTypes {
     | '/dashboard/blog/'
     | '/dashboard/offers/'
     | '/dashboard/requests/'
+    | '/dashboard/viewings/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   fileRoutesByTo: FileRoutesByTo
@@ -1450,7 +1460,6 @@ export interface FileRouteTypes {
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
-    | '/dashboard/viewings'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1474,6 +1483,7 @@ export interface FileRouteTypes {
     | '/dashboard/blog'
     | '/dashboard/offers'
     | '/dashboard/requests'
+    | '/dashboard/viewings'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   id:
@@ -1603,6 +1613,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/blog/'
     | '/_authenticated/dashboard/offers/'
     | '/_authenticated/dashboard/requests/'
+    | '/_authenticated/dashboard/viewings/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
   fileRoutesById: FileRoutesById
@@ -2428,6 +2439,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAdCampaignsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/dashboard/viewings/': {
+      id: '/_authenticated/dashboard/viewings/'
+      path: '/'
+      fullPath: '/dashboard/viewings/'
+      preLoaderRoute: typeof AuthenticatedDashboardViewingsIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardViewingsRoute
+    }
     '/_authenticated/dashboard/requests/': {
       id: '/_authenticated/dashboard/requests/'
       path: '/'
@@ -2707,6 +2725,21 @@ const AuthenticatedDashboardRequestsRouteWithChildren =
     AuthenticatedDashboardRequestsRouteChildren,
   )
 
+interface AuthenticatedDashboardViewingsRouteChildren {
+  AuthenticatedDashboardViewingsIndexRoute: typeof AuthenticatedDashboardViewingsIndexRoute
+}
+
+const AuthenticatedDashboardViewingsRouteChildren: AuthenticatedDashboardViewingsRouteChildren =
+  {
+    AuthenticatedDashboardViewingsIndexRoute:
+      AuthenticatedDashboardViewingsIndexRoute,
+  }
+
+const AuthenticatedDashboardViewingsRouteWithChildren =
+  AuthenticatedDashboardViewingsRoute._addFileChildren(
+    AuthenticatedDashboardViewingsRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
@@ -2737,7 +2770,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardSecurityRoute: typeof AuthenticatedDashboardSecurityRoute
   AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
-  AuthenticatedDashboardViewingsRoute: typeof AuthenticatedDashboardViewingsRoute
+  AuthenticatedDashboardViewingsRoute: typeof AuthenticatedDashboardViewingsRouteWithChildren
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
   AuthenticatedDashboardFeatureIdRoute: typeof AuthenticatedDashboardFeatureIdRoute
@@ -2786,7 +2819,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardSubscriptionRoute:
     AuthenticatedDashboardSubscriptionRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
-  AuthenticatedDashboardViewingsRoute: AuthenticatedDashboardViewingsRoute,
+  AuthenticatedDashboardViewingsRoute:
+    AuthenticatedDashboardViewingsRouteWithChildren,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
   AuthenticatedDashboardFeatureIdRoute: AuthenticatedDashboardFeatureIdRoute,
