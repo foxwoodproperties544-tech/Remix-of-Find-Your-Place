@@ -2,10 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { CalendarRange, Download, Search } from "lucide-react";
+import { CalendarRange, Download, FileSpreadsheet, Search } from "lucide-react";
 import { adminListViewings } from "@/lib/viewings.functions";
 import { ViewingStatusBadge } from "@/components/viewings/ViewingStatusBadge";
-import { downloadCsv, formatViewingTime, VIEWING_STATUSES, VIEWING_STATUS_LABEL, VIEWING_TYPES, VIEWING_TYPE_LABEL } from "@/lib/viewings";
+import { downloadCsv, downloadExcel, formatViewingTime, VIEWING_STATUSES, VIEWING_STATUS_LABEL, VIEWING_TYPES, VIEWING_TYPE_LABEL } from "@/lib/viewings";
 
 export const Route = createFileRoute("/_authenticated/admin/viewings")({
   head: () => ({
