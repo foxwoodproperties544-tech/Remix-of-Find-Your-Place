@@ -40,10 +40,11 @@ function BrowseRequests() {
   const [showFilters, setShowFilters] = useState(false);
 
   const filters = useMemo(() => ({ ...f, page, perPage: PER_PAGE }), [f, page]);
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, isFetching, refetch } = useQuery({
     queryKey: ["property-requests", filters],
     queryFn: () => fetchRequests(filters),
     staleTime: 30_000,
+    placeholderData: (prev) => prev,
   });
 
   const set = <K extends keyof RequestFilters>(k: K, v: RequestFilters[K]) => {
