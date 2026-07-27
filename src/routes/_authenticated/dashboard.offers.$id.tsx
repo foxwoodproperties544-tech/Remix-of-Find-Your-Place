@@ -14,6 +14,8 @@ import {
 import { OfferTimeline } from "@/components/offers/OfferTimeline";
 import { OfferChat } from "@/components/offers/OfferChat";
 import { OfferExpiry } from "@/components/offers/OfferExpiry";
+import { whatsappLink, propertyReference } from "@/lib/whatsapp";
+import { MessageCircle } from "lucide-react";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard/offers/$id")({
@@ -175,6 +177,17 @@ function OfferDetail() {
           )}
 
           <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
+            <a
+              href={whatsappLink(sellerSide ? offer.buyer_phone : null, "offer", {
+                propertyTitle: offer.property?.title ?? null,
+                reference: propertyReference(offer.property?.id ?? null),
+                offerAmount: formatKsh(offerAmount(offer)),
+                bookingId: offer.offer_ref,
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost w-full justify-center"
+            ><MessageCircle className="h-4 w-4" /> WhatsApp about this offer</a>
             <button onClick={() => downloadOfferSummary(offer)} className="btn-ghost w-full justify-center"><Download className="h-4 w-4" /> Download summary</button>
             {offer.property && (
               <Link to="/properties/$id" params={{ id: offer.property.slug ?? offer.property.id }} className="btn-ghost w-full justify-center"><CalendarDays className="h-4 w-4" /> View listing & book viewing</Link>
