@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   ShieldCheck, Eye, Sparkles, Users, Award, HeartHandshake, Scale, BadgeCheck,
-  Landmark, Home, Building2, Warehouse, Store, KeyRound, FileSearch, Megaphone,
-  UsersRound, BookOpen, MapPinned, Search, CalendarCheck, Handshake, MessageSquare,
+  Megaphone, UsersRound, MapPinned, Search, CalendarCheck, Handshake, MessageSquare,
   LineChart, LifeBuoy, ChevronDown, Phone, Mail, Clock, MessageCircle, Star, Quote,
   ArrowRight, Compass,
 } from "lucide-react";
@@ -16,6 +15,12 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   SUPPORT_PHONE_DISPLAY, SUPPORT_PHONE_TEL, trackSupportClick, whatsappUrl, supportMessageFor,
 } from "@/lib/support";
+import {
+  DEFAULT_PARTNERS, DEFAULT_PROCESS, DEFAULT_SERVICES, DEFAULT_STATS, DEFAULT_TESTIMONIALS,
+  PARTNER_CATEGORIES, PARTNER_CATEGORY_LABEL, SETTINGS_KEYS, iconFor, itemsOr,
+  type PartnerItem, type ProcessStep, type ServiceCard, type Testimonial,
+} from "@/lib/about-content";
+import { buildAboutPage, buildBreadcrumbs, buildOrganization } from "@/lib/structured-data";
 
 const TITLE = "About Us — Foxwood Properties Ltd | Trusted Property Marketplace in Kenya";
 const DESC =
@@ -25,14 +30,6 @@ const CANONICAL = `${SITE_URL}/about-us`;
 const SUPPORT_EMAIL = "foxwoodproperties544@gmail.com";
 const ABOUT_WA_MESSAGE = supportMessageFor("generic", "I would like to learn more about your services.");
 
-const DEFAULT_STATS = [
-  { label: "Properties listed", value: 1200, suffix: "+" },
-  { label: "Counties covered", value: 47, suffix: "" },
-  { label: "Trusted agents", value: 180, suffix: "+" },
-  { label: "Happy customers", value: 3500, suffix: "+" },
-  { label: "Successful connections", value: 5200, suffix: "+" },
-  { label: "Monthly visitors", value: 42000, suffix: "+" },
-];
 
 export const Route = createFileRoute("/about-us")({
   head: () => ({
