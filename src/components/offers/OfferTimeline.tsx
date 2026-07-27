@@ -12,11 +12,23 @@ const ICONS: Record<string, any> = {
   info_request: HelpCircle,
 };
 
-export function OfferTimeline({ events }: { events: OfferEvent[] }) {
+export function OfferTimeline({
+  events,
+  offerStatus,
+  offerExpiresAt,
+}: {
+  events: OfferEvent[];
+  offerStatus?: string;
+  offerExpiresAt?: string | null;
+}) {
   return (
     <section className="rounded-2xl border border-border bg-card p-5">
-      <h2 className="text-lg font-bold">Negotiation history</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-lg font-bold">Negotiation history</h2>
+        {offerStatus && <OfferExpiry expiresAt={offerExpiresAt} status={offerStatus} compact />}
+      </div>
       <ol className="mt-4 space-y-4">
+
         {events.map((e) => {
           const Icon = ICONS[e.type] ?? Clock;
           return (
