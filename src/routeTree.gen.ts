@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SavedRequestsRouteImport } from './routes/saved-requests'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -58,6 +57,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AgentsBecomeRouteImport } from './routes/agents.become'
 import { Route as AgentsIdRouteImport } from './routes/agents.$id'
 import { Route as AuthenticatedSavedSearchesRouteImport } from './routes/_authenticated/saved-searches'
+import { Route as AuthenticatedSavedRequestsRouteImport } from './routes/_authenticated/saved-requests'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated/favorites'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as BlogAuthorsIndexRouteImport } from './routes/blog.authors.index'
@@ -145,11 +145,6 @@ const TermsRoute = TermsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SavedRequestsRoute = SavedRequestsRouteImport.update({
-  id: '/saved-requests',
-  path: '/saved-requests',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
@@ -376,6 +371,12 @@ const AuthenticatedSavedSearchesRoute =
   AuthenticatedSavedSearchesRouteImport.update({
     id: '/saved-searches',
     path: '/saved-searches',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSavedRequestsRoute =
+  AuthenticatedSavedRequestsRouteImport.update({
+    id: '/saved-requests',
+    path: '/saved-requests',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
@@ -827,12 +828,12 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/refund-policy': typeof RefundPolicyRoute
-  '/saved-requests': typeof SavedRequestsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
+  '/saved-requests': typeof AuthenticatedSavedRequestsRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
@@ -950,12 +951,12 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/refund-policy': typeof RefundPolicyRoute
-  '/saved-requests': typeof SavedRequestsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/favorites': typeof AuthenticatedFavoritesRoute
+  '/saved-requests': typeof AuthenticatedSavedRequestsRoute
   '/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
@@ -1073,12 +1074,12 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/refund-policy': typeof RefundPolicyRoute
-  '/saved-requests': typeof SavedRequestsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
+  '/_authenticated/saved-requests': typeof AuthenticatedSavedRequestsRoute
   '/_authenticated/saved-searches': typeof AuthenticatedSavedSearchesRoute
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
@@ -1198,12 +1199,12 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/property-sitemap.xml'
     | '/refund-policy'
-    | '/saved-requests'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
     | '/admin'
     | '/favorites'
+    | '/saved-requests'
     | '/saved-searches'
     | '/agents/$id'
     | '/agents/become'
@@ -1321,12 +1322,12 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/property-sitemap.xml'
     | '/refund-policy'
-    | '/saved-requests'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
     | '/admin'
     | '/favorites'
+    | '/saved-requests'
     | '/saved-searches'
     | '/agents/$id'
     | '/agents/become'
@@ -1443,12 +1444,12 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/property-sitemap.xml'
     | '/refund-policy'
-    | '/saved-requests'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
     | '/_authenticated/admin'
     | '/_authenticated/favorites'
+    | '/_authenticated/saved-requests'
     | '/_authenticated/saved-searches'
     | '/agents/$id'
     | '/agents/become'
@@ -1568,7 +1569,6 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
-  SavedRequestsRoute: typeof SavedRequestsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   TestimonialsRoute: typeof TestimonialsRoute
@@ -1621,13 +1621,6 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/saved-requests': {
-      id: '/saved-requests'
-      path: '/saved-requests'
-      fullPath: '/saved-requests'
-      preLoaderRoute: typeof SavedRequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund-policy': {
@@ -1943,6 +1936,13 @@ declare module '@tanstack/react-router' {
       path: '/saved-searches'
       fullPath: '/saved-searches'
       preLoaderRoute: typeof AuthenticatedSavedSearchesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/saved-requests': {
+      id: '/_authenticated/saved-requests'
+      path: '/saved-requests'
+      fullPath: '/saved-requests'
+      preLoaderRoute: typeof AuthenticatedSavedRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/favorites': {
@@ -2593,6 +2593,7 @@ const AuthenticatedDashboardRequestsRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
+  AuthenticatedSavedRequestsRoute: typeof AuthenticatedSavedRequestsRoute
   AuthenticatedSavedSearchesRoute: typeof AuthenticatedSavedSearchesRoute
   AuthenticatedDashboardAccountRoute: typeof AuthenticatedDashboardAccountRoute
   AuthenticatedDashboardAdAnalyticsRoute: typeof AuthenticatedDashboardAdAnalyticsRoute
@@ -2629,6 +2630,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
+  AuthenticatedSavedRequestsRoute: AuthenticatedSavedRequestsRoute,
   AuthenticatedSavedSearchesRoute: AuthenticatedSavedSearchesRoute,
   AuthenticatedDashboardAccountRoute: AuthenticatedDashboardAccountRoute,
   AuthenticatedDashboardAdAnalyticsRoute:
@@ -2711,7 +2713,6 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
   RefundPolicyRoute: RefundPolicyRoute,
-  SavedRequestsRoute: SavedRequestsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   TestimonialsRoute: TestimonialsRoute,

@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { PageHero } from "@/components/site/PageHero";
 import { RequestCard } from "@/components/requests/RequestCard";
+import { RequestCardSkeletonGrid } from "@/components/requests/RequestCardSkeleton";
+import { RequestsErrorState } from "@/components/requests/RequestsErrorState";
 import { fetchRequests, REQUEST_SORTS, REQUEST_KINDS, KIND_LABEL, type RequestFilters, type RequestSort } from "@/lib/property-requests";
 import { ALL_TYPES } from "@/lib/taxonomy";
 import { KENYA_COUNTIES } from "@/lib/kenya-locations-data";
@@ -38,10 +40,11 @@ function BrowseRequests() {
   const [showFilters, setShowFilters] = useState(false);
 
   const filters = useMemo(() => ({ ...f, page, perPage: PER_PAGE }), [f, page]);
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, isFetching, refetch } = useQuery({
     queryKey: ["property-requests", filters],
     queryFn: () => fetchRequests(filters),
     staleTime: 30_000,
+    placeholderData: (prev) => prev,
   });
 
   const set = <K extends keyof RequestFilters>(k: K, v: RequestFilters[K]) => {
@@ -152,7 +155,9 @@ function BrowseRequests() {
 
           <div>
             {isLoading ? (
-              <div className="grid place-items-center py-24 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>
+              <RequestCardSkeletonGrid count={6} />
+            ) : isError ? (
+              <RequestsErrorState onRetry={() => refetch()} retrying={isFetching} />
             ) : !data?.rows.length ? (
               <div className="rounded-2xl border border-dashed border-border p-12 text-center">
                 <p className="font-semibold">No requests match these filters yet.</p>
@@ -161,14 +166,26 @@ function BrowseRequests() {
               </div>
             ) : (
               <>
-                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <div className={`grid gap-6 sm:grid-cols-2 xl:grid-cols-3 ${isFetching ? "opacity-60 transition-opacity" : ""}`}>
                   {data.rows.map((r) => <RequestCard key={r.id} r={r} />)}
                 </div>
                 {pages > 1 && (
-                  <nav className="mt-8 flex items-center justify-center gap-2" aria-label="Pagination">
-                    <button disabled={page === 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-border px-3 py-1.5 text-sm disabled:opacity-40">Previous</button>
-                    <span className="text-sm text-muted-foreground">Page {page} of {pages}</span>
-                    <button disabled={page >= pages} onClick={() => setPage((p) => p + 1)} className="rounded-lg border border-border px-3 py-1.5 text-sm disabled:opacity-40">Next</button>
+                  <nav className="mt-8 flex flex-col items-center gap-3" aria-label="Pagination">
+                    {page < pages && (
+                      <button
+                        type="button"
+                        onClick={() => setPage((p) => p + 1)}
+                        disabled={isFetching}
+                        className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+                      >
+                        {isFetching ? <><Loader2 className="h-4 w-4 animate-spin" /> Loading…</> : "Load more requests"}
+                      </button>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <button disabled={page === 1 || isFetching} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-border px-3 py-1.5 text-sm disabled:opacity-40">Previous</button>
+                      <span className="text-sm text-muted-foreground">Page {page} of {pages}</span>
+                      <button disabled={page >= pages || isFetching} onClick={() => setPage((p) => p + 1)} className="rounded-lg border border-border px-3 py-1.5 text-sm disabled:opacity-40">Next</button>
+                    </div>
                   </nav>
                 )}
               </>

@@ -1,12 +1,21 @@
 import { Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { MapPin, Clock, MessageSquare, Eye, Flame, Star, ShieldCheck, BedDouble, Bath, Bookmark } from "lucide-react";
 import { budgetLabel, daysLeft, KIND_LABEL, type PropertyRequest } from "@/lib/property-requests";
 import { useSavedRequests } from "@/hooks/use-saved-requests";
 
 export function RequestCard({ r, matchPct }: { r: PropertyRequest; matchPct?: number | null }) {
   const left = daysLeft(r.expires_at);
-  const { isSaved, toggle } = useSavedRequests();
+  const { isSaved, toggle, restore } = useSavedRequests();
   const saved = isSaved(r.id);
+
+  function onToggleSaved() {
+    const { previous, saved: nowSaved } = toggle(r.id);
+    toast[nowSaved ? "success" : "info"](nowSaved ? "Saved to your requests" : "Removed from saved requests", {
+      description: r.title,
+      action: { label: "Undo", onClick: () => restore(previous) },
+    });
+  }
 
   return (
     <article className="group relative rounded-2xl border border-border bg-card p-5 shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all">
@@ -56,7 +65,7 @@ export function RequestCard({ r, matchPct }: { r: PropertyRequest; matchPct?: nu
         <span className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => toggle(r.id)}
+            onClick={onToggleSaved}
             aria-pressed={saved}
             aria-label={saved ? "Remove from saved requests" : "Save this request"}
             title={saved ? "Saved" : "Save request"}

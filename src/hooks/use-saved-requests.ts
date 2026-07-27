@@ -25,9 +25,11 @@ function write(ids: string[]) {
 
 export function useSavedRequests() {
   const [ids, setIds] = useState<string[]>([]);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setIds(read());
+    setHydrated(true);
     const onChange = () => setIds(read());
     window.addEventListener(EVT, onChange);
     window.addEventListener("storage", onChange);
@@ -39,13 +41,22 @@ export function useSavedRequests() {
 
   const isSaved = useCallback((id: string) => ids.includes(id), [ids]);
 
-  const toggle = useCallback((id: string) => {
-    if (!id) return;
+  /** Toggles and returns the previous list so callers can offer an undo. */
+  const toggle = useCallback((id: string): { previous: string[]; saved: boolean } => {
     const current = read();
-    write(current.includes(id) ? current.filter((v) => v !== id) : [id, ...current]);
+    if (!id) return { previous: current, saved: current.includes(id) };
+    const willSave = !current.includes(id);
+    write(willSave ? [id, ...current] : current.filter((v) => v !== id));
+    return { previous: current, saved: willSave };
   }, []);
 
-  const clear = useCallback(() => write([]), []);
+  const restore = useCallback((snapshot: string[]) => write(snapshot), []);
 
-  return { ids, isSaved, toggle, clear };
+  const clear = useCallback((): string[] => {
+    const previous = read();
+    write([]);
+    return previous;
+  }, []);
+
+  return { ids, hydrated, isSaved, toggle, restore, clear };
 }
