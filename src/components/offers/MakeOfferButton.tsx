@@ -237,12 +237,39 @@ function OfferDialog({
                     I confirm this offer is genuine and I accept the Foxwood Properties <Link to="/terms" className="text-primary underline">Terms</Link> and <Link to="/privacy" className="text-primary underline">Privacy Policy</Link>. Offers are not legally binding until a sale agreement is signed.
                   </span>
                 </label>
+                {captcha && (
+                  <div className="space-y-2 rounded-xl border border-secondary/40 bg-secondary/10 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-secondary">Spam check</p>
+                    <p className="text-sm">{captcha.question}</p>
+                    <div className="flex gap-2">
+                      <input
+                        inputMode="numeric"
+                        value={captchaAnswer}
+                        onChange={(e) => setCaptchaAnswer(e.target.value)}
+                        className="input-base flex-1"
+                        placeholder="Your answer"
+                        aria-label="CAPTCHA answer"
+                      />
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setCaptchaAnswer("");
+                          setCaptcha((await loadCaptcha({})) as { question: string; token: string });
+                        }}
+                        className="btn-ghost text-xs"
+                      >
+                        New question
+                      </button>
+                    </div>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <button onClick={() => setStep(2)} className="btn-ghost"><ChevronLeft className="h-4 w-4" /> Back</button>
-                  <button disabled={!terms || mut.isPending} onClick={() => mut.mutate()} className="btn-primary disabled:opacity-50">
+                  <button disabled={!terms || mut.isPending || (!!captcha && !captchaAnswer.trim())} onClick={() => mut.mutate()} className="btn-primary disabled:opacity-50">
                     {mut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Handshake className="h-4 w-4" />} Submit offer
                   </button>
                 </div>
+
               </div>
             )}
           </>
