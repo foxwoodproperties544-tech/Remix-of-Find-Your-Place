@@ -128,6 +128,8 @@ function ViewingDetail() {
 
           <ViewingTimeline events={events} />
 
+          <ViewingAuditLog viewingId={id} />
+
           {isBuyer && viewing.status === "completed" && (
             feedback ? (
               <section className="rounded-2xl border border-border bg-card p-5">
