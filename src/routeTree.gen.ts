@@ -107,6 +107,7 @@ import { Route as AuthenticatedAdminRequestsRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authenticated/admin.reports'
 import { Route as AuthenticatedAdminQueueRouteImport } from './routes/_authenticated/admin.queue'
 import { Route as AuthenticatedAdminPwaAnalyticsRouteImport } from './routes/_authenticated/admin.pwa-analytics'
+import { Route as AuthenticatedAdminPriceHistoryRouteImport } from './routes/_authenticated/admin.price-history'
 import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authenticated/admin.packages'
 import { Route as AuthenticatedAdminOffersRouteImport } from './routes/_authenticated/admin.offers'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
@@ -673,6 +674,12 @@ const AuthenticatedAdminPwaAnalyticsRoute =
     path: '/pwa-analytics',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminPriceHistoryRoute =
+  AuthenticatedAdminPriceHistoryRouteImport.update({
+    id: '/price-history',
+    path: '/price-history',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminPackagesRoute =
   AuthenticatedAdminPackagesRouteImport.update({
     id: '/packages',
@@ -939,6 +946,7 @@ export interface FileRoutesByFullPath {
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
+  '/admin/price-history': typeof AuthenticatedAdminPriceHistoryRoute
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
@@ -1072,6 +1080,7 @@ export interface FileRoutesByTo {
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
+  '/admin/price-history': typeof AuthenticatedAdminPriceHistoryRoute
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
@@ -1203,6 +1212,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/_authenticated/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
+  '/_authenticated/admin/price-history': typeof AuthenticatedAdminPriceHistoryRoute
   '/_authenticated/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/_authenticated/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
@@ -1338,6 +1348,7 @@ export interface FileRouteTypes {
     | '/admin/notifications'
     | '/admin/offers'
     | '/admin/packages'
+    | '/admin/price-history'
     | '/admin/pwa-analytics'
     | '/admin/queue'
     | '/admin/reports'
@@ -1471,6 +1482,7 @@ export interface FileRouteTypes {
     | '/admin/notifications'
     | '/admin/offers'
     | '/admin/packages'
+    | '/admin/price-history'
     | '/admin/pwa-analytics'
     | '/admin/queue'
     | '/admin/reports'
@@ -1601,6 +1613,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/notifications'
     | '/_authenticated/admin/offers'
     | '/_authenticated/admin/packages'
+    | '/_authenticated/admin/price-history'
     | '/_authenticated/admin/pwa-analytics'
     | '/_authenticated/admin/queue'
     | '/_authenticated/admin/reports'
@@ -2414,6 +2427,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPwaAnalyticsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/price-history': {
+      id: '/_authenticated/admin/price-history'
+      path: '/price-history'
+      fullPath: '/admin/price-history'
+      preLoaderRoute: typeof AuthenticatedAdminPriceHistoryRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/packages': {
       id: '/_authenticated/admin/packages'
       path: '/packages'
@@ -2685,6 +2705,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
   AuthenticatedAdminOffersRoute: typeof AuthenticatedAdminOffersRoute
   AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRouteWithChildren
+  AuthenticatedAdminPriceHistoryRoute: typeof AuthenticatedAdminPriceHistoryRoute
   AuthenticatedAdminPwaAnalyticsRoute: typeof AuthenticatedAdminPwaAnalyticsRoute
   AuthenticatedAdminQueueRoute: typeof AuthenticatedAdminQueueRoute
   AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
@@ -2716,6 +2737,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
   AuthenticatedAdminOffersRoute: AuthenticatedAdminOffersRoute,
   AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRouteWithChildren,
+  AuthenticatedAdminPriceHistoryRoute: AuthenticatedAdminPriceHistoryRoute,
   AuthenticatedAdminPwaAnalyticsRoute: AuthenticatedAdminPwaAnalyticsRoute,
   AuthenticatedAdminQueueRoute: AuthenticatedAdminQueueRoute,
   AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,

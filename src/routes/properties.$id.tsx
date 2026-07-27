@@ -25,6 +25,7 @@ import { ReportListingButton } from "@/components/site/ReportListingButton";
 import { VerificationScoreCard } from "@/components/property/VerificationScoreCard";
 import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
 import { PropertyTimeline } from "@/components/property/PropertyTimeline";
+import { PriceHistoryCard } from "@/components/property/PriceHistoryCard";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { BookViewingButton } from "@/components/viewings/BookViewingButton";
 import { MakeOfferButton } from "@/components/offers/MakeOfferButton";
@@ -576,6 +577,17 @@ function Detail() {
 
           {/* Investment Score */}
           <InvestmentScoreCard propertyId={propertyKey} />
+
+          {/* Price history */}
+          <PriceHistoryCard
+            propertyId={propertyKey}
+            propertyKey={propertyKey}
+            currentPrice={p.price}
+            listedAt={(p as any).published_at ?? (p as any).created_at ?? null}
+            county={p.county}
+            town={p.town}
+            category={p.category}
+          />
 
           {/* Property history timeline */}
           <PropertyTimeline propertyId={propertyKey} propertyKey={propertyKey} />
