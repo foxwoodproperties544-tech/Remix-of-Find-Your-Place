@@ -5,6 +5,7 @@ import { PropertyCard } from "@/components/site/PropertyCard";
 import { ProfileReviews } from "@/components/site/ProfileReviews";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { useAuth } from "@/hooks/use-auth";
+import { whatsappLink } from "@/lib/whatsapp";
 import {
   Phone, MessageCircle, MapPin, Home, BadgeCheck, Building2, Mail, Globe, Facebook, Instagram,
   Linkedin, Twitter, Music2, Clock, Languages as LangIcon, Briefcase, Award, ShieldCheck, AlertCircle, CheckCircle2,
@@ -56,6 +57,12 @@ function AgentPage() {
   const initials = name.split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
   const phone = p.phone as string | null;
   const waNumber = (p.whatsapp || p.phone || "").replace(/[^\d]/g, "");
+  const waHref = whatsappLink(waNumber, p.company_name ? "company" : "agent", {
+    agentName: p.full_name,
+    companyName: p.company_name,
+    town: p.town,
+    county: p.county,
+  });
   const since = new Date(p.created_at).toLocaleDateString("en-KE", { year: "numeric", month: "long" });
   const roleLabel = p.role_primary === "developer" ? "Verified Developer" : p.role_primary === "owner" ? "Property Owner" : "Verified Agent";
   const location = [p.town, p.county].filter(Boolean).join(", ") || "Kenya";
@@ -153,7 +160,7 @@ function AgentPage() {
           </div>
           <div className="flex flex-wrap gap-2">
             {phone && <a href={`tel:${phone}`} className="btn-primary btn-primary-hover"><Phone className="h-4 w-4" /> Call</a>}
-            {waNumber && <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noreferrer" className="btn-secondary"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+            {waNumber && <a href={waHref} target="_blank" rel="noreferrer" className="btn-secondary"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
           </div>
         </div>
       </section>
@@ -226,7 +233,7 @@ function AgentPage() {
               {waNumber && (
                 <li className="flex items-center gap-3">
                   <MessageCircle className="h-4 w-4 text-primary shrink-0" />
-                  <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noreferrer" className="hover:text-primary">WhatsApp chat</a>
+                  <a href={waHref} target="_blank" rel="noreferrer" className="hover:text-primary">WhatsApp chat</a>
                 </li>
               )}
               {p.email_public && (

@@ -1,11 +1,12 @@
 // Central admin/customer support contact for Foxwood Properties.
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { buildWhatsAppMessage, type WhatsAppContext } from "@/lib/whatsapp";
 
 export const SUPPORT_PHONE_DISPLAY = "+254 759 556 026";
 export const SUPPORT_PHONE_TEL = "+254759556026";
 export const SUPPORT_WHATSAPP_INTL = "254759556026";
-export const SUPPORT_DEFAULT_MESSAGE = "Hello Foxwood Properties, I need assistance.";
+export const SUPPORT_DEFAULT_MESSAGE = buildWhatsAppMessage("contact");
 
 export type SupportContext =
   | "generic"
@@ -23,31 +24,32 @@ export type SupportContext =
   | "payment"
   | "floating";
 
-const CONTEXT_MESSAGES: Record<SupportContext, string> = {
-  generic: SUPPORT_DEFAULT_MESSAGE,
-  property: "Hello Foxwood Properties, I'd like more information about a property I'm viewing.",
-  dashboard: "Hello Foxwood Properties, I need help with my dashboard.",
-  pricing: "Hello Foxwood Properties, I have a question about your pricing.",
-  listing_packages: "Hello Foxwood Properties, I need help choosing a listing package.",
-  advertising_packages: "Hello Foxwood Properties, I'd like advice on advertising packages.",
-  blog_packages: "Hello Foxwood Properties, I need help with a blog submission package.",
-  agent_subscription: "Hello Foxwood Properties, I'd like help becoming an agent.",
-  auth: "Hello Foxwood Properties, I'm having trouble signing in or creating an account.",
-  blog: "Hello Foxwood Properties, I have a question about a blog article.",
-  faq: "Hello Foxwood Properties, I couldn't find my answer in the FAQ.",
-  contact: SUPPORT_DEFAULT_MESSAGE,
-  payment: "Hello Foxwood Properties, I need help completing a payment.",
-  floating: SUPPORT_DEFAULT_MESSAGE,
+/** Support contexts mapped onto the platform-wide WhatsApp message standard. */
+const CONTEXT_MAP: Record<SupportContext, WhatsAppContext> = {
+  generic: "contact",
+  property: "property",
+  dashboard: "dashboard",
+  pricing: "pricing",
+  listing_packages: "pricing",
+  advertising_packages: "pricing",
+  blog_packages: "pricing",
+  agent_subscription: "agent",
+  auth: "support",
+  blog: "blog",
+  faq: "support",
+  contact: "contact",
+  payment: "pricing",
+  floating: "contact",
 };
 
 export function supportMessageFor(context: SupportContext, extra?: string): string {
-  const base = CONTEXT_MESSAGES[context] ?? SUPPORT_DEFAULT_MESSAGE;
-  return extra ? `${base} (${extra})` : base;
+  return buildWhatsAppMessage(CONTEXT_MAP[context] ?? "contact", { extra: extra ?? null });
 }
 
 export function whatsappUrl(message: string = SUPPORT_DEFAULT_MESSAGE): string {
   return `https://wa.me/${SUPPORT_WHATSAPP_INTL}?text=${encodeURIComponent(message)}`;
 }
+
 
 /** Infer a support context from the current pathname (client-side use). */
 export function inferContextFromPath(pathname: string): SupportContext {

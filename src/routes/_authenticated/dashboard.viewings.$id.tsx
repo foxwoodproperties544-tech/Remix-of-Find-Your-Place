@@ -13,6 +13,7 @@ import { ViewingAuditLog } from "@/components/viewings/ViewingAuditLog";
 import { ViewingCalendarActions } from "@/components/viewings/ViewingCalendarActions";
 import { ViewingStatusBadge } from "@/components/viewings/ViewingStatusBadge";
 import { formatViewingTime, VIEWING_TYPE_LABEL } from "@/lib/viewings";
+import { whatsappLink, propertyReference } from "@/lib/whatsapp";
 
 export const Route = createFileRoute("/_authenticated/dashboard/viewings/$id")({
   head: () => ({
@@ -214,6 +215,19 @@ function ViewingDetail() {
                 propertyTitle: viewing.property?.title ?? "Property",
               }}
             />
+            <a
+              href={whatsappLink(isAgent ? viewing.requester_phone : agent?.phone, "viewing", {
+                propertyTitle: viewing.property?.title ?? null,
+                reference: propertyReference(viewing.property?.id ?? null),
+                bookingId: viewing.booking_ref,
+                viewingDate: when ? new Date(when).toLocaleDateString("en-KE", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : null,
+                viewingTime: when ? new Date(when).toLocaleTimeString("en-KE", { hour: "2-digit", minute: "2-digit" }) : null,
+                agentName: agent?.full_name ?? null,
+              })}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-ghost w-full justify-center"
+            ><MessageSquare className="h-4 w-4" /> WhatsApp about this viewing</a>
             {viewing.property && (
               <Link to="/properties/$id" params={{ id: viewing.property.slug ?? viewing.property.id }} className="btn-ghost w-full justify-center">
                 <MapPin className="h-4 w-4" /> View listing

@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { AppointmentStatusBadge } from "@/components/site/AppointmentStatusBadge";
+import { buildWhatsAppMessage } from "@/lib/whatsapp";
 import { APPOINTMENT_STATUSES, formatDateTime, waLink, type AppointmentStatus } from "@/lib/appointments";
 import { CalendarClock, Check, X, MessageCircle, Mail, Phone as PhoneIcon, ExternalLink, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
@@ -129,7 +130,12 @@ function AppointmentsPage() {
         <div className="mt-6 grid gap-3">
           {filtered.map(r => {
             const displayTime = r.proposed_at ?? r.requested_at;
-            const waMessage = `Hi ${r.requester_name}, this is regarding your viewing for "${r.properties?.title ?? "our listing"}" on ${formatDateTime(displayTime)}.`;
+            const waMessage = buildWhatsAppMessage("viewing", {
+              propertyTitle: r.properties?.title ?? "our listing",
+              bookingId: r.id?.slice(0, 8).toUpperCase(),
+              viewingDate: displayTime ? new Date(displayTime).toLocaleDateString("en-KE", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) : null,
+              viewingTime: displayTime ? new Date(displayTime).toLocaleTimeString("en-KE", { hour: "2-digit", minute: "2-digit" }) : null,
+            });
             const wa = waLink(r.requester_phone, waMessage);
             return (
               <div key={r.id} className="rounded-xl border border-border bg-card p-5">
