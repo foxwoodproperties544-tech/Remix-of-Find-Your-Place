@@ -462,16 +462,29 @@ function AboutUs() {
       {/* Awards & partners */}
       <section className="bg-muted/40 border-y border-border py-16">
         <div className="container-page">
-          <SectionTitle eyebrow="Credibility" title="Certifications, memberships & partners" subtitle="Organisations and platforms we work alongside." />
-          <div className="mt-10 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-            {PARTNERS.map((p) => (
-              <div key={p} className="rounded-2xl border border-border bg-background px-4 py-6 text-center text-xs font-semibold text-muted-foreground grid place-items-center min-h-[96px]">
-                {p}
+          <SectionTitle eyebrow="Credibility" title="Certifications, memberships, partners & awards" subtitle="Organisations and platforms we work alongside." />
+          <div className="mt-10 space-y-10">
+            {PARTNER_CATEGORIES.filter((c) => partners.some((p) => p.category === c)).map((cat) => (
+              <div key={cat}>
+                <h3 className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {PARTNER_CATEGORY_LABEL[cat]}
+                </h3>
+                <div className="mt-4 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+                  {partners.filter((p) => p.category === cat).map((p, i) => (
+                    <div key={`${p.name}-${i}`} className="rounded-2xl border border-border bg-background px-4 py-6 text-center grid place-items-center gap-2 min-h-[96px]">
+                      {p.logo_url ? (
+                        <img src={p.logo_url} alt={`${p.name} logo`} loading="lazy" className="h-10 w-auto max-w-[120px] object-contain" />
+                      ) : null}
+                      <span className="text-xs font-semibold text-muted-foreground">{p.name}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
 
       {/* CTA */}
       <section className="relative overflow-hidden bg-primary py-16 text-primary-foreground">
