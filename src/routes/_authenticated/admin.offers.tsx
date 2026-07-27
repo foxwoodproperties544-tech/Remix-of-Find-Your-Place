@@ -26,7 +26,8 @@ export const Route = createFileRoute("/_authenticated/admin/offers")({
 const STATUSES = ["all", "pending", "under_review", "counter_offered", "accepted", "rejected", "withdrawn", "expired"];
 
 function AdminOffers() {
-  const { ready, isAdmin } = useAdminGuard();
+  const { isAdmin, loading } = useAdminGuard();
+  const ready = !loading;
   const qc = useQueryClient();
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("all");
