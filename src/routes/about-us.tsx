@@ -145,20 +145,6 @@ const VALUES = [
   { i: Users, t: "Accountability", d: "We own our promises from first search to handover." },
 ];
 
-const SERVICES = [
-  { i: Landmark, t: "Land & plot sales", d: "Verified plots and land parcels across Kenya." },
-  { i: Home, t: "Residential sales", d: "Houses, apartments and family homes for sale." },
-  { i: KeyRound, t: "Rental listings", d: "Long-term rentals with genuine landlords." },
-  { i: FileSearch, t: "Lease listings", d: "Commercial and residential lease opportunities." },
-  { i: Building2, t: "Airbnb listings", d: "Short-stay and holiday homes for travellers." },
-  { i: Store, t: "Commercial properties", d: "Shops, offices and retail spaces." },
-  { i: Warehouse, t: "Property marketplace", d: "One place to browse, compare and connect." },
-  { i: Megaphone, t: "Property request marketplace", d: "Post what you need and let owners come to you." },
-  { i: LineChart, t: "Property marketing", d: "Featured placement and campaign packages." },
-  { i: UsersRound, t: "Agent & developer directory", d: "Discover verified professionals near you." },
-  { i: BookOpen, t: "Property blogs & guides", d: "Market insight and buyer education." },
-];
-
 const WHY = [
   { i: BadgeCheck, t: "Verified property listings", d: "Every listing is checked before publishing." },
   { i: UsersRound, t: "Trusted agents & developers", d: "Profiles, KYC and verification badges." },
@@ -172,39 +158,31 @@ const WHY = [
   { i: LifeBuoy, t: "Fast customer support", d: "Call, chat or WhatsApp — we reply quickly." },
 ];
 
-const STEPS = [
-  { i: Search, t: "Search or request a property", d: "Browse verified listings or post a property request." },
-  { i: UsersRound, t: "Connect with trusted agents or owners", d: "Message verified professionals directly." },
-  { i: CalendarCheck, t: "Book a viewing or make an offer", d: "Schedule visits and negotiate in-platform." },
-  { i: Handshake, t: "Complete your property journey", d: "Close with guidance from search to signing." },
-];
-
-const PARTNERS = [
-  "Kenya Property Developers Association",
-  "Estate Agents Registration Board",
-  "Ministry of Lands e-Citizen",
-  "Kenya Bankers Mortgage Partners",
-  "Safaricom M-Pesa",
-  "Institution of Surveyors of Kenya",
-];
-
 /* ---------------- page ---------------- */
 
-function AboutUs() {
-  const { data: stats } = useQuery({
-    queryKey: ["about-stats"],
+function useSetting<T>(key: string, fallback: T[]) {
+  return useQuery({
+    queryKey: ["platform-setting", key],
     queryFn: async () => {
-      const { data } = await supabase.from("platform_settings").select("value").eq("key", "about_stats").maybeSingle();
-      const rows = (data?.value as any)?.items;
-      return Array.isArray(rows) && rows.length ? (rows as typeof DEFAULT_STATS) : DEFAULT_STATS;
+      const { data } = await supabase.from("platform_settings").select("value").eq("key", key).maybeSingle();
+      return itemsOr<T>(data?.value, fallback);
     },
-    initialData: DEFAULT_STATS,
+    initialData: fallback,
     staleTime: 5 * 60_000,
   });
+}
 
-  const { data: testimonials } = useQuery({
+function AboutUs() {
+  const { data: stats } = useSetting(SETTINGS_KEYS.stats, DEFAULT_STATS);
+  const { data: services } = useSetting<ServiceCard>(SETTINGS_KEYS.services, DEFAULT_SERVICES);
+  const { data: steps } = useSetting<ProcessStep>(SETTINGS_KEYS.process, DEFAULT_PROCESS);
+  const { data: partners } = useSetting<PartnerItem>(SETTINGS_KEYS.partners, DEFAULT_PARTNERS);
+  const { data: curated } = useSetting<Testimonial>(SETTINGS_KEYS.testimonials, DEFAULT_TESTIMONIALS);
+
+  const { data: reviewTestimonials } = useQuery({
     queryKey: ["about-testimonials"],
-    queryFn: async () => {
+    enabled: curated.length === 0,
+    queryFn: async (): Promise<Testimonial[]> => {
       const { data } = await supabase
         .from("reviews")
         .select("id, rating, comment, created_at, user_id")
@@ -219,10 +197,19 @@ function AboutUs() {
         const { data: profs } = await supabase.from("public_profiles").select("id, full_name, avatar_url").in("id", ids);
         (profs ?? []).forEach((p: any) => (map[p.id] = { full_name: p.full_name, avatar_url: p.avatar_url }));
       }
-      return rows.map((r: any) => ({ ...r, reviewer: map[r.user_id] ?? null }));
+      return rows.map((r: any) => ({
+        name: map[r.user_id]?.full_name ?? "Foxwood customer",
+        location: "",
+        rating: r.rating ?? 5,
+        text: r.comment ?? "",
+        photo_url: map[r.user_id]?.avatar_url ?? undefined,
+      }));
     },
     staleTime: 5 * 60_000,
   });
+
+  const testimonials: Testimonial[] = curated.length ? curated : (reviewTestimonials ?? []);
+
 
   return (
     <>
