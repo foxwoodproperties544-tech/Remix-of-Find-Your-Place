@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { CalendarClock, MapPin, Video, Users, ExternalLink } from "lucide-react";
 import { listMyViewings } from "@/lib/viewings.functions";
 import { ViewingStatusBadge } from "@/components/viewings/ViewingStatusBadge";
+import { ViewingCalendarActions } from "@/components/viewings/ViewingCalendarActions";
 import { formatViewingTime, VIEWING_TYPE_LABEL } from "@/lib/viewings";
 
 export const Route = createFileRoute("/_authenticated/dashboard/viewings/")({
