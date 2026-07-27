@@ -75,6 +75,7 @@ import { Route as AuthenticatedDashboardRequestResponsesRouteImport } from './ro
 import { Route as AuthenticatedDashboardReferralsRouteImport } from './routes/_authenticated/dashboard.referrals'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardPaymentHistoryRouteImport } from './routes/_authenticated/dashboard.payment-history'
+import { Route as AuthenticatedDashboardOffersRouteImport } from './routes/_authenticated/dashboard.offers'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardMyAppointmentsRouteImport } from './routes/_authenticated/dashboard.my-appointments'
 import { Route as AuthenticatedDashboardMyAdsRouteImport } from './routes/_authenticated/dashboard.my-ads'
@@ -103,6 +104,7 @@ import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminQueueRouteImport } from './routes/_authenticated/admin.queue'
 import { Route as AuthenticatedAdminPwaAnalyticsRouteImport } from './routes/_authenticated/admin.pwa-analytics'
 import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authenticated/admin.packages'
+import { Route as AuthenticatedAdminOffersRouteImport } from './routes/_authenticated/admin.offers'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
 import { Route as AuthenticatedAdminMarketplaceRouteImport } from './routes/_authenticated/admin.marketplace'
 import { Route as AuthenticatedAdminKycRouteImport } from './routes/_authenticated/admin.kyc'
@@ -116,11 +118,13 @@ import { Route as AuthenticatedAdminAgentsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
 import { Route as AuthenticatedDashboardRequestsIndexRouteImport } from './routes/_authenticated/dashboard.requests.index'
+import { Route as AuthenticatedDashboardOffersIndexRouteImport } from './routes/_authenticated/dashboard.offers.index'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api/public/hooks/subscription-scan'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardRequestsNewRouteImport } from './routes/_authenticated/dashboard.requests.new'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
+import { Route as AuthenticatedDashboardOffersIdRouteImport } from './routes/_authenticated/dashboard.offers.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
 import { Route as AuthenticatedDashboardInvoiceIdRouteImport } from './routes/_authenticated/dashboard.invoice.$id'
@@ -473,6 +477,12 @@ const AuthenticatedDashboardPaymentHistoryRoute =
     path: '/dashboard/payment-history',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardOffersRoute =
+  AuthenticatedDashboardOffersRouteImport.update({
+    id: '/dashboard/offers',
+    path: '/dashboard/offers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardNewRoute =
   AuthenticatedDashboardNewRouteImport.update({
     id: '/dashboard/new',
@@ -639,6 +649,12 @@ const AuthenticatedAdminPackagesRoute =
     path: '/packages',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminOffersRoute =
+  AuthenticatedAdminOffersRouteImport.update({
+    id: '/offers',
+    path: '/offers',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminNotificationsRoute =
   AuthenticatedAdminNotificationsRouteImport.update({
     id: '/notifications',
@@ -713,6 +729,12 @@ const AuthenticatedDashboardRequestsIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedDashboardRequestsRoute,
   } as any)
+const AuthenticatedDashboardOffersIndexRoute =
+  AuthenticatedDashboardOffersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardOffersRoute,
+  } as any)
 const AuthenticatedDashboardBlogIndexRoute =
   AuthenticatedDashboardBlogIndexRouteImport.update({
     id: '/',
@@ -742,6 +764,12 @@ const AuthenticatedDashboardPayIdRoute =
     id: '/dashboard/pay/$id',
     path: '/dashboard/pay/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardOffersIdRoute =
+  AuthenticatedDashboardOffersIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedDashboardOffersRoute,
   } as any)
 const AuthenticatedDashboardLeadsNewRoute =
   AuthenticatedDashboardLeadsNewRouteImport.update({
@@ -867,6 +895,7 @@ export interface FileRoutesByFullPath {
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
@@ -895,6 +924,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/dashboard/offers': typeof AuthenticatedDashboardOffersRouteWithChildren
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -918,11 +948,13 @@ export interface FileRoutesByFullPath {
   '/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/dashboard/offers/$id': typeof AuthenticatedDashboardOffersIdRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
+  '/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -990,6 +1022,7 @@ export interface FileRoutesByTo {
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
@@ -1039,11 +1072,13 @@ export interface FileRoutesByTo {
   '/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/dashboard/offers/$id': typeof AuthenticatedDashboardOffersIdRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
+  '/dashboard/offers': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests': typeof AuthenticatedDashboardRequestsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -1113,6 +1148,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/_authenticated/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/_authenticated/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
   '/_authenticated/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/_authenticated/admin/queue': typeof AuthenticatedAdminQueueRoute
@@ -1141,6 +1177,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/_authenticated/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/_authenticated/dashboard/offers': typeof AuthenticatedDashboardOffersRouteWithChildren
   '/_authenticated/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -1164,11 +1201,13 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/_authenticated/dashboard/offers/$id': typeof AuthenticatedDashboardOffersIdRoute
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
+  '/_authenticated/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/_authenticated/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -1238,6 +1277,7 @@ export interface FileRouteTypes {
     | '/admin/kyc'
     | '/admin/marketplace'
     | '/admin/notifications'
+    | '/admin/offers'
     | '/admin/packages'
     | '/admin/pwa-analytics'
     | '/admin/queue'
@@ -1266,6 +1306,7 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
+    | '/dashboard/offers'
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
@@ -1289,11 +1330,13 @@ export interface FileRouteTypes {
     | '/dashboard/invoice/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
+    | '/dashboard/offers/$id'
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog/'
+    | '/dashboard/offers/'
     | '/dashboard/requests/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
@@ -1361,6 +1404,7 @@ export interface FileRouteTypes {
     | '/admin/kyc'
     | '/admin/marketplace'
     | '/admin/notifications'
+    | '/admin/offers'
     | '/admin/packages'
     | '/admin/pwa-analytics'
     | '/admin/queue'
@@ -1410,11 +1454,13 @@ export interface FileRouteTypes {
     | '/dashboard/invoice/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
+    | '/dashboard/offers/$id'
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog'
+    | '/dashboard/offers'
     | '/dashboard/requests'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
@@ -1483,6 +1529,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/kyc'
     | '/_authenticated/admin/marketplace'
     | '/_authenticated/admin/notifications'
+    | '/_authenticated/admin/offers'
     | '/_authenticated/admin/packages'
     | '/_authenticated/admin/pwa-analytics'
     | '/_authenticated/admin/queue'
@@ -1511,6 +1558,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/my-ads'
     | '/_authenticated/dashboard/my-appointments'
     | '/_authenticated/dashboard/new'
+    | '/_authenticated/dashboard/offers'
     | '/_authenticated/dashboard/payment-history'
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/referrals'
@@ -1534,11 +1582,13 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/invoice/$id'
     | '/_authenticated/dashboard/leads/$id'
     | '/_authenticated/dashboard/leads/new'
+    | '/_authenticated/dashboard/offers/$id'
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/requests/new'
     | '/_authenticated/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/_authenticated/dashboard/blog/'
+    | '/_authenticated/dashboard/offers/'
     | '/_authenticated/dashboard/requests/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
@@ -2064,6 +2114,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardPaymentHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/offers': {
+      id: '/_authenticated/dashboard/offers'
+      path: '/dashboard/offers'
+      fullPath: '/dashboard/offers'
+      preLoaderRoute: typeof AuthenticatedDashboardOffersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/new': {
       id: '/_authenticated/dashboard/new'
       path: '/dashboard/new'
@@ -2260,6 +2317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPackagesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/offers': {
+      id: '/_authenticated/admin/offers'
+      path: '/offers'
+      fullPath: '/admin/offers'
+      preLoaderRoute: typeof AuthenticatedAdminOffersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/notifications': {
       id: '/_authenticated/admin/notifications'
       path: '/notifications'
@@ -2351,6 +2415,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRequestsIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRequestsRoute
     }
+    '/_authenticated/dashboard/offers/': {
+      id: '/_authenticated/dashboard/offers/'
+      path: '/'
+      fullPath: '/dashboard/offers/'
+      preLoaderRoute: typeof AuthenticatedDashboardOffersIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardOffersRoute
+    }
     '/_authenticated/dashboard/blog/': {
       id: '/_authenticated/dashboard/blog/'
       path: '/'
@@ -2385,6 +2456,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/pay/$id'
       preLoaderRoute: typeof AuthenticatedDashboardPayIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/offers/$id': {
+      id: '/_authenticated/dashboard/offers/$id'
+      path: '/$id'
+      fullPath: '/dashboard/offers/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardOffersIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardOffersRoute
     }
     '/_authenticated/dashboard/leads/new': {
       id: '/_authenticated/dashboard/leads/new'
@@ -2487,6 +2565,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminKycRoute: typeof AuthenticatedAdminKycRoute
   AuthenticatedAdminMarketplaceRoute: typeof AuthenticatedAdminMarketplaceRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
+  AuthenticatedAdminOffersRoute: typeof AuthenticatedAdminOffersRoute
   AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRouteWithChildren
   AuthenticatedAdminPwaAnalyticsRoute: typeof AuthenticatedAdminPwaAnalyticsRoute
   AuthenticatedAdminQueueRoute: typeof AuthenticatedAdminQueueRoute
@@ -2516,6 +2595,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminKycRoute: AuthenticatedAdminKycRoute,
   AuthenticatedAdminMarketplaceRoute: AuthenticatedAdminMarketplaceRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
+  AuthenticatedAdminOffersRoute: AuthenticatedAdminOffersRoute,
   AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRouteWithChildren,
   AuthenticatedAdminPwaAnalyticsRoute: AuthenticatedAdminPwaAnalyticsRoute,
   AuthenticatedAdminQueueRoute: AuthenticatedAdminQueueRoute,
@@ -2572,6 +2652,23 @@ const AuthenticatedDashboardLeadsRouteWithChildren =
     AuthenticatedDashboardLeadsRouteChildren,
   )
 
+interface AuthenticatedDashboardOffersRouteChildren {
+  AuthenticatedDashboardOffersIdRoute: typeof AuthenticatedDashboardOffersIdRoute
+  AuthenticatedDashboardOffersIndexRoute: typeof AuthenticatedDashboardOffersIndexRoute
+}
+
+const AuthenticatedDashboardOffersRouteChildren: AuthenticatedDashboardOffersRouteChildren =
+  {
+    AuthenticatedDashboardOffersIdRoute: AuthenticatedDashboardOffersIdRoute,
+    AuthenticatedDashboardOffersIndexRoute:
+      AuthenticatedDashboardOffersIndexRoute,
+  }
+
+const AuthenticatedDashboardOffersRouteWithChildren =
+  AuthenticatedDashboardOffersRoute._addFileChildren(
+    AuthenticatedDashboardOffersRouteChildren,
+  )
+
 interface AuthenticatedDashboardRequestsRouteChildren {
   AuthenticatedDashboardRequestsNewRoute: typeof AuthenticatedDashboardRequestsNewRoute
   AuthenticatedDashboardRequestsIndexRoute: typeof AuthenticatedDashboardRequestsIndexRoute
@@ -2611,6 +2708,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardMyAdsRoute: typeof AuthenticatedDashboardMyAdsRoute
   AuthenticatedDashboardMyAppointmentsRoute: typeof AuthenticatedDashboardMyAppointmentsRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
+  AuthenticatedDashboardOffersRoute: typeof AuthenticatedDashboardOffersRouteWithChildren
   AuthenticatedDashboardPaymentHistoryRoute: typeof AuthenticatedDashboardPaymentHistoryRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
   AuthenticatedDashboardReferralsRoute: typeof AuthenticatedDashboardReferralsRoute
@@ -2653,6 +2751,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardMyAppointmentsRoute:
     AuthenticatedDashboardMyAppointmentsRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
+  AuthenticatedDashboardOffersRoute:
+    AuthenticatedDashboardOffersRouteWithChildren,
   AuthenticatedDashboardPaymentHistoryRoute:
     AuthenticatedDashboardPaymentHistoryRoute,
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,

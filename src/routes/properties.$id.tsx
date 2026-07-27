@@ -26,6 +26,7 @@ import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
 import { PropertyTimeline } from "@/components/property/PropertyTimeline";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { AppointmentBookingForm } from "@/components/site/AppointmentBookingForm";
+import { MakeOfferButton } from "@/components/offers/MakeOfferButton";
 import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/properties/$id")({
@@ -414,6 +415,15 @@ function Detail() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 md:justify-end">
+            {ownerId && (
+              <MakeOfferButton
+                propertyId={propertyKey}
+                propertyTitle={p.title}
+                askingPrice={p.price}
+                category={p.category}
+                className="btn-primary"
+              />
+            )}
             <button onClick={() => toggleFav(propertyKey)} className={`btn-ghost ${isFavorite(propertyKey) ? "text-secondary" : ""}`} aria-pressed={isFavorite(propertyKey)}>
               <Heart className={`h-4 w-4 ${isFavorite(propertyKey) ? "fill-current" : ""}`} /> {isFavorite(propertyKey) ? "Saved" : "Save"}
             </button>
@@ -584,6 +594,19 @@ function Detail() {
         <aside className="lg:sticky lg:top-24 h-fit space-y-4">
           <AgentCard ownerId={ownerId} profile={ownerProfile} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} />
           <MortgageMini price={p.price} />
+          {ownerId && (
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h3 className="font-bold">Negotiate directly</h3>
+              <p className="mt-1 text-xs text-muted-foreground">Send a private offer to the seller and keep the whole negotiation on Foxwood.</p>
+              <MakeOfferButton
+                propertyId={propertyKey}
+                propertyTitle={p.title}
+                askingPrice={p.price}
+                category={p.category}
+                className="btn-primary mt-3 w-full justify-center"
+              />
+            </div>
+          )}
           <AppointmentBookingForm propertyId={propertyKey} propertyTitle={p.title} />
           <InquiryForm propertyKey={propertyKey} ownerId={ownerId} propertyTitle={p.title} />
           <ReportListingButton propertyId={p.id} />
