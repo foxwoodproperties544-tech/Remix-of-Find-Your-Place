@@ -5,6 +5,8 @@ import { useFavorites } from "@/hooks/use-favorites";
 import { useCompare } from "@/hooks/use-compare";
 import { normalizedPrice } from "@/lib/measure";
 
+import { LatestPriceChangeBadge } from "@/components/property/PriceChangeBadge";
+
 export function PropertyCard({ p, distanceKm }: { p: Property; distanceKm?: number | null }) {
   const { isFavorite, toggle } = useFavorites();
   const { has, toggle: toggleCompare } = useCompare();
@@ -49,6 +51,7 @@ export function PropertyCard({ p, distanceKm }: { p: Property; distanceKm?: numb
             <span className="text-lg font-bold text-primary">
               {formatKsh(p.price)}<span className="text-xs font-medium text-muted-foreground">{p.priceSuffix ?? ""}</span>
             </span>
+            <LatestPriceChangeBadge propertyId={p.id} compact />
             {perUnit && (
               <span className="rounded-full bg-muted text-[11px] font-semibold px-2 py-0.5 text-muted-foreground" title="Normalized price for like-for-like comparison">
                 {perUnit.label}
