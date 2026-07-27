@@ -53,13 +53,26 @@ export function RequestCard({ r, matchPct }: { r: PropertyRequest; matchPct?: nu
           {r.published_at ? new Date(r.published_at).toLocaleDateString() : new Date(r.created_at).toLocaleDateString()}
           {left != null && <span className={left <= 5 ? "text-secondary font-semibold" : ""}> · {left > 0 ? `${left}d left` : "expired"}</span>}
         </span>
-        <Link
-          to="/property-requests/$slug"
-          params={{ slug: r.slug ?? r.id }}
-          className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
-        >
-          View Request
-        </Link>
+        <span className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => toggle(r.id)}
+            aria-pressed={saved}
+            aria-label={saved ? "Remove from saved requests" : "Save this request"}
+            title={saved ? "Saved" : "Save request"}
+            className={`grid h-8 w-8 place-items-center rounded-full border transition-colors ${saved ? "border-primary bg-primary-soft text-primary" : "border-border text-muted-foreground hover:text-primary hover:bg-primary-soft"}`}
+          >
+            <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+          </button>
+          <Link
+            to="/property-requests/$slug"
+            params={{ slug: r.slug ?? r.id }}
+            className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90"
+          >
+            View Request
+          </Link>
+        </span>
+
       </div>
     </article>
   );
