@@ -200,11 +200,13 @@ function ViewingDetail() {
           <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
             <button
               onClick={() => downloadIcs({
-                ref: viewing.booking_ref,
-                title: `Viewing: ${viewing.property?.title ?? "Property"}`,
-                start: when,
-                location: viewing.meeting_location ?? viewing.virtual_link ?? [viewing.property?.town, viewing.property?.county].filter(Boolean).join(", "),
-                description: viewing.notes ?? "",
+                booking_ref: viewing.booking_ref,
+                requested_at: when,
+                duration_minutes: viewing.duration_minutes ?? 30,
+                viewing_type: viewing.viewing_type,
+                meeting_location: viewing.meeting_location,
+                virtual_link: viewing.virtual_link,
+                propertyTitle: viewing.property?.title ?? "Property",
               })}
               className="btn-ghost w-full justify-center"
             >

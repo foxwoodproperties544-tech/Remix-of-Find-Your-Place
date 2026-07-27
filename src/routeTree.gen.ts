@@ -123,6 +123,7 @@ import { Route as AuthenticatedDashboardRequestsIndexRouteImport } from './route
 import { Route as AuthenticatedDashboardOffersIndexRouteImport } from './routes/_authenticated/dashboard.offers.index'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api/public/hooks/subscription-scan'
+import { Route as AuthenticatedDashboardViewingsIdRouteImport } from './routes/_authenticated/dashboard.viewings.$id'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardRequestsNewRouteImport } from './routes/_authenticated/dashboard.requests.new'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
@@ -761,6 +762,12 @@ const ApiPublicHooksSubscriptionScanRoute =
     path: '/api/public/hooks/subscription-scan',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedDashboardViewingsIdRoute =
+  AuthenticatedDashboardViewingsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedDashboardViewingsRoute,
+  } as any)
 const AuthenticatedDashboardVerifyIdRoute =
   AuthenticatedDashboardVerifyIdRouteImport.update({
     id: '/dashboard/verify/$id',
@@ -967,6 +974,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
@@ -1092,6 +1100,7 @@ export interface FileRoutesByTo {
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/offers': typeof AuthenticatedDashboardOffersIndexRoute
@@ -1223,6 +1232,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/_authenticated/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/_authenticated/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
@@ -1354,6 +1364,7 @@ export interface FileRouteTypes {
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
+    | '/dashboard/viewings/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog/'
     | '/dashboard/offers/'
@@ -1479,6 +1490,7 @@ export interface FileRouteTypes {
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
+    | '/dashboard/viewings/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog'
     | '/dashboard/offers'
@@ -1609,6 +1621,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/requests/new'
     | '/_authenticated/dashboard/verify/$id'
+    | '/_authenticated/dashboard/viewings/$id'
     | '/api/public/hooks/subscription-scan'
     | '/_authenticated/dashboard/blog/'
     | '/_authenticated/dashboard/offers/'
@@ -2474,6 +2487,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSubscriptionScanRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/viewings/$id': {
+      id: '/_authenticated/dashboard/viewings/$id'
+      path: '/$id'
+      fullPath: '/dashboard/viewings/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardViewingsIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardViewingsRoute
+    }
     '/_authenticated/dashboard/verify/$id': {
       id: '/_authenticated/dashboard/verify/$id'
       path: '/dashboard/verify/$id'
@@ -2726,11 +2746,14 @@ const AuthenticatedDashboardRequestsRouteWithChildren =
   )
 
 interface AuthenticatedDashboardViewingsRouteChildren {
+  AuthenticatedDashboardViewingsIdRoute: typeof AuthenticatedDashboardViewingsIdRoute
   AuthenticatedDashboardViewingsIndexRoute: typeof AuthenticatedDashboardViewingsIndexRoute
 }
 
 const AuthenticatedDashboardViewingsRouteChildren: AuthenticatedDashboardViewingsRouteChildren =
   {
+    AuthenticatedDashboardViewingsIdRoute:
+      AuthenticatedDashboardViewingsIdRoute,
     AuthenticatedDashboardViewingsIndexRoute:
       AuthenticatedDashboardViewingsIndexRoute,
   }
