@@ -402,6 +402,7 @@ export const actOnViewing = createServerFn({ method: "POST" })
       case "no_show":
         patch.status = "no_show";
         patch.agent_notes = data.note ?? viewing.agent_notes;
+        buyerMsg = { type: "viewing_no_show", title: "Viewing marked as a no-show", body: `Booking ${viewing.booking_ref} was marked as a no-show by the agent.` };
         break;
       case "note":
         if (!data.note) throw new Error("Note is required");
