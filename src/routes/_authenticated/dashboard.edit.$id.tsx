@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { ArrowLeft, X, Loader2, UploadCloud, FileText } from "lucide-react";
 import { fetchPropertyRowById } from "@/lib/properties";
+import { ListingPriceManager } from "@/components/dashboard/ListingPriceManager";
 import { CATEGORIES as CATS, ALL_TYPES, TYPE_GROUPS } from "@/lib/taxonomy";
 
 const CATEGORIES = [...CATS];

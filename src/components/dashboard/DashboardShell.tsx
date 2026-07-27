@@ -83,6 +83,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/deletion-requests", label: "Deletion requests", icon: ShieldCheck },
 
         { to: "/admin/marketplace", label: "Scores & guides", icon: ShieldCheck },
+        { to: "/admin/price-history", label: "Price history", icon: LineChart },
         { to: "/admin/analytics", label: "Analytics", icon: LayoutDashboard },
 
         { to: "/admin/users", label: "Users & roles", icon: UserCog },
