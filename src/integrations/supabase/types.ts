@@ -1630,6 +1630,183 @@ export type Database = {
         }
         Relationships: []
       }
+      offer_events: {
+        Row: {
+          actor_id: string | null
+          actor_role: string | null
+          amount: number | null
+          body: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          metadata: Json | null
+          offer_id: string
+          type: string
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_role?: string | null
+          amount?: number | null
+          body?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          offer_id: string
+          type: string
+        }
+        Update: {
+          actor_id?: string | null
+          actor_role?: string | null
+          amount?: number | null
+          body?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          offer_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offer_events_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offer_messages: {
+        Row: {
+          attachments: string[]
+          body: string | null
+          created_at: string
+          id: string
+          offer_id: string
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          attachments?: string[]
+          body?: string | null
+          created_at?: string
+          id?: string
+          offer_id: string
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          attachments?: string[]
+          body?: string | null
+          created_at?: string
+          id?: string
+          offer_id?: string
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offer_messages_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          agent_id: string | null
+          amount: number
+          asking_price: number
+          buyer_email: string | null
+          buyer_id: string
+          buyer_name: string | null
+          buyer_phone: string | null
+          cash_buyer: boolean
+          closed_at: string | null
+          created_at: string
+          currency: string
+          current_amount: number | null
+          expires_at: string | null
+          first_response_at: string | null
+          has_viewed: boolean
+          id: string
+          last_actor: string | null
+          message: string | null
+          needs_mortgage: boolean
+          offer_ref: string
+          owner_id: string | null
+          property_id: string
+          status: string
+          timeline: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          amount: number
+          asking_price?: number
+          buyer_email?: string | null
+          buyer_id: string
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          cash_buyer?: boolean
+          closed_at?: string | null
+          created_at?: string
+          currency?: string
+          current_amount?: number | null
+          expires_at?: string | null
+          first_response_at?: string | null
+          has_viewed?: boolean
+          id?: string
+          last_actor?: string | null
+          message?: string | null
+          needs_mortgage?: boolean
+          offer_ref?: string
+          owner_id?: string | null
+          property_id: string
+          status?: string
+          timeline?: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          amount?: number
+          asking_price?: number
+          buyer_email?: string | null
+          buyer_id?: string
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          cash_buyer?: boolean
+          closed_at?: string | null
+          created_at?: string
+          currency?: string
+          current_amount?: number | null
+          expires_at?: string | null
+          first_response_at?: string | null
+          has_viewed?: boolean
+          id?: string
+          last_actor?: string | null
+          message?: string | null
+          needs_mortgage?: boolean
+          offer_ref?: string
+          owner_id?: string | null
+          property_id?: string
+          status?: string
+          timeline?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       phone_verifications: {
         Row: {
           attempts: number
@@ -1914,6 +2091,7 @@ export type Database = {
           property_type: string
           published_at: string | null
           purpose: string | null
+          sale_state: string | null
           size: string | null
           slug: string | null
           status: string
@@ -1960,6 +2138,7 @@ export type Database = {
           property_type: string
           published_at?: string | null
           purpose?: string | null
+          sale_state?: string | null
           size?: string | null
           slug?: string | null
           status?: string
@@ -2006,6 +2185,7 @@ export type Database = {
           property_type?: string
           published_at?: string | null
           purpose?: string | null
+          sale_state?: string | null
           size?: string | null
           slug?: string | null
           status?: string
@@ -3383,6 +3563,7 @@ export type Database = {
       }
       claim_referral: { Args: { _code: string }; Returns: boolean }
       expire_listing_packages: { Args: never; Returns: undefined }
+      expire_offers: { Args: never; Returns: number }
       expire_verification_subscriptions: { Args: never; Returns: number }
       generate_referral_code: { Args: never; Returns: string }
       has_role: {
