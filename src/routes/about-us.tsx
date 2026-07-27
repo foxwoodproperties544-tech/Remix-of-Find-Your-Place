@@ -374,18 +374,22 @@ function AboutUs() {
         <SectionTitle eyebrow="Simple process" title="How Foxwood works" />
         <div className="mt-12 grid gap-6 md:grid-cols-4 relative">
           <div className="hidden md:block absolute top-7 left-[12%] right-[12%] h-px bg-border" aria-hidden="true" />
-          {STEPS.map(({ i: Icon, t, d }, idx) => (
-            <Reveal key={t} delay={idx * 120} className="relative">
-              <div className="text-center">
-                <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-secondary text-white shadow-soft ring-8 ring-background">
-                  <Icon className="h-6 w-6" />
+          {steps.map((s, idx) => {
+            const Icon = iconFor(s.icon);
+            return (
+              <Reveal key={`${s.title}-${idx}`} delay={idx * 120} className="relative">
+                <div className="text-center">
+                  <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-secondary text-white shadow-soft ring-8 ring-background">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div className="mt-4 text-xs font-semibold uppercase tracking-wider text-secondary">Step {idx + 1}</div>
+                  <h3 className="mt-1 font-bold">{s.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
                 </div>
-                <div className="mt-4 text-xs font-semibold uppercase tracking-wider text-secondary">Step {idx + 1}</div>
-                <h3 className="mt-1 font-bold">{t}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{d}</p>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
+
         </div>
       </section>
 
