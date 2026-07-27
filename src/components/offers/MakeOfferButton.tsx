@@ -7,7 +7,7 @@ import { X, Handshake, ChevronRight, ChevronLeft, Loader2, Check } from "lucide-
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { formatKsh } from "@/lib/mock-data";
-import { submitOffer } from "@/lib/offers.functions";
+import { submitOffer, getOfferCaptcha } from "@/lib/offers.functions";
 import { TIMELINES, priceDiff } from "@/lib/offers";
 
 interface Props {
@@ -92,6 +92,10 @@ function OfferDialog({
   const numericAmount = Number(String(amount).replace(/[^\d.]/g, "")) || 0;
   const diff = useMemo(() => priceDiff(askingPrice, numericAmount), [askingPrice, numericAmount]);
 
+  const [captcha, setCaptcha] = useState<{ question: string; token: string } | null>(null);
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const loadCaptcha = useServerFn(getOfferCaptcha);
+
   const send = useServerFn(submitOffer);
   const mut = useMutation({
     mutationFn: () =>
@@ -109,17 +113,33 @@ function OfferDialog({
           buyerEmail: email.trim(),
           buyerPhone: phone.trim(),
           acceptTerms: true as const,
+          captchaToken: captcha?.token,
+          captchaAnswer: captchaAnswer.trim() || undefined,
         },
       }),
     onSuccess: (o: any) => {
       setDone(o.id);
       toast.success(`Offer ${o.offer_ref} sent to the seller`);
     },
-    onError: (e: any) => toast.error(e?.message ?? "Could not submit offer"),
+    onError: async (e: any) => {
+      const msg = String(e?.message ?? "Could not submit offer");
+      if (msg.includes("CAPTCHA_REQUIRED")) {
+        setCaptchaAnswer("");
+        try {
+          setCaptcha((await loadCaptcha({})) as { question: string; token: string });
+        } catch {
+          /* ignore */
+        }
+        toast.error("Too many offers submitted — please complete the quick verification.");
+        return;
+      }
+      toast.error(msg);
+    },
   });
 
   const canNext1 = numericAmount > 0;
   const canNext2 = name.trim().length > 1 && /\S+@\S+\.\S+/.test(email) && phone.trim().length > 6;
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-label="Make an offer">
