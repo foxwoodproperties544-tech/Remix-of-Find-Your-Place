@@ -36,6 +36,7 @@ import { Route as AdvertisingPackagesRouteImport } from './routes/advertising-pa
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PropertyRequestsIndexRouteImport } from './routes/property-requests.index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -257,6 +258,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertyRequestsIndexRoute = PropertyRequestsIndexRouteImport.update({
+  id: '/property-requests/',
+  path: '/property-requests/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
@@ -798,6 +804,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/property-requests/': typeof PropertyRequestsIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/agents': typeof AuthenticatedAdminAgentsRoute
@@ -913,6 +920,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/properties': typeof PropertiesIndexRoute
+  '/property-requests': typeof PropertyRequestsIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/agents': typeof AuthenticatedAdminAgentsRoute
@@ -1029,6 +1037,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/property-requests/': typeof PropertyRequestsIndexRoute
   '/_authenticated/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/_authenticated/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/_authenticated/admin/agents': typeof AuthenticatedAdminAgentsRoute
@@ -1146,6 +1155,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/locations/'
     | '/properties/'
+    | '/property-requests/'
     | '/admin/ad-campaigns'
     | '/admin/ads'
     | '/admin/agents'
@@ -1261,6 +1271,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/locations'
     | '/properties'
+    | '/property-requests'
     | '/admin/ad-campaigns'
     | '/admin/ads'
     | '/admin/agents'
@@ -1376,6 +1387,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/locations/'
     | '/properties/'
+    | '/property-requests/'
     | '/_authenticated/admin/ad-campaigns'
     | '/_authenticated/admin/ads'
     | '/_authenticated/admin/agents'
@@ -1490,6 +1502,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
+  PropertyRequestsIndexRoute: typeof PropertyRequestsIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   BlogAuthorIdRoute: typeof BlogAuthorIdRoute
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
@@ -1687,6 +1700,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/property-requests/': {
+      id: '/property-requests/'
+      path: '/property-requests'
+      fullPath: '/property-requests/'
+      preLoaderRoute: typeof PropertyRequestsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/properties/': {
@@ -2548,6 +2568,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
+  PropertyRequestsIndexRoute: PropertyRequestsIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   BlogAuthorIdRoute: BlogAuthorIdRoute,
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
