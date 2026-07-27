@@ -75,6 +75,7 @@ import { Route as AuthenticatedDashboardRequestResponsesRouteImport } from './ro
 import { Route as AuthenticatedDashboardReferralsRouteImport } from './routes/_authenticated/dashboard.referrals'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardPaymentHistoryRouteImport } from './routes/_authenticated/dashboard.payment-history'
+import { Route as AuthenticatedDashboardOffersRouteImport } from './routes/_authenticated/dashboard.offers'
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardMyAppointmentsRouteImport } from './routes/_authenticated/dashboard.my-appointments'
 import { Route as AuthenticatedDashboardMyAdsRouteImport } from './routes/_authenticated/dashboard.my-ads'
@@ -471,6 +472,12 @@ const AuthenticatedDashboardPaymentHistoryRoute =
   AuthenticatedDashboardPaymentHistoryRouteImport.update({
     id: '/dashboard/payment-history',
     path: '/dashboard/payment-history',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardOffersRoute =
+  AuthenticatedDashboardOffersRouteImport.update({
+    id: '/dashboard/offers',
+    path: '/dashboard/offers',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardNewRoute =
@@ -895,6 +902,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/dashboard/offers': typeof AuthenticatedDashboardOffersRoute
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -1017,6 +1025,7 @@ export interface FileRoutesByTo {
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/dashboard/offers': typeof AuthenticatedDashboardOffersRoute
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -1141,6 +1150,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/_authenticated/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
+  '/_authenticated/dashboard/offers': typeof AuthenticatedDashboardOffersRoute
   '/_authenticated/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -1266,6 +1276,7 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
+    | '/dashboard/offers'
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
@@ -1388,6 +1399,7 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
+    | '/dashboard/offers'
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
@@ -1511,6 +1523,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/my-ads'
     | '/_authenticated/dashboard/my-appointments'
     | '/_authenticated/dashboard/new'
+    | '/_authenticated/dashboard/offers'
     | '/_authenticated/dashboard/payment-history'
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/referrals'
@@ -2064,6 +2077,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardPaymentHistoryRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/offers': {
+      id: '/_authenticated/dashboard/offers'
+      path: '/dashboard/offers'
+      fullPath: '/dashboard/offers'
+      preLoaderRoute: typeof AuthenticatedDashboardOffersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/new': {
       id: '/_authenticated/dashboard/new'
       path: '/dashboard/new'
@@ -2611,6 +2631,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardMyAdsRoute: typeof AuthenticatedDashboardMyAdsRoute
   AuthenticatedDashboardMyAppointmentsRoute: typeof AuthenticatedDashboardMyAppointmentsRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
+  AuthenticatedDashboardOffersRoute: typeof AuthenticatedDashboardOffersRoute
   AuthenticatedDashboardPaymentHistoryRoute: typeof AuthenticatedDashboardPaymentHistoryRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
   AuthenticatedDashboardReferralsRoute: typeof AuthenticatedDashboardReferralsRoute
@@ -2653,6 +2674,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardMyAppointmentsRoute:
     AuthenticatedDashboardMyAppointmentsRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
+  AuthenticatedDashboardOffersRoute: AuthenticatedDashboardOffersRoute,
   AuthenticatedDashboardPaymentHistoryRoute:
     AuthenticatedDashboardPaymentHistoryRoute,
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
