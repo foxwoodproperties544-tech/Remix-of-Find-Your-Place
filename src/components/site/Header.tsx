@@ -25,7 +25,7 @@ const requestsItems = [
   { to: "/property-requests", label: "Browse Requests", icon: Search, desc: "See what buyers and tenants are looking for", auth: false },
   { to: "/dashboard/requests/new", label: "Submit a Request", icon: PlusCircle, desc: "Tell agents exactly what you need", auth: false },
   { to: "/dashboard/requests", label: "My Requests", icon: Inbox, desc: "Manage the requests you posted", auth: true },
-  { to: "/saved-requests", label: "Saved Requests", icon: Bookmark, desc: "Requests you bookmarked to respond later", auth: false },
+  { to: "/saved-requests", label: "Saved Requests", icon: Bookmark, desc: "Requests you bookmarked to respond later", auth: true },
 ] as const;
 
 const agentsItems = [
