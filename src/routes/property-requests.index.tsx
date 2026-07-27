@@ -53,10 +53,12 @@ function BrowseRequests() {
   return (
     <>
       <PageHero
+        image={heroTools}
         eyebrow="Property Request Marketplace"
         title="What buyers and tenants are looking for"
         subtitle="Post what you need, or respond with a matching property. Verified agents, developers and owners compete to find the right match."
       />
+
 
       <section className="container-page py-10">
         <RequestStats />
