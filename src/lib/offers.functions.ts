@@ -342,7 +342,7 @@ export const actOnOffer = createServerFn({ method: "POST" })
 
     const now = new Date().toISOString();
     const patch: Record<string, unknown> = { last_actor: role };
-    let eventType = data.action;
+    let eventType: string = data.action;
     let amount: number | null = null;
 
     switch (data.action) {
