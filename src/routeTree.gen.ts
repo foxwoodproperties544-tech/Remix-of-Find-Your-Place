@@ -33,6 +33,7 @@ import { Route as BlogSitemapDotxmlRouteImport } from './routes/blog-sitemap[.]x
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AgentDeveloperSubscriptionsRouteImport } from './routes/agent-developer-subscriptions'
 import { Route as AdvertisingPackagesRouteImport } from './routes/advertising-packages'
+import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -41,6 +42,7 @@ import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
+import { Route as TeamKennedyMutuaRouteImport } from './routes/team.kennedy-mutua'
 import { Route as ServicesValuationRouteImport } from './routes/services.valuation'
 import { Route as ServicesSellRouteImport } from './routes/services.sell'
 import { Route as ServicesRentRouteImport } from './routes/services.rent'
@@ -139,6 +141,7 @@ import { Route as AuthenticatedDashboardFeatureIdRouteImport } from './routes/_a
 import { Route as AuthenticatedDashboardEditIdRouteImport } from './routes/_authenticated/dashboard.edit.$id'
 import { Route as AuthenticatedDashboardBlogNewRouteImport } from './routes/_authenticated/dashboard.blog.new'
 import { Route as AuthenticatedAdminSettingsSupportRouteImport } from './routes/_authenticated/admin.settings.support'
+import { Route as AuthenticatedAdminSettingsAboutRouteImport } from './routes/_authenticated/admin.settings.about'
 import { Route as AuthenticatedAdminPackagesPreviewRouteImport } from './routes/_authenticated/admin.packages.preview'
 import { Route as AuthenticatedDashboardBlogIdPayRouteImport } from './routes/_authenticated/dashboard.blog.$id.pay'
 import { Route as AuthenticatedDashboardBlogIdEditRouteImport } from './routes/_authenticated/dashboard.blog.$id.edit'
@@ -264,6 +267,11 @@ const AdvertisingPackagesRoute = AdvertisingPackagesRouteImport.update({
   path: '/advertising-packages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutUsRoute = AboutUsRouteImport.update({
+  id: '/about-us',
+  path: '/about-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -301,6 +309,11 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
 const AgentsIndexRoute = AgentsIndexRouteImport.update({
   id: '/agents/',
   path: '/agents/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamKennedyMutuaRoute = TeamKennedyMutuaRouteImport.update({
+  id: '/team/kennedy-mutua',
+  path: '/team/kennedy-mutua',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesValuationRoute = ServicesValuationRouteImport.update({
@@ -862,6 +875,12 @@ const AuthenticatedAdminSettingsSupportRoute =
     path: '/settings/support',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminSettingsAboutRoute =
+  AuthenticatedAdminSettingsAboutRouteImport.update({
+    id: '/settings/about',
+    path: '/settings/about',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminPackagesPreviewRoute =
   AuthenticatedAdminPackagesPreviewRouteImport.update({
     id: '/preview',
@@ -884,6 +903,7 @@ const AuthenticatedDashboardBlogIdEditRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/advertising-packages': typeof AdvertisingPackagesRoute
   '/agent-developer-subscriptions': typeof AgentDeveloperSubscriptionsRoute
   '/auth': typeof AuthRoute
@@ -927,6 +947,7 @@ export interface FileRoutesByFullPath {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/team/kennedy-mutua': typeof TeamKennedyMutuaRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
@@ -995,6 +1016,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/blog/authors/': typeof BlogAuthorsIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/admin/settings/about': typeof AuthenticatedAdminSettingsAboutRoute
   '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
@@ -1018,6 +1040,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/advertising-packages': typeof AdvertisingPackagesRoute
   '/agent-developer-subscriptions': typeof AgentDeveloperSubscriptionsRoute
   '/auth': typeof AuthRoute
@@ -1061,6 +1084,7 @@ export interface FileRoutesByTo {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/team/kennedy-mutua': typeof TeamKennedyMutuaRoute
   '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
   '/locations': typeof LocationsIndexRoute
@@ -1125,6 +1149,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/blog/authors': typeof BlogAuthorsIndexRoute
   '/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/admin/settings/about': typeof AuthenticatedAdminSettingsAboutRoute
   '/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
@@ -1150,6 +1175,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/about-us': typeof AboutUsRoute
   '/advertising-packages': typeof AdvertisingPackagesRoute
   '/agent-developer-subscriptions': typeof AgentDeveloperSubscriptionsRoute
   '/auth': typeof AuthRoute
@@ -1193,6 +1219,7 @@ export interface FileRoutesById {
   '/services/rent': typeof ServicesRentRoute
   '/services/sell': typeof ServicesSellRoute
   '/services/valuation': typeof ServicesValuationRoute
+  '/team/kennedy-mutua': typeof TeamKennedyMutuaRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
@@ -1261,6 +1288,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/blog/authors/': typeof BlogAuthorsIndexRoute
   '/_authenticated/admin/packages/preview': typeof AuthenticatedAdminPackagesPreviewRoute
+  '/_authenticated/admin/settings/about': typeof AuthenticatedAdminSettingsAboutRoute
   '/_authenticated/admin/settings/support': typeof AuthenticatedAdminSettingsSupportRoute
   '/_authenticated/dashboard/blog/new': typeof AuthenticatedDashboardBlogNewRoute
   '/_authenticated/dashboard/edit/$id': typeof AuthenticatedDashboardEditIdRoute
@@ -1286,6 +1314,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/about-us'
     | '/advertising-packages'
     | '/agent-developer-subscriptions'
     | '/auth'
@@ -1329,6 +1358,7 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/team/kennedy-mutua'
     | '/agents/'
     | '/blog/'
     | '/locations/'
@@ -1397,6 +1427,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/blog/authors/'
     | '/admin/packages/preview'
+    | '/admin/settings/about'
     | '/admin/settings/support'
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
@@ -1420,6 +1451,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/about-us'
     | '/advertising-packages'
     | '/agent-developer-subscriptions'
     | '/auth'
@@ -1463,6 +1495,7 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/team/kennedy-mutua'
     | '/agents'
     | '/blog'
     | '/locations'
@@ -1527,6 +1560,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/blog/authors'
     | '/admin/packages/preview'
+    | '/admin/settings/about'
     | '/admin/settings/support'
     | '/dashboard/blog/new'
     | '/dashboard/edit/$id'
@@ -1551,6 +1585,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/about-us'
     | '/advertising-packages'
     | '/agent-developer-subscriptions'
     | '/auth'
@@ -1594,6 +1629,7 @@ export interface FileRouteTypes {
     | '/services/rent'
     | '/services/sell'
     | '/services/valuation'
+    | '/team/kennedy-mutua'
     | '/agents/'
     | '/blog/'
     | '/locations/'
@@ -1662,6 +1698,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/'
     | '/blog/authors/'
     | '/_authenticated/admin/packages/preview'
+    | '/_authenticated/admin/settings/about'
     | '/_authenticated/admin/settings/support'
     | '/_authenticated/dashboard/blog/new'
     | '/_authenticated/dashboard/edit/$id'
@@ -1687,6 +1724,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AboutUsRoute: typeof AboutUsRoute
   AdvertisingPackagesRoute: typeof AdvertisingPackagesRoute
   AgentDeveloperSubscriptionsRoute: typeof AgentDeveloperSubscriptionsRoute
   AuthRoute: typeof AuthRoute
@@ -1726,6 +1764,7 @@ export interface RootRouteChildren {
   ServicesRentRoute: typeof ServicesRentRoute
   ServicesSellRoute: typeof ServicesSellRoute
   ServicesValuationRoute: typeof ServicesValuationRoute
+  TeamKennedyMutuaRoute: typeof TeamKennedyMutuaRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
@@ -1909,6 +1948,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdvertisingPackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about-us': {
+      id: '/about-us'
+      path: '/about-us'
+      fullPath: '/about-us'
+      preLoaderRoute: typeof AboutUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -1963,6 +2009,13 @@ declare module '@tanstack/react-router' {
       path: '/agents'
       fullPath: '/agents/'
       preLoaderRoute: typeof AgentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team/kennedy-mutua': {
+      id: '/team/kennedy-mutua'
+      path: '/team/kennedy-mutua'
+      fullPath: '/team/kennedy-mutua'
+      preLoaderRoute: typeof TeamKennedyMutuaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services/valuation': {
@@ -2651,6 +2704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSettingsSupportRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/settings/about': {
+      id: '/_authenticated/admin/settings/about'
+      path: '/settings/about'
+      fullPath: '/admin/settings/about'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsAboutRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/packages/preview': {
       id: '/_authenticated/admin/packages/preview'
       path: '/preview'
@@ -2718,6 +2778,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
   AuthenticatedAdminViewingsRoute: typeof AuthenticatedAdminViewingsRoute
+  AuthenticatedAdminSettingsAboutRoute: typeof AuthenticatedAdminSettingsAboutRoute
   AuthenticatedAdminSettingsSupportRoute: typeof AuthenticatedAdminSettingsSupportRoute
 }
 
@@ -2750,6 +2811,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
   AuthenticatedAdminViewingsRoute: AuthenticatedAdminViewingsRoute,
+  AuthenticatedAdminSettingsAboutRoute: AuthenticatedAdminSettingsAboutRoute,
   AuthenticatedAdminSettingsSupportRoute:
     AuthenticatedAdminSettingsSupportRoute,
 }
@@ -2960,6 +3022,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AboutUsRoute: AboutUsRoute,
   AdvertisingPackagesRoute: AdvertisingPackagesRoute,
   AgentDeveloperSubscriptionsRoute: AgentDeveloperSubscriptionsRoute,
   AuthRoute: AuthRoute,
@@ -2999,6 +3062,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRentRoute: ServicesRentRoute,
   ServicesSellRoute: ServicesSellRoute,
   ServicesValuationRoute: ServicesValuationRoute,
+  TeamKennedyMutuaRoute: TeamKennedyMutuaRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
