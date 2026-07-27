@@ -153,7 +153,7 @@ function AgentPage() {
           </div>
           <div className="flex flex-wrap gap-2">
             {phone && <a href={`tel:${phone}`} className="btn-primary btn-primary-hover"><Phone className="h-4 w-4" /> Call</a>}
-            {waNumber && <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noreferrer" className="btn-secondary"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+            {waNumber && <a href={waHref} target="_blank" rel="noreferrer" className="btn-secondary"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
           </div>
         </div>
       </section>
@@ -226,7 +226,7 @@ function AgentPage() {
               {waNumber && (
                 <li className="flex items-center gap-3">
                   <MessageCircle className="h-4 w-4 text-primary shrink-0" />
-                  <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noreferrer" className="hover:text-primary">WhatsApp chat</a>
+                  <a href={waHref} target="_blank" rel="noreferrer" className="hover:text-primary">WhatsApp chat</a>
                 </li>
               )}
               {p.email_public && (
