@@ -71,6 +71,24 @@ export function Header() {
   };
   const moreActive = moreItems.some((m) => pathname === m.to);
   const agentsActive = agentsItems.some((m) => pathname === m.to);
+  const visibleRequestsItems = requestsItems.filter((m) => !m.auth || !!user);
+  const requestsActive = pathname.startsWith("/property-requests") || pathname.startsWith("/dashboard/requests") || pathname === "/saved-requests";
+
+  useEffect(() => {
+    if (!requestsOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (requestsRef.current && !requestsRef.current.contains(e.target as Node)) setRequestsOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setRequestsOpen(false); };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [requestsOpen]);
+
+
 
   // Close on outside click / Esc
   useEffect(() => {
