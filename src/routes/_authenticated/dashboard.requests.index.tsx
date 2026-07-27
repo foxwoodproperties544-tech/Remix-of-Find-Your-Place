@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { Plus, Eye, MessageSquare, Pencil, Trash2 } from "lucide-react";
+import { Plus, Eye, MessageSquare, Trash2 } from "lucide-react";
 import { budgetLabel, fetchMyRequests, KIND_LABEL, type PropertyRequest } from "@/lib/property-requests";
 
 export const Route = createFileRoute("/_authenticated/dashboard/requests/")({
