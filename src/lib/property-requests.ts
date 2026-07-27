@@ -217,6 +217,15 @@ export async function fetchMyRequests(userId: string) {
   return (data ?? []) as unknown as PropertyRequest[];
 }
 
+export async function fetchRequestsByIds(ids: string[]) {
+  if (!ids.length) return [] as PropertyRequest[];
+  const { data, error } = await db().select("*").in("id", ids);
+  if (error) throw error;
+  const rows = (data ?? []) as unknown as PropertyRequest[];
+  return ids.map((id) => rows.find((r) => r.id === id)).filter(Boolean) as PropertyRequest[];
+}
+
+
 export async function fetchRequestPackages(audience?: "buyer" | "agent") {
   let q = supabase.from("request_packages" as any).select("*").eq("active", true).order("sort_order");
   if (audience) q = q.eq("audience", audience);
