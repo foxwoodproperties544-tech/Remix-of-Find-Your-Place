@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SavedRequestsRouteImport } from './routes/saved-requests'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -144,6 +145,11 @@ const TermsRoute = TermsRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SavedRequestsRoute = SavedRequestsRouteImport.update({
+  id: '/saved-requests',
+  path: '/saved-requests',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
@@ -821,6 +827,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/saved-requests': typeof SavedRequestsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -943,6 +950,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/saved-requests': typeof SavedRequestsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -1065,6 +1073,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/saved-requests': typeof SavedRequestsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -1189,6 +1198,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/property-sitemap.xml'
     | '/refund-policy'
+    | '/saved-requests'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
@@ -1311,6 +1321,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/property-sitemap.xml'
     | '/refund-policy'
+    | '/saved-requests'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
@@ -1432,6 +1443,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/property-sitemap.xml'
     | '/refund-policy'
+    | '/saved-requests'
     | '/sitemap.xml'
     | '/terms'
     | '/testimonials'
@@ -1556,6 +1568,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  SavedRequestsRoute: typeof SavedRequestsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   TestimonialsRoute: typeof TestimonialsRoute
@@ -1608,6 +1621,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saved-requests': {
+      id: '/saved-requests'
+      path: '/saved-requests'
+      fullPath: '/saved-requests'
+      preLoaderRoute: typeof SavedRequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund-policy': {
@@ -2691,6 +2711,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  SavedRequestsRoute: SavedRequestsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   TestimonialsRoute: TestimonialsRoute,

@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Home, Megaphone, PenSquare, Building2, FileText, Sparkles, Search, Languages } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Bookmark, Home, Megaphone, PenSquare, Building2, FileText, Sparkles, Search, Languages } from "lucide-react";
 import { SearchCommand } from "./SearchCommand";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
@@ -15,12 +15,18 @@ const nav = [
   { to: "/properties", label: "Rent", search: { category: "For Rent" } as const },
   { to: "/properties", label: "Lease", search: { category: "For Lease" } as const },
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
-  { to: "/property-requests", label: "Requests" },
   { to: "/blog", label: "Blog" },
 
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ];
+
+const requestsItems = [
+  { to: "/property-requests", label: "Browse Requests", icon: Search, desc: "See what buyers and tenants are looking for", auth: false },
+  { to: "/dashboard/requests/new", label: "Submit a Request", icon: PlusCircle, desc: "Tell agents exactly what you need", auth: false },
+  { to: "/dashboard/requests", label: "My Requests", icon: Inbox, desc: "Manage the requests you posted", auth: true },
+  { to: "/saved-requests", label: "Saved Requests", icon: Bookmark, desc: "Requests you bookmarked to respond later", auth: false },
+] as const;
 
 const agentsItems = [
   { to: "/agents", label: "Our Agents", icon: UsersIcon, desc: "Meet verified agents and developers on Foxwood" },
@@ -35,6 +41,7 @@ const moreItems = [
 ] as const;
 
 
+
 export function Header() {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -45,6 +52,10 @@ export function Header() {
   const [mobileAgentsOpen, setMobileAgentsOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
   const agentsRef = useRef<HTMLDivElement>(null);
+  const [requestsOpen, setRequestsOpen] = useState(false);
+  const [mobileRequestsOpen, setMobileRequestsOpen] = useState(false);
+  const requestsRef = useRef<HTMLDivElement>(null);
+
   const { user } = useAuth();
   const { isAdmin } = useRoles();
   const navigate = useNavigate();
@@ -60,6 +71,24 @@ export function Header() {
   };
   const moreActive = moreItems.some((m) => pathname === m.to);
   const agentsActive = agentsItems.some((m) => pathname === m.to);
+  const visibleRequestsItems = requestsItems.filter((m) => !m.auth || !!user);
+  const requestsActive = pathname.startsWith("/property-requests") || pathname.startsWith("/dashboard/requests") || pathname === "/saved-requests";
+
+  useEffect(() => {
+    if (!requestsOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (requestsRef.current && !requestsRef.current.contains(e.target as Node)) setRequestsOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setRequestsOpen(false); };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [requestsOpen]);
+
+
 
   // Close on outside click / Esc
   useEffect(() => {
@@ -127,7 +156,52 @@ export function Header() {
               activeProps={{ className: "text-primary bg-primary-soft" }}
             >{navLabel(n.label)}</Link>
           ))}
+          {/* Property Requests dropdown */}
+          <div
+            ref={requestsRef}
+            className="relative"
+            onMouseEnter={() => setRequestsOpen(true)}
+            onMouseLeave={() => setRequestsOpen(false)}
+          >
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={requestsOpen}
+              onClick={() => setRequestsOpen((v) => !v)}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive || requestsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
+            >
+              Property Requests <ChevronDown className={`h-3.5 w-3.5 transition-transform ${requestsOpen ? "rotate-180" : ""}`} />
+            </button>
+            {requestsOpen && (
+              <div role="menu" className="absolute right-0 top-full pt-2 w-[22rem]">
+                <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
+                  {visibleRequestsItems.map((m) => {
+                    const Icon = m.icon;
+                    const active = pathname === m.to;
+                    return (
+                      <Link
+                        key={m.to}
+                        to={m.to}
+                        role="menuitem"
+                        onClick={() => setRequestsOpen(false)}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
+                      >
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className={`block font-semibold ${active ? "text-primary" : ""}`}>{m.label}</span>
+                          <span className="block text-xs text-muted-foreground">{m.desc}</span>
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
           {/* Agents dropdown */}
+
           <div
             ref={agentsRef}
             className="relative"
@@ -277,7 +351,29 @@ export function Header() {
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{navLabel(n.label)}</Link>
             ))}
+            {/* Mobile Property Requests accordion */}
+            <button
+              type="button"
+              aria-expanded={mobileRequestsOpen}
+              onClick={() => setMobileRequestsOpen((v) => !v)}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${requestsActive ? "text-primary" : ""}`}
+            >
+              <span>Property Requests</span>
+              <ChevronDown className={`h-4 w-4 transition-transform ${mobileRequestsOpen ? "rotate-180" : ""}`} />
+            </button>
+            {mobileRequestsOpen && (
+              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+                {visibleRequestsItems.map((m) => (
+                  <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileRequestsOpen(false); }}
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    activeProps={{ className: "text-primary bg-primary-soft" }}>
+                    {m.label}
+                  </Link>
+                ))}
+              </div>
+            )}
             {/* Mobile Agents accordion */}
+
             <button
               type="button"
               aria-expanded={mobileAgentsOpen}
