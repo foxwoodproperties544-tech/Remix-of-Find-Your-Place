@@ -51,39 +51,19 @@ export const Route = createFileRoute("/about-us")({
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
+      { type: "application/ld+json", children: JSON.stringify(buildAboutPage()) },
+      { type: "application/ld+json", children: JSON.stringify(buildOrganization()) },
       {
         type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "AboutPage",
-          name: "About Foxwood Properties Ltd",
-          url: CANONICAL,
-          description: DESC,
-          mainEntity: {
-            "@type": "RealEstateAgent",
-            name: "Foxwood Properties Ltd",
-            url: SITE_URL,
-            image: OG_IMAGE,
-            telephone: SUPPORT_PHONE_TEL,
-            email: SUPPORT_EMAIL,
-            areaServed: "Kenya",
-            address: { "@type": "PostalAddress", addressCountry: "KE", addressLocality: "Nairobi" },
-            openingHours: "Mo-Sa 08:00-18:00",
-          },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-            { "@type": "ListItem", position: 2, name: "About Us", item: CANONICAL },
-          ],
-        }),
+        children: JSON.stringify(
+          buildBreadcrumbs([
+            { name: "Home", url: SITE_URL },
+            { name: "About Us", url: CANONICAL },
+          ]),
+        ),
       },
     ],
+
   }),
   component: AboutUs,
 });
