@@ -238,6 +238,7 @@ export function Header() {
                 <div onMouseLeave={() => setMenu(false)} className="absolute right-0 mt-2 w-56 rounded-xl border border-border bg-card shadow-glow p-1.5 text-sm">
                   <div className="px-3 py-2 text-xs text-muted-foreground truncate">{user.email}</div>
                   <Link to="/dashboard" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><LayoutDashboard className="h-4 w-4" /> My listings</Link>
+                  <Link to="/dashboard/requests" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Inbox className="h-4 w-4" /> My property requests</Link>
                   <Link to="/dashboard/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PlusCircle className="h-4 w-4" /> Post listing</Link>
                   <Link to="/dashboard/blog/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PenSquare className="h-4 w-4" /> Write a blog</Link>
                   <Link to="/dashboard/blog" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><FileText className="h-4 w-4" /> My blog posts</Link>

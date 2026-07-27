@@ -24,6 +24,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/dashboard/profile", label: "My profile", icon: UserCog },
       { to: "/dashboard/kyc", label: "Verify identity", icon: ShieldCheck },
       { to: "/dashboard/buyer", label: "Buyer tools", icon: Search },
+      { to: "/dashboard/requests", label: "My property requests", icon: Search, end: true },
+      { to: "/dashboard/requests/new", label: "Post a request", icon: PlusCircle },
       { to: "/favorites", label: "Favorites", icon: Heart },
       { to: "/saved-searches", label: "Saved searches", icon: Search },
       { to: "/dashboard/my-appointments", label: "My viewings", icon: CalendarDays },
@@ -55,6 +57,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/my-ads", label: "My ads", icon: Star },
         { to: "/dashboard/ad-analytics", label: "Ad analytics", icon: LayoutDashboard },
         { to: "/dashboard/insights", label: "Traffic insights", icon: LayoutDashboard },
+        { to: "/dashboard/request-responses", label: "Request responses", icon: Inbox },
 
       ],
     });
@@ -66,6 +69,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
       items: [
         { to: "/admin", label: "Moderation", icon: ShieldCheck, end: true },
         { to: "/admin/queue", label: "Approval queue", icon: CheckCircle2 },
+        { to: "/admin/requests", label: "Property requests", icon: Search },
         { to: "/admin/reports", label: "Flagged listings", icon: ShieldCheck },
         { to: "/admin/reviews", label: "Review moderation", icon: ShieldCheck },
         { to: "/admin/deletion-requests", label: "Deletion requests", icon: ShieldCheck },
