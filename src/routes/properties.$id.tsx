@@ -424,6 +424,7 @@ function Detail() {
                 {formatKsh(p.price)}<span className="text-base text-muted-foreground font-semibold">{p.priceSuffix ?? ""}</span>
               </div>
               <div className="text-xs text-muted-foreground">{p.category}</div>
+              <LatestPriceChangeBadge propertyId={propertyKey} />
             </div>
           </div>
           <div className="flex flex-wrap gap-2 md:justify-end">
