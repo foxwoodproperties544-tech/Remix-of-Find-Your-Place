@@ -595,7 +595,7 @@ function Detail() {
             <div className="mt-5 flex flex-wrap gap-2">
               <a href="#inquiry-form" className="btn-primary btn-primary-hover bg-white !text-primary hover:!opacity-90"><MessageCircle className="h-4 w-4" /> Contact agent</a>
               <a href="#inquiry-form" className="btn-secondary"><Calendar className="h-4 w-4" /> Book a viewing</a>
-              <WhatsAppLink phone={normalizePhone(contactWhatsapp) ?? normalizePhone(contactPhone) ?? normalizePhone(ownerProfile?.phone ?? null)} title={p.title} className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20" />
+              <WhatsAppLink phone={normalizePhone(contactWhatsapp) ?? normalizePhone(contactPhone) ?? normalizePhone(ownerProfile?.phone ?? null)} waContext={waContext} waDetails={waDetails} className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20" />
               <Link to="/properties" className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20"><HomeIcon className="h-4 w-4" /> Browse similar</Link>
             </div>
           </div>
@@ -603,7 +603,7 @@ function Detail() {
 
         {/* Sidebar */}
         <aside className="lg:sticky lg:top-24 h-fit space-y-4">
-          <AgentCard ownerId={ownerId} profile={ownerProfile} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} />
+          <AgentCard ownerId={ownerId} profile={ownerProfile} title={p.title} waContext={waContext} waDetails={waDetails} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} />
           <MortgageMini price={p.price} />
           {ownerId && (
             <div className="rounded-2xl border border-border bg-card p-5">
@@ -645,7 +645,7 @@ function Detail() {
       <RecentlyViewedRail excludeId={p.id} />
 
       {/* Mobile sticky CTA */}
-      <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} title={p.title} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} />
+      <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} waContext={waContext} waDetails={waDetails} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} />
 
       {/* Lightbox */}
       {lightbox && (
@@ -687,9 +687,9 @@ function Badge({ children, tone }: { children: React.ReactNode; tone: "primary" 
   return <span className={`inline-flex items-center gap-1 rounded-full text-xs font-semibold px-3 py-1 shadow-soft ${cls}`}>{children}</span>;
 }
 
-function WhatsAppLink({ phone, title, className }: { phone: string | null; title: string; className?: string }) {
+function WhatsAppLink({ phone, waContext, waDetails, className }: { phone: string | null; waContext: WhatsAppContext; waDetails: WhatsAppDetails; className?: string }) {
   if (!phone) return null;
-  const href = `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(`Hi, I'm interested in "${title}" on Foxwood Properties.`)}`;
+  const href = whatsappLink(phone, waContext, waDetails);
   return <a href={href} target="_blank" rel="noreferrer" className={className ?? "btn-secondary"}><MessageCircle className="h-4 w-4" /> WhatsApp agent</a>;
 }
 
@@ -766,8 +766,8 @@ function ReviewsSection({ propertyKey }: { propertyKey: string }) {
   );
 }
 
-function MobileCta({ price, priceSuffix, town, area, title, contactPhone, contactWhatsapp, profilePhone }:
-  { price: number; priceSuffix?: string; town: string; area: string; title: string; contactPhone: string | null; contactWhatsapp: string | null; profilePhone: string | null }) {
+function MobileCta({ price, priceSuffix, town, area, waContext, waDetails, contactPhone, contactWhatsapp, profilePhone }:
+  { price: number; priceSuffix?: string; town: string; area: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null; profilePhone: string | null }) {
   const phone = normalizePhone(contactPhone) ?? normalizePhone(profilePhone);
   const wa = normalizePhone(contactWhatsapp) ?? phone;
   const scrollToInquiry = () => document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -784,7 +784,7 @@ function MobileCta({ price, priceSuffix, town, area, title, contactPhone, contac
           <button onClick={() => { toast("No phone on this listing", { description: "Use the inquiry form to reach the agent." }); scrollToInquiry(); }} aria-label="No phone available" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-muted text-muted-foreground"><Phone className="h-4 w-4" /></button>
         )}
         {wa ? (
-          <a href={`https://wa.me/${wa.replace(/\D/g, "")}?text=${encodeURIComponent(`Hi, I'm interested in "${title}" on Foxwood Properties.`)}`} target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !py-2.5 !px-4 text-sm"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+          <a href={whatsappLink(wa, waContext, waDetails)} target="_blank" rel="noreferrer" className="btn-secondary shrink-0 !py-2.5 !px-4 text-sm"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
         ) : (
           <button onClick={scrollToInquiry} className="btn-secondary shrink-0 !py-2.5 !px-4 text-sm opacity-70"><MessageCircle className="h-4 w-4" /> Inquire</button>
         )}
@@ -793,8 +793,8 @@ function MobileCta({ price, priceSuffix, town, area, title, contactPhone, contac
   );
 }
 
-function AgentCard({ ownerId, profile, title, contactPhone, contactWhatsapp }:
-  { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null } | null; title: string; contactPhone: string | null; contactWhatsapp: string | null }) {
+function AgentCard({ ownerId, profile, title, waContext, waDetails, contactPhone, contactWhatsapp }:
+  { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null } | null; title: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null }) {
   const name = profile?.full_name ?? "Foxwood Agent";
   const initials = name.split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
   const phone = normalizePhone(contactPhone) ?? normalizePhone(profile?.phone ?? null);
@@ -831,7 +831,7 @@ function AgentCard({ ownerId, profile, title, contactPhone, contactWhatsapp }:
           <button type="button" onClick={scrollToInquiry} className="btn-primary btn-primary-hover w-full opacity-80"><Phone className="h-4 w-4" /> Request callback</button>
         )}
         {wa ? (
-          <a href={`https://wa.me/${wa.replace(/\D/g, "")}?text=${encodeURIComponent(`Hi, I'm interested in "${title}" on Foxwood Properties.`)}`} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+          <a href={whatsappLink(wa, waContext, waDetails)} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
         ) : (
           <button type="button" onClick={scrollToInquiry} className="btn-secondary w-full opacity-80"><MessageCircle className="h-4 w-4" /> Message via form</button>
         )}
@@ -852,7 +852,7 @@ function AgentCard({ ownerId, profile, title, contactPhone, contactWhatsapp }:
             <Phone className="h-3.5 w-3.5" /> Call Admin
           </a>
           <a
-            href={`https://wa.me/254759556026?text=${encodeURIComponent(`Hello Foxwood Properties, I need assistance about "${title}".`)}`}
+            href={whatsappLink(null, waContext, waDetails)}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("whatsapp", "property")); }}
