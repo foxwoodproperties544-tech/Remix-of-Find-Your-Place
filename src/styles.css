@@ -87,6 +87,18 @@
   @media (min-width: 1024px) { padding-inline: 2rem; }
 }
 
+@utility input-base {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+
+
 @utility btn-primary {
   display: inline-flex;
   align-items: center;

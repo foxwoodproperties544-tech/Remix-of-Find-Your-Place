@@ -52,7 +52,9 @@ const staticEntries: SitemapEntry[] = [
   { path: "/pricing", changefreq: "monthly", priority: "0.7" },
   { path: "/help-center", changefreq: "monthly", priority: "0.5" },
   { path: "/get-app", changefreq: "monthly", priority: "0.7" },
+  { path: "/property-requests", changefreq: "daily", priority: "0.8" },
 ];
+
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -68,6 +70,24 @@ export const Route = createFileRoute("/sitemap.xml")({
             entries.push({ path: `/locations/${cSlug}/${toSlug(town)}`, changefreq: "weekly", priority: "0.5" });
           }
         }
+
+        try {
+          const { data: reqs } = await supabase
+            .from("property_requests" as any)
+            .select("id, slug, updated_at")
+            .eq("status", "active")
+            .order("updated_at", { ascending: false })
+            .limit(1000);
+          for (const r of (reqs ?? []) as any[]) {
+            entries.push({
+              path: `/property-requests/${r.slug ?? r.id}`,
+              lastmod: r.updated_at?.slice(0, 10),
+              changefreq: "daily",
+              priority: "0.6",
+            });
+          }
+        } catch { /* ignore */ }
+
 
 
         try {

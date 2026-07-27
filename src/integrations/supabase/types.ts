@@ -2309,6 +2309,358 @@ export type Database = {
           },
         ]
       }
+      property_request_messages: {
+        Row: {
+          attachments: string[]
+          body: string
+          created_at: string
+          id: string
+          read_at: string | null
+          response_id: string
+          sender_id: string
+        }
+        Insert: {
+          attachments?: string[]
+          body: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          response_id: string
+          sender_id: string
+        }
+        Update: {
+          attachments?: string[]
+          body?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          response_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_request_messages_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "property_request_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_request_reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          reason: string
+          reporter_id: string | null
+          request_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason: string
+          reporter_id?: string | null
+          request_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          reason?: string
+          reporter_id?: string | null
+          request_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_request_reports_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_request_responses: {
+        Row: {
+          attachments: string[]
+          availability: string | null
+          created_at: string
+          id: string
+          match_score: number | null
+          message: string
+          price: number | null
+          property_id: string | null
+          property_link: string | null
+          request_id: string
+          responder_id: string
+          status: Database["public"]["Enums"]["request_response_status"]
+          updated_at: string
+          viewing_dates: string | null
+        }
+        Insert: {
+          attachments?: string[]
+          availability?: string | null
+          created_at?: string
+          id?: string
+          match_score?: number | null
+          message: string
+          price?: number | null
+          property_id?: string | null
+          property_link?: string | null
+          request_id: string
+          responder_id: string
+          status?: Database["public"]["Enums"]["request_response_status"]
+          updated_at?: string
+          viewing_dates?: string | null
+        }
+        Update: {
+          attachments?: string[]
+          availability?: string | null
+          created_at?: string
+          id?: string
+          match_score?: number | null
+          message?: string
+          price?: number | null
+          property_id?: string | null
+          property_link?: string | null
+          request_id?: string
+          responder_id?: string
+          status?: Database["public"]["Enums"]["request_response_status"]
+          updated_at?: string
+          viewing_dates?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_request_responses_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_request_responses_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_request_saves: {
+        Row: {
+          created_at: string
+          id: string
+          request_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          request_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          request_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_request_saves_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_request_views: {
+        Row: {
+          created_at: string
+          id: string
+          request_id: string
+          viewer_user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          request_id: string
+          viewer_user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          request_id?: string
+          viewer_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_request_views_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_requests: {
+        Row: {
+          allow_messages: boolean
+          allow_whatsapp: boolean
+          amenities: string[]
+          bathrooms: number | null
+          bedrooms: number | null
+          budget_max: number | null
+          budget_min: number | null
+          building_size: string | null
+          closed_at: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          county: string
+          created_at: string
+          currency: string
+          description: string
+          email_notifications: boolean
+          estate: string | null
+          expires_at: string | null
+          fulfilled_property_id: string | null
+          furnished: boolean
+          hide_email: boolean
+          hide_phone: boolean
+          id: string
+          images: string[]
+          is_featured: boolean
+          is_urgent: boolean
+          kind: Database["public"]["Enums"]["request_kind"]
+          land_size: string | null
+          move_date: string | null
+          package_slug: string | null
+          parking: number | null
+          preferred_location: string | null
+          property_type: string
+          published_at: string | null
+          response_count: number
+          slug: string | null
+          status: Database["public"]["Enums"]["request_status"]
+          title: string
+          town: string | null
+          updated_at: string
+          user_id: string
+          view_count: number
+          viewing_times: string | null
+        }
+        Insert: {
+          allow_messages?: boolean
+          allow_whatsapp?: boolean
+          amenities?: string[]
+          bathrooms?: number | null
+          bedrooms?: number | null
+          budget_max?: number | null
+          budget_min?: number | null
+          building_size?: string | null
+          closed_at?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county: string
+          created_at?: string
+          currency?: string
+          description?: string
+          email_notifications?: boolean
+          estate?: string | null
+          expires_at?: string | null
+          fulfilled_property_id?: string | null
+          furnished?: boolean
+          hide_email?: boolean
+          hide_phone?: boolean
+          id?: string
+          images?: string[]
+          is_featured?: boolean
+          is_urgent?: boolean
+          kind?: Database["public"]["Enums"]["request_kind"]
+          land_size?: string | null
+          move_date?: string | null
+          package_slug?: string | null
+          parking?: number | null
+          preferred_location?: string | null
+          property_type: string
+          published_at?: string | null
+          response_count?: number
+          slug?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          title: string
+          town?: string | null
+          updated_at?: string
+          user_id: string
+          view_count?: number
+          viewing_times?: string | null
+        }
+        Update: {
+          allow_messages?: boolean
+          allow_whatsapp?: boolean
+          amenities?: string[]
+          bathrooms?: number | null
+          bedrooms?: number | null
+          budget_max?: number | null
+          budget_min?: number | null
+          building_size?: string | null
+          closed_at?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string
+          created_at?: string
+          currency?: string
+          description?: string
+          email_notifications?: boolean
+          estate?: string | null
+          expires_at?: string | null
+          fulfilled_property_id?: string | null
+          furnished?: boolean
+          hide_email?: boolean
+          hide_phone?: boolean
+          id?: string
+          images?: string[]
+          is_featured?: boolean
+          is_urgent?: boolean
+          kind?: Database["public"]["Enums"]["request_kind"]
+          land_size?: string | null
+          move_date?: string | null
+          package_slug?: string | null
+          parking?: number | null
+          preferred_location?: string | null
+          property_type?: string
+          published_at?: string | null
+          response_count?: number
+          slug?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          title?: string
+          town?: string | null
+          updated_at?: string
+          user_id?: string
+          view_count?: number
+          viewing_times?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_requests_fulfilled_property_id_fkey"
+            columns: ["fulfilled_property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_verification_checks: {
         Row: {
           checked_at: string | null
@@ -2428,6 +2780,72 @@ export type Database = {
           hit_at?: string
           id?: string
           key?: string
+        }
+        Relationships: []
+      }
+      request_packages: {
+        Row: {
+          active: boolean
+          audience: string
+          badge_color: string | null
+          created_at: string
+          description: string | null
+          duration_days: number
+          id: string
+          instant_notifications: boolean
+          is_featured: boolean
+          is_urgent: boolean
+          name: string
+          premium_leads: boolean
+          price: number
+          priority_matching: boolean
+          renewal_enabled: boolean
+          response_limit: number | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          audience?: string
+          badge_color?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          id?: string
+          instant_notifications?: boolean
+          is_featured?: boolean
+          is_urgent?: boolean
+          name: string
+          premium_leads?: boolean
+          price?: number
+          priority_matching?: boolean
+          renewal_enabled?: boolean
+          response_limit?: number | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          audience?: string
+          badge_color?: string | null
+          created_at?: string
+          description?: string | null
+          duration_days?: number
+          id?: string
+          instant_notifications?: boolean
+          is_featured?: boolean
+          is_urgent?: boolean
+          name?: string
+          premium_leads?: boolean
+          price?: number
+          priority_matching?: boolean
+          renewal_enabled?: boolean
+          response_limit?: number | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -3042,6 +3460,15 @@ export type Database = {
         | "advertisement"
         | "blog_submission"
       mpesa_status: "pending" | "success" | "failed" | "cancelled"
+      request_kind: "buy" | "rent" | "lease"
+      request_response_status: "pending" | "accepted" | "rejected" | "withdrawn"
+      request_status:
+        | "draft"
+        | "active"
+        | "paused"
+        | "closed"
+        | "fulfilled"
+        | "expired"
       verification_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
@@ -3220,6 +3647,16 @@ export const Constants = {
         "blog_submission",
       ],
       mpesa_status: ["pending", "success", "failed", "cancelled"],
+      request_kind: ["buy", "rent", "lease"],
+      request_response_status: ["pending", "accepted", "rejected", "withdrawn"],
+      request_status: [
+        "draft",
+        "active",
+        "paused",
+        "closed",
+        "fulfilled",
+        "expired",
+      ],
       verification_status: ["pending", "approved", "rejected"],
     },
   },

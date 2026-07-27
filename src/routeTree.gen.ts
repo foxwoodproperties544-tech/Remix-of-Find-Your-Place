@@ -36,6 +36,7 @@ import { Route as AdvertisingPackagesRouteImport } from './routes/advertising-pa
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PropertyRequestsIndexRouteImport } from './routes/property-requests.index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -49,6 +50,7 @@ import { Route as ServicesListRouteImport } from './routes/services.list'
 import { Route as ServicesLeaseRouteImport } from './routes/services.lease'
 import { Route as ServicesInvestmentRouteImport } from './routes/services.investment'
 import { Route as ServicesBuyRouteImport } from './routes/services.buy'
+import { Route as PropertyRequestsSlugRouteImport } from './routes/property-requests.$slug'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -67,6 +69,8 @@ import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
 import { Route as AuthenticatedDashboardSecurityRouteImport } from './routes/_authenticated/dashboard.security'
+import { Route as AuthenticatedDashboardRequestsRouteImport } from './routes/_authenticated/dashboard.requests'
+import { Route as AuthenticatedDashboardRequestResponsesRouteImport } from './routes/_authenticated/dashboard.request-responses'
 import { Route as AuthenticatedDashboardReferralsRouteImport } from './routes/_authenticated/dashboard.referrals'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardPaymentHistoryRouteImport } from './routes/_authenticated/dashboard.payment-history'
@@ -93,6 +97,7 @@ import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
 import { Route as AuthenticatedAdminScanRunsRouteImport } from './routes/_authenticated/admin.scan-runs'
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
+import { Route as AuthenticatedAdminRequestsRouteImport } from './routes/_authenticated/admin.requests'
 import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authenticated/admin.reports'
 import { Route as AuthenticatedAdminQueueRouteImport } from './routes/_authenticated/admin.queue'
 import { Route as AuthenticatedAdminPwaAnalyticsRouteImport } from './routes/_authenticated/admin.pwa-analytics'
@@ -109,9 +114,11 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminAgentsRouteImport } from './routes/_authenticated/admin.agents'
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
+import { Route as AuthenticatedDashboardRequestsIndexRouteImport } from './routes/_authenticated/dashboard.requests.index'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api/public/hooks/subscription-scan'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
+import { Route as AuthenticatedDashboardRequestsNewRouteImport } from './routes/_authenticated/dashboard.requests.new'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
@@ -259,6 +266,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PropertyRequestsIndexRoute = PropertyRequestsIndexRouteImport.update({
+  id: '/property-requests/',
+  path: '/property-requests/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
   id: '/properties/',
   path: '/properties/',
@@ -322,6 +334,11 @@ const ServicesInvestmentRoute = ServicesInvestmentRouteImport.update({
 const ServicesBuyRoute = ServicesBuyRouteImport.update({
   id: '/services/buy',
   path: '/services/buy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertyRequestsSlugRoute = PropertyRequestsSlugRouteImport.update({
+  id: '/property-requests/$slug',
+  path: '/property-requests/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
@@ -417,6 +434,18 @@ const AuthenticatedDashboardSecurityRoute =
   AuthenticatedDashboardSecurityRouteImport.update({
     id: '/dashboard/security',
     path: '/dashboard/security',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardRequestsRoute =
+  AuthenticatedDashboardRequestsRouteImport.update({
+    id: '/dashboard/requests',
+    path: '/dashboard/requests',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardRequestResponsesRoute =
+  AuthenticatedDashboardRequestResponsesRouteImport.update({
+    id: '/dashboard/request-responses',
+    path: '/dashboard/request-responses',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardReferralsRoute =
@@ -574,6 +603,12 @@ const AuthenticatedAdminReviewsRoute =
     path: '/reviews',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminRequestsRoute =
+  AuthenticatedAdminRequestsRouteImport.update({
+    id: '/requests',
+    path: '/requests',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminReportsRoute =
   AuthenticatedAdminReportsRouteImport.update({
     id: '/reports',
@@ -665,6 +700,12 @@ const AuthenticatedAdminAdCampaignsRoute =
     path: '/ad-campaigns',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedDashboardRequestsIndexRoute =
+  AuthenticatedDashboardRequestsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRequestsRoute,
+  } as any)
 const AuthenticatedDashboardBlogIndexRoute =
   AuthenticatedDashboardBlogIndexRouteImport.update({
     id: '/',
@@ -682,6 +723,12 @@ const AuthenticatedDashboardVerifyIdRoute =
     id: '/dashboard/verify/$id',
     path: '/dashboard/verify/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardRequestsNewRoute =
+  AuthenticatedDashboardRequestsNewRouteImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AuthenticatedDashboardRequestsRoute,
   } as any)
 const AuthenticatedDashboardPayIdRoute =
   AuthenticatedDashboardPayIdRouteImport.update({
@@ -785,6 +832,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/property-requests/$slug': typeof PropertyRequestsSlugRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
   '/services/lease': typeof ServicesLeaseRoute
@@ -798,6 +846,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/property-requests/': typeof PropertyRequestsIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/agents': typeof AuthenticatedAdminAgentsRoute
@@ -814,6 +863,7 @@ export interface FileRoutesByFullPath {
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
+  '/admin/requests': typeof AuthenticatedAdminRequestsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
@@ -840,6 +890,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
+  '/dashboard/request-responses': typeof AuthenticatedDashboardRequestResponsesRoute
+  '/dashboard/requests': typeof AuthenticatedDashboardRequestsRouteWithChildren
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
@@ -859,9 +911,11 @@ export interface FileRoutesByFullPath {
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
+  '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
+  '/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -900,6 +954,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/property-requests/$slug': typeof PropertyRequestsSlugRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
   '/services/lease': typeof ServicesLeaseRoute
@@ -913,6 +968,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/properties': typeof PropertiesIndexRoute
+  '/property-requests': typeof PropertyRequestsIndexRoute
   '/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/admin/agents': typeof AuthenticatedAdminAgentsRoute
@@ -929,6 +985,7 @@ export interface FileRoutesByTo {
   '/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/admin/reports': typeof AuthenticatedAdminReportsRoute
+  '/admin/requests': typeof AuthenticatedAdminRequestsRoute
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
@@ -954,6 +1011,7 @@ export interface FileRoutesByTo {
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
+  '/dashboard/request-responses': typeof AuthenticatedDashboardRequestResponsesRoute
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
@@ -973,9 +1031,11 @@ export interface FileRoutesByTo {
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
+  '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
+  '/dashboard/requests': typeof AuthenticatedDashboardRequestsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1016,6 +1076,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
+  '/property-requests/$slug': typeof PropertyRequestsSlugRoute
   '/services/buy': typeof ServicesBuyRoute
   '/services/investment': typeof ServicesInvestmentRoute
   '/services/lease': typeof ServicesLeaseRoute
@@ -1029,6 +1090,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/property-requests/': typeof PropertyRequestsIndexRoute
   '/_authenticated/admin/ad-campaigns': typeof AuthenticatedAdminAdCampaignsRoute
   '/_authenticated/admin/ads': typeof AuthenticatedAdminAdsRoute
   '/_authenticated/admin/agents': typeof AuthenticatedAdminAgentsRoute
@@ -1045,6 +1107,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pwa-analytics': typeof AuthenticatedAdminPwaAnalyticsRoute
   '/_authenticated/admin/queue': typeof AuthenticatedAdminQueueRoute
   '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
+  '/_authenticated/admin/requests': typeof AuthenticatedAdminRequestsRoute
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
@@ -1071,6 +1134,8 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
+  '/_authenticated/dashboard/request-responses': typeof AuthenticatedDashboardRequestResponsesRoute
+  '/_authenticated/dashboard/requests': typeof AuthenticatedDashboardRequestsRouteWithChildren
   '/_authenticated/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
@@ -1090,9 +1155,11 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
+  '/_authenticated/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
+  '/_authenticated/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1133,6 +1200,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
+    | '/property-requests/$slug'
     | '/services/buy'
     | '/services/investment'
     | '/services/lease'
@@ -1146,6 +1214,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/locations/'
     | '/properties/'
+    | '/property-requests/'
     | '/admin/ad-campaigns'
     | '/admin/ads'
     | '/admin/agents'
@@ -1162,6 +1231,7 @@ export interface FileRouteTypes {
     | '/admin/pwa-analytics'
     | '/admin/queue'
     | '/admin/reports'
+    | '/admin/requests'
     | '/admin/reviews'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
@@ -1188,6 +1258,8 @@ export interface FileRouteTypes {
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
+    | '/dashboard/request-responses'
+    | '/dashboard/requests'
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
@@ -1207,9 +1279,11 @@ export interface FileRouteTypes {
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
+    | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog/'
+    | '/dashboard/requests/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   fileRoutesByTo: FileRoutesByTo
@@ -1248,6 +1322,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
+    | '/property-requests/$slug'
     | '/services/buy'
     | '/services/investment'
     | '/services/lease'
@@ -1261,6 +1336,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/locations'
     | '/properties'
+    | '/property-requests'
     | '/admin/ad-campaigns'
     | '/admin/ads'
     | '/admin/agents'
@@ -1277,6 +1353,7 @@ export interface FileRouteTypes {
     | '/admin/pwa-analytics'
     | '/admin/queue'
     | '/admin/reports'
+    | '/admin/requests'
     | '/admin/reviews'
     | '/admin/scan-runs'
     | '/admin/subscriptions'
@@ -1302,6 +1379,7 @@ export interface FileRouteTypes {
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
+    | '/dashboard/request-responses'
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
@@ -1321,9 +1399,11 @@ export interface FileRouteTypes {
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
     | '/dashboard/pay/$id'
+    | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog'
+    | '/dashboard/requests'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   id:
@@ -1363,6 +1443,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/locations/$county'
     | '/properties/$id'
+    | '/property-requests/$slug'
     | '/services/buy'
     | '/services/investment'
     | '/services/lease'
@@ -1376,6 +1457,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/locations/'
     | '/properties/'
+    | '/property-requests/'
     | '/_authenticated/admin/ad-campaigns'
     | '/_authenticated/admin/ads'
     | '/_authenticated/admin/agents'
@@ -1392,6 +1474,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pwa-analytics'
     | '/_authenticated/admin/queue'
     | '/_authenticated/admin/reports'
+    | '/_authenticated/admin/requests'
     | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/scan-runs'
     | '/_authenticated/admin/subscriptions'
@@ -1418,6 +1501,8 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/payment-history'
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/referrals'
+    | '/_authenticated/dashboard/request-responses'
+    | '/_authenticated/dashboard/requests'
     | '/_authenticated/dashboard/security'
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/upgrade'
@@ -1437,9 +1522,11 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/leads/$id'
     | '/_authenticated/dashboard/leads/new'
     | '/_authenticated/dashboard/pay/$id'
+    | '/_authenticated/dashboard/requests/new'
     | '/_authenticated/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/_authenticated/dashboard/blog/'
+    | '/_authenticated/dashboard/requests/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
   fileRoutesById: FileRoutesById
@@ -1477,6 +1564,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
+  PropertyRequestsSlugRoute: typeof PropertyRequestsSlugRoute
   ServicesBuyRoute: typeof ServicesBuyRoute
   ServicesInvestmentRoute: typeof ServicesInvestmentRoute
   ServicesLeaseRoute: typeof ServicesLeaseRoute
@@ -1490,6 +1578,7 @@ export interface RootRouteChildren {
   BlogIndexRoute: typeof BlogIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
+  PropertyRequestsIndexRoute: typeof PropertyRequestsIndexRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   BlogAuthorIdRoute: typeof BlogAuthorIdRoute
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
@@ -1689,6 +1778,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/property-requests/': {
+      id: '/property-requests/'
+      path: '/property-requests'
+      fullPath: '/property-requests/'
+      preLoaderRoute: typeof PropertyRequestsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/properties/': {
       id: '/properties/'
       path: '/properties'
@@ -1778,6 +1874,13 @@ declare module '@tanstack/react-router' {
       path: '/services/buy'
       fullPath: '/services/buy'
       preLoaderRoute: typeof ServicesBuyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/property-requests/$slug': {
+      id: '/property-requests/$slug'
+      path: '/property-requests/$slug'
+      fullPath: '/property-requests/$slug'
+      preLoaderRoute: typeof PropertyRequestsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/properties/$id': {
@@ -1904,6 +2007,20 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/security'
       fullPath: '/dashboard/security'
       preLoaderRoute: typeof AuthenticatedDashboardSecurityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/requests': {
+      id: '/_authenticated/dashboard/requests'
+      path: '/dashboard/requests'
+      fullPath: '/dashboard/requests'
+      preLoaderRoute: typeof AuthenticatedDashboardRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/request-responses': {
+      id: '/_authenticated/dashboard/request-responses'
+      path: '/dashboard/request-responses'
+      fullPath: '/dashboard/request-responses'
+      preLoaderRoute: typeof AuthenticatedDashboardRequestResponsesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/referrals': {
@@ -2088,6 +2205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/requests': {
+      id: '/_authenticated/admin/requests'
+      path: '/requests'
+      fullPath: '/admin/requests'
+      preLoaderRoute: typeof AuthenticatedAdminRequestsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/reports': {
       id: '/_authenticated/admin/reports'
       path: '/reports'
@@ -2200,6 +2324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAdCampaignsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/dashboard/requests/': {
+      id: '/_authenticated/dashboard/requests/'
+      path: '/'
+      fullPath: '/dashboard/requests/'
+      preLoaderRoute: typeof AuthenticatedDashboardRequestsIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRequestsRoute
+    }
     '/_authenticated/dashboard/blog/': {
       id: '/_authenticated/dashboard/blog/'
       path: '/'
@@ -2220,6 +2351,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/verify/$id'
       preLoaderRoute: typeof AuthenticatedDashboardVerifyIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/requests/new': {
+      id: '/_authenticated/dashboard/requests/new'
+      path: '/new'
+      fullPath: '/dashboard/requests/new'
+      preLoaderRoute: typeof AuthenticatedDashboardRequestsNewRouteImport
+      parentRoute: typeof AuthenticatedDashboardRequestsRoute
     }
     '/_authenticated/dashboard/pay/$id': {
       id: '/_authenticated/dashboard/pay/$id'
@@ -2333,6 +2471,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminPwaAnalyticsRoute: typeof AuthenticatedAdminPwaAnalyticsRoute
   AuthenticatedAdminQueueRoute: typeof AuthenticatedAdminQueueRoute
   AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
+  AuthenticatedAdminRequestsRoute: typeof AuthenticatedAdminRequestsRoute
   AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
   AuthenticatedAdminScanRunsRoute: typeof AuthenticatedAdminScanRunsRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
@@ -2361,6 +2500,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminPwaAnalyticsRoute: AuthenticatedAdminPwaAnalyticsRoute,
   AuthenticatedAdminQueueRoute: AuthenticatedAdminQueueRoute,
   AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,
+  AuthenticatedAdminRequestsRoute: AuthenticatedAdminRequestsRoute,
   AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
   AuthenticatedAdminScanRunsRoute: AuthenticatedAdminScanRunsRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
@@ -2412,6 +2552,24 @@ const AuthenticatedDashboardLeadsRouteWithChildren =
     AuthenticatedDashboardLeadsRouteChildren,
   )
 
+interface AuthenticatedDashboardRequestsRouteChildren {
+  AuthenticatedDashboardRequestsNewRoute: typeof AuthenticatedDashboardRequestsNewRoute
+  AuthenticatedDashboardRequestsIndexRoute: typeof AuthenticatedDashboardRequestsIndexRoute
+}
+
+const AuthenticatedDashboardRequestsRouteChildren: AuthenticatedDashboardRequestsRouteChildren =
+  {
+    AuthenticatedDashboardRequestsNewRoute:
+      AuthenticatedDashboardRequestsNewRoute,
+    AuthenticatedDashboardRequestsIndexRoute:
+      AuthenticatedDashboardRequestsIndexRoute,
+  }
+
+const AuthenticatedDashboardRequestsRouteWithChildren =
+  AuthenticatedDashboardRequestsRoute._addFileChildren(
+    AuthenticatedDashboardRequestsRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
@@ -2435,6 +2593,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardPaymentHistoryRoute: typeof AuthenticatedDashboardPaymentHistoryRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
   AuthenticatedDashboardReferralsRoute: typeof AuthenticatedDashboardReferralsRoute
+  AuthenticatedDashboardRequestResponsesRoute: typeof AuthenticatedDashboardRequestResponsesRoute
+  AuthenticatedDashboardRequestsRoute: typeof AuthenticatedDashboardRequestsRouteWithChildren
   AuthenticatedDashboardSecurityRoute: typeof AuthenticatedDashboardSecurityRoute
   AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
@@ -2475,6 +2635,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedDashboardPaymentHistoryRoute,
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
   AuthenticatedDashboardReferralsRoute: AuthenticatedDashboardReferralsRoute,
+  AuthenticatedDashboardRequestResponsesRoute:
+    AuthenticatedDashboardRequestResponsesRoute,
+  AuthenticatedDashboardRequestsRoute:
+    AuthenticatedDashboardRequestsRouteWithChildren,
   AuthenticatedDashboardSecurityRoute: AuthenticatedDashboardSecurityRoute,
   AuthenticatedDashboardSubscriptionRoute:
     AuthenticatedDashboardSubscriptionRoute,
@@ -2535,6 +2699,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
+  PropertyRequestsSlugRoute: PropertyRequestsSlugRoute,
   ServicesBuyRoute: ServicesBuyRoute,
   ServicesInvestmentRoute: ServicesInvestmentRoute,
   ServicesLeaseRoute: ServicesLeaseRoute,
@@ -2548,6 +2713,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIndexRoute: BlogIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
+  PropertyRequestsIndexRoute: PropertyRequestsIndexRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   BlogAuthorIdRoute: BlogAuthorIdRoute,
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
