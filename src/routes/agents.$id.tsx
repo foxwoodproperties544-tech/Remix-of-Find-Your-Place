@@ -56,6 +56,12 @@ function AgentPage() {
   const initials = name.split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
   const phone = p.phone as string | null;
   const waNumber = (p.whatsapp || p.phone || "").replace(/[^\d]/g, "");
+  const waHref = whatsappLink(waNumber, p.company_name ? "company" : "agent", {
+    agentName: p.full_name,
+    companyName: p.company_name,
+    town: p.town,
+    county: p.county,
+  });
   const since = new Date(p.created_at).toLocaleDateString("en-KE", { year: "numeric", month: "long" });
   const roleLabel = p.role_primary === "developer" ? "Verified Developer" : p.role_primary === "owner" ? "Property Owner" : "Verified Agent";
   const location = [p.town, p.county].filter(Boolean).join(", ") || "Kenya";
