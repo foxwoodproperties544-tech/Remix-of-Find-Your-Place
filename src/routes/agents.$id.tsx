@@ -5,6 +5,7 @@ import { PropertyCard } from "@/components/site/PropertyCard";
 import { ProfileReviews } from "@/components/site/ProfileReviews";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { useAuth } from "@/hooks/use-auth";
+import { whatsappLink } from "@/lib/whatsapp";
 import {
   Phone, MessageCircle, MapPin, Home, BadgeCheck, Building2, Mail, Globe, Facebook, Instagram,
   Linkedin, Twitter, Music2, Clock, Languages as LangIcon, Briefcase, Award, ShieldCheck, AlertCircle, CheckCircle2,
