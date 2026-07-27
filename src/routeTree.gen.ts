@@ -123,6 +123,7 @@ import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardRequestsNewRouteImport } from './routes/_authenticated/dashboard.requests.new'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
+import { Route as AuthenticatedDashboardOffersIdRouteImport } from './routes/_authenticated/dashboard.offers.$id'
 import { Route as AuthenticatedDashboardLeadsNewRouteImport } from './routes/_authenticated/dashboard.leads.new'
 import { Route as AuthenticatedDashboardLeadsIdRouteImport } from './routes/_authenticated/dashboard.leads.$id'
 import { Route as AuthenticatedDashboardInvoiceIdRouteImport } from './routes/_authenticated/dashboard.invoice.$id'
@@ -757,6 +758,12 @@ const AuthenticatedDashboardPayIdRoute =
     path: '/dashboard/pay/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardOffersIdRoute =
+  AuthenticatedDashboardOffersIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedDashboardOffersRoute,
+  } as any)
 const AuthenticatedDashboardLeadsNewRoute =
   AuthenticatedDashboardLeadsNewRouteImport.update({
     id: '/new',
@@ -933,6 +940,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/dashboard/offers/$id': typeof AuthenticatedDashboardOffersIdRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
@@ -1055,6 +1063,7 @@ export interface FileRoutesByTo {
   '/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/dashboard/offers/$id': typeof AuthenticatedDashboardOffersIdRoute
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
@@ -1182,6 +1191,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/invoice/$id': typeof AuthenticatedDashboardInvoiceIdRoute
   '/_authenticated/dashboard/leads/$id': typeof AuthenticatedDashboardLeadsIdRoute
   '/_authenticated/dashboard/leads/new': typeof AuthenticatedDashboardLeadsNewRoute
+  '/_authenticated/dashboard/offers/$id': typeof AuthenticatedDashboardOffersIdRoute
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
@@ -1309,6 +1319,7 @@ export interface FileRouteTypes {
     | '/dashboard/invoice/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
+    | '/dashboard/offers/$id'
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
@@ -1431,6 +1442,7 @@ export interface FileRouteTypes {
     | '/dashboard/invoice/$id'
     | '/dashboard/leads/$id'
     | '/dashboard/leads/new'
+    | '/dashboard/offers/$id'
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
@@ -1557,6 +1569,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/invoice/$id'
     | '/_authenticated/dashboard/leads/$id'
     | '/_authenticated/dashboard/leads/new'
+    | '/_authenticated/dashboard/offers/$id'
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/requests/new'
     | '/_authenticated/dashboard/verify/$id'
@@ -2424,6 +2437,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardPayIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/offers/$id': {
+      id: '/_authenticated/dashboard/offers/$id'
+      path: '/$id'
+      fullPath: '/dashboard/offers/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardOffersIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardOffersRoute
+    }
     '/_authenticated/dashboard/leads/new': {
       id: '/_authenticated/dashboard/leads/new'
       path: '/new'
@@ -2611,11 +2631,13 @@ const AuthenticatedDashboardLeadsRouteWithChildren =
   )
 
 interface AuthenticatedDashboardOffersRouteChildren {
+  AuthenticatedDashboardOffersIdRoute: typeof AuthenticatedDashboardOffersIdRoute
   AuthenticatedDashboardOffersIndexRoute: typeof AuthenticatedDashboardOffersIndexRoute
 }
 
 const AuthenticatedDashboardOffersRouteChildren: AuthenticatedDashboardOffersRouteChildren =
   {
+    AuthenticatedDashboardOffersIdRoute: AuthenticatedDashboardOffersIdRoute,
     AuthenticatedDashboardOffersIndexRoute:
       AuthenticatedDashboardOffersIndexRoute,
   }
