@@ -214,6 +214,66 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_availability: {
+        Row: {
+          allow_in_person: boolean
+          allow_virtual: boolean
+          block_public_holidays: boolean
+          blocked_dates: string[]
+          buffer_minutes: number
+          created_at: string
+          default_location: string | null
+          end_time: string
+          horizon_days: number
+          id: string
+          lead_time_hours: number
+          max_per_day: number
+          owner_id: string
+          slot_minutes: number
+          start_time: string
+          updated_at: string
+          working_days: number[]
+        }
+        Insert: {
+          allow_in_person?: boolean
+          allow_virtual?: boolean
+          block_public_holidays?: boolean
+          blocked_dates?: string[]
+          buffer_minutes?: number
+          created_at?: string
+          default_location?: string | null
+          end_time?: string
+          horizon_days?: number
+          id?: string
+          lead_time_hours?: number
+          max_per_day?: number
+          owner_id: string
+          slot_minutes?: number
+          start_time?: string
+          updated_at?: string
+          working_days?: number[]
+        }
+        Update: {
+          allow_in_person?: boolean
+          allow_virtual?: boolean
+          block_public_holidays?: boolean
+          blocked_dates?: string[]
+          buffer_minutes?: number
+          created_at?: string
+          default_location?: string | null
+          end_time?: string
+          horizon_days?: number
+          id?: string
+          lead_time_hours?: number
+          max_per_day?: number
+          owner_id?: string
+          slot_minutes?: number
+          start_time?: string
+          updated_at?: string
+          working_days?: number[]
+        }
+        Relationships: []
+      }
       area_guides: {
         Row: {
           attractions: string | null
@@ -2083,6 +2143,7 @@ export type Database = {
           lat: number | null
           listing_type: string | null
           lng: number | null
+          open_house_at: string | null
           owner_id: string
           price: number
           price_previous: number | null
@@ -2130,6 +2191,7 @@ export type Database = {
           lat?: number | null
           listing_type?: string | null
           lng?: number | null
+          open_house_at?: string | null
           owner_id: string
           price: number
           price_previous?: number | null
@@ -2177,6 +2239,7 @@ export type Database = {
           lat?: number | null
           listing_type?: string | null
           lng?: number | null
+          open_house_at?: string | null
           owner_id?: string
           price?: number
           price_previous?: number | null
@@ -3376,13 +3439,101 @@ export type Database = {
           },
         ]
       }
-      viewings: {
+      viewing_events: {
         Row: {
-          agent_notes: string | null
-          cancel_reason: string | null
-          confirmed_at: string | null
+          actor_id: string | null
+          body: string | null
           created_at: string
           id: string
+          metadata: Json | null
+          type: string
+          viewing_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          type: string
+          viewing_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          type?: string
+          viewing_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "viewing_events_viewing_id_fkey"
+            columns: ["viewing_id"]
+            isOneToOne: false
+            referencedRelation: "viewings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      viewing_feedback: {
+        Row: {
+          as_described: boolean | null
+          buyer_id: string
+          comments: string | null
+          created_at: string
+          id: string
+          interested_in_offer: boolean
+          rating: number
+          viewing_id: string
+        }
+        Insert: {
+          as_described?: boolean | null
+          buyer_id: string
+          comments?: string | null
+          created_at?: string
+          id?: string
+          interested_in_offer?: boolean
+          rating: number
+          viewing_id: string
+        }
+        Update: {
+          as_described?: boolean | null
+          buyer_id?: string
+          comments?: string | null
+          created_at?: string
+          id?: string
+          interested_in_offer?: boolean
+          rating?: number
+          viewing_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "viewing_feedback_viewing_id_fkey"
+            columns: ["viewing_id"]
+            isOneToOne: true
+            referencedRelation: "viewings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      viewings: {
+        Row: {
+          agent_id: string | null
+          agent_notes: string | null
+          booking_ref: string | null
+          cancel_reason: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          completed_at: string | null
+          confirmed_at: string | null
+          created_at: string
+          duration_minutes: number
+          first_response_at: string | null
+          id: string
+          internal_notes: string | null
+          meeting_location: string | null
           notes: string | null
           property_id: string
           proposed_at: string | null
@@ -3394,13 +3545,25 @@ export type Database = {
           rescheduled_by: string | null
           status: string
           updated_at: string
+          viewing_type: string
+          virtual_link: string | null
+          visitor_count: number
         }
         Insert: {
+          agent_id?: string | null
           agent_notes?: string | null
+          booking_ref?: string | null
           cancel_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
           confirmed_at?: string | null
           created_at?: string
+          duration_minutes?: number
+          first_response_at?: string | null
           id?: string
+          internal_notes?: string | null
+          meeting_location?: string | null
           notes?: string | null
           property_id: string
           proposed_at?: string | null
@@ -3412,13 +3575,25 @@ export type Database = {
           rescheduled_by?: string | null
           status?: string
           updated_at?: string
+          viewing_type?: string
+          virtual_link?: string | null
+          visitor_count?: number
         }
         Update: {
+          agent_id?: string | null
           agent_notes?: string | null
+          booking_ref?: string | null
           cancel_reason?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
           confirmed_at?: string | null
           created_at?: string
+          duration_minutes?: number
+          first_response_at?: string | null
           id?: string
+          internal_notes?: string | null
+          meeting_location?: string | null
           notes?: string | null
           property_id?: string
           proposed_at?: string | null
@@ -3430,6 +3605,9 @@ export type Database = {
           rescheduled_by?: string | null
           status?: string
           updated_at?: string
+          viewing_type?: string
+          virtual_link?: string | null
+          visitor_count?: number
         }
         Relationships: [
           {

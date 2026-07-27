@@ -67,6 +67,7 @@ import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category.$category'
 import { Route as BlogAuthorIdRouteImport } from './routes/blog.author.$id'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
+import { Route as AuthenticatedDashboardViewingsRouteImport } from './routes/_authenticated/dashboard.viewings'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
 import { Route as AuthenticatedDashboardSecurityRouteImport } from './routes/_authenticated/dashboard.security'
@@ -87,11 +88,14 @@ import { Route as AuthenticatedDashboardCrmSettingsRouteImport } from './routes/
 import { Route as AuthenticatedDashboardCrmRouteImport } from './routes/_authenticated/dashboard.crm'
 import { Route as AuthenticatedDashboardBuyerRouteImport } from './routes/_authenticated/dashboard.buyer'
 import { Route as AuthenticatedDashboardBulkImportRouteImport } from './routes/_authenticated/dashboard.bulk-import'
+import { Route as AuthenticatedDashboardBookingsRouteImport } from './routes/_authenticated/dashboard.bookings'
 import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authenticated/dashboard.blog'
+import { Route as AuthenticatedDashboardAvailabilityRouteImport } from './routes/_authenticated/dashboard.availability'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
 import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
 import { Route as AuthenticatedDashboardAdAnalyticsRouteImport } from './routes/_authenticated/dashboard.ad-analytics'
 import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
+import { Route as AuthenticatedAdminViewingsRouteImport } from './routes/_authenticated/admin.viewings'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminTierPlansRouteImport } from './routes/_authenticated/admin.tier-plans'
@@ -117,10 +121,12 @@ import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminAgentsRouteImport } from './routes/_authenticated/admin.agents'
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
+import { Route as AuthenticatedDashboardViewingsIndexRouteImport } from './routes/_authenticated/dashboard.viewings.index'
 import { Route as AuthenticatedDashboardRequestsIndexRouteImport } from './routes/_authenticated/dashboard.requests.index'
 import { Route as AuthenticatedDashboardOffersIndexRouteImport } from './routes/_authenticated/dashboard.offers.index'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api/public/hooks/subscription-scan'
+import { Route as AuthenticatedDashboardViewingsIdRouteImport } from './routes/_authenticated/dashboard.viewings.$id'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardRequestsNewRouteImport } from './routes/_authenticated/dashboard.requests.new'
 import { Route as AuthenticatedDashboardPayIdRouteImport } from './routes/_authenticated/dashboard.pay.$id'
@@ -429,6 +435,12 @@ const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
   path: '/api/public/mpesa-callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardViewingsRoute =
+  AuthenticatedDashboardViewingsRouteImport.update({
+    id: '/dashboard/viewings',
+    path: '/dashboard/viewings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardUpgradeRoute =
   AuthenticatedDashboardUpgradeRouteImport.update({
     id: '/dashboard/upgrade',
@@ -549,10 +561,22 @@ const AuthenticatedDashboardBulkImportRoute =
     path: '/dashboard/bulk-import',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardBookingsRoute =
+  AuthenticatedDashboardBookingsRouteImport.update({
+    id: '/dashboard/bookings',
+    path: '/dashboard/bookings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardBlogRoute =
   AuthenticatedDashboardBlogRouteImport.update({
     id: '/dashboard/blog',
     path: '/dashboard/blog',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardAvailabilityRoute =
+  AuthenticatedDashboardAvailabilityRouteImport.update({
+    id: '/dashboard/availability',
+    path: '/dashboard/availability',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardAppointmentsRoute =
@@ -578,6 +602,12 @@ const AuthenticatedDashboardAccountRoute =
     id: '/dashboard/account',
     path: '/dashboard/account',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminViewingsRoute =
+  AuthenticatedAdminViewingsRouteImport.update({
+    id: '/viewings',
+    path: '/viewings',
+    getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminVerificationsRoute =
   AuthenticatedAdminVerificationsRouteImport.update({
@@ -723,6 +753,12 @@ const AuthenticatedAdminAdCampaignsRoute =
     path: '/ad-campaigns',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedDashboardViewingsIndexRoute =
+  AuthenticatedDashboardViewingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardViewingsRoute,
+  } as any)
 const AuthenticatedDashboardRequestsIndexRoute =
   AuthenticatedDashboardRequestsIndexRouteImport.update({
     id: '/',
@@ -746,6 +782,12 @@ const ApiPublicHooksSubscriptionScanRoute =
     id: '/api/public/hooks/subscription-scan',
     path: '/api/public/hooks/subscription-scan',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedDashboardViewingsIdRoute =
+  AuthenticatedDashboardViewingsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedDashboardViewingsRoute,
   } as any)
 const AuthenticatedDashboardVerifyIdRoute =
   AuthenticatedDashboardVerifyIdRouteImport.update({
@@ -908,11 +950,14 @@ export interface FileRoutesByFullPath {
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
+  '/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
+  '/dashboard/bookings': typeof AuthenticatedDashboardBookingsRoute
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -933,6 +978,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
+  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsRouteWithChildren
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -952,10 +998,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
+  '/dashboard/viewings/': typeof AuthenticatedDashboardViewingsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1035,10 +1083,13 @@ export interface FileRoutesByTo {
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
+  '/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
+  '/dashboard/bookings': typeof AuthenticatedDashboardBookingsRoute
   '/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -1076,10 +1127,12 @@ export interface FileRoutesByTo {
   '/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/offers': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests': typeof AuthenticatedDashboardRequestsIndexRoute
+  '/dashboard/viewings': typeof AuthenticatedDashboardViewingsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1161,11 +1214,14 @@ export interface FileRoutesById {
   '/_authenticated/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
+  '/_authenticated/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/_authenticated/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
+  '/_authenticated/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
   '/_authenticated/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
+  '/_authenticated/dashboard/bookings': typeof AuthenticatedDashboardBookingsRoute
   '/_authenticated/dashboard/bulk-import': typeof AuthenticatedDashboardBulkImportRoute
   '/_authenticated/dashboard/buyer': typeof AuthenticatedDashboardBuyerRoute
   '/_authenticated/dashboard/crm': typeof AuthenticatedDashboardCrmRoute
@@ -1186,6 +1242,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
+  '/_authenticated/dashboard/viewings': typeof AuthenticatedDashboardViewingsRouteWithChildren
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1205,10 +1262,12 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/pay/$id': typeof AuthenticatedDashboardPayIdRoute
   '/_authenticated/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
+  '/_authenticated/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/_authenticated/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/_authenticated/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
+  '/_authenticated/dashboard/viewings/': typeof AuthenticatedDashboardViewingsIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
 }
@@ -1290,11 +1349,14 @@ export interface FileRouteTypes {
     | '/admin/tier-plans'
     | '/admin/users'
     | '/admin/verifications'
+    | '/admin/viewings'
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
+    | '/dashboard/availability'
     | '/dashboard/blog'
+    | '/dashboard/bookings'
     | '/dashboard/bulk-import'
     | '/dashboard/buyer'
     | '/dashboard/crm'
@@ -1315,6 +1377,7 @@ export interface FileRouteTypes {
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
+    | '/dashboard/viewings'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1334,10 +1397,12 @@ export interface FileRouteTypes {
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
+    | '/dashboard/viewings/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog/'
     | '/dashboard/offers/'
     | '/dashboard/requests/'
+    | '/dashboard/viewings/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   fileRoutesByTo: FileRoutesByTo
@@ -1417,10 +1482,13 @@ export interface FileRouteTypes {
     | '/admin/tier-plans'
     | '/admin/users'
     | '/admin/verifications'
+    | '/admin/viewings'
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
     | '/dashboard/appointments'
+    | '/dashboard/availability'
+    | '/dashboard/bookings'
     | '/dashboard/bulk-import'
     | '/dashboard/buyer'
     | '/dashboard/crm'
@@ -1458,10 +1526,12 @@ export interface FileRouteTypes {
     | '/dashboard/pay/$id'
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
+    | '/dashboard/viewings/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog'
     | '/dashboard/offers'
     | '/dashboard/requests'
+    | '/dashboard/viewings'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
   id:
@@ -1542,11 +1612,14 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/tier-plans'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
+    | '/_authenticated/admin/viewings'
     | '/_authenticated/dashboard/account'
     | '/_authenticated/dashboard/ad-analytics'
     | '/_authenticated/dashboard/advertise'
     | '/_authenticated/dashboard/appointments'
+    | '/_authenticated/dashboard/availability'
     | '/_authenticated/dashboard/blog'
+    | '/_authenticated/dashboard/bookings'
     | '/_authenticated/dashboard/bulk-import'
     | '/_authenticated/dashboard/buyer'
     | '/_authenticated/dashboard/crm'
@@ -1567,6 +1640,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/security'
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/upgrade'
+    | '/_authenticated/dashboard/viewings'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1586,10 +1660,12 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/pay/$id'
     | '/_authenticated/dashboard/requests/new'
     | '/_authenticated/dashboard/verify/$id'
+    | '/_authenticated/dashboard/viewings/$id'
     | '/api/public/hooks/subscription-scan'
     | '/_authenticated/dashboard/blog/'
     | '/_authenticated/dashboard/offers/'
     | '/_authenticated/dashboard/requests/'
+    | '/_authenticated/dashboard/viewings/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
   fileRoutesById: FileRoutesById
@@ -2058,6 +2134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard/viewings': {
+      id: '/_authenticated/dashboard/viewings'
+      path: '/dashboard/viewings'
+      fullPath: '/dashboard/viewings'
+      preLoaderRoute: typeof AuthenticatedDashboardViewingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/upgrade': {
       id: '/_authenticated/dashboard/upgrade'
       path: '/dashboard/upgrade'
@@ -2198,11 +2281,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBulkImportRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/bookings': {
+      id: '/_authenticated/dashboard/bookings'
+      path: '/dashboard/bookings'
+      fullPath: '/dashboard/bookings'
+      preLoaderRoute: typeof AuthenticatedDashboardBookingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/blog': {
       id: '/_authenticated/dashboard/blog'
       path: '/dashboard/blog'
       fullPath: '/dashboard/blog'
       preLoaderRoute: typeof AuthenticatedDashboardBlogRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/availability': {
+      id: '/_authenticated/dashboard/availability'
+      path: '/dashboard/availability'
+      fullPath: '/dashboard/availability'
+      preLoaderRoute: typeof AuthenticatedDashboardAvailabilityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/appointments': {
@@ -2232,6 +2329,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/account'
       preLoaderRoute: typeof AuthenticatedDashboardAccountRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/viewings': {
+      id: '/_authenticated/admin/viewings'
+      path: '/viewings'
+      fullPath: '/admin/viewings'
+      preLoaderRoute: typeof AuthenticatedAdminViewingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/verifications': {
       id: '/_authenticated/admin/verifications'
@@ -2408,6 +2512,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAdCampaignsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/dashboard/viewings/': {
+      id: '/_authenticated/dashboard/viewings/'
+      path: '/'
+      fullPath: '/dashboard/viewings/'
+      preLoaderRoute: typeof AuthenticatedDashboardViewingsIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardViewingsRoute
+    }
     '/_authenticated/dashboard/requests/': {
       id: '/_authenticated/dashboard/requests/'
       path: '/'
@@ -2435,6 +2546,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/hooks/subscription-scan'
       preLoaderRoute: typeof ApiPublicHooksSubscriptionScanRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard/viewings/$id': {
+      id: '/_authenticated/dashboard/viewings/$id'
+      path: '/$id'
+      fullPath: '/dashboard/viewings/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardViewingsIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardViewingsRoute
     }
     '/_authenticated/dashboard/verify/$id': {
       id: '/_authenticated/dashboard/verify/$id'
@@ -2578,6 +2696,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminTierPlansRoute: typeof AuthenticatedAdminTierPlansRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
+  AuthenticatedAdminViewingsRoute: typeof AuthenticatedAdminViewingsRoute
   AuthenticatedAdminSettingsSupportRoute: typeof AuthenticatedAdminSettingsSupportRoute
 }
 
@@ -2608,6 +2727,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminTierPlansRoute: AuthenticatedAdminTierPlansRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
+  AuthenticatedAdminViewingsRoute: AuthenticatedAdminViewingsRoute,
   AuthenticatedAdminSettingsSupportRoute:
     AuthenticatedAdminSettingsSupportRoute,
 }
@@ -2687,6 +2807,24 @@ const AuthenticatedDashboardRequestsRouteWithChildren =
     AuthenticatedDashboardRequestsRouteChildren,
   )
 
+interface AuthenticatedDashboardViewingsRouteChildren {
+  AuthenticatedDashboardViewingsIdRoute: typeof AuthenticatedDashboardViewingsIdRoute
+  AuthenticatedDashboardViewingsIndexRoute: typeof AuthenticatedDashboardViewingsIndexRoute
+}
+
+const AuthenticatedDashboardViewingsRouteChildren: AuthenticatedDashboardViewingsRouteChildren =
+  {
+    AuthenticatedDashboardViewingsIdRoute:
+      AuthenticatedDashboardViewingsIdRoute,
+    AuthenticatedDashboardViewingsIndexRoute:
+      AuthenticatedDashboardViewingsIndexRoute,
+  }
+
+const AuthenticatedDashboardViewingsRouteWithChildren =
+  AuthenticatedDashboardViewingsRoute._addFileChildren(
+    AuthenticatedDashboardViewingsRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
@@ -2696,7 +2834,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAdAnalyticsRoute: typeof AuthenticatedDashboardAdAnalyticsRoute
   AuthenticatedDashboardAdvertiseRoute: typeof AuthenticatedDashboardAdvertiseRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
+  AuthenticatedDashboardAvailabilityRoute: typeof AuthenticatedDashboardAvailabilityRoute
   AuthenticatedDashboardBlogRoute: typeof AuthenticatedDashboardBlogRouteWithChildren
+  AuthenticatedDashboardBookingsRoute: typeof AuthenticatedDashboardBookingsRoute
   AuthenticatedDashboardBulkImportRoute: typeof AuthenticatedDashboardBulkImportRoute
   AuthenticatedDashboardBuyerRoute: typeof AuthenticatedDashboardBuyerRoute
   AuthenticatedDashboardCrmRoute: typeof AuthenticatedDashboardCrmRoute
@@ -2717,6 +2857,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardSecurityRoute: typeof AuthenticatedDashboardSecurityRoute
   AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
   AuthenticatedDashboardUpgradeRoute: typeof AuthenticatedDashboardUpgradeRoute
+  AuthenticatedDashboardViewingsRoute: typeof AuthenticatedDashboardViewingsRouteWithChildren
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardEditIdRoute: typeof AuthenticatedDashboardEditIdRoute
   AuthenticatedDashboardFeatureIdRoute: typeof AuthenticatedDashboardFeatureIdRoute
@@ -2736,7 +2877,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardAdvertiseRoute: AuthenticatedDashboardAdvertiseRoute,
   AuthenticatedDashboardAppointmentsRoute:
     AuthenticatedDashboardAppointmentsRoute,
+  AuthenticatedDashboardAvailabilityRoute:
+    AuthenticatedDashboardAvailabilityRoute,
   AuthenticatedDashboardBlogRoute: AuthenticatedDashboardBlogRouteWithChildren,
+  AuthenticatedDashboardBookingsRoute: AuthenticatedDashboardBookingsRoute,
   AuthenticatedDashboardBulkImportRoute: AuthenticatedDashboardBulkImportRoute,
   AuthenticatedDashboardBuyerRoute: AuthenticatedDashboardBuyerRoute,
   AuthenticatedDashboardCrmRoute: AuthenticatedDashboardCrmRoute,
@@ -2765,6 +2909,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardSubscriptionRoute:
     AuthenticatedDashboardSubscriptionRoute,
   AuthenticatedDashboardUpgradeRoute: AuthenticatedDashboardUpgradeRoute,
+  AuthenticatedDashboardViewingsRoute:
+    AuthenticatedDashboardViewingsRouteWithChildren,
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
   AuthenticatedDashboardEditIdRoute: AuthenticatedDashboardEditIdRoute,
   AuthenticatedDashboardFeatureIdRoute: AuthenticatedDashboardFeatureIdRoute,
