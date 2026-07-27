@@ -26,6 +26,7 @@ import { VerificationScoreCard } from "@/components/property/VerificationScoreCa
 import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
 import { PropertyTimeline } from "@/components/property/PropertyTimeline";
 import { PriceHistoryCard } from "@/components/property/PriceHistoryCard";
+import { LatestPriceChangeBadge } from "@/components/property/PriceChangeBadge";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { BookViewingButton } from "@/components/viewings/BookViewingButton";
 import { MakeOfferButton } from "@/components/offers/MakeOfferButton";
