@@ -117,6 +117,7 @@ import { Route as AuthenticatedAdminAgentsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminAdsRouteImport } from './routes/_authenticated/admin.ads'
 import { Route as AuthenticatedAdminAdCampaignsRouteImport } from './routes/_authenticated/admin.ad-campaigns'
 import { Route as AuthenticatedDashboardRequestsIndexRouteImport } from './routes/_authenticated/dashboard.requests.index'
+import { Route as AuthenticatedDashboardOffersIndexRouteImport } from './routes/_authenticated/dashboard.offers.index'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api/public/hooks/subscription-scan'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
@@ -720,6 +721,12 @@ const AuthenticatedDashboardRequestsIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedDashboardRequestsRoute,
   } as any)
+const AuthenticatedDashboardOffersIndexRoute =
+  AuthenticatedDashboardOffersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardOffersRoute,
+  } as any)
 const AuthenticatedDashboardBlogIndexRoute =
   AuthenticatedDashboardBlogIndexRouteImport.update({
     id: '/',
@@ -902,7 +909,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
-  '/dashboard/offers': typeof AuthenticatedDashboardOffersRoute
+  '/dashboard/offers': typeof AuthenticatedDashboardOffersRouteWithChildren
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -931,6 +938,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
+  '/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -1025,7 +1033,6 @@ export interface FileRoutesByTo {
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
-  '/dashboard/offers': typeof AuthenticatedDashboardOffersRoute
   '/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -1053,6 +1060,7 @@ export interface FileRoutesByTo {
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
+  '/dashboard/offers': typeof AuthenticatedDashboardOffersIndexRoute
   '/dashboard/requests': typeof AuthenticatedDashboardRequestsIndexRoute
   '/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -1150,7 +1158,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/_authenticated/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
-  '/_authenticated/dashboard/offers': typeof AuthenticatedDashboardOffersRoute
+  '/_authenticated/dashboard/offers': typeof AuthenticatedDashboardOffersRouteWithChildren
   '/_authenticated/dashboard/payment-history': typeof AuthenticatedDashboardPaymentHistoryRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/referrals': typeof AuthenticatedDashboardReferralsRoute
@@ -1179,6 +1187,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
+  '/_authenticated/dashboard/offers/': typeof AuthenticatedDashboardOffersIndexRoute
   '/_authenticated/dashboard/requests/': typeof AuthenticatedDashboardRequestsIndexRoute
   '/_authenticated/dashboard/blog/$id/edit': typeof AuthenticatedDashboardBlogIdEditRoute
   '/_authenticated/dashboard/blog/$id/pay': typeof AuthenticatedDashboardBlogIdPayRoute
@@ -1305,6 +1314,7 @@ export interface FileRouteTypes {
     | '/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog/'
+    | '/dashboard/offers/'
     | '/dashboard/requests/'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
@@ -1399,7 +1409,6 @@ export interface FileRouteTypes {
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
-    | '/dashboard/offers'
     | '/dashboard/payment-history'
     | '/dashboard/profile'
     | '/dashboard/referrals'
@@ -1427,6 +1436,7 @@ export interface FileRouteTypes {
     | '/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog'
+    | '/dashboard/offers'
     | '/dashboard/requests'
     | '/dashboard/blog/$id/edit'
     | '/dashboard/blog/$id/pay'
@@ -1552,6 +1562,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/verify/$id'
     | '/api/public/hooks/subscription-scan'
     | '/_authenticated/dashboard/blog/'
+    | '/_authenticated/dashboard/offers/'
     | '/_authenticated/dashboard/requests/'
     | '/_authenticated/dashboard/blog/$id/edit'
     | '/_authenticated/dashboard/blog/$id/pay'
@@ -2371,6 +2382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRequestsIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRequestsRoute
     }
+    '/_authenticated/dashboard/offers/': {
+      id: '/_authenticated/dashboard/offers/'
+      path: '/'
+      fullPath: '/dashboard/offers/'
+      preLoaderRoute: typeof AuthenticatedDashboardOffersIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardOffersRoute
+    }
     '/_authenticated/dashboard/blog/': {
       id: '/_authenticated/dashboard/blog/'
       path: '/'
@@ -2592,6 +2610,21 @@ const AuthenticatedDashboardLeadsRouteWithChildren =
     AuthenticatedDashboardLeadsRouteChildren,
   )
 
+interface AuthenticatedDashboardOffersRouteChildren {
+  AuthenticatedDashboardOffersIndexRoute: typeof AuthenticatedDashboardOffersIndexRoute
+}
+
+const AuthenticatedDashboardOffersRouteChildren: AuthenticatedDashboardOffersRouteChildren =
+  {
+    AuthenticatedDashboardOffersIndexRoute:
+      AuthenticatedDashboardOffersIndexRoute,
+  }
+
+const AuthenticatedDashboardOffersRouteWithChildren =
+  AuthenticatedDashboardOffersRoute._addFileChildren(
+    AuthenticatedDashboardOffersRouteChildren,
+  )
+
 interface AuthenticatedDashboardRequestsRouteChildren {
   AuthenticatedDashboardRequestsNewRoute: typeof AuthenticatedDashboardRequestsNewRoute
   AuthenticatedDashboardRequestsIndexRoute: typeof AuthenticatedDashboardRequestsIndexRoute
@@ -2631,7 +2664,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardMyAdsRoute: typeof AuthenticatedDashboardMyAdsRoute
   AuthenticatedDashboardMyAppointmentsRoute: typeof AuthenticatedDashboardMyAppointmentsRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
-  AuthenticatedDashboardOffersRoute: typeof AuthenticatedDashboardOffersRoute
+  AuthenticatedDashboardOffersRoute: typeof AuthenticatedDashboardOffersRouteWithChildren
   AuthenticatedDashboardPaymentHistoryRoute: typeof AuthenticatedDashboardPaymentHistoryRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
   AuthenticatedDashboardReferralsRoute: typeof AuthenticatedDashboardReferralsRoute
@@ -2674,7 +2707,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardMyAppointmentsRoute:
     AuthenticatedDashboardMyAppointmentsRoute,
   AuthenticatedDashboardNewRoute: AuthenticatedDashboardNewRoute,
-  AuthenticatedDashboardOffersRoute: AuthenticatedDashboardOffersRoute,
+  AuthenticatedDashboardOffersRoute:
+    AuthenticatedDashboardOffersRouteWithChildren,
   AuthenticatedDashboardPaymentHistoryRoute:
     AuthenticatedDashboardPaymentHistoryRoute,
   AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
