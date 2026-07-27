@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { CalendarClock, MapPin, Video, Users, ExternalLink } from "lucide-react";
 import { listMyViewings } from "@/lib/viewings.functions";
 import { ViewingStatusBadge } from "@/components/viewings/ViewingStatusBadge";
+import { ViewingCalendarActions } from "@/components/viewings/ViewingCalendarActions";
 import { formatViewingTime, VIEWING_TYPE_LABEL } from "@/lib/viewings";
 
 export const Route = createFileRoute("/_authenticated/dashboard/viewings/")({
@@ -117,6 +118,21 @@ function MyViewings() {
                 </div>
                 <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
               </div>
+              {["confirmed", "approved"].includes(r.status) && (
+                <ViewingCalendarActions
+                  compact
+                  className="mt-3"
+                  viewing={{
+                    booking_ref: r.booking_ref,
+                    requested_at: r.proposed_at ?? r.requested_at,
+                    duration_minutes: r.duration_minutes ?? 30,
+                    viewing_type: r.viewing_type,
+                    meeting_location: r.meeting_location,
+                    virtual_link: r.virtual_link,
+                    propertyTitle: r.property?.title ?? "Property",
+                  }}
+                />
+              )}
             </Link>
           ))}
         </div>

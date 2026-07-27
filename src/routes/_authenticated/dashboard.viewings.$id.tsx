@@ -9,8 +9,10 @@ import {
 } from "lucide-react";
 import { actOnViewing, getViewing, submitViewingFeedback } from "@/lib/viewings.functions";
 import { ViewingTimeline } from "@/components/viewings/ViewingTimeline";
+import { ViewingAuditLog } from "@/components/viewings/ViewingAuditLog";
+import { ViewingCalendarActions } from "@/components/viewings/ViewingCalendarActions";
 import { ViewingStatusBadge } from "@/components/viewings/ViewingStatusBadge";
-import { downloadIcs, formatViewingTime, VIEWING_TYPE_LABEL } from "@/lib/viewings";
+import { formatViewingTime, VIEWING_TYPE_LABEL } from "@/lib/viewings";
 
 export const Route = createFileRoute("/_authenticated/dashboard/viewings/$id")({
   head: () => ({
@@ -126,6 +128,8 @@ function ViewingDetail() {
 
           <ViewingTimeline events={events} />
 
+          <ViewingAuditLog viewingId={id} />
+
           {isBuyer && viewing.status === "completed" && (
             feedback ? (
               <section className="rounded-2xl border border-border bg-card p-5">
@@ -198,8 +202,9 @@ function ViewingDetail() {
           )}
 
           <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
-            <button
-              onClick={() => downloadIcs({
+            <p className="text-sm font-semibold">Add to your calendar</p>
+            <ViewingCalendarActions
+              viewing={{
                 booking_ref: viewing.booking_ref,
                 requested_at: when,
                 duration_minutes: viewing.duration_minutes ?? 30,
@@ -207,11 +212,8 @@ function ViewingDetail() {
                 meeting_location: viewing.meeting_location,
                 virtual_link: viewing.virtual_link,
                 propertyTitle: viewing.property?.title ?? "Property",
-              })}
-              className="btn-ghost w-full justify-center"
-            >
-              <CalendarPlus className="h-4 w-4" /> Add to calendar
-            </button>
+              }}
+            />
             {viewing.property && (
               <Link to="/properties/$id" params={{ id: viewing.property.slug ?? viewing.property.id }} className="btn-ghost w-full justify-center">
                 <MapPin className="h-4 w-4" /> View listing

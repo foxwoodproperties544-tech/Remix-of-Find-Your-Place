@@ -402,6 +402,7 @@ export const actOnViewing = createServerFn({ method: "POST" })
       case "no_show":
         patch.status = "no_show";
         patch.agent_notes = data.note ?? viewing.agent_notes;
+        buyerMsg = { type: "viewing_no_show", title: "Viewing marked as a no-show", body: `Booking ${viewing.booking_ref} was marked as a no-show by the agent.` };
         break;
       case "note":
         if (!data.note) throw new Error("Note is required");
@@ -601,4 +602,55 @@ export const adminListViewings = createServerFn({ method: "GET" })
         topLocations: tally((r) => [r.property?.town, r.property?.county].filter(Boolean).join(", ") || null),
       },
     };
+  });
+
+/* ------------------------------------ audit trail ------------------------------------ */
+
+/**
+ * Booking action audit trail (who did what and when) for a single viewing.
+ * Visible to the buyer, the listing agent/owner and admins only.
+ */
+export const getViewingAuditLog = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const ctx = context as unknown as Ctx;
+    const { data: viewing } = await ctx.supabase
+      .from("viewings").select("id, requester_id, agent_id, property_id").eq("id", data.id).maybeSingle();
+    if (!viewing) throw new Error("Booking not found");
+
+    const { data: property } = await ctx.supabase
+      .from("properties").select("owner_id").eq("id", viewing.property_id).maybeSingle();
+
+    const admin = await isAdmin(ctx);
+    const isBuyer = viewing.requester_id === ctx.userId;
+    const isAgent = viewing.agent_id === ctx.userId || property?.owner_id === ctx.userId;
+    if (!isBuyer && !isAgent && !admin) throw new Error("Forbidden");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: logs, error } = await supabaseAdmin
+      .from("audit_logs")
+      .select("id, action, summary, actor_id, actor_email, metadata, created_at")
+      .eq("entity_type", "viewing")
+      .eq("entity_id", viewing.id)
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error) throw new Error(error.message);
+
+    const actorIds = [...new Set((logs ?? []).map((l: any) => l.actor_id).filter(Boolean))];
+    const { data: actors } = await supabaseAdmin
+      .from("profiles").select("id, full_name")
+      .in("id", actorIds.length ? actorIds : ["00000000-0000-0000-0000-000000000000"]);
+    const nameById = Object.fromEntries((actors ?? []).map((a: any) => [a.id, a.full_name]));
+
+    // Buyers see who acted, but never internal emails of other parties.
+    return (logs ?? []).map((l: any) => ({
+      id: l.id,
+      action: l.action,
+      summary: l.summary,
+      created_at: l.created_at,
+      actor_name: nameById[l.actor_id] ?? (l.actor_id === ctx.userId ? "You" : "Foxwood user"),
+      actor_email: admin || isAgent ? l.actor_email : null,
+      metadata: l.metadata ?? null,
+    }));
   });

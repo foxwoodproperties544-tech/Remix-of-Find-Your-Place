@@ -2,10 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { CalendarRange, Download, Search } from "lucide-react";
+import { CalendarRange, Download, FileSpreadsheet, Search } from "lucide-react";
 import { adminListViewings } from "@/lib/viewings.functions";
 import { ViewingStatusBadge } from "@/components/viewings/ViewingStatusBadge";
-import { downloadCsv, formatViewingTime, VIEWING_STATUSES, VIEWING_STATUS_LABEL, VIEWING_TYPES, VIEWING_TYPE_LABEL } from "@/lib/viewings";
+import { downloadCsv, downloadExcel, formatViewingTime, VIEWING_STATUSES, VIEWING_STATUS_LABEL, VIEWING_TYPES, VIEWING_TYPE_LABEL } from "@/lib/viewings";
 
 export const Route = createFileRoute("/_authenticated/admin/viewings")({
   head: () => ({
@@ -46,6 +46,43 @@ function AdminViewings() {
   const rows = query.data?.rows ?? [];
   const a = query.data?.analytics;
 
+  const exportName = (ext: string) => `foxwood-viewings-${new Date().toISOString().slice(0, 10)}.${ext}`;
+
+  const exportRows = () => rows.map((r: any) => ({
+    ref: r.booking_ref,
+    property: r.property?.title ?? "",
+    location: [r.property?.town, r.property?.county].filter(Boolean).join(", "),
+    agent: r.agent_name ?? "",
+    status: VIEWING_STATUS_LABEL[r.status] ?? r.status,
+    type: VIEWING_TYPE_LABEL[r.viewing_type] ?? r.viewing_type,
+    when: formatViewingTime(r.proposed_at ?? r.requested_at),
+    visitors: r.visitor_count ?? 1,
+    buyer: r.requester_name ?? "",
+    phone: r.requester_phone ?? "",
+    email: r.requester_email ?? "",
+    requested_on: new Date(r.created_at).toLocaleString(),
+  }));
+
+  const statusBreakdown = () =>
+    VIEWING_STATUSES.map((s) => {
+      const value = rows.filter((r: any) => r.status === s).length;
+      return {
+        status: VIEWING_STATUS_LABEL[s],
+        bookings: value,
+        share: rows.length ? `${Math.round((value / rows.length) * 1000) / 10}%` : "0%",
+      };
+    });
+
+  const filterSummary = () => [{
+    search: q || "(none)",
+    status: status ? VIEWING_STATUS_LABEL[status] : "All",
+    type: viewingType ? (VIEWING_TYPE_LABEL[viewingType] ?? viewingType) : "All",
+    from: from || "(any)",
+    to: to || "(any)",
+    total_rows: rows.length,
+    exported_at: new Date().toLocaleString(),
+  }];
+
   return (
     <div className="container-page py-10">
       <div className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-3 py-1 text-xs font-semibold text-primary">
@@ -84,15 +121,20 @@ function AdminViewings() {
         </div>
       </div>
 
-      <div className="mt-3 flex justify-end">
+      <div className="mt-3 flex flex-wrap justify-end gap-2">
+        <button onClick={() => downloadCsv(exportName("csv"), exportRows())} className="btn-ghost">
+          <Download className="h-4 w-4" /> Export CSV
+        </button>
         <button
-          onClick={() => downloadCsv("foxwood-admin-viewings.csv", rows.map((r: any) => ({
-            ref: r.booking_ref, property: r.property?.title ?? "", agent: r.agent_name ?? "",
-            status: r.status, type: r.viewing_type, when: r.proposed_at ?? r.requested_at,
-            buyer: r.requester_name, phone: r.requester_phone, email: r.requester_email,
-          })))}
+          onClick={() => downloadExcel(exportName("xls"), [
+            { name: "Bookings", rows: exportRows() },
+            { name: "Status breakdown", rows: statusBreakdown() },
+            { name: "Filters", rows: filterSummary() },
+          ])}
           className="btn-ghost"
-        ><Download className="h-4 w-4" /> Export CSV</button>
+        >
+          <FileSpreadsheet className="h-4 w-4" /> Export Excel
+        </button>
       </div>
 
       {a && (
