@@ -1,9 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { MapPin, Clock, MessageSquare, Eye, Flame, Star, ShieldCheck, BedDouble, Bath } from "lucide-react";
+import { MapPin, Clock, MessageSquare, Eye, Flame, Star, ShieldCheck, BedDouble, Bath, Bookmark } from "lucide-react";
 import { budgetLabel, daysLeft, KIND_LABEL, type PropertyRequest } from "@/lib/property-requests";
+import { useSavedRequests } from "@/hooks/use-saved-requests";
 
 export function RequestCard({ r, matchPct }: { r: PropertyRequest; matchPct?: number | null }) {
   const left = daysLeft(r.expires_at);
+  const { isSaved, toggle } = useSavedRequests();
+  const saved = isSaved(r.id);
+
   return (
     <article className="group relative rounded-2xl border border-border bg-card p-5 shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all">
       <div className="flex flex-wrap items-center gap-2">
