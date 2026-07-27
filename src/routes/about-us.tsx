@@ -425,22 +425,23 @@ function AboutUs() {
       {/* Testimonials */}
       <section className="container-page py-16 md:py-24">
         <SectionTitle eyebrow="Customer stories" title="What our customers say" />
-        {testimonials && testimonials.length > 0 ? (
+        {testimonials.length > 0 ? (
           <div className="mt-10 flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4">
-            {testimonials.map((t: any) => (
-              <figure key={t.id} className="snap-start shrink-0 w-[85%] sm:w-[45%] lg:w-[31%] rounded-2xl border border-border bg-card p-6">
+            {testimonials.map((t, idx) => (
+              <figure key={`${t.name}-${idx}`} className="snap-start shrink-0 w-[85%] sm:w-[45%] lg:w-[31%] rounded-2xl border border-border bg-card p-6">
                 <Quote className="h-6 w-6 text-secondary" />
-                <blockquote className="mt-3 text-sm text-muted-foreground line-clamp-6">{t.comment}</blockquote>
+                <blockquote className="mt-3 text-sm text-muted-foreground line-clamp-6">{t.text}</blockquote>
                 <div className="mt-4 flex items-center gap-3">
-                  {t.reviewer?.avatar_url ? (
-                    <img src={t.reviewer.avatar_url} alt="" loading="lazy" className="h-10 w-10 rounded-full object-cover" />
+                  {t.photo_url ? (
+                    <img src={t.photo_url} alt="" loading="lazy" className="h-10 w-10 rounded-full object-cover" />
                   ) : (
                     <div className="h-10 w-10 rounded-full bg-primary-soft text-primary grid place-items-center text-sm font-bold">
-                      {(t.reviewer?.full_name ?? "F").charAt(0)}
+                      {(t.name || "F").charAt(0)}
                     </div>
                   )}
                   <figcaption className="text-sm">
-                    <div className="font-semibold">{t.reviewer?.full_name ?? "Foxwood customer"}</div>
+                    <div className="font-semibold">{t.name || "Foxwood customer"}</div>
+                    {t.location && <div className="text-xs text-muted-foreground">{t.location}</div>}
                     <div className="flex items-center gap-0.5 text-secondary" aria-label={`${t.rating} out of 5`}>
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} className={`h-3.5 w-3.5 ${i < t.rating ? "fill-current" : "opacity-30"}`} />
@@ -458,6 +459,7 @@ function AboutUs() {
           </p>
         )}
       </section>
+
 
       {/* Awards & partners */}
       <section className="bg-muted/40 border-y border-border py-16">
