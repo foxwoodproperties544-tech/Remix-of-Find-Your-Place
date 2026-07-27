@@ -1,11 +1,12 @@
 // Central admin/customer support contact for Foxwood Properties.
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { buildWhatsAppMessage, type WhatsAppContext } from "@/lib/whatsapp";
 
 export const SUPPORT_PHONE_DISPLAY = "+254 759 556 026";
 export const SUPPORT_PHONE_TEL = "+254759556026";
 export const SUPPORT_WHATSAPP_INTL = "254759556026";
-export const SUPPORT_DEFAULT_MESSAGE = "Hello Foxwood Properties, I need assistance.";
+export const SUPPORT_DEFAULT_MESSAGE = buildWhatsAppMessage("contact");
 
 export type SupportContext =
   | "generic"
