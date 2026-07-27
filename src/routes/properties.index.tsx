@@ -382,7 +382,21 @@ function List() {
                   <option value="price-desc">Price: High to Low</option>
                   <option value="beds-desc">Most bedrooms</option>
                   <option value="ppsf-asc">Best value (price/sqft)</option>
+                  <option value="biggest-drop">Biggest price drop</option>
                   {center && <option value="distance">Closest first</option>}
+                </select>
+                <select
+                  value={params.priceChange}
+                  onChange={(e) => updateSearch({ priceChange: e.target.value })}
+                  aria-label="Filter by price change"
+                  className="rounded-full border border-border px-3 py-2 text-xs bg-background font-medium"
+                >
+                  <option value="">Any price change</option>
+                  <option value="reduced">Recently reduced</option>
+                  <option value="increased">Recently increased</option>
+                  <option value="reduced-week">Price reduced this week</option>
+                  <option value="reduced-month">Price reduced this month</option>
+                  <option value="none">No price changes</option>
                 </select>
                 <div className="inline-flex rounded-full border border-border overflow-hidden text-xs">
                   <button onClick={() => setView("list")} aria-pressed={view === "list"}
