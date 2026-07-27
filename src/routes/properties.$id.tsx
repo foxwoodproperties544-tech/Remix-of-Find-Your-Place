@@ -25,7 +25,7 @@ import { VerificationScoreCard } from "@/components/property/VerificationScoreCa
 import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
 import { PropertyTimeline } from "@/components/property/PropertyTimeline";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
-import { AppointmentBookingForm } from "@/components/site/AppointmentBookingForm";
+import { BookViewingButton } from "@/components/viewings/BookViewingButton";
 import { MakeOfferButton } from "@/components/offers/MakeOfferButton";
 import { useQuery } from "@tanstack/react-query";
 
