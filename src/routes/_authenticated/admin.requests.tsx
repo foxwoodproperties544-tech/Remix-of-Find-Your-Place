@@ -11,7 +11,8 @@ export const Route = createFileRoute("/_authenticated/admin/requests")({
 });
 
 function AdminRequests() {
-  const { ready } = useAdminGuard();
+  const { isAdmin, loading } = useAdminGuard();
+  const ready = isAdmin && !loading;
   const qc = useQueryClient();
   const [status, setStatus] = useState<string>("all");
   const [q, setQ] = useState("");
