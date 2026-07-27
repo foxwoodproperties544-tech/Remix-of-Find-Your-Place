@@ -102,6 +102,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
 
        { to: "/admin/support", label: "Support inbox", icon: LifeBuoy },
        { to: "/admin/settings/support", label: "Support settings", icon: SlidersHorizontal },
+      { to: "/admin/settings/about", label: "About page stats", icon: SlidersHorizontal },
        { to: "/admin/audit", label: "Audit logs", icon: ShieldCheck },
        { to: "/admin/scan-runs", label: "Subscription scan runs", icon: RefreshCw },
        { to: "/admin/pwa-analytics", label: "PWA install analytics", icon: LayoutDashboard },
