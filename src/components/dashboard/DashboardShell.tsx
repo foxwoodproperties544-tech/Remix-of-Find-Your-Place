@@ -1,3 +1,4 @@
+import { foxwoodWhatsappLink } from "@/lib/whatsapp";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { useAuth } from "@/hooks/use-auth";
@@ -188,7 +189,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                     <Phone className="h-3.5 w-3.5" /> Call
                   </a>
                   <a
-                    href="https://wa.me/254759556026?text=Hello%20Foxwood%20Properties%2C%20I%20need%20help%20with%20my%20dashboard."
+                    href={foxwoodWhatsappLink("dashboard")}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("whatsapp", "dashboard")); }}

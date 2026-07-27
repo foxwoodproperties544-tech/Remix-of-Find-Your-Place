@@ -1,3 +1,4 @@
+import { buildWhatsAppMessage, whatsappHref as waHref, FOXWOOD_WHATSAPP } from "@/lib/whatsapp";
 import { supabase } from "@/integrations/supabase/client";
 import type { Property } from "./mock-data";
 
@@ -332,27 +333,16 @@ export function matchScore(req: PropertyRequest, p: Property, w: MatchWeights = 
 
 /* ---------------- WhatsApp ---------------- */
 
-export function requestWhatsappMessage(propertyTitle: string, reference: string) {
-  return `Hello, I found your response to my Property Request on Foxwood Properties Ltd.
-
-I am interested in:
-
-Property:
-${propertyTitle}
-
-Reference:
-${reference}
-
-Is it still available?
-
-Please provide more information.
-
-Thank you.`;
+export function requestWhatsappMessage(propertyTitle: string, reference: string, requestTitle?: string) {
+  return buildWhatsAppMessage("request_response", {
+    propertyTitle,
+    reference,
+    requestTitle: requestTitle ?? null,
+  });
 }
 
 export function whatsappHref(phone: string, message: string) {
-  const digits = phone.replace(/[^0-9]/g, "");
-  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+  return waHref(phone, message) ?? `https://wa.me/${FOXWOOD_WHATSAPP}?text=${encodeURIComponent(message)}`;
 }
 
 export function budgetLabel(r: Pick<PropertyRequest, "budget_min" | "budget_max" | "currency">) {

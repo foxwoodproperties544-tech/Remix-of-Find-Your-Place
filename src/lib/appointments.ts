@@ -1,3 +1,4 @@
+import { whatsappHref } from "@/lib/whatsapp";
 export type AppointmentStatus =
   | "pending"
   | "approved"
@@ -39,9 +40,7 @@ export function toWaNumber(phone?: string | null): string | null {
 }
 
 export function waLink(phone: string | null | undefined, message: string): string | null {
-  const num = toWaNumber(phone);
-  if (!num) return null;
-  return `https://wa.me/${num}?text=${encodeURIComponent(message)}`;
+  return whatsappHref(phone, message);
 }
 
 export function formatDateTime(iso: string | null | undefined): string {
