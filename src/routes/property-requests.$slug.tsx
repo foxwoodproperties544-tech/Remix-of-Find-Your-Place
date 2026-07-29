@@ -18,7 +18,7 @@ import {
   matchScore,
   KIND_LABEL,
   logRequestView,
-  type PropertyRequest,
+  type PublicPropertyRequest,
 } from "@/lib/property-requests";
 
 export const Route = createFileRoute("/property-requests/$slug")({
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/property-requests/$slug")({
     return { request };
   },
   head: ({ loaderData }) => {
-    const r = loaderData?.request as PropertyRequest | undefined;
+    const r = loaderData?.request as PublicPropertyRequest | undefined;
     const title = r ? `${r.title} — Property Request | Foxwood Properties` : "Property Request | Foxwood Properties";
     const desc = r
       ? `${KIND_LABEL[r.kind] ?? r.kind} request for ${r.property_type} in ${[r.town, r.county].filter(Boolean).join(", ")}. Budget ${budgetLabel(r)}. Respond with a matching property on Foxwood.`
@@ -61,7 +61,7 @@ export const Route = createFileRoute("/property-requests/$slug")({
 });
 
 function RequestDetail() {
-  const { request } = Route.useLoaderData() as { request: PropertyRequest };
+  const { request } = Route.useLoaderData() as { request: PublicPropertyRequest };
   const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   const left = daysLeft(request.expires_at);
@@ -146,7 +146,7 @@ function RequestDetail() {
         .neq("id", request.id)
         .order("published_at", { ascending: false })
         .limit(3);
-      return (data ?? []) as unknown as PropertyRequest[];
+      return (data ?? []) as unknown as PublicPropertyRequest[];
     },
     staleTime: 60_000,
   });

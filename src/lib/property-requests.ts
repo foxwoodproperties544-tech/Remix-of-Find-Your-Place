@@ -78,6 +78,7 @@ export interface PropertyRequest {
 }
 
 export type PublicPropertyRequest = Omit<PropertyRequest, "contact_phone" | "contact_email" | "email_notifications">;
+export type RequestDisplay = PropertyRequest | PublicPropertyRequest;
 
 export interface RequestResponse {
   id: string;
@@ -222,11 +223,11 @@ export async function fetchMyRequests(userId: string) {
 }
 
 export async function fetchRequestsByIds(ids: string[]) {
-  if (!ids.length) return [] as PropertyRequest[];
+  if (!ids.length) return [] as PublicPropertyRequest[];
   const { data, error } = await publicDb().select("*").in("id", ids);
   if (error) throw error;
-  const rows = (data ?? []) as unknown as PropertyRequest[];
-  return ids.map((id) => rows.find((r) => r.id === id)).filter(Boolean) as PropertyRequest[];
+  const rows = (data ?? []) as unknown as PublicPropertyRequest[];
+  return ids.map((id) => rows.find((r) => r.id === id)).filter(Boolean) as PublicPropertyRequest[];
 }
 
 
@@ -281,7 +282,7 @@ export async function fetchMatchWeights(): Promise<MatchWeights> {
 const norm = (s?: string | null) => (s ?? "").trim().toLowerCase();
 
 /** Score 0-100 for how well a listing satisfies a request. */
-export function matchScore(req: PropertyRequest, p: Property, w: MatchWeights = DEFAULT_MATCH_WEIGHTS): number {
+export function matchScore(req: RequestDisplay, p: Property, w: MatchWeights = DEFAULT_MATCH_WEIGHTS): number {
   let earned = 0;
   let total = 0;
 
@@ -348,7 +349,7 @@ export function whatsappHref(phone: string, message: string) {
   return waHref(phone, message) ?? `https://wa.me/${FOXWOOD_WHATSAPP}?text=${encodeURIComponent(message)}`;
 }
 
-export function budgetLabel(r: Pick<PropertyRequest, "budget_min" | "budget_max" | "currency">) {
+export function budgetLabel(r: Pick<RequestDisplay, "budget_min" | "budget_max" | "currency">) {
   const fmt = (n: number) =>
     new Intl.NumberFormat("en-KE", { maximumFractionDigits: 0 }).format(n);
   const cur = r.currency || "KES";

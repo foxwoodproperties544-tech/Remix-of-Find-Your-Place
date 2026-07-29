@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { MapPin, Clock, MessageSquare, Eye, Flame, Star, ShieldCheck, BedDouble, Bath, Bookmark } from "lucide-react";
-import { budgetLabel, daysLeft, KIND_LABEL, type PropertyRequest } from "@/lib/property-requests";
+import { budgetLabel, daysLeft, KIND_LABEL, type RequestDisplay } from "@/lib/property-requests";
 import { useSavedRequests } from "@/hooks/use-saved-requests";
 
-export function RequestCard({ r, matchPct }: { r: PropertyRequest; matchPct?: number | null }) {
+export function RequestCard({ r, matchPct }: { r: RequestDisplay; matchPct?: number | null }) {
   const left = daysLeft(r.expires_at);
   const { isSaved, toggle, restore } = useSavedRequests();
   const saved = isSaved(r.id);
