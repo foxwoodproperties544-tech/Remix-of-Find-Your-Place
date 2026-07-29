@@ -465,9 +465,9 @@ function AboutUs() {
                 </h3>
                 <div className="mt-4 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
                   {partners.filter((p) => p.category === cat).map((p, i) => (
-                    <div key={`${p.name}-${i}`} className="rounded-2xl border border-border bg-background px-4 py-6 text-center grid place-items-center gap-2 min-h-[96px]">
+                    <div key={`${p.name}-${i}`} className="rounded-2xl border border-border bg-background px-4 py-6 text-center grid place-items-center gap-3 min-h-[140px]">
                       {p.logo_url ? (
-                        <img src={p.logo_url} alt={`${p.name} logo`} loading="lazy" className="h-10 w-auto max-w-[120px] object-contain" />
+                        <img src={p.logo_url} alt={`${p.name} logo`} loading="lazy" width={512} height={512} className="h-14 w-14 object-contain" />
                       ) : null}
                       <span className="text-xs font-semibold text-muted-foreground">{p.name}</span>
                     </div>
