@@ -9,6 +9,12 @@ import {
   MapPinned, LifeBuoy, ShieldCheck, BadgeCheck, Award, Sparkles, Scale, Eye,
   HeartHandshake, Users, Compass, Star, Quote, Briefcase, Globe, type LucideIcon,
 } from "lucide-react";
+import logoKpda from "@/assets/partners/kpda.png";
+import logoEarb from "@/assets/partners/earb.png";
+import logoLands from "@/assets/partners/lands.png";
+import logoMortgage from "@/assets/partners/mortgage.png";
+import logoMobileMoney from "@/assets/partners/mobile-money.png";
+import logoSurveyors from "@/assets/partners/surveyors.png";
 
 export const ICONS: Record<string, LucideIcon> = {
   Landmark, Home, KeyRound, FileSearch, Building2, Store, Warehouse, Megaphone,
@@ -87,12 +93,12 @@ export const DEFAULT_PROCESS: ProcessStep[] = [
 ];
 
 export const DEFAULT_PARTNERS: PartnerItem[] = [
-  { name: "Kenya Property Developers Association", category: "membership" },
-  { name: "Estate Agents Registration Board", category: "certification" },
-  { name: "Ministry of Lands e-Citizen", category: "partner" },
-  { name: "Kenya Bankers Mortgage Partners", category: "partner" },
-  { name: "Safaricom M-Pesa", category: "partner" },
-  { name: "Institution of Surveyors of Kenya", category: "membership" },
+  { name: "Kenya Property Developers Association", category: "membership", logo_url: logoKpda },
+  { name: "Estate Agents Registration Board", category: "certification", logo_url: logoEarb },
+  { name: "Ministry of Lands e-Citizen", category: "partner", logo_url: logoLands },
+  { name: "Kenya Bankers Mortgage Partners", category: "partner", logo_url: logoMortgage },
+  { name: "Safaricom M-Pesa", category: "partner", logo_url: logoMobileMoney },
+  { name: "Institution of Surveyors of Kenya", category: "membership", logo_url: logoSurveyors },
 ];
 
 export const DEFAULT_TESTIMONIALS: Testimonial[] = [];
