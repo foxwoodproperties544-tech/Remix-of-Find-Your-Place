@@ -2694,6 +2694,13 @@ export type Database = {
             referencedRelation: "property_requests"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "property_request_reports_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       property_request_responses: {
@@ -2760,6 +2767,13 @@ export type Database = {
             referencedRelation: "property_requests"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "property_request_responses_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       property_request_saves: {
@@ -2789,6 +2803,13 @@ export type Database = {
             referencedRelation: "property_requests"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "property_request_saves_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       property_request_views: {
@@ -2816,6 +2837,13 @@ export type Database = {
             columns: ["request_id"]
             isOneToOne: false
             referencedRelation: "property_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_request_views_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "property_requests_public"
             referencedColumns: ["id"]
           },
         ]
@@ -3683,6 +3711,143 @@ export type Database = {
       }
     }
     Views: {
+      property_requests_public: {
+        Row: {
+          allow_messages: boolean | null
+          allow_whatsapp: boolean | null
+          amenities: string[] | null
+          bathrooms: number | null
+          bedrooms: number | null
+          budget_max: number | null
+          budget_min: number | null
+          building_size: string | null
+          closed_at: string | null
+          county: string | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          estate: string | null
+          expires_at: string | null
+          fulfilled_property_id: string | null
+          furnished: boolean | null
+          hide_email: boolean | null
+          hide_phone: boolean | null
+          id: string | null
+          images: string[] | null
+          is_featured: boolean | null
+          is_urgent: boolean | null
+          kind: Database["public"]["Enums"]["request_kind"] | null
+          land_size: string | null
+          move_date: string | null
+          package_slug: string | null
+          parking: number | null
+          preferred_location: string | null
+          property_type: string | null
+          published_at: string | null
+          response_count: number | null
+          slug: string | null
+          status: Database["public"]["Enums"]["request_status"] | null
+          title: string | null
+          town: string | null
+          updated_at: string | null
+          user_id: string | null
+          view_count: number | null
+          viewing_times: string | null
+        }
+        Insert: {
+          allow_messages?: boolean | null
+          allow_whatsapp?: boolean | null
+          amenities?: string[] | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          budget_max?: number | null
+          budget_min?: number | null
+          building_size?: string | null
+          closed_at?: string | null
+          county?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          estate?: string | null
+          expires_at?: string | null
+          fulfilled_property_id?: string | null
+          furnished?: boolean | null
+          hide_email?: boolean | null
+          hide_phone?: boolean | null
+          id?: string | null
+          images?: string[] | null
+          is_featured?: boolean | null
+          is_urgent?: boolean | null
+          kind?: Database["public"]["Enums"]["request_kind"] | null
+          land_size?: string | null
+          move_date?: string | null
+          package_slug?: string | null
+          parking?: number | null
+          preferred_location?: string | null
+          property_type?: string | null
+          published_at?: string | null
+          response_count?: number | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          title?: string | null
+          town?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          view_count?: number | null
+          viewing_times?: string | null
+        }
+        Update: {
+          allow_messages?: boolean | null
+          allow_whatsapp?: boolean | null
+          amenities?: string[] | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          budget_max?: number | null
+          budget_min?: number | null
+          building_size?: string | null
+          closed_at?: string | null
+          county?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          estate?: string | null
+          expires_at?: string | null
+          fulfilled_property_id?: string | null
+          furnished?: boolean | null
+          hide_email?: boolean | null
+          hide_phone?: boolean | null
+          id?: string | null
+          images?: string[] | null
+          is_featured?: boolean | null
+          is_urgent?: boolean | null
+          kind?: Database["public"]["Enums"]["request_kind"] | null
+          land_size?: string | null
+          move_date?: string | null
+          package_slug?: string | null
+          parking?: number | null
+          preferred_location?: string | null
+          property_type?: string | null
+          published_at?: string | null
+          response_count?: number | null
+          slug?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          title?: string | null
+          town?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          view_count?: number | null
+          viewing_times?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_requests_fulfilled_property_id_fkey"
+            columns: ["fulfilled_property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       public_profiles: {
         Row: {
           address_line: string | null
