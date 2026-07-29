@@ -132,7 +132,7 @@ export function LiveChatWidget() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label="Open live chat"
-        className="fixed bottom-5 right-24 z-40 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2"
+        className="hidden md:inline-flex fixed bottom-5 right-24 z-40 items-center gap-2 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl transition-shadow px-4 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2"
       >
         <MessagesSquare className="h-5 w-5" />
         <span className="hidden sm:inline text-sm font-semibold">Live chat</span>
