@@ -8,7 +8,7 @@ import { MessageSquare, Send, CheckCircle2, XCircle, ShieldCheck, ExternalLink, 
 import {
   requestWhatsappMessage,
   whatsappHref,
-  type PropertyRequest,
+  type RequestDisplay,
   type RequestResponse,
   type RequestMessage,
 } from "@/lib/property-requests";
@@ -25,7 +25,7 @@ interface Profile {
   role_primary: string | null;
 }
 
-export function ResponseThread({ request }: { request: PropertyRequest }) {
+export function ResponseThread({ request }: { request: RequestDisplay }) {
   const { user } = useAuth();
   const qc = useQueryClient();
   const isOwner = user?.id === request.user_id;
@@ -280,7 +280,7 @@ function MessageThread({ responseId }: { responseId: string }) {
   );
 }
 
-export function RespondForm({ request }: { request: PropertyRequest }) {
+export function RespondForm({ request }: { request: RequestDisplay }) {
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
