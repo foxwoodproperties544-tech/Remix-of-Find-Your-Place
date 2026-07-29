@@ -4,6 +4,7 @@ import { PageHero } from "@/components/site/PageHero";
 import heroAbout from "@/assets/hero-about.jpg";
 import { absoluteUrl, SITE_URL } from "@/lib/site-url";
 import { supportMessageFor, trackSupportClick, whatsappUrl } from "@/lib/support";
+import { buildBreadcrumbs, buildPerson } from "@/lib/structured-data";
 
 const NAME = "Kennedy Mutua";
 const TITLE = "Kennedy Mutua — Founder & CEO, Foxwood Properties Ltd";
@@ -30,29 +31,14 @@ export const Route = createFileRoute("/team/kennedy-mutua")({
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
     scripts: [
+      { type: "application/ld+json", children: JSON.stringify(buildPerson()) },
       {
         type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: NAME,
-          jobTitle: "Founder & Chief Executive Officer",
-          url: CANONICAL,
-          image: OG_IMAGE,
-          worksFor: { "@type": "Organization", name: "Foxwood Properties Ltd", url: SITE_URL },
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-            { "@type": "ListItem", position: 2, name: "About Us", item: `${SITE_URL}/about-us` },
-            { "@type": "ListItem", position: 3, name: NAME, item: CANONICAL },
-          ],
-        }),
+        children: JSON.stringify(buildBreadcrumbs([
+          { name: "Home", url: SITE_URL },
+          { name: "About Us", url: `${SITE_URL}/about-us` },
+          { name: NAME, url: CANONICAL },
+        ])),
       },
     ],
   }),

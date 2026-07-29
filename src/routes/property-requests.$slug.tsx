@@ -139,7 +139,7 @@ function RequestDetail() {
     queryKey: ["similar-requests", request.id],
     queryFn: async () => {
       const { data } = await supabase
-        .from("property_requests" as any)
+        .from("property_requests_public" as any)
         .select("*")
         .eq("status", "active")
         .eq("county", request.county)

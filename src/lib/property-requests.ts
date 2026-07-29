@@ -77,6 +77,8 @@ export interface PropertyRequest {
   updated_at: string;
 }
 
+export type PublicPropertyRequest = Omit<PropertyRequest, "contact_phone" | "contact_email" | "email_notifications">;
+
 export interface RequestResponse {
   id: string;
   request_id: string;
@@ -136,6 +138,7 @@ export const REQUEST_SORTS = [
 export type RequestSort = (typeof REQUEST_SORTS)[number]["value"];
 
 const db = () => supabase.from("property_requests" as any);
+const publicDb = () => supabase.from("property_requests_public" as any);
 
 export interface RequestFilters {
   kind?: string;
@@ -160,7 +163,7 @@ export interface RequestFilters {
 export async function fetchRequests(f: RequestFilters = {}) {
   const perPage = f.perPage ?? 12;
   const page = f.page ?? 1;
-  let q = db().select("*", { count: "exact" }).eq("status", "active");
+  let q = publicDb().select("*", { count: "exact" }).eq("status", "active");
 
   if (f.kind) q = q.eq("kind", f.kind);
   if (f.type) q = q.eq("property_type", f.type);
@@ -202,14 +205,14 @@ export async function fetchRequests(f: RequestFilters = {}) {
   const from = (page - 1) * perPage;
   const { data, error, count } = await q.range(from, from + perPage - 1);
   if (error) throw error;
-  return { rows: (data ?? []) as unknown as PropertyRequest[], total: count ?? 0 };
+  return { rows: (data ?? []) as unknown as PublicPropertyRequest[], total: count ?? 0 };
 }
 
-export async function fetchRequestBySlug(slugOrId: string): Promise<PropertyRequest | null> {
-  const { data } = await db().select("*").eq("slug", slugOrId).maybeSingle();
-  if (data) return data as unknown as PropertyRequest;
-  const { data: byId } = await db().select("*").eq("id", slugOrId).maybeSingle();
-  return (byId as unknown as PropertyRequest) ?? null;
+export async function fetchRequestBySlug(slugOrId: string): Promise<PublicPropertyRequest | null> {
+  const { data } = await publicDb().select("*").eq("slug", slugOrId).maybeSingle();
+  if (data) return data as unknown as PublicPropertyRequest;
+  const { data: byId } = await publicDb().select("*").eq("id", slugOrId).maybeSingle();
+  return (byId as unknown as PublicPropertyRequest) ?? null;
 }
 
 export async function fetchMyRequests(userId: string) {
@@ -220,7 +223,7 @@ export async function fetchMyRequests(userId: string) {
 
 export async function fetchRequestsByIds(ids: string[]) {
   if (!ids.length) return [] as PropertyRequest[];
-  const { data, error } = await db().select("*").in("id", ids);
+  const { data, error } = await publicDb().select("*").in("id", ids);
   if (error) throw error;
   const rows = (data ?? []) as unknown as PropertyRequest[];
   return ids.map((id) => rows.find((r) => r.id === id)).filter(Boolean) as PropertyRequest[];

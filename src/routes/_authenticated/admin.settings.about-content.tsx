@@ -11,7 +11,15 @@ import {
 
 export const Route = createFileRoute("/_authenticated/admin/settings/about-content")({
   component: AboutContentSettings,
-  head: () => ({ meta: [{ title: "About page content — Foxwood Admin" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [
+    { title: "About page content — Foxwood Admin" },
+    { name: "description", content: "Manage Foxwood About page services and process steps." },
+    { property: "og:title", content: "About page content — Foxwood Admin" },
+    { property: "og:description", content: "Manage Foxwood About page services and process steps." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex" },
+  ] }),
 });
 
 const inputCls = "rounded-lg border border-border bg-background px-3 py-2 text-sm w-full";
