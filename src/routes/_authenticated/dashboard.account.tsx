@@ -9,6 +9,7 @@ import { Heart, Search, CalendarDays, Bell, User, Home, ShieldCheck } from "luci
 import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
 import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist";
 import { PrivacyDataCard } from "@/components/dashboard/PrivacyDataCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/_authenticated/dashboard/account")({
   component: Account,
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/account")({
 
 function Account() {
   const { user } = useAuth();
-  const { isAgent, isAdmin } = useRoles();
+  const { isAgent, isAdmin, loading: rolesLoading } = useRoles();
   const qc = useQueryClient();
 
   const profile = useQuery({
@@ -101,6 +102,26 @@ function Account() {
     { label: "Booked viewings", value: s?.viewings ?? "—", icon: CalendarDays, to: "/dashboard/my-appointments" },
     { label: "Unread alerts", value: s?.unread ?? "—", icon: Bell, to: "/dashboard/account" },
   ];
+
+  // Role-loading guard: never render role-dependent UI (or let anything redirect)
+  // until roles have finished hydrating — prevents the flash/bounce on Account.
+  if (rolesLoading) {
+    return (
+      <div className="space-y-8" data-testid="account-roles-loading" aria-busy="true">
+        <div className="space-y-2">
+          <Skeleton className="h-9 w-64" />
+          <Skeleton className="h-4 w-80" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-24 rounded-xl" />
+          ))}
+        </div>
+        <Skeleton className="h-40 rounded-2xl" />
+        <span className="sr-only">Loading your account…</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
