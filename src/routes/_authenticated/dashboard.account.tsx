@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/account")({
 
 function Account() {
   const { user } = useAuth();
-  const { isAgent, isAdmin } = useRoles();
+  const { isAgent, isAdmin, loading: rolesLoading } = useRoles();
   const qc = useQueryClient();
 
   const profile = useQuery({
