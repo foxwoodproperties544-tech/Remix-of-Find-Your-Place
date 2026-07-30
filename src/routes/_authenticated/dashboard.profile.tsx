@@ -138,22 +138,47 @@ function ProfilePage() {
 
   async function handleAvatarUpload(file: File) {
     if (!user) return;
+    if (!file.type.startsWith("image/")) { toast.error("Please choose an image file (JPG, PNG or WebP)"); return; }
     if (file.size > 4 * 1024 * 1024) { toast.error("Max avatar size is 4 MB"); return; }
     setUploading(true);
     try {
-      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
       const path = `${user.id}/avatar-${Date.now()}.${ext}`;
-      const { error: upErr } = await supabase.storage.from("property-images").upload(path, file, { upsert: true });
+      const { error: upErr } = await supabase.storage
+        .from("property-images")
+        .upload(path, file, { upsert: true, contentType: file.type, cacheControl: "3600" });
       if (upErr) throw upErr;
+
+      // The bucket is private, so a public URL may 404 — fall back to a long-lived signed URL.
       const { data: pub } = supabase.storage.from("property-images").getPublicUrl(path);
-      setForm((f) => ({ ...f, avatar_url: pub.publicUrl }));
-      toast.success("Avatar uploaded — click Save to apply");
+      let url = pub?.publicUrl ?? "";
+      try {
+        const head = await fetch(url, { method: "HEAD" });
+        if (!head.ok) throw new Error("not public");
+      } catch {
+        const { data: signed, error: signErr } = await supabase.storage
+          .from("property-images")
+          .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+        if (signErr) throw signErr;
+        if (signed?.signedUrl) url = signed.signedUrl;
+      }
+      if (!url) throw new Error("Could not generate a link for the uploaded photo");
+
+      // Persist immediately so the photo survives a refresh even before the form is saved.
+      const { error: saveErr } = await supabase.from("profiles").update({ avatar_url: url }).eq("id", user.id);
+      if (saveErr) throw saveErr;
+
+      setForm((f) => ({ ...f, avatar_url: url }));
+      qc.invalidateQueries({ queryKey: ["my-profile"] });
+      qc.invalidateQueries({ queryKey: ["onboarding"] });
+      toast.success("Profile photo updated");
     } catch (e: any) {
       toast.error(e.message ?? "Upload failed");
     } finally {
       setUploading(false);
     }
   }
+
 
   const checks = {
     name: form.full_name.trim().length > 1,

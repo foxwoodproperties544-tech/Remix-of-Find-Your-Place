@@ -37,7 +37,7 @@ export const Route = createFileRoute("/properties/$id")({
     const mock = mockProps.find(x => x.id === params.id);
     if (mock) return {
       p: mock, ownerId: null as string | null, propertyKey: params.id,
-      ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null },
+      ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null; whatsapp: string | null; company: string | null },
       videoUrl: null as string | null, tourUrl: null as string | null, documents: [] as Array<{ name: string; url: string }>,
       verificationScore: null as number | null, investmentScore: null as number | null,
       latOverride: null as number | null, lngOverride: null as number | null,
@@ -48,8 +48,9 @@ export const Route = createFileRoute("/properties/$id")({
     if (!row) throw notFound();
     const { data: profile } = await supabase
       .from("public_profiles")
-      .select("full_name, avatar_url, phone, company_name")
+      .select("full_name, avatar_url, phone, whatsapp, company_name")
       .eq("id", row.owner_id).maybeSingle();
+
     const [{ data: vScore }, { data: iScore }] = await Promise.all([
       supabase.rpc("property_verification_score", { _property_id: row.id }),
       supabase.rpc("property_investment_score", { _property_id: row.id }),
@@ -609,7 +610,7 @@ function Detail() {
             <div className="mt-5 flex flex-wrap gap-2">
               <a href="#inquiry-form" className="btn-primary btn-primary-hover bg-white !text-primary hover:!opacity-90"><MessageCircle className="h-4 w-4" /> Contact agent</a>
               <a href="#inquiry-form" className="btn-secondary"><Calendar className="h-4 w-4" /> Book a viewing</a>
-              <WhatsAppLink phone={normalizePhone(contactWhatsapp) ?? normalizePhone(contactPhone) ?? normalizePhone(ownerProfile?.phone ?? null)} waContext={waContext} waDetails={waDetails} className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20" />
+              <WhatsAppLink phone={normalizePhone(contactWhatsapp) ?? normalizePhone(contactPhone) ?? normalizePhone(ownerProfile?.whatsapp ?? null) ?? normalizePhone(ownerProfile?.phone ?? null)} waContext={waContext} waDetails={waDetails} className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20" />
               <Link to="/properties" className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20"><HomeIcon className="h-4 w-4" /> Browse similar</Link>
             </div>
           </div>
@@ -659,7 +660,7 @@ function Detail() {
       <RecentlyViewedRail excludeId={p.id} />
 
       {/* Mobile sticky CTA */}
-      <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} waContext={waContext} waDetails={waDetails} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} />
+      <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} waContext={waContext} waDetails={waDetails} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} profileWhatsapp={ownerProfile?.whatsapp ?? null} />
 
       {/* Lightbox */}
       {lightbox && (
@@ -780,10 +781,11 @@ function ReviewsSection({ propertyKey }: { propertyKey: string }) {
   );
 }
 
-function MobileCta({ price, priceSuffix, town, area, waContext, waDetails, contactPhone, contactWhatsapp, profilePhone }:
-  { price: number; priceSuffix?: string; town: string; area: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null; profilePhone: string | null }) {
+function MobileCta({ price, priceSuffix, town, area, waContext, waDetails, contactPhone, contactWhatsapp, profilePhone, profileWhatsapp }:
+  { price: number; priceSuffix?: string; town: string; area: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null; profilePhone: string | null; profileWhatsapp?: string | null }) {
   const phone = normalizePhone(contactPhone) ?? normalizePhone(profilePhone);
-  const wa = normalizePhone(contactWhatsapp) ?? phone;
+  const wa = normalizePhone(contactWhatsapp) ?? normalizePhone(profileWhatsapp ?? null) ?? phone;
+
   const scrollToInquiry = () => document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
   return (
     <div className="lg:hidden sticky bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-lift print:hidden">
@@ -808,11 +810,12 @@ function MobileCta({ price, priceSuffix, town, area, waContext, waDetails, conta
 }
 
 function AgentCard({ ownerId, profile, title, waContext, waDetails, contactPhone, contactWhatsapp }:
-  { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null } | null; title: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null }) {
+  { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null; whatsapp?: string | null; company: string | null } | null; title: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null }) {
   const name = profile?.full_name ?? "Foxwood Agent";
   const initials = name.split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
   const phone = normalizePhone(contactPhone) ?? normalizePhone(profile?.phone ?? null);
-  const wa = normalizePhone(contactWhatsapp) ?? phone;
+  const wa = normalizePhone(contactWhatsapp) ?? normalizePhone(profile?.whatsapp ?? null) ?? phone;
+
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     try {
@@ -832,6 +835,22 @@ function AgentCard({ ownerId, profile, title, waContext, waDetails, contactPhone
           <div className="text-xs text-muted-foreground truncate">{profile?.company ?? "Verified · Kenya"}</div>
         </div>
       </div>
+      {(phone || wa) && (
+        <dl className="mt-4 space-y-1.5 text-xs">
+          {phone && (
+            <div className="flex items-center gap-2">
+              <dt className="text-muted-foreground w-20 shrink-0">Phone</dt>
+              <dd className="font-medium text-foreground truncate">{phone}</dd>
+            </div>
+          )}
+          {wa && (
+            <div className="flex items-center gap-2">
+              <dt className="text-muted-foreground w-20 shrink-0">WhatsApp</dt>
+              <dd className="font-medium text-foreground truncate">{wa}</dd>
+            </div>
+          )}
+        </dl>
+      )}
       {!phone && !wa && (
         <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/10 border border-secondary/20 p-3 text-xs text-foreground/80">
           <AlertCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
@@ -845,8 +864,9 @@ function AgentCard({ ownerId, profile, title, waContext, waDetails, contactPhone
           <button type="button" onClick={scrollToInquiry} className="btn-primary btn-primary-hover w-full opacity-80"><Phone className="h-4 w-4" /> Request callback</button>
         )}
         {wa ? (
-          <a href={whatsappLink(wa, waContext, waDetails)} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+          <a href={whatsappLink(wa, waContext, waDetails)} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp {wa}</a>
         ) : (
+
           <button type="button" onClick={scrollToInquiry} className="btn-secondary w-full opacity-80"><MessageCircle className="h-4 w-4" /> Message via form</button>
         )}
         <button type="button" onClick={share} className="btn-ghost w-full"><Share2 className="h-4 w-4" /> Share</button>
