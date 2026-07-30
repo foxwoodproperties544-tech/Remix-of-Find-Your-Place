@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin, Crown, AlertTriangle } from "lucide-react";
 import { z } from "zod";
 import { SupportBanner } from "@/components/site/SupportBanner";
+import { PROFILE_COMPLETENESS_COLUMNS, missingProfileFields } from "@/lib/profile-completeness";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard/new")({
