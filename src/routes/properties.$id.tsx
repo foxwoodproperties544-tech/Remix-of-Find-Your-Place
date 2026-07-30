@@ -660,7 +660,7 @@ function Detail() {
       <RecentlyViewedRail excludeId={p.id} />
 
       {/* Mobile sticky CTA */}
-      <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} waContext={waContext} waDetails={waDetails} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} />
+      <MobileCta price={p.price} priceSuffix={p.priceSuffix} town={p.town} area={p.area} waContext={waContext} waDetails={waDetails} contactPhone={contactPhone ?? null} contactWhatsapp={contactWhatsapp ?? null} profilePhone={ownerProfile?.phone ?? null} profileWhatsapp={ownerProfile?.whatsapp ?? null} />
 
       {/* Lightbox */}
       {lightbox && (
