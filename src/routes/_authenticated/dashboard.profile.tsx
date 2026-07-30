@@ -62,7 +62,7 @@ function ProfilePage() {
   const [hydrated, setHydrated] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetched, isError } = useQuery({
     queryKey: ["my-profile", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -71,6 +71,11 @@ function ProfilePage() {
       return data;
     },
   });
+
+  // A signed-in user with no profile row yet is still "loaded" — don't hang.
+  useEffect(() => {
+    if (isFetched || isError) setHydrated(true);
+  }, [isFetched, isError]);
 
   useEffect(() => {
     if (!data) return;
