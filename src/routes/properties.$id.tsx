@@ -610,7 +610,7 @@ function Detail() {
             <div className="mt-5 flex flex-wrap gap-2">
               <a href="#inquiry-form" className="btn-primary btn-primary-hover bg-white !text-primary hover:!opacity-90"><MessageCircle className="h-4 w-4" /> Contact agent</a>
               <a href="#inquiry-form" className="btn-secondary"><Calendar className="h-4 w-4" /> Book a viewing</a>
-              <WhatsAppLink phone={normalizePhone(contactWhatsapp) ?? normalizePhone(contactPhone) ?? normalizePhone(ownerProfile?.phone ?? null)} waContext={waContext} waDetails={waDetails} className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20" />
+              <WhatsAppLink phone={normalizePhone(contactWhatsapp) ?? normalizePhone(contactPhone) ?? normalizePhone(ownerProfile?.whatsapp ?? null) ?? normalizePhone(ownerProfile?.phone ?? null)} waContext={waContext} waDetails={waDetails} className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20" />
               <Link to="/properties" className="btn-ghost bg-white/10 text-white border border-white/30 hover:bg-white/20"><HomeIcon className="h-4 w-4" /> Browse similar</Link>
             </div>
           </div>
