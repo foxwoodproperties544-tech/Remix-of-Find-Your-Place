@@ -16,8 +16,6 @@ const nav = [
   { to: "/properties", label: "Lease", search: { category: "For Lease" } as const },
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
   { to: "/blog", label: "Blog" },
-
-  { to: "/about-us", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ];
 
