@@ -56,12 +56,13 @@ const empty: ProfileForm = {
 };
 
 function ProfilePage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const qc = useQueryClient();
   const [form, setForm] = useState<ProfileForm>(empty);
+  const [hydrated, setHydrated] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetched, isError } = useQuery({
     queryKey: ["my-profile", user?.id],
     enabled: !!user,
     queryFn: async () => {
@@ -70,6 +71,11 @@ function ProfilePage() {
       return data;
     },
   });
+
+  // A signed-in user with no profile row yet is still "loaded" — don't hang.
+  useEffect(() => {
+    if (isFetched || isError) setHydrated(true);
+  }, [isFetched, isError]);
 
   useEffect(() => {
     if (!data) return;
@@ -98,6 +104,7 @@ function ProfilePage() {
       license_number: (data as any).license_number ?? "",
       office_hours: (data as any).office_hours ?? "",
     });
+    setHydrated(true);
   }, [data]);
 
   const townOptions = useMemo(() => (form.county ? (KENYA_SUBLOCATIONS[form.county] ?? []) : []), [form.county]);
@@ -180,6 +187,11 @@ function ProfilePage() {
   }
 
 
+  // Never judge completeness from the empty initial form: wait until the saved
+  // profile has actually loaded, otherwise a fully-filled agent sees the
+  // "complete your profile" checklist on every visit while auth hydrates.
+  const profileReady = !authLoading && !!user && !isLoading && hydrated;
+
   const checks = {
     name: form.full_name.trim().length > 1,
     bio: form.bio.trim().length >= 60,
@@ -190,11 +202,14 @@ function ProfilePage() {
     areas: form.service_areas.length > 0,
     avatar: !!form.avatar_url,
   };
-  const complete = checks.name && checks.bio && checks.phone && checks.phone_verified && checks.location && checks.services && checks.areas;
+  const rulesPass = checks.name && checks.bio && checks.phone && checks.phone_verified && checks.location && checks.services && checks.areas;
+  // Trust the stored flag too, so a stale trigger never re-opens the checklist.
+  const complete = profileReady && (rulesPass || !!(data as any)?.profile_completed_at);
   const verificationStatus = ((data as any)?.agent_verification_status ?? "none") as "none" | "pending" | "approved" | "rejected";
   const isVerified = !!(data as any)?.verified;
 
-  if (isLoading) return <div className="text-sm text-muted-foreground">Loading…</div>;
+  if (!profileReady) return <div className="text-sm text-muted-foreground">Loading…</div>;
+
 
 
   return (
