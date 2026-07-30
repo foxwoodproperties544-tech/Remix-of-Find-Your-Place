@@ -9,6 +9,8 @@ import { UserCog, Upload, CheckCircle2, AlertCircle, ExternalLink, ShieldCheck, 
 import { SERVICES, ALL_TYPES } from "@/lib/taxonomy";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
+import { normalizePhone, validatePhone } from "@/lib/phone";
+
 import { requestAgentVerification } from "@/lib/agent-verification.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard/profile")({
@@ -103,24 +105,36 @@ function ProfilePage() {
   const save = useMutation({
     mutationFn: async (payload: ProfileForm) => {
       const yrs = payload.years_experience.trim();
-      const hasPhone = payload.phone.trim().length > 6;
+      const rawPhone = payload.phone.trim();
+      let phone: string | null = null;
+      if (rawPhone) {
+        const invalid = validatePhone(rawPhone);
+        if (invalid) throw new Error(invalid);
+        phone = normalizePhone(rawPhone);
+        const { data: taken, error: dupErr } = await supabase.rpc("phone_in_use" as any, { _phone: phone });
+        if (dupErr) throw dupErr;
+        if (taken) throw new Error("That phone number is already linked to another Foxwood account.");
+      }
       const clean = {
         ...payload,
+        phone,
         years_experience: yrs === "" ? null : Math.max(0, Math.min(80, parseInt(yrs, 10) || 0)),
-        phone_verified: hasPhone,
-        phone_verified_at: hasPhone ? new Date().toISOString() : null,
+        phone_verified: !!phone,
+        phone_verified_at: phone ? new Date().toISOString() : null,
       };
       const { error } = await supabase.from("profiles").update(clean as any).eq("id", user!.id);
       if (error) throw error;
+      return { phone };
     },
-    onSuccess: () => {
-      toast.success("Profile saved");
+    onSuccess: (res) => {
+      toast.success(res?.phone ? `Profile saved — phone ${res.phone} confirmed` : "Profile saved");
       qc.invalidateQueries({ queryKey: ["my-profile"] });
       qc.invalidateQueries({ queryKey: ["onboarding"] });
       qc.invalidateQueries({ queryKey: ["phone-verify-status"] });
     },
     onError: (e: any) => toast.error(e.message ?? "Failed to save"),
   });
+
 
   async function handleAvatarUpload(file: File) {
     if (!user) return;
