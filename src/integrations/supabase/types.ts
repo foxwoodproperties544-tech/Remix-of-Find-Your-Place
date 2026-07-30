@@ -3983,6 +3983,7 @@ export type Database = {
         Args: { _p: Database["public"]["Tables"]["profiles"]["Row"] }
         Returns: boolean
       }
+      phone_in_use: { Args: { _phone: string }; Returns: boolean }
       property_investment_score: {
         Args: { _property_id: string }
         Returns: number
