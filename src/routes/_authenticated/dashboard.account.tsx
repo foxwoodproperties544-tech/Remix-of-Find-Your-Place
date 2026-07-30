@@ -9,6 +9,7 @@ import { Heart, Search, CalendarDays, Bell, User, Home, ShieldCheck } from "luci
 import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
 import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist";
 import { PrivacyDataCard } from "@/components/dashboard/PrivacyDataCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/_authenticated/dashboard/account")({
   component: Account,
