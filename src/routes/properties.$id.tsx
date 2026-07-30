@@ -835,6 +835,22 @@ function AgentCard({ ownerId, profile, title, waContext, waDetails, contactPhone
           <div className="text-xs text-muted-foreground truncate">{profile?.company ?? "Verified · Kenya"}</div>
         </div>
       </div>
+      {(phone || wa) && (
+        <dl className="mt-4 space-y-1.5 text-xs">
+          {phone && (
+            <div className="flex items-center gap-2">
+              <dt className="text-muted-foreground w-20 shrink-0">Phone</dt>
+              <dd className="font-medium text-foreground truncate">{phone}</dd>
+            </div>
+          )}
+          {wa && (
+            <div className="flex items-center gap-2">
+              <dt className="text-muted-foreground w-20 shrink-0">WhatsApp</dt>
+              <dd className="font-medium text-foreground truncate">{wa}</dd>
+            </div>
+          )}
+        </dl>
+      )}
       {!phone && !wa && (
         <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/10 border border-secondary/20 p-3 text-xs text-foreground/80">
           <AlertCircle className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
@@ -848,8 +864,9 @@ function AgentCard({ ownerId, profile, title, waContext, waDetails, contactPhone
           <button type="button" onClick={scrollToInquiry} className="btn-primary btn-primary-hover w-full opacity-80"><Phone className="h-4 w-4" /> Request callback</button>
         )}
         {wa ? (
-          <a href={whatsappLink(wa, waContext, waDetails)} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp</a>
+          <a href={whatsappLink(wa, waContext, waDetails)} target="_blank" rel="noreferrer" className="btn-secondary w-full"><MessageCircle className="h-4 w-4" /> WhatsApp {wa}</a>
         ) : (
+
           <button type="button" onClick={scrollToInquiry} className="btn-secondary w-full opacity-80"><MessageCircle className="h-4 w-4" /> Message via form</button>
         )}
         <button type="button" onClick={share} className="btn-ghost w-full"><Share2 className="h-4 w-4" /> Share</button>
