@@ -56,9 +56,10 @@ const empty: ProfileForm = {
 };
 
 function ProfilePage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const qc = useQueryClient();
   const [form, setForm] = useState<ProfileForm>(empty);
+  const [hydrated, setHydrated] = useState(false);
   const [uploading, setUploading] = useState(false);
 
   const { data, isLoading } = useQuery({
