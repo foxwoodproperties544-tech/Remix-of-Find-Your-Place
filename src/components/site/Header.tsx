@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Bookmark, Home, Megaphone, PenSquare, Building2, FileText, Sparkles, Search, Languages } from "lucide-react";
+import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Bookmark, Home, Megaphone, PenSquare, Building2, FileText, Sparkles, Search, Languages, Info } from "lucide-react";
 import { SearchCommand } from "./SearchCommand";
 import { useAuth } from "@/hooks/use-auth";
 import { useRoles } from "@/hooks/use-role";
@@ -16,8 +16,6 @@ const nav = [
   { to: "/properties", label: "Lease", search: { category: "For Lease" } as const },
   { to: "/properties", label: "Airbnbs", search: { type: "Airbnbs" } as const },
   { to: "/blog", label: "Blog" },
-
-  { to: "/about-us", label: "About Us" },
   { to: "/contact", label: "Contact Us" },
 ];
 
@@ -34,6 +32,7 @@ const agentsItems = [
 ] as const;
 
 const moreItems = [
+  { to: "/about-us", label: "About Us", icon: Info, desc: "Learn more about Foxwood Properties" },
   { to: "/listing-packages", label: "Listing Packages", icon: Home, desc: "Post a property with the right visibility" },
   { to: "/advertising-packages", label: "Advertising Packages", icon: Megaphone, desc: "Homepage, sidebar, search & blog banners" },
   { to: "/blog-submission-packages", label: "Blog Submission Packages", icon: PenSquare, desc: "Publish articles to Kenya's property audience" },
