@@ -810,11 +810,12 @@ function MobileCta({ price, priceSuffix, town, area, waContext, waDetails, conta
 }
 
 function AgentCard({ ownerId, profile, title, waContext, waDetails, contactPhone, contactWhatsapp }:
-  { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null } | null; title: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null }) {
+  { ownerId: string | null; profile: { full_name: string | null; avatar_url: string | null; phone: string | null; whatsapp?: string | null; company: string | null } | null; title: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null }) {
   const name = profile?.full_name ?? "Foxwood Agent";
   const initials = name.split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
   const phone = normalizePhone(contactPhone) ?? normalizePhone(profile?.phone ?? null);
-  const wa = normalizePhone(contactWhatsapp) ?? phone;
+  const wa = normalizePhone(contactWhatsapp) ?? normalizePhone(profile?.whatsapp ?? null) ?? phone;
+
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     try {
