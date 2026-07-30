@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { X, UploadCloud, Loader2, ImageIcon, Info, FileText, MapPin, Crown, AlertTriangle } from "lucide-react";
 import { z } from "zod";
 import { SupportBanner } from "@/components/site/SupportBanner";
+import { PROFILE_COMPLETENESS_COLUMNS, missingProfileFields } from "@/lib/profile-completeness";
 
 
 export const Route = createFileRoute("/_authenticated/dashboard/new")({
@@ -73,16 +74,21 @@ function NewListing() {
     isFounding: boolean; quota: number; used: number; remaining: number; atQuota: boolean;
   } | null>(null);
   const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data: prof } = await supabase
         .from("profiles")
-        .select("tier, tier_expires_at, listing_quota, profile_completed_at")
+        .select(`tier, tier_expires_at, listing_quota, ${PROFILE_COMPLETENESS_COLUMNS}`)
         .eq("id", user.id)
         .maybeSingle();
-      setProfileComplete(!!(prof as any)?.profile_completed_at);
+      const missing = missingProfileFields(prof as any);
+      setMissingFields(missing);
+      // Trust the stored flag when set; otherwise fall back to the same rules
+      // the database uses so a freshly-filled profile isn't blocked by a stale row.
+      setProfileComplete(!!(prof as any)?.profile_completed_at || missing.length === 0);
       const active =
         prof?.tier === "founding" &&
         (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
@@ -348,9 +354,15 @@ function NewListing() {
           <div className="flex-1">
             <div className="font-semibold text-secondary">Complete your public agent profile first</div>
             <p className="text-sm text-foreground/80 mt-1">
-              Buyers need to see who they're dealing with. Add your bio, location, contact and services so your listings look trustworthy.
+              Your account is active — we just need a few public profile details so buyers can see who they're dealing with.
             </p>
+            {missingFields.length > 0 && (
+              <ul className="mt-2 list-disc pl-5 text-sm text-foreground/80 space-y-0.5">
+                {missingFields.map((f) => <li key={f}>{f}</li>)}
+              </ul>
+            )}
             <Link to="/dashboard/profile" className="btn-primary btn-primary-hover text-sm mt-3 inline-flex">Complete profile</Link>
+
           </div>
         </div>
       )}
