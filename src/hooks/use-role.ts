@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./use-auth";
 
 export function useRoles() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const q = useQuery({
     queryKey: ["roles", user?.id],
     enabled: !!user,
@@ -14,11 +14,15 @@ export function useRoles() {
     },
   });
   const roles = q.data ?? [];
+  // While auth is hydrating, or the roles query has not resolved yet, we must
+  // report loading — otherwise callers see "no roles" and wrongly redirect agents.
+  const loading = !!authLoading || (!!user && q.data === undefined && !q.isError) || (!user && !authLoading ? false : !user);
   return {
     roles,
     isAdmin: roles.includes("admin"),
     isAgent: roles.includes("agent"),
-    loading: q.isLoading,
+    loading,
     refetch: q.refetch,
   };
 }
+
