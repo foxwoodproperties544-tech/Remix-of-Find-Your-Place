@@ -48,8 +48,9 @@ export const Route = createFileRoute("/properties/$id")({
     if (!row) throw notFound();
     const { data: profile } = await supabase
       .from("public_profiles")
-      .select("full_name, avatar_url, phone, company_name")
+      .select("full_name, avatar_url, phone, whatsapp, company_name")
       .eq("id", row.owner_id).maybeSingle();
+
     const [{ data: vScore }, { data: iScore }] = await Promise.all([
       supabase.rpc("property_verification_score", { _property_id: row.id }),
       supabase.rpc("property_investment_score", { _property_id: row.id }),
