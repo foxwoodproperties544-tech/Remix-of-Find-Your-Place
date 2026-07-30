@@ -37,7 +37,7 @@ export const Route = createFileRoute("/properties/$id")({
     const mock = mockProps.find(x => x.id === params.id);
     if (mock) return {
       p: mock, ownerId: null as string | null, propertyKey: params.id,
-      ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null; company: string | null },
+      ownerProfile: null as null | { full_name: string | null; avatar_url: string | null; phone: string | null; whatsapp: string | null; company: string | null },
       videoUrl: null as string | null, tourUrl: null as string | null, documents: [] as Array<{ name: string; url: string }>,
       verificationScore: null as number | null, investmentScore: null as number | null,
       latOverride: null as number | null, lngOverride: null as number | null,
