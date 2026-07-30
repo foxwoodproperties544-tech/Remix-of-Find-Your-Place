@@ -16,7 +16,8 @@ export function useRoles() {
   const roles = q.data ?? [];
   // While auth is hydrating, or the roles query has not resolved yet, we must
   // report loading — otherwise callers see "no roles" and wrongly redirect agents.
-  const loading = !!authLoading || (!!user && q.data === undefined && !q.isError) || (!user && !authLoading ? false : !user);
+  const loading = authLoading || (!!user && q.data === undefined && !q.isError);
+
   return {
     roles,
     isAdmin: roles.includes("admin"),
