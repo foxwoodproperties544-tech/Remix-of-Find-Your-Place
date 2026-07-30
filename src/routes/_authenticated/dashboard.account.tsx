@@ -104,10 +104,18 @@ function Account() {
 
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="text-3xl font-bold">Welcome back{fullName ? `, ${fullName.split(" ")[0]}` : ""}</h1>
-        <p className="text-sm text-muted-foreground mt-1">Manage your profile, favorites and property activity.</p>
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-bold">Welcome back{fullName ? `, ${fullName.split(" ")[0]}` : ""}</h1>
+          <p className="text-sm text-muted-foreground mt-1">Manage your profile, favorites and property activity.</p>
+        </div>
+        {(isAgent || isAdmin) && (
+          <Link to="/dashboard" className="btn-primary btn-primary-hover !py-2 !px-4 text-sm">
+            <Home className="h-4 w-4" /> Go to agent dashboard
+          </Link>
+        )}
       </header>
+
 
       <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {cards.map((c) => (
