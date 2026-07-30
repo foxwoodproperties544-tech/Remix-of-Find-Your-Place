@@ -781,10 +781,11 @@ function ReviewsSection({ propertyKey }: { propertyKey: string }) {
   );
 }
 
-function MobileCta({ price, priceSuffix, town, area, waContext, waDetails, contactPhone, contactWhatsapp, profilePhone }:
-  { price: number; priceSuffix?: string; town: string; area: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null; profilePhone: string | null }) {
+function MobileCta({ price, priceSuffix, town, area, waContext, waDetails, contactPhone, contactWhatsapp, profilePhone, profileWhatsapp }:
+  { price: number; priceSuffix?: string; town: string; area: string; waContext: WhatsAppContext; waDetails: WhatsAppDetails; contactPhone: string | null; contactWhatsapp: string | null; profilePhone: string | null; profileWhatsapp?: string | null }) {
   const phone = normalizePhone(contactPhone) ?? normalizePhone(profilePhone);
-  const wa = normalizePhone(contactWhatsapp) ?? phone;
+  const wa = normalizePhone(contactWhatsapp) ?? normalizePhone(profileWhatsapp ?? null) ?? phone;
+
   const scrollToInquiry = () => document.getElementById("inquiry-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
   return (
     <div className="lg:hidden sticky bottom-0 inset-x-0 z-30 border-t border-border bg-background/95 backdrop-blur px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-lift print:hidden">
