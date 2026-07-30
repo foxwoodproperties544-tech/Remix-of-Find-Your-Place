@@ -95,7 +95,7 @@ function AgentPage() {
 
   const labels: Record<string, string> = {
     name: "Full name", avatar: "Profile photo", bio: "Bio (60+ characters)", phone: "Phone number",
-    phone_verified: "Verified phone (SMS)", location: "County & town", services: "At least one service", areas: "At least one area served",
+    phone_verified: "Phone number on file", location: "County & town", services: "At least one service", areas: "At least one area served",
   };
 
   return (

@@ -117,6 +117,7 @@ function ProfilePage() {
       toast.success("Profile saved");
       qc.invalidateQueries({ queryKey: ["my-profile"] });
       qc.invalidateQueries({ queryKey: ["onboarding"] });
+      qc.invalidateQueries({ queryKey: ["phone-verify-status"] });
     },
     onError: (e: any) => toast.error(e.message ?? "Failed to save"),
   });
@@ -179,7 +180,7 @@ function ProfilePage() {
               <ChecklistItem ok={checks.avatar} label="Profile photo" />
               <ChecklistItem ok={checks.bio} label="Bio (60+ characters)" />
               <ChecklistItem ok={checks.phone} label="Phone number" />
-              <ChecklistItem ok={checks.phone_verified} label="Phone verified (SMS code)" />
+              <ChecklistItem ok={checks.phone_verified} label="Phone number confirmed" />
               <ChecklistItem ok={checks.location} label="County & town" />
               <ChecklistItem ok={checks.services} label="At least one service" />
               <ChecklistItem ok={checks.areas} label="At least one area served" />
