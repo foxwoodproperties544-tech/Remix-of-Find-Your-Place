@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Home, Search, Heart, Bell, User } from "lucide-react";
+import { useRoles } from "@/hooks/use-role";
 
 const TABS = [
   { to: "/", label: "Home", icon: Home, match: (p: string) => p === "/" },
@@ -12,6 +13,11 @@ const TABS = [
 /** Mobile-only bottom navigation for one-tap access to the core journeys. */
 export function MobileTabBar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isAgent, isAdmin, loading: rolesLoading } = useRoles();
+
+  // Account tab points at the dashboard that matches the resolved role. While
+  // roles hydrate we keep /dashboard, which itself waits before redirecting.
+  const accountTo = rolesLoading || isAgent || isAdmin ? "/dashboard" : "/dashboard/account";
 
   return (
     <nav
@@ -22,11 +28,13 @@ export function MobileTabBar() {
       <ul className="grid grid-cols-5">
         {TABS.map(({ to, label, icon: Icon, match }) => {
           const active = match(pathname);
+          const href = label === "Account" ? accountTo : to;
           return (
             <li key={to}>
               <Link
-                to={to}
+                to={href}
                 aria-current={active ? "page" : undefined}
+                data-testid={label === "Account" ? "tab-account" : undefined}
                 className={`flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium transition-colors ${
                   active ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`}
@@ -41,3 +49,4 @@ export function MobileTabBar() {
     </nav>
   );
 }
+
