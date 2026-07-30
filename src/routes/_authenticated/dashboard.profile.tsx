@@ -9,6 +9,8 @@ import { UserCog, Upload, CheckCircle2, AlertCircle, ExternalLink, ShieldCheck, 
 import { SERVICES, ALL_TYPES } from "@/lib/taxonomy";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import { PhoneVerifyCard } from "@/components/site/PhoneVerifyCard";
+import { normalizePhone, validatePhone } from "@/lib/phone";
+
 import { requestAgentVerification } from "@/lib/agent-verification.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard/profile")({
