@@ -9,7 +9,7 @@ import { test, expect } from "@playwright/test";
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:8080";
 
 test.describe("Header More dropdown — About Us", () => {
-  test("desktop: opens More dropdown via keyboard and navigates to About Us", async ({ page }) => {
+  test("desktop: opens More dropdown and navigates to About Us", async ({ page }) => {
     await page.goto(`${BASE_URL}/`);
     await page.setViewportSize({ width: 1440, height: 900 });
 
@@ -18,15 +18,12 @@ test.describe("Header More dropdown — About Us", () => {
     await expect(moreButton).toHaveAttribute("aria-haspopup", "menu");
     await expect(moreButton).toHaveAttribute("aria-expanded", "false");
 
-    // Keyboard users open the menu with ArrowDown; the first item is focused.
-    await moreButton.focus();
-    await moreButton.press("ArrowDown");
+    await moreButton.click();
     await expect(moreButton).toHaveAttribute("aria-expanded", "true");
     await expect(moreButton).toHaveAttribute("aria-controls", "more-menu");
 
     const aboutLink = page.getByRole("menuitem", { name: /About Us/i }).first();
     await expect(aboutLink).toBeVisible();
-    await expect(aboutLink).toBeFocused();
     await aboutLink.click();
 
     await page.waitForURL(/\/about-us$/);
@@ -34,13 +31,15 @@ test.describe("Header More dropdown — About Us", () => {
     await expect(page.getByRole("heading", { name: /About Us/i, level: 1 })).toBeVisible();
   });
 
-  test("keyboard: cycles through More items and closes with Escape", async ({ page }) => {
+  test("keyboard: ArrowDown opens More dropdown and cycles through items", async ({ page }) => {
     await page.goto(`${BASE_URL}/`);
     await page.setViewportSize({ width: 1440, height: 900 });
 
     const moreButton = page.getByRole("button", { name: /^More$/ });
     await moreButton.focus();
+
     await moreButton.press("ArrowDown");
+    await expect(moreButton).toHaveAttribute("aria-expanded", "true");
 
     const aboutLink = page.getByRole("menuitem", { name: /About Us/i }).first();
     await expect(aboutLink).toBeFocused();
@@ -76,4 +75,5 @@ test.describe("Header More dropdown — About Us", () => {
     await expect(page.getByRole("heading", { name: /About Us/i, level: 1 })).toBeVisible();
   });
 });
+
 
