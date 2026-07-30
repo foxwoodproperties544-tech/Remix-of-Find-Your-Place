@@ -354,9 +354,15 @@ function NewListing() {
           <div className="flex-1">
             <div className="font-semibold text-secondary">Complete your public agent profile first</div>
             <p className="text-sm text-foreground/80 mt-1">
-              Buyers need to see who they're dealing with. Add your bio, location, contact and services so your listings look trustworthy.
+              Your account is active — we just need a few public profile details so buyers can see who they're dealing with.
             </p>
+            {missingFields.length > 0 && (
+              <ul className="mt-2 list-disc pl-5 text-sm text-foreground/80 space-y-0.5">
+                {missingFields.map((f) => <li key={f}>{f}</li>)}
+              </ul>
+            )}
             <Link to="/dashboard/profile" className="btn-primary btn-primary-hover text-sm mt-3 inline-flex">Complete profile</Link>
+
           </div>
         </div>
       )}
