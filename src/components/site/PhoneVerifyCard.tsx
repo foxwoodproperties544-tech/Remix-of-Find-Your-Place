@@ -78,27 +78,36 @@ export function PhoneVerifyCard() {
       </div>
 
       {showForm && (
-        <div className="mt-4 flex gap-2 flex-wrap">
-          <input
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-            placeholder="+254712345678"
-            className="flex-1 min-w-[200px] rounded-xl border border-border px-4 py-2.5 text-sm outline-none focus:border-primary"
-          />
-          <button
-            onClick={() => save.mutate(phone)}
-            disabled={save.isPending || phone.trim().length < 7}
-            className="btn-primary btn-primary-hover"
-          >
-            {save.isPending ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving…</> : "Save number"}
-          </button>
-          {editing && (
-            <button onClick={() => { setEditing(false); setPhone(""); }} className="btn-ghost text-sm">
-              Cancel
+        <>
+          <div className="mt-4 flex gap-2 flex-wrap">
+            <input
+              value={phone}
+              onChange={e => { setPhone(e.target.value); if (error) setError(null); }}
+              onKeyDown={e => { if (e.key === "Enter") submit(); }}
+              aria-label="Phone number"
+              aria-invalid={!!error}
+              placeholder="+254712345678"
+              className={`flex-1 min-w-[200px] rounded-xl border px-4 py-2.5 text-sm outline-none focus:border-primary ${error ? "border-destructive" : "border-border"}`}
+            />
+            <button
+              onClick={submit}
+              disabled={save.isPending || phone.trim().length < 7}
+              className="btn-primary btn-primary-hover"
+            >
+              {save.isPending ? <><Loader2 className="h-4 w-4 animate-spin" /> Saving…</> : "Save number"}
             </button>
-          )}
-        </div>
+            {editing && (
+              <button onClick={() => { setEditing(false); setPhone(""); setError(null); }} className="btn-ghost text-sm">
+                Cancel
+              </button>
+            )}
+          </div>
+          {error
+            ? <p role="alert" className="mt-2 text-xs text-destructive">{error}</p>
+            : <p className="mt-2 text-xs text-muted-foreground">Use international format, e.g. +254712345678.</p>}
+        </>
       )}
+
     </section>
   );
 }
