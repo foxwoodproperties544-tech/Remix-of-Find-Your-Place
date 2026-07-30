@@ -259,7 +259,10 @@ export function Header() {
           <div
             ref={moreRef}
             className="relative"
-            onMouseEnter={() => setMoreOpen(true)}
+            onMouseEnter={() => {
+              moreHoverTsRef.current = Date.now();
+              setMoreOpen(true);
+            }}
             onMouseLeave={() => setMoreOpen(false)}
           >
             <button
@@ -269,7 +272,15 @@ export function Header() {
               aria-haspopup="menu"
               aria-expanded={moreOpen}
               aria-controls={moreOpen ? "more-menu" : undefined}
-              onClick={() => setMoreOpen((v) => !v)}
+              onClick={() =>
+                setMoreOpen((current) => {
+                  // If the menu just opened via hover (e.g. a click event that followed
+                  // mouseEnter), keep it open instead of immediately toggling it closed.
+                  const openedByHover =
+                    current && Date.now() - moreHoverTsRef.current < 150;
+                  return openedByHover ? true : !current;
+                })
+              }
               className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive || moreOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
             >
               More <ChevronDown className={`h-3.5 w-3.5 transition-transform ${moreOpen ? "rotate-180" : ""}`} />
