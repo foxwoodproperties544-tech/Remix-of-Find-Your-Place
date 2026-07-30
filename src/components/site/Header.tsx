@@ -53,6 +53,7 @@ export function Header() {
   const moreRef = useRef<HTMLDivElement>(null);
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
+  const moreHoverTsRef = useRef<number>(0);
   const agentsRef = useRef<HTMLDivElement>(null);
   const [requestsOpen, setRequestsOpen] = useState(false);
   const [mobileRequestsOpen, setMobileRequestsOpen] = useState(false);
