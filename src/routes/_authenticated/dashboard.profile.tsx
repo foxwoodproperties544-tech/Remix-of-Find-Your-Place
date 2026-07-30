@@ -99,6 +99,7 @@ function ProfilePage() {
       license_number: (data as any).license_number ?? "",
       office_hours: (data as any).office_hours ?? "",
     });
+    setHydrated(true);
   }, [data]);
 
   const townOptions = useMemo(() => (form.county ? (KENYA_SUBLOCATIONS[form.county] ?? []) : []), [form.county]);
