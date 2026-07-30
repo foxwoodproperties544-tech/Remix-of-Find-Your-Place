@@ -182,6 +182,11 @@ function ProfilePage() {
   }
 
 
+  // Never judge completeness from the empty initial form: wait until the saved
+  // profile has actually loaded, otherwise a fully-filled agent sees the
+  // "complete your profile" checklist on every visit while auth hydrates.
+  const profileReady = !authLoading && !!user && !isLoading && hydrated;
+
   const checks = {
     name: form.full_name.trim().length > 1,
     bio: form.bio.trim().length >= 60,
@@ -192,11 +197,14 @@ function ProfilePage() {
     areas: form.service_areas.length > 0,
     avatar: !!form.avatar_url,
   };
-  const complete = checks.name && checks.bio && checks.phone && checks.phone_verified && checks.location && checks.services && checks.areas;
+  const rulesPass = checks.name && checks.bio && checks.phone && checks.phone_verified && checks.location && checks.services && checks.areas;
+  // Trust the stored flag too, so a stale trigger never re-opens the checklist.
+  const complete = profileReady && (rulesPass || !!(data as any)?.profile_completed_at);
   const verificationStatus = ((data as any)?.agent_verification_status ?? "none") as "none" | "pending" | "approved" | "rejected";
   const isVerified = !!(data as any)?.verified;
 
-  if (isLoading) return <div className="text-sm text-muted-foreground">Loading…</div>;
+  if (!profileReady) return <div className="text-sm text-muted-foreground">Loading…</div>;
+
 
 
   return (
