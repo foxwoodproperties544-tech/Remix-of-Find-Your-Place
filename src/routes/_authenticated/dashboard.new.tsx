@@ -73,16 +73,21 @@ function NewListing() {
     isFounding: boolean; quota: number; used: number; remaining: number; atQuota: boolean;
   } | null>(null);
   const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const { data: prof } = await supabase
         .from("profiles")
-        .select("tier, tier_expires_at, listing_quota, profile_completed_at")
+        .select(`tier, tier_expires_at, listing_quota, ${PROFILE_COMPLETENESS_COLUMNS}`)
         .eq("id", user.id)
         .maybeSingle();
-      setProfileComplete(!!(prof as any)?.profile_completed_at);
+      const missing = missingProfileFields(prof as any);
+      setMissingFields(missing);
+      // Trust the stored flag when set; otherwise fall back to the same rules
+      // the database uses so a freshly-filled profile isn't blocked by a stale row.
+      setProfileComplete(!!(prof as any)?.profile_completed_at || missing.length === 0);
       const active =
         prof?.tier === "founding" &&
         (!prof.tier_expires_at || new Date(prof.tier_expires_at).getTime() > Date.now());
