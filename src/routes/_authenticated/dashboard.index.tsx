@@ -41,9 +41,8 @@ function Dashboard() {
   const [renewFor, setRenewFor] = useState<{ purchase: any; property: any } | null>(null);
   const listPurchasesFn = useServerFn(listMyActiveListingPurchases);
 
-  if (!rolesLoading && !isAgent && !isAdmin) {
-    return <Navigate to="/dashboard/account" replace />;
-  }
+  const showBuyerRedirect = !rolesLoading && !!user && !isAgent && !isAdmin;
+
 
 
 
@@ -127,7 +126,15 @@ function Dashboard() {
     return rows.sort((a, b) => (b.views + b.favs * 2) - (a.views + a.favs * 2));
   }, [data, insights.data]);
 
+  if (showBuyerRedirect) return <Navigate to="/dashboard/account" replace />;
+  if (rolesLoading) {
+    return (
+      <div className="container-page py-24 text-center text-sm text-muted-foreground">Loading your dashboard…</div>
+    );
+  }
+
   return (
+
     <>
       <PageHero
         image={heroTools}
