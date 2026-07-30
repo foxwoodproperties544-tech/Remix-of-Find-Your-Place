@@ -1,14 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-
-function normalizePhone(raw: string): string {
-  const digits = raw.replace(/[^\d+]/g, "");
-  if (digits.startsWith("+")) return digits;
-  if (digits.startsWith("0") && digits.length === 10) return "+254" + digits.slice(1);
-  if (digits.startsWith("254")) return "+" + digits;
-  return digits.startsWith("+") ? digits : "+" + digits;
-}
+import { normalizePhone, validatePhone } from "@/lib/phone";
 
 export const getPhoneVerifyStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -27,8 +20,15 @@ export const savePhoneNumber = createServerFn({ method: "POST" })
     z.object({ phone: z.string().trim().min(7).max(20) }).parse(input),
   )
   .handler(async ({ data, context }) => {
+    const invalid = validatePhone(data.phone);
+    if (invalid) throw new Error(invalid);
     const phone = normalizePhone(data.phone);
-    if (!/^\+\d{9,15}$/.test(phone)) throw new Error("Enter a valid phone number (e.g. +254712345678)");
+
+    const { data: taken, error: dupErr } = await context.supabase.rpc("phone_in_use" as any, {
+      _phone: phone,
+    });
+    if (dupErr) throw new Error(dupErr.message);
+    if (taken) throw new Error("That phone number is already linked to another Foxwood account.");
 
     const { error } = await context.supabase
       .from("profiles")
