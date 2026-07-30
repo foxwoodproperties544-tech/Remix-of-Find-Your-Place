@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { useEffect, useRef, useState } from "react";
+import { useMenuKeyboard } from "@/hooks/use-menu-keyboard";
 import { Menu, X, Phone, User as UserIcon, LogOut, LayoutDashboard, Heart, PlusCircle, ShieldCheck, Inbox, Bell, Users as UsersIcon, TrendingUp, CalendarClock, ChevronDown, Bookmark, Home, Megaphone, PenSquare, Building2, FileText, Sparkles, Search, Languages, Info } from "lucide-react";
 import { SearchCommand } from "./SearchCommand";
 import { useAuth } from "@/hooks/use-auth";
@@ -50,6 +51,8 @@ export function Header() {
   const [agentsOpen, setAgentsOpen] = useState(false);
   const [mobileAgentsOpen, setMobileAgentsOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+  const moreButtonRef = useRef<HTMLButtonElement>(null);
   const agentsRef = useRef<HTMLDivElement>(null);
   const [requestsOpen, setRequestsOpen] = useState(false);
   const [mobileRequestsOpen, setMobileRequestsOpen] = useState(false);
@@ -72,6 +75,13 @@ export function Header() {
   const agentsActive = agentsItems.some((m) => pathname === m.to);
   const visibleRequestsItems = requestsItems.filter((m) => !m.auth || !!user);
   const requestsActive = pathname.startsWith("/property-requests") || pathname.startsWith("/dashboard/requests") || pathname === "/saved-requests";
+
+  useMenuKeyboard({
+    isOpen: moreOpen,
+    setIsOpen: setMoreOpen,
+    menuRef: moreMenuRef,
+    triggerRef: moreButtonRef,
+  });
 
   useEffect(() => {
     if (!requestsOpen) return;
@@ -252,9 +262,12 @@ export function Header() {
             onMouseLeave={() => setMoreOpen(false)}
           >
             <button
+              ref={moreButtonRef}
+              id="more-button"
               type="button"
               aria-haspopup="menu"
               aria-expanded={moreOpen}
+              aria-controls={moreOpen ? "more-menu" : undefined}
               onClick={() => setMoreOpen((v) => !v)}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive || moreOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
             >
@@ -262,7 +275,10 @@ export function Header() {
             </button>
             {moreOpen && (
               <div
+                id="more-menu"
+                ref={moreMenuRef}
                 role="menu"
+                aria-labelledby="more-button"
                 className="absolute right-0 top-full pt-2 w-[22rem]"
               >
                 <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
@@ -274,6 +290,7 @@ export function Header() {
                         key={m.to}
                         to={m.to}
                         role="menuitem"
+                        aria-current={active ? "page" : undefined}
                         onClick={() => setMoreOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
                       >
