@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Phone, ShieldCheck, Loader2 } from "lucide-react";
 import { savePhoneNumber, getPhoneVerifyStatus } from "@/lib/phone-verify.functions";
+import { normalizePhone, validatePhone } from "@/lib/phone";
 
 export function PhoneVerifyCard() {
   const qc = useQueryClient();
@@ -12,6 +13,7 @@ export function PhoneVerifyCard() {
 
   const [phone, setPhone] = useState("");
   const [editing, setEditing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const status = useQuery({
     queryKey: ["phone-verify-status"],
@@ -19,21 +21,38 @@ export function PhoneVerifyCard() {
   });
 
   const save = useMutation({
-    mutationFn: (p: string) => saveFn({ data: { phone: p } }),
-    onSuccess: () => {
-      toast.success("Phone number saved");
+    mutationFn: (p: string) => saveFn({ data: { phone: normalizePhone(p) } }),
+    onSuccess: (res: any) => {
+      toast.success(`Phone number saved — ${res?.phone ?? ""}`.trim());
       setEditing(false);
       setPhone("");
+      setError(null);
       qc.invalidateQueries({ queryKey: ["phone-verify-status"] });
       qc.invalidateQueries({ queryKey: ["profile"] });
       qc.invalidateQueries({ queryKey: ["my-profile"] });
     },
-    onError: (e: any) => toast.error(e?.message ?? "Could not save phone number"),
+    onError: (e: any) => {
+      const msg = e?.message ?? "Could not save phone number";
+      setError(msg);
+      toast.error(msg);
+    },
   });
+
+  function submit() {
+    const invalid = validatePhone(phone);
+    if (invalid) {
+      setError(invalid);
+      toast.error(invalid);
+      return;
+    }
+    setError(null);
+    save.mutate(phone);
+  }
 
   const saved = !!status.data?.phone_verified;
   const currentPhone = status.data?.phone as string | null | undefined;
   const showForm = !saved || editing;
+
 
   return (
     <section className="rounded-2xl border border-border bg-card p-5">
