@@ -103,9 +103,12 @@ function ProfilePage() {
   const save = useMutation({
     mutationFn: async (payload: ProfileForm) => {
       const yrs = payload.years_experience.trim();
+      const hasPhone = payload.phone.trim().length > 6;
       const clean = {
         ...payload,
         years_experience: yrs === "" ? null : Math.max(0, Math.min(80, parseInt(yrs, 10) || 0)),
+        phone_verified: hasPhone,
+        phone_verified_at: hasPhone ? new Date().toISOString() : null,
       };
       const { error } = await supabase.from("profiles").update(clean as any).eq("id", user!.id);
       if (error) throw error;
