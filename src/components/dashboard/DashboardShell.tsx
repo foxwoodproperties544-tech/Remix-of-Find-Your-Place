@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
   Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
-  Phone, MessageCircle, Handshake, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2, LineChart,
+  Phone, MessageCircle, Handshake, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2, LineChart, FileSignature,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -32,6 +32,9 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/dashboard/viewings", label: "My viewings", icon: CalendarDays, end: true },
       { to: "/dashboard/my-appointments", label: "Legacy appointments", icon: CalendarDays },
       { to: "/dashboard/offers", label: "Offer Center", icon: Handshake, end: true },
+      { to: "/dashboard/messages", label: "Messages", icon: MessageCircle, end: true },
+      { to: "/dashboard/my-applications", label: "My rental applications", icon: FileSignature },
+
       { to: "/dashboard/subscription", label: "My subscription", icon: Crown },
       { to: "/dashboard/payment-history", label: "Payment history", icon: Receipt },
       { to: "/dashboard/blog/new", label: "Write a blog", icon: FileText, end: true },
@@ -58,6 +61,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/availability", label: "Viewing availability", icon: CalendarDays },
         { to: "/dashboard/appointments", label: "Appointments", icon: CalendarCheck },
         { to: "/dashboard/offers", label: "Offers received", icon: Handshake, end: true },
+        { to: "/dashboard/applications", label: "Rental applications", icon: FileSignature },
+
         { to: "/dashboard/upgrade", label: "Upgrade", icon: Star },
         { to: "/dashboard/advertise", label: "Advertise", icon: PlusCircle },
         { to: "/dashboard/my-ads", label: "My ads", icon: Star },
