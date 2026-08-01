@@ -27,13 +27,14 @@ const schema = z.object({
 });
 
 function NewRequest() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [captcha, setCaptcha] = useState("");
   const [a] = useState(() => Math.floor(Math.random() * 8) + 2);
   const [b] = useState(() => Math.floor(Math.random() * 8) + 2);
+
 
   const { data: packages } = useQuery({ queryKey: ["request-packages", "buyer"], queryFn: () => fetchRequestPackages("buyer") });
 
