@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Award, Clock, Home, Handshake, Star, ShieldCheck, Zap, CalendarDays } from "lucide-react";
+import { Award, Clock, Home, Handshake, Star, ShieldCheck, Zap, CalendarDays, Activity } from "lucide-react";
+
 
 export type AgentPerf = {
   active_listings: number;
@@ -47,6 +48,74 @@ function years(since?: string | null) {
   return y < 1 ? "<1" : Math.floor(y).toString();
 }
 
+/** Last public activity = most recent listing publish/update by this agent. */
+export function useAgentLastActive(agentId?: string | null) {
+  return useQuery({
+    queryKey: ["agent-last-active", agentId],
+    enabled: !!agentId,
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("properties")
+        .select("published_at, last_confirmed_at, updated_at")
+        .eq("owner_id", agentId!)
+        .eq("status", "published")
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!data) return null;
+      const times = [data.last_confirmed_at, data.published_at, data.updated_at]
+        .filter(Boolean)
+        .map((t) => new Date(t as string).getTime());
+      return times.length ? new Date(Math.max(...times)).toISOString() : null;
+    },
+  });
+}
+
+export function relativeActivity(iso?: string | null) {
+  if (!iso) return null;
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  if (days <= 0) return "Active today";
+  if (days === 1) return "Active yesterday";
+  if (days < 7) return `Active ${days} days ago`;
+  if (days < 14) return "Active last week";
+  if (days < 60) return `Active ${Math.floor(days / 7)} weeks ago`;
+  return `Active ${Math.floor(days / 30)} months ago`;
+}
+
+export function formatResponseTime(hours?: number | null) {
+  if (hours == null) return null;
+  if (hours < 1) return "Replies in under an hour";
+  if (hours <= 4) return `Replies in ~${Math.round(hours)}h`;
+  if (hours <= 24) return `Replies within ${Math.round(hours)}h`;
+  const d = Math.round(hours / 24);
+  return `Replies in ~${d} day${d === 1 ? "" : "s"}`;
+}
+
+/** Compact trust badges: typical response time + last activity. */
+export function AgentActivityBadges({ agentId, className = "" }: { agentId: string; className?: string }) {
+  const { data: perf } = useAgentPerformance(agentId);
+  const { data: lastActive } = useAgentLastActive(agentId);
+  const response = formatResponseTime(perf?.avg_response_hours ?? null);
+  const active = relativeActivity(lastActive);
+  if (!response && !active) return null;
+  return (
+    <div className={`flex flex-wrap gap-2 ${className}`}>
+      {response && (
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary">
+          <Clock className="h-3.5 w-3.5" /> {response}
+        </span>
+      )}
+      {active && (
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
+          <Activity className="h-3.5 w-3.5" /> {active}
+        </span>
+      )}
+    </div>
+  );
+}
+
+
 export function AgentPerformanceCard({ agentId }: { agentId: string }) {
   const { data } = useAgentPerformance(agentId);
   if (!data) return null;
@@ -67,6 +136,10 @@ export function AgentPerformanceCard({ agentId }: { agentId: string }) {
       <h2 id="agent-performance" className="text-xl font-bold flex items-center gap-2">
         <Award className="h-5 w-5 text-primary" /> Agent performance
       </h2>
+
+      <AgentActivityBadges agentId={agentId} className="mt-3" />
+
+
 
       {badges.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">

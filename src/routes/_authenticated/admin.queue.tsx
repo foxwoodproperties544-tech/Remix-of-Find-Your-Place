@@ -5,8 +5,10 @@ import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { listPendingAgentListings, moderateListing } from "@/lib/founding.functions";
 import { formatKsh } from "@/lib/mock-data";
-import { ShieldCheck, CheckCircle2, XCircle, ExternalLink, BadgeCheck, AlertTriangle, Loader2, Sparkles } from "lucide-react";
+import { ShieldCheck, CheckCircle2, XCircle, ExternalLink, BadgeCheck, AlertTriangle, Loader2, Sparkles, Gauge, Copy } from "lucide-react";
+import { listingQualityScore } from "@/lib/listing-quality";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/_authenticated/admin/queue")({
   component: ModerationQueue,
@@ -115,6 +117,54 @@ function ModerationQueue() {
                     {formatKsh(Number(p.price))}{p.price_suffix ?? ""}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.description}</p>
+
+                  {(() => {
+                    const q = listingQualityScore({
+                      title: p.title,
+                      description: p.description,
+                      price: p.price,
+                      images: p.images,
+                      county: p.county,
+                      town: p.town,
+                      area: p.area,
+                    });
+                    return (
+                      <div className="mt-2 flex items-center gap-2 text-xs">
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-semibold ${
+                            q.score >= 65 ? "bg-primary-soft text-primary" : "bg-secondary/10 text-secondary"
+                          }`}
+                        >
+                          <Gauge className="h-3 w-3" /> Quality {q.score}%
+                        </span>
+                        {q.missingRequired.length > 0 && (
+                          <span className="text-muted-foreground">
+                            Missing: {q.missingRequired.map((m) => m.label).join(", ")}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
+
+                  {p.duplicate && (
+                    <div
+                      className={`mt-2 rounded-lg border p-2 text-xs ${
+                        p.duplicate.severity === "high"
+                          ? "border-destructive/40 bg-destructive/10 text-destructive"
+                          : "border-border bg-muted/40 text-muted-foreground"
+                      }`}
+                    >
+                      <span className="inline-flex items-center gap-1 font-semibold">
+                        <Copy className="h-3 w-3" />
+                        {p.duplicate.severity === "high"
+                          ? "Duplicate photos from another account"
+                          : "Photos reused from this agent's other listings"}
+                      </span>{" "}
+                      — {p.duplicate.photos} photo{p.duplicate.photos === 1 ? "" : "s"} match {p.duplicate.matches} other
+                      listing{p.duplicate.matches === 1 ? "" : "s"}.
+                    </div>
+                  )}
+
 
                   {p.owner && (
                     <div className="mt-3 rounded-lg border border-border bg-muted/30 p-2.5 text-xs flex flex-wrap items-center gap-x-4 gap-y-1">
