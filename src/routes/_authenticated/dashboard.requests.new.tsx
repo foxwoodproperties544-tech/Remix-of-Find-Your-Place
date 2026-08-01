@@ -74,7 +74,15 @@ function NewRequest() {
   const pkg = packages?.find((p) => p.slug === f.package_slug);
 
   async function save(status: "draft" | "active") {
-    if (!user) return;
+    if (authLoading) {
+      toast.info("Just a moment — finishing sign-in…");
+      return;
+    }
+    if (!user) {
+      toast.error("Please sign in again to submit your request.");
+      navigate({ to: "/auth" });
+      return;
+    }
     const parsed = schema.safeParse({
       title: f.title,
       property_type: f.property_type,
@@ -84,12 +92,24 @@ function NewRequest() {
       budget_max: f.budget_max ? Number(f.budget_max) : null,
     });
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0].message);
+      const issue = parsed.error.issues[0];
+      // Send the user back to the step that holds the offending field.
+      const field = String(issue.path[0] ?? "");
+      setStep(field === "description" ? 1 : 0);
+      toast.error(issue.message);
+      return;
+    }
+    const min = f.budget_min ? Number(f.budget_min) : null;
+    const max = f.budget_max ? Number(f.budget_max) : null;
+    if (min != null && max != null && min > max) {
+      setStep(0);
+      toast.error("Budget min cannot be greater than budget max");
       return;
     }
     if (status === "active" && Number(captcha) !== a + b) {
       toast.error("Please answer the spam check correctly");
       return;
+
     }
     setSaving(true);
     try {
