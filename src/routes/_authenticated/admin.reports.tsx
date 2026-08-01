@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { listPropertyReports, resolvePropertyReport } from "@/lib/reports.functions";
+import { escalateReport } from "@/lib/ops.functions";
 import { formatKsh } from "@/lib/mock-data";
 import { Flag, ExternalLink, CheckCircle2, EyeOff, Trash2, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
