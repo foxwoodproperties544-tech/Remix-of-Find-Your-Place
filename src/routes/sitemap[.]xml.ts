@@ -3,6 +3,7 @@ import type {} from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import { toSlug } from "@/lib/location-slug";
+import { allCombos } from "@/lib/programmatic-seo";
 
 const BASE_URL = "https://find-joy-list.lovable.app";
 
