@@ -602,7 +602,30 @@ function NewListing() {
           )}
         </div>
 
+        <ListingQualityCard
+          input={{
+            title: form.title,
+            description: form.description,
+            price: form.price,
+            images,
+            amenities: form.amenities,
+            features: form.features,
+            bedrooms: form.bedrooms,
+            bathrooms: form.bathrooms,
+            size: form.size,
+            county: form.county,
+            town: form.town,
+            area: form.area,
+            lat: form.lat,
+            lng: form.lng,
+            video_url: form.video_url,
+            tour_url: form.tour_url,
+            documents: docs,
+          }}
+        />
+
         <div className="pt-4 border-t border-border flex flex-wrap justify-end gap-2">
+
           <button type="button" onClick={() => navigate({ to: "/dashboard" })} className="btn-ghost">Cancel</button>
           <button type="button" disabled={!!saving || uploading > 0} onClick={() => save("draft")} className="btn-ghost border border-border">
             {saving === "draft" ? "Saving draft…" : "Save as draft"}
