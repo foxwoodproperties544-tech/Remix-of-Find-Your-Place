@@ -22,15 +22,29 @@ for (const theme of ["light", "dark"] as const) {
         await page.evaluate(() => document.documentElement.classList.add("dark"));
       }
       const colors = await page.evaluate((sel) => {
-        const ctx = document.createElement("canvas").getContext("2d")!;
+        // Chrome returns oklch()/color-mix() verbatim from `fillStyle`, so
+        // paint each colour onto a 1x1 canvas and read the sRGB pixel back.
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 1;
+        const ctx = canvas.getContext("2d")!;
         const to = (v: string) => {
+          ctx.clearRect(0, 0, 1, 1);
           ctx.fillStyle = "#000";
           ctx.fillStyle = v;
-          return ctx.fillStyle as string;
+          ctx.fillRect(0, 0, 1, 1);
+          const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+          return `rgb(${r}, ${g}, ${b})`;
         };
         return [...document.querySelectorAll(sel)].map((e) => {
           const s = getComputedStyle(e as HTMLElement);
-          return { bg: to(s.backgroundColor), fg: to(s.color) };
+          // Transparent fields inherit the nearest painted ancestor background.
+          let rawBg = s.backgroundColor;
+          let walker = (e as HTMLElement).parentElement;
+          while ((rawBg === "rgba(0, 0, 0, 0)" || rawBg === "transparent") && walker) {
+            rawBg = getComputedStyle(walker).backgroundColor;
+            walker = walker.parentElement;
+          }
+          return { bg: to(rawBg), fg: to(s.color) };
         });
       }, FIELD_SELECTOR);
 
