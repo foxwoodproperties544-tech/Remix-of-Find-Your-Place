@@ -55,11 +55,26 @@ for (const theme of ["light", "dark"] as const) {
             canvas.height = bitmap.height;
             const ctx = canvas.getContext("2d")!;
             ctx.drawImage(bitmap, 0, 0);
-            // A few px inside the border is background, never glyph pixels.
-            const x = Math.min(6, canvas.width - 1);
-            const y = Math.round(canvas.height / 2);
-            const d = ctx.getImageData(x, y, 1, 1).data;
-            const back: [number, number, number] = [d[0], d[1], d[2]];
+            // Text/placeholder glyphs can sit anywhere inside the field, so use
+            // the most frequent pixel colour: the background always dominates.
+            const inset = 2;
+            const w = Math.max(1, canvas.width - inset * 2);
+            const h = Math.max(1, canvas.height - inset * 2);
+            const px = ctx.getImageData(inset, inset, w, h).data;
+            const tally = new Map<string, number>();
+            for (let i = 0; i < px.length; i += 4) {
+              const key = `${px[i]},${px[i + 1]},${px[i + 2]}`;
+              tally.set(key, (tally.get(key) ?? 0) + 1);
+            }
+            let bestKey = "255,255,255";
+            let bestCount = -1;
+            for (const [key, n] of tally) {
+              if (n > bestCount) {
+                bestCount = n;
+                bestKey = key;
+              }
+            }
+            const back = bestKey.split(",").map(Number) as [number, number, number];
 
             const el = [...document.querySelectorAll(sel)][index] as HTMLElement;
             const probe = document.createElement("canvas");
