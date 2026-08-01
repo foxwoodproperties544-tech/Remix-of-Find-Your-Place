@@ -108,6 +108,11 @@ function ReportsQueue() {
                     <span className="rounded-full bg-destructive/10 text-destructive text-xs px-2 py-0.5 font-semibold">
                       {r.status}
                     </span>
+                    {r.severity && r.severity !== "normal" && (
+                      <span className="rounded-full bg-secondary text-secondary-foreground text-xs px-2 py-0.5 font-semibold uppercase">
+                        {r.severity}
+                      </span>
+                    )}
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
                     {r.property ? `${r.property.town}, ${r.property.county} · ${formatKsh(Number(r.property.price))}` : "—"}
