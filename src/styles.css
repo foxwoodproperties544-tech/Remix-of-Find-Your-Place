@@ -57,7 +57,7 @@
   --primary-soft: oklch(0.96 0.02 180);
   /* secondary orange — slightly deepened so white text on the orange
      hover/active state clears WCAG AA. */
-  --secondary: oklch(0.6 0.2 32);
+  --secondary: oklch(0.575 0.19 32);
   --secondary-foreground: oklch(1 0 0);
 
   --accent: oklch(0.96 0.02 180);
@@ -83,7 +83,7 @@
   --field-border: oklch(0.42 0.03 195);
   --field-foreground: oklch(0.97 0.005 200);
   /* Orange tuned for dark surfaces; white text keeps >= 4.5:1 contrast. */
-  --secondary: oklch(0.62 0.2 34);
+  --secondary: oklch(0.585 0.19 34);
   --secondary-foreground: oklch(1 0 0);
 }
 
@@ -189,6 +189,27 @@
     background-color: transparent;
     color: color-mix(in oklab, var(--color-popover-foreground) 55%, var(--color-popover));
   }
+}
+
+/* Unlayered so it wins over Tailwind's `focus-visible:outline-none` utility. */
+/* Focus ring on coloured surfaces ------------------------------------
+   Hover paints the orange secondary background and the active page paints
+   the teal primary background; a teal ring on either drops below 3:1. On
+   those states switch to a white inner outline with a dark outer halo so
+   keyboard focus stays clearly visible in light and dark themes. */
+a:hover:focus-visible,
+button:hover:focus-visible,
+[role="menuitem"]:hover:focus-visible,
+[role="option"]:hover:focus-visible,
+[data-menu-item]:hover:focus-visible,
+[data-radix-collection-item]:hover:focus-visible,
+[aria-current="page"]:focus-visible,
+[data-state="open"]:focus-visible {
+  outline: 2px solid oklch(1 0 0);
+  outline-offset: -3px;
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, black 65%, transparent),
+    0 0 0 5px color-mix(in oklab, var(--color-ring) 45%, transparent);
 }
 
 

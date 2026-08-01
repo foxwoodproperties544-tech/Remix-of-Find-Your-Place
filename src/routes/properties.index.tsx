@@ -340,7 +340,7 @@ function List() {
         <div className="rounded-2xl bg-background text-foreground p-3 shadow-lift ring-1 ring-border/60">
           <div className="flex items-center gap-2 rounded-full border border-border px-4 py-2.5 focus-within:border-primary/50 transition-colors">
             <Search className="h-4 w-4 text-muted-foreground" />
-            <input value={q} maxLength={120} disabled={searchThrottled} onChange={(e) => setQ(e.target.value)} placeholder="Search by title, area, town..." className="w-full bg-transparent text-sm outline-none" />
+            <input value={q} maxLength={120} disabled={searchThrottled} onChange={(e) => setQ(e.target.value)} placeholder="Search by title, area, town..." className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none" />
           </div>
         </div>
       </PageHero>

@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 
 const PAGES = ["/auth", "/contact", "/mortgage", "/properties"];
 const FIELD_SELECTOR =
-  "input:not([type=hidden]):not([type=checkbox]):not([type=radio]),textarea,select";
+  "input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),textarea,select";
 
 /** Relative luminance of a computed colour resolved to rgb() by the browser. */
 function luminance(rgb: string): number | null {
@@ -21,18 +21,81 @@ for (const theme of ["light", "dark"] as const) {
       if (theme === "dark") {
         await page.evaluate(() => document.documentElement.classList.add("dark"));
       }
-      const colors = await page.evaluate((sel) => {
-        const ctx = document.createElement("canvas").getContext("2d")!;
-        const to = (v: string) => {
-          ctx.fillStyle = "#000";
-          ctx.fillStyle = v;
-          return ctx.fillStyle as string;
-        };
-        return [...document.querySelectorAll(sel)].map((e) => {
-          const s = getComputedStyle(e as HTMLElement);
-          return { bg: to(s.backgroundColor), fg: to(s.color) };
+      // Painted backgrounds can come from absolutely positioned overlays
+      // (e.g. the teal footer band), so sample the real rendered pixel behind
+      // each field instead of walking computed ancestor backgrounds.
+      const fields = page.locator(FIELD_SELECTOR);
+      const count = await fields.count();
+      const colors: { bg: string; fg: string }[] = [];
+
+      for (let i = 0; i < count; i++) {
+        const field = fields.nth(i);
+        if (!(await field.isVisible().catch(() => false))) continue;
+        // Clip from a page screenshot (not an element screenshot) so painted
+        // ancestors and overlay bands behind the field are included.
+        await field.scrollIntoViewIfNeeded().catch(() => {});
+        // boundingBox() is document-relative; screenshot clips are viewport-relative.
+        const box = await field.evaluate((el) => {
+          const r = (el as HTMLElement).getBoundingClientRect();
+          return { x: r.x, y: r.y, width: r.width, height: r.height };
         });
-      }, FIELD_SELECTOR);
+        if (!box || box.width < 8 || box.height < 8) continue;
+        const shot = (await page
+          .screenshot({
+            clip: { x: box.x, y: box.y, width: Math.min(box.width, 120), height: box.height },
+          })
+          .catch(() => null)) as Buffer | null;
+        if (!shot) continue;
+        const measured = await page.evaluate(
+          async ({ b64, sel, index }) => {
+            const blob = await (await fetch(`data:image/png;base64,${b64}`)).blob();
+            const bitmap = await createImageBitmap(blob);
+            const canvas = document.createElement("canvas");
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
+            const ctx = canvas.getContext("2d")!;
+            ctx.drawImage(bitmap, 0, 0);
+            // Text/placeholder glyphs can sit anywhere inside the field, so use
+            // the most frequent pixel colour: the background always dominates.
+            const inset = 2;
+            const w = Math.max(1, canvas.width - inset * 2);
+            const h = Math.max(1, canvas.height - inset * 2);
+            const px = ctx.getImageData(inset, inset, w, h).data;
+            const tally = new Map<string, number>();
+            for (let i = 0; i < px.length; i += 4) {
+              const key = `${px[i]},${px[i + 1]},${px[i + 2]}`;
+              tally.set(key, (tally.get(key) ?? 0) + 1);
+            }
+            let bestKey = "255,255,255";
+            let bestCount = -1;
+            for (const [key, n] of tally) {
+              if (n > bestCount) {
+                bestCount = n;
+                bestKey = key;
+              }
+            }
+            const back = bestKey.split(",").map(Number) as [number, number, number];
+
+            const el = [...document.querySelectorAll(sel)][index] as HTMLElement;
+            const probe = document.createElement("canvas");
+            probe.width = probe.height = 1;
+            const pctx = probe.getContext("2d")!;
+            pctx.clearRect(0, 0, 1, 1);
+            pctx.fillStyle = "#000";
+            pctx.fillStyle = getComputedStyle(el).color;
+            pctx.fillRect(0, 0, 1, 1);
+            const c = pctx.getImageData(0, 0, 1, 1).data;
+            const a = c[3] / 255;
+            const blend = (v: number, bk: number) => Math.round(v * a + bk * (1 - a));
+            return {
+              bg: `rgb(${back[0]}, ${back[1]}, ${back[2]})`,
+              fg: `rgb(${blend(c[0], back[0])}, ${blend(c[1], back[1])}, ${blend(c[2], back[2])})`,
+            };
+          },
+          { b64: shot.toString("base64"), sel: FIELD_SELECTOR, index: i }
+        );
+        colors.push(measured);
+      }
 
       for (const { bg, fg } of colors) {
         const hexToRgb = (h: string) =>

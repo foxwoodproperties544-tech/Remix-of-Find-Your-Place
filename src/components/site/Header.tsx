@@ -437,7 +437,7 @@ export function Header() {
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
                 data-mobile-nav-item={n.label}
                 activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
-                activeProps={{ className: "bg-primary-soft text-primary font-semibold", "aria-current": "page" }}
+                activeProps={{ className: "bg-primary text-primary-foreground font-semibold", "aria-current": "page" }}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel(n.label)}</Link>
             ))}
             {/* Mobile Property Requests accordion */}
@@ -449,7 +449,7 @@ export function Header() {
               aria-controls="mobile-requests-panel"
               aria-current={requestsActive ? "page" : undefined}
               onClick={() => setMobileRequestsOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive ? "text-primary bg-primary-soft font-semibold" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive ? "bg-primary text-primary-foreground font-semibold" : ""}`}
             >
               <span>Property Requests</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileRequestsOpen ? "rotate-180" : ""}`} />
@@ -459,7 +459,7 @@ export function Header() {
                 {visibleRequestsItems.map((m) => (
                   <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileRequestsOpen(false); }}
                     className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-                    activeProps={{ className: "text-primary bg-primary-soft font-semibold", "aria-current": "page" }}>
+                    activeProps={{ className: "bg-primary text-primary-foreground font-semibold", "aria-current": "page" }}>
                     {m.label}
                   </Link>
                 ))}
@@ -474,7 +474,7 @@ export function Header() {
               aria-controls="mobile-agents-panel"
               aria-current={agentsActive ? "page" : undefined}
               onClick={() => setMobileAgentsOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive ? "text-primary bg-primary-soft font-semibold" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive ? "bg-primary text-primary-foreground font-semibold" : ""}`}
             >
               <span>Agents</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileAgentsOpen ? "rotate-180" : ""}`} />
@@ -489,7 +489,7 @@ export function Header() {
                       to={m.to}
                       onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
                       aria-current={active ? "page" : undefined}
-                      className={`rounded-lg px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft text-primary font-semibold" : "hover:bg-secondary hover:text-secondary-foreground"}`}
+                      className={`rounded-lg px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary text-primary-foreground font-semibold" : "hover:bg-secondary hover:text-secondary-foreground"}`}
                     >
                       {m.label}
                     </Link>
@@ -506,7 +506,7 @@ export function Header() {
               aria-controls="mobile-more-panel"
               aria-current={moreActive ? "page" : undefined}
               onClick={() => setMobileMoreOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive ? "text-primary bg-primary-soft font-semibold" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive ? "bg-primary text-primary-foreground font-semibold" : ""}`}
             >
               <span>More</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileMoreOpen ? "rotate-180" : ""}`} />
@@ -516,14 +516,14 @@ export function Header() {
                 {moreItems.map((m) => (
                   <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileMoreOpen(false); }}
                     className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-                    activeProps={{ className: "text-primary bg-primary-soft font-semibold", "aria-current": "page" }}>
+                    activeProps={{ className: "bg-primary text-primary-foreground font-semibold", "aria-current": "page" }}>
                     {m.label}
                   </Link>
                 ))}
               </div>
             )}
-            <Link to="/blog" onClick={() => setOpen(false)} data-mobile-nav-item="Blog" activeProps={{ className: "bg-primary-soft text-primary font-semibold", "aria-current": "page" }} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Blog")}</Link>
-            <Link to="/contact" onClick={() => setOpen(false)} data-mobile-nav-item="Contact Us" activeProps={{ className: "bg-primary-soft text-primary font-semibold", "aria-current": "page" }} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Contact Us")}</Link>
+            <Link to="/blog" onClick={() => setOpen(false)} data-mobile-nav-item="Blog" activeProps={{ className: "bg-primary text-primary-foreground font-semibold", "aria-current": "page" }} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Blog")}</Link>
+            <Link to="/contact" onClick={() => setOpen(false)} data-mobile-nav-item="Contact Us" activeProps={{ className: "bg-primary text-primary-foreground font-semibold", "aria-current": "page" }} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Contact Us")}</Link>
 
             {user ? (
               <>
