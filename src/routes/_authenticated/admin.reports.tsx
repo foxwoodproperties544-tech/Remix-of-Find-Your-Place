@@ -153,7 +153,7 @@ function ReportsQueue() {
                       <ExternalLink className="h-3.5 w-3.5" /> Preview
                     </Link>
                   )}
-                  {r.status === "open" && (
+                  {(r.status === "open" || r.status === "reviewing") && (
                     <>
                       <button
                         onClick={() => setNoteFor(noteFor === r.id ? null : r.id)}
@@ -161,6 +161,23 @@ function ReportsQueue() {
                       >
                         Add note & act
                       </button>
+                      <button
+                        onClick={() => escalate.mutate({ reportId: r.id, severity: "high", internalNotes: note || undefined })}
+                        disabled={escalate.isPending}
+                        className="btn-ghost text-xs !py-1.5 text-secondary"
+                      >
+                        <ShieldCheck className="h-3.5 w-3.5" /> Escalate
+                      </button>
+                      <button
+                        onClick={() => escalate.mutate({ reportId: r.id, severity: "critical", internalNotes: note || undefined })}
+                        disabled={escalate.isPending}
+                        className="btn-ghost text-xs !py-1.5 text-destructive"
+                      >
+                        <ShieldCheck className="h-3.5 w-3.5" /> Critical
+                      </button>
+                      <Link to="/admin/trust-safety" className="btn-ghost text-xs !py-1.5">
+                        Trust &amp; safety
+                      </Link>
                       <button
                         onClick={() => act.mutate({ reportId: r.id, action: "dismiss" })}
                         disabled={act.isPending}
