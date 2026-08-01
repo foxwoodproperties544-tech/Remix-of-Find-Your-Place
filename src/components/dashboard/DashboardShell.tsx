@@ -61,6 +61,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard/availability", label: "Viewing availability", icon: CalendarDays },
         { to: "/dashboard/appointments", label: "Appointments", icon: CalendarCheck },
         { to: "/dashboard/offers", label: "Offers received", icon: Handshake, end: true },
+        { to: "/dashboard/applications", label: "Rental applications", icon: FileSignature },
+
         { to: "/dashboard/upgrade", label: "Upgrade", icon: Star },
         { to: "/dashboard/advertise", label: "Advertise", icon: PlusCircle },
         { to: "/dashboard/my-ads", label: "My ads", icon: Star },
