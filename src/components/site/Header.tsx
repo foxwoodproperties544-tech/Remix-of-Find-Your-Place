@@ -55,9 +55,14 @@ export function Header() {
   const moreButtonRef = useRef<HTMLButtonElement>(null);
   const moreHoverTsRef = useRef<number>(0);
   const agentsRef = useRef<HTMLDivElement>(null);
+  const agentsMenuRef = useRef<HTMLDivElement>(null);
+  const agentsButtonRef = useRef<HTMLButtonElement>(null);
   const [requestsOpen, setRequestsOpen] = useState(false);
   const [mobileRequestsOpen, setMobileRequestsOpen] = useState(false);
   const requestsRef = useRef<HTMLDivElement>(null);
+  const requestsMenuRef = useRef<HTMLDivElement>(null);
+  const requestsButtonRef = useRef<HTMLButtonElement>(null);
+
 
   const { user } = useAuth();
   const { isAdmin } = useRoles();
