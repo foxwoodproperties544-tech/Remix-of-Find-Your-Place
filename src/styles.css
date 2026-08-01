@@ -55,10 +55,10 @@
   --primary: oklch(0.51 0.08 180);
   --primary-foreground: oklch(0.99 0 0);
   --primary-soft: oklch(0.96 0.02 180);
-  /* secondary orange — slightly deepened so white text on the orange
-     hover/active state clears WCAG AA. */
-  --secondary: oklch(0.575 0.19 32);
+  /* secondary orange — brand colour #FE4C25 */
+  --secondary: #FE4C25;
   --secondary-foreground: oklch(1 0 0);
+
 
   --accent: oklch(0.96 0.02 180);
   --accent-foreground: oklch(0.35 0.06 180);
@@ -82,8 +82,8 @@
   --field-focus: oklch(0.31 0.03 195);
   --field-border: oklch(0.42 0.03 195);
   --field-foreground: oklch(0.97 0.005 200);
-  /* Orange tuned for dark surfaces; white text keeps >= 4.5:1 contrast. */
-  --secondary: oklch(0.585 0.19 34);
+  /* Brand orange stays identical in dark mode. */
+  --secondary: #FE4C25;
   --secondary-foreground: oklch(1 0 0);
 }
 
