@@ -82,6 +82,21 @@
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+
+  /* Make every fillable control visibly a "field" without hurting text contrast. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"]):not([type="button"]),
+  textarea,
+  select {
+    background-color: var(--color-field);
+  }
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"]):not([type="button"]):focus,
+  textarea:focus,
+  select:focus {
+    background-color: var(--color-field-focus);
+  }
+  input:disabled, textarea:disabled, select:disabled {
+    background-color: var(--color-muted);
+  }
 }
 
 @utility container-page {
@@ -96,12 +111,22 @@
 @utility input-base {
   width: 100%;
   border-radius: 0.5rem;
-  border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--background));
+  border: 1px solid var(--color-border);
+  background-color: var(--color-field);
+  color: var(--color-foreground);
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   outline: none;
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+  &::placeholder { color: var(--color-muted-foreground); }
+  &:focus {
+    background-color: var(--color-field-focus);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 18%, transparent);
+  }
+  &:disabled { background-color: var(--color-muted); cursor: not-allowed; }
 }
+
 
 
 
