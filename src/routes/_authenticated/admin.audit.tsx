@@ -131,13 +131,13 @@ function AuditPage() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search actor, summary…"
-              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border text-sm bg-background outline-none focus:border-primary"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border border-border text-sm bg-field outline-none focus:border-primary"
             />
           </div>
           <select
             value={agentId}
             onChange={(e) => setAgentId(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-border text-sm bg-background outline-none focus:border-primary"
+            className="px-3 py-2 rounded-lg border border-border text-sm bg-field outline-none focus:border-primary"
           >
             <option value="">All agents / users</option>
             {(users ?? []).map((u: any) => (
@@ -150,13 +150,13 @@ function AuditPage() {
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-border text-sm bg-background outline-none focus:border-primary"
+            className="px-3 py-2 rounded-lg border border-border text-sm bg-field outline-none focus:border-primary"
           />
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-border text-sm bg-background outline-none focus:border-primary"
+            className="px-3 py-2 rounded-lg border border-border text-sm bg-field outline-none focus:border-primary"
           />
         </div>
 
@@ -164,7 +164,7 @@ function AuditPage() {
           value={action}
           onChange={(e) => setAction(e.target.value)}
           placeholder="Advanced: single action override (e.g. agent.invite)"
-          className="w-full px-3 py-2 rounded-lg border border-border text-sm bg-background outline-none focus:border-primary"
+          className="w-full px-3 py-2 rounded-lg border border-border text-sm bg-field outline-none focus:border-primary"
         />
       </div>
 

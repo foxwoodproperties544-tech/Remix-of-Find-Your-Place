@@ -249,7 +249,7 @@ export function LiveChatWidget() {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder="Type a message…"
-                  className="flex-1 rounded-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                  className="flex-1 rounded-full border border-border bg-field px-3 py-2 text-sm outline-none focus:border-primary"
                   aria-label="Chat message"
                 />
                 <button

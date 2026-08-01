@@ -121,12 +121,12 @@ function AuthPage() {
       <form onSubmit={submit} className="space-y-3">
         {mode === "signup" && (
           <input value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder="Full name"
-            className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm" />
+            className="w-full rounded-lg border border-border bg-field px-4 py-3 text-sm" />
         )}
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Email"
-          className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm" />
+          className="w-full rounded-lg border border-border bg-field px-4 py-3 text-sm" />
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} placeholder="Password (min 6 chars)"
-          className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm" />
+          className="w-full rounded-lg border border-border bg-field px-4 py-3 text-sm" />
         <button disabled={loading} className="w-full btn-primary btn-primary-hover !py-3">
           {loading ? "Please wait..." : mode === "signin" ? "Sign in" : "Create account"}
         </button>

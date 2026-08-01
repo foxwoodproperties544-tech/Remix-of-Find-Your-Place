@@ -43,7 +43,7 @@ export function BlogSidebar({ currentPost, categories, popularPosts, recentPosts
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input id="blog-search" value={q} onChange={(e) => setQ(e.target.value)}
               placeholder="Search articles…"
-              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm" />
+              className="w-full rounded-lg border border-border bg-field pl-9 pr-3 py-2 text-sm" />
           </div>
         </form>
       </div>
@@ -127,7 +127,7 @@ export function BlogSidebar({ currentPost, categories, popularPosts, recentPosts
         <form onSubmit={onSubscribe} className="mt-3 space-y-2">
           <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           <button type="submit" className="btn-primary btn-primary-hover w-full">Subscribe</button>
         </form>
         {msg && <p className="mt-2 text-xs text-primary">{msg}</p>}

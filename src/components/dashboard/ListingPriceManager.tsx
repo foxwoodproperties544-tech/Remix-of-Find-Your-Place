@@ -150,7 +150,7 @@ export function ListingPriceManager({ propertyId, propertyKey, currentPrice, lis
               min={1}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-xl border border-border bg-field px-3 py-2 text-sm"
             />
           </label>
           <label className="text-xs font-semibold">
@@ -161,7 +161,7 @@ export function ListingPriceManager({ propertyId, propertyKey, currentPrice, lis
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g. Motivated seller, market adjustment"
-              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-xl border border-border bg-field px-3 py-2 text-sm"
             />
           </label>
           <button type="submit" disabled={saving} className="btn-primary btn-primary-hover inline-flex items-center gap-2 justify-center">

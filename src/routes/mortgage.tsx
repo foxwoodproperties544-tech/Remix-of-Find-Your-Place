@@ -109,7 +109,7 @@ function Field({ label, value, onChange, min, max, step, format, hint }: {
       <div className="mt-2 flex items-center gap-2">
         <input type="number" min={min} max={max} step={step} value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+          className="flex-1 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
       </div>
     </div>

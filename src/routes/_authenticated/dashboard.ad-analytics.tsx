@@ -111,17 +111,17 @@ function AdAnalytics() {
         <div className="rounded-xl border border-border bg-card p-3">
           <label className="text-[10px] uppercase font-bold text-muted-foreground">From</label>
           <input type="date" value={from} onChange={(e) => setFrom(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         </div>
         <div className="rounded-xl border border-border bg-card p-3">
           <label className="text-[10px] uppercase font-bold text-muted-foreground">To</label>
           <input type="date" value={to} onChange={(e) => setTo(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         </div>
         <div className="rounded-xl border border-border bg-card p-3 md:col-span-2">
           <label className="text-[10px] uppercase font-bold text-muted-foreground">Campaign</label>
           <select value={campaignId} onChange={(e) => setCampaignId(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
             <option value="">All campaigns</option>
             {campaigns?.map((c: any) => (
               <option key={c.id} value={c.id}>{c.title} · {c.placement}</option>

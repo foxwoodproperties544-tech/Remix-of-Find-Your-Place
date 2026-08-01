@@ -189,9 +189,9 @@ function AdminSubscriptions() {
           <div className="flex flex-wrap gap-2 items-center">
             <div className="relative max-w-md flex-1 min-w-[220px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, company, phone…" className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm" />
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name, company, phone…" className="w-full rounded-lg border border-border bg-field pl-9 pr-3 py-2 text-sm" />
             </div>
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as any)} className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as any)} className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
               <option value="all">All statuses</option>
               <option value="active">Active</option>
               <option value="expiring">Expiring soon</option>
@@ -259,7 +259,7 @@ function AdminSubscriptions() {
           <div className="flex items-center gap-2 text-sm font-semibold"><Receipt className="h-4 w-4 text-primary" /> Payment lookup</div>
           <p className="text-xs text-muted-foreground mt-1">Search by M-Pesa receipt, phone, or request ID.</p>
           <form onSubmit={(e) => { e.preventDefault(); if (lookup.trim().length >= 3) doLookup(); }} className="mt-3 flex gap-2">
-            <input value={lookup} onChange={(e) => setLookup(e.target.value)} placeholder="e.g. QK123ABC or 2547…" className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            <input value={lookup} onChange={(e) => setLookup(e.target.value)} placeholder="e.g. QK123ABC or 2547…" className="flex-1 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             <button type="submit" className="btn-primary btn-primary-hover text-sm">Find</button>
           </form>
 

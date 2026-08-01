@@ -122,11 +122,11 @@ function Advertise() {
 
           <div>
             <label className="text-xs font-semibold">Ad headline</label>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Off-plan apartments in Kilimani" className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Off-plan apartments in Kilimani" className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
           <div>
             <label className="text-xs font-semibold">Creative image URL <span className="text-muted-foreground">({selected.width_px}×{selected.height_px})</span></label>
-            <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://…" className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://…" className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             {imageUrl && (
               <div className="mt-2 rounded-lg border border-border overflow-hidden bg-muted aspect-[16/5]">
                 <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
@@ -135,7 +135,7 @@ function Advertise() {
           </div>
           <div>
             <label className="text-xs font-semibold">Destination URL (where clicks go)</label>
-            <input value={targetUrl} onChange={(e) => setTargetUrl(e.target.value)} placeholder="https://…" className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            <input value={targetUrl} onChange={(e) => setTargetUrl(e.target.value)} placeholder="https://…" className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
 
           {Number(selected.price) > 0 && (
@@ -143,7 +143,7 @@ function Advertise() {
               <label className="text-xs font-semibold">M-Pesa phone</label>
               <div className="mt-1 flex gap-2">
                 <div className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm text-muted-foreground"><Phone className="h-4 w-4" /> +254</div>
-                <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0712 345 678" className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0712 345 678" className="flex-1 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
               </div>
             </div>
           )}

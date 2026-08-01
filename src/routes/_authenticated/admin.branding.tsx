@@ -88,18 +88,18 @@ function BrandingPage() {
             <label className="block text-sm">
               <span className="mb-1 block font-medium">Full name (browser tab, install prompt)</span>
               <input value={name} onChange={(e) => { setName(e.target.value); setSaved(false); }}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                className="w-full rounded-md border border-input bg-field px-3 py-2 text-sm" />
             </label>
             <label className="block text-sm">
               <span className="mb-1 block font-medium">Short name (home screen label)</span>
               <input value={shortName} onChange={(e) => { setShortName(e.target.value); setSaved(false); }}
                 maxLength={12}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                className="w-full rounded-md border border-input bg-field px-3 py-2 text-sm" />
             </label>
             <label className="block text-sm">
               <span className="mb-1 block font-medium">Tagline</span>
               <input value={tagline} onChange={(e) => { setTagline(e.target.value); setSaved(false); }}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                className="w-full rounded-md border border-input bg-field px-3 py-2 text-sm" />
             </label>
             <div className="flex items-center gap-2">
               <button

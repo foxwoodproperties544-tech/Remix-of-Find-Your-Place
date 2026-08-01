@@ -175,7 +175,7 @@ function ModerationQueue() {
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     rows={2}
-                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                    className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm outline-none focus:border-primary"
                     placeholder="e.g. Photos are low quality, please re-upload."
                   />
                   <div className="flex gap-2 justify-end">

@@ -100,7 +100,7 @@ function AdminUsers() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search name, email, company…"
-          className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-field pl-9 pr-3 py-2 text-sm"
         />
       </div>
 
@@ -214,7 +214,7 @@ function AdminUsers() {
               onChange={(e) => setReason(e.target.value)}
               rows={4}
               placeholder="Reason (optional but recommended)"
-              className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              className="mt-3 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"
             />
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={() => setRejectFor(null)} className="btn-ghost text-sm">Cancel</button>

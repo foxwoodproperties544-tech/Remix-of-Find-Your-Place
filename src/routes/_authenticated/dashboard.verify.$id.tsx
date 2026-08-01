@@ -87,7 +87,7 @@ function Verify() {
           <label className="block text-sm">
             <span className="font-medium">Notes (optional)</span>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
-              className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-background" placeholder="Anything the reviewer should know" />
+              className="mt-1 w-full px-3 py-2 rounded-lg border border-border bg-field" placeholder="Anything the reviewer should know" />
           </label>
 
           <div className="flex gap-3">

@@ -467,7 +467,7 @@ function VerificationCard({
             value={notes}
             onChange={(e) => setNotes(e.target.value.slice(0, 500))}
             placeholder="Optional: anything the reviewer should know (license number, referral, etc.)"
-            className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm min-h-[80px]"
+            className="mt-3 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm min-h-[80px]"
             maxLength={500}
           />
           <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">

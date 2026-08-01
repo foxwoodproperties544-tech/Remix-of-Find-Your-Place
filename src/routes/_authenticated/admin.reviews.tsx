@@ -177,7 +177,7 @@ function ReviewQueue() {
                     onChange={(e) => setNote(e.target.value)}
                     rows={2}
                     maxLength={1000}
-                    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                    className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm outline-none focus:border-primary"
                     placeholder="e.g. Abusive language / not a genuine customer."
                   />
                   <div className="flex flex-wrap gap-2 justify-end">

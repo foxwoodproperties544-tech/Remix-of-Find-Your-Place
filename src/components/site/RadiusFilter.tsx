@@ -75,7 +75,7 @@ export function RadiusFilter({ value, onChange, matchCount }: Props) {
         <select
           value={RADIUS_PLACES.includes(value.nearLabel) ? value.nearLabel : ""}
           onChange={(e) => pickPlace(e.target.value)}
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"
         >
           <option value="">Choose a centre point…</option>
           {RADIUS_PLACES.map((p) => (
@@ -99,7 +99,7 @@ export function RadiusFilter({ value, onChange, matchCount }: Props) {
             value={value.radius || "10"}
             disabled={!active}
             onChange={(e) => onChange({ radius: e.target.value })}
-            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm disabled:opacity-50"
+            className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm disabled:opacity-50"
           >
             {RADIUS_OPTIONS.map((km) => (
               <option key={km} value={km}>{km} km</option>

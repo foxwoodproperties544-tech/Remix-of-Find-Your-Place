@@ -97,7 +97,7 @@ function DeletionRequests() {
                     value={notes[r.id] ?? ""}
                     onChange={(e) => setNotes((n) => ({ ...n, [r.id]: e.target.value }))}
                     placeholder="Internal note (optional)"
-                    className="flex-1 min-w-[200px] rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                    className="flex-1 min-w-[200px] rounded-lg border border-border bg-field px-3 py-2 text-sm"
                   />
                   <button
                     disabled={act.isPending}

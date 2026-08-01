@@ -172,11 +172,11 @@ function AdminBlogDetail({ id, onBack }: { id: string; onBack: () => void }) {
           {editMode ? (
             <div className="mt-3 space-y-3">
               <input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-xl font-bold" />
+                className="w-full rounded-lg border border-border bg-field px-3 py-2 text-xl font-bold" />
               <textarea value={draft.excerpt ?? ""} onChange={(e) => setDraft({ ...draft, excerpt: e.target.value })}
-                rows={2} placeholder="Excerpt" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                rows={2} placeholder="Excerpt" className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
               <textarea value={draft.content} onChange={(e) => setDraft({ ...draft, content: e.target.value })}
-                rows={20} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-mono" />
+                rows={20} className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm font-mono" />
               <div className="flex gap-2">
                 <button onClick={() => setEditMode(false)} className="btn-ghost text-sm">Cancel</button>
                 <button onClick={() => saveEdit.mutate()} disabled={saveEdit.isPending}
@@ -201,7 +201,7 @@ function AdminBlogDetail({ id, onBack }: { id: string; onBack: () => void }) {
             <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Actions</div>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
               rows={3} placeholder="Admin notes (required for reject/revise)"
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             <button onClick={() => run(() => approve({ data: { id, notes: notes || undefined } }), "Approved & published")}
               className="w-full btn-primary btn-primary-hover text-sm inline-flex items-center justify-center gap-2">
               <CheckCircle2 className="h-4 w-4" /> Approve & publish

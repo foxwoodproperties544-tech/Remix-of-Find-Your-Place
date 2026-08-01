@@ -154,7 +154,7 @@ function PayForListing() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="0712 345 678"
-                  className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                  className="flex-1 rounded-lg border border-border bg-field px-3 py-2 text-sm"
                 />
               </div>
               <p className="mt-1 text-xs text-muted-foreground">You'll get an STK push to authorize KSh {Number(activePkg.price).toLocaleString()}.</p>

@@ -75,7 +75,7 @@ export function BlogEditor({ initial, onChange }: Props) {
           <input
             value={initial.title} onChange={(e) => set("title", e.target.value)}
             placeholder="e.g. 10 things to know before buying land in Kiambu"
-            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-lg font-semibold"
+            className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-lg font-semibold"
           />
         </div>
 
@@ -85,7 +85,7 @@ export function BlogEditor({ initial, onChange }: Props) {
             value={initial.excerpt} onChange={(e) => set("excerpt", e.target.value)}
             rows={2} maxLength={400}
             placeholder="One or two sentence summary shown in listings and social shares."
-            className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"
           />
         </div>
 
@@ -140,7 +140,7 @@ export function BlogEditor({ initial, onChange }: Props) {
             <textarea
               id="blog-content" value={initial.content} onChange={(e) => set("content", e.target.value)}
               rows={22} placeholder="Write your article in Markdown. Use the toolbar above for formatting."
-              className="w-full bg-background px-4 py-3 text-sm font-mono focus:outline-none resize-y"
+              className="w-full bg-field px-4 py-3 text-sm font-mono focus:outline-none resize-y"
             />
           ) : (
             <div className="prose prose-sm max-w-none px-5 py-4 bg-background min-h-[400px]"
@@ -172,7 +172,7 @@ export function BlogEditor({ initial, onChange }: Props) {
           <div>
             <label className="text-xs font-semibold">Category</label>
             <select value={initial.category} onChange={(e) => set("category", e.target.value)}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
+              className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
               {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
@@ -180,13 +180,13 @@ export function BlogEditor({ initial, onChange }: Props) {
             <label className="text-xs font-semibold">Tags (comma separated)</label>
             <input value={initial.tags} onChange={(e) => set("tags", e.target.value)}
               placeholder="kenya, land, kiambu"
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
           <div>
             <label className="text-xs font-semibold">Reading minutes</label>
             <input type="number" min={1} max={120} value={initial.reading_minutes}
               onChange={(e) => set("reading_minutes", Number(e.target.value))}
-              className="mt-1 w-24 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="mt-1 w-24 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
         </div>
 
@@ -196,19 +196,19 @@ export function BlogEditor({ initial, onChange }: Props) {
             <label className="text-xs font-semibold">URL slug</label>
             <input value={initial.slug} onChange={(e) => set("slug", e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))}
               placeholder="auto from title" maxLength={120}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm font-mono" />
+              className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm font-mono" />
           </div>
           <div>
             <label className="text-xs font-semibold">SEO title</label>
             <input value={initial.seo_title} onChange={(e) => set("seo_title", e.target.value)}
               maxLength={120} placeholder="Overrides the title in search results"
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
           <div>
             <label className="text-xs font-semibold">Meta description</label>
             <textarea value={initial.seo_description} onChange={(e) => set("seo_description", e.target.value)}
               rows={3} maxLength={300}
-              className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
         </div>
       </aside>

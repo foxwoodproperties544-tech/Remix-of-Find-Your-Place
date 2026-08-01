@@ -199,7 +199,7 @@ function VerificationSubscriptionPage() {
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="0712345678"
                     inputMode="tel"
-                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-background text-sm"
+                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-border bg-field text-sm"
                   />
                 </div>
               </label>

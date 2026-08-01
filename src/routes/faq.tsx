@@ -144,7 +144,7 @@ function FAQPage() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search FAQs..."
-            className="w-full rounded-full border border-white/30 bg-white/95 backdrop-blur pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-white"
+            className="w-full rounded-full border border-white/30 bg-field/95 backdrop-blur pl-10 pr-4 py-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-white"
             aria-label="Search FAQs"
           />
         </div>

@@ -107,7 +107,7 @@ export function ProfileReviews({ targetId }: { targetId: string }) {
             onChange={(e) => setComment(e.target.value)}
             placeholder="Share your experience working with this agent…"
             rows={3}
-            className="w-full rounded-lg border border-border bg-background p-3 text-sm"
+            className="w-full rounded-lg border border-border bg-field p-3 text-sm"
           />
           <button type="submit" disabled={submit.isPending} className="btn-primary btn-primary-hover mt-3">
             {submit.isPending && <Loader2 className="h-4 w-4 animate-spin" />} Post review

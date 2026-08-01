@@ -138,19 +138,19 @@ function TemplatesPanel() {
         <h3 className="text-sm font-semibold mb-3">New template</h3>
         <div className="grid gap-2 sm:grid-cols-[1fr_150px]">
           <input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-            placeholder="Template name" className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            placeholder="Template name" className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           <select value={draft.channel} onChange={(e) => setDraft({ ...draft, channel: e.target.value })}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm capitalize">
+            className="rounded-lg border border-border bg-field px-3 py-2 text-sm capitalize">
             {TEMPLATE_CHANNELS.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
         {draft.channel === "email" && (
           <input value={draft.subject} onChange={(e) => setDraft({ ...draft, subject: e.target.value })}
-            placeholder="Subject" className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            placeholder="Subject" className="mt-2 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         )}
         <textarea value={draft.body} onChange={(e) => setDraft({ ...draft, body: e.target.value })} rows={4}
           placeholder="Hi {{contact_name}}, …"
-          className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+          className="mt-2 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         <div className="mt-2 flex justify-end">
           <button
             disabled={!draft.name.trim() || !draft.body.trim() || save.isPending}
@@ -198,18 +198,18 @@ function TemplateRow({ row, onSave, onDelete }: {
         <div className="mt-3 space-y-2">
           <div className="grid gap-2 sm:grid-cols-[1fr_150px]">
             <input value={name} onChange={(e) => setName(e.target.value)}
-              className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             <select value={channel} onChange={(e) => setChannel(e.target.value)}
-              className="rounded-lg border border-border bg-background px-3 py-2 text-sm capitalize">
+              className="rounded-lg border border-border bg-field px-3 py-2 text-sm capitalize">
               {TEMPLATE_CHANNELS.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
           {channel === "email" && (
             <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Subject"
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           )}
           <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={5}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           <div className="flex justify-end">
             <button onClick={() => onSave({ name: name.trim(), channel, subject: channel === "email" ? (subject.trim() || null) : null, body })}
               className="btn-primary btn-primary-hover !py-2 !px-4 text-sm">Save changes</button>
@@ -332,9 +332,9 @@ function RoutingPanel() {
         <div className="grid gap-2 sm:grid-cols-2">
           <input value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}
             placeholder="Rule name (e.g. Nairobi leads → Jane)"
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           <select value={draft.assign_to} onChange={(e) => setDraft({ ...draft, assign_to: e.target.value })}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
             <option value="">Assign to…</option>
             {user && <option value={user.id}>Me</option>}
             {(teamQ.data ?? []).filter((t: any) => t.id !== user?.id).map((t: any) => (
@@ -342,19 +342,19 @@ function RoutingPanel() {
             ))}
           </select>
           <select value={draft.match_county} onChange={(e) => setDraft({ ...draft, match_county: e.target.value })}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
             <option value="">Any county</option>
             {KENYA_COUNTIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
           <select value={draft.match_source} onChange={(e) => setDraft({ ...draft, match_source: e.target.value })}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm capitalize">
+            className="rounded-lg border border-border bg-field px-3 py-2 text-sm capitalize">
             <option value="">Any source</option>
             {LEAD_SOURCES.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
           </select>
           <input type="number" min={0} value={draft.min_budget} onChange={(e) => setDraft({ ...draft, min_budget: e.target.value })}
-            placeholder="Minimum budget (KES)" className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            placeholder="Minimum budget (KES)" className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           <input type="number" value={draft.priority} onChange={(e) => setDraft({ ...draft, priority: e.target.value })}
-            placeholder="Priority" className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            placeholder="Priority" className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         </div>
         <div className="mt-2 flex justify-end">
           <button

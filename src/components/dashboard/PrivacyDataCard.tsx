@@ -86,7 +86,7 @@ export function PrivacyDataCard() {
             onChange={(e) => setReason(e.target.value)}
             rows={2}
             maxLength={1000}
-            className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+            className="mt-2 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"
             placeholder="Reason for leaving"
           />
           <div className="mt-3 flex gap-2">

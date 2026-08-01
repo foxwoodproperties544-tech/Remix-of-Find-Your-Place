@@ -220,7 +220,7 @@ function LeadDetail() {
                 <input type="number" defaultValue={lead.deal_value ?? ""} onBlur={e => {
                   const v = e.target.value ? Number(e.target.value) : null;
                   if (v !== lead.deal_value) updateLead.mutate({ deal_value: v });
-                }} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                }} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
               </div>
             )}
             {lead.status === "lost" && (
@@ -228,7 +228,7 @@ function LeadDetail() {
                 <label className="text-xs font-semibold text-muted-foreground">Lost reason</label>
                 <input defaultValue={lead.lost_reason ?? ""} onBlur={e => {
                   if (e.target.value !== lead.lost_reason) updateLead.mutate({ lost_reason: e.target.value });
-                }} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                }} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
               </div>
             )}
           </div>
@@ -346,7 +346,7 @@ function LogCommForm({ lead, onSubmit }: { lead: any; onSubmit: (type: LeadActiv
       )}
       <textarea value={body} onChange={e => setBody(e.target.value)} rows={3}
         placeholder={type === "note" ? "Add a note…" : `Log ${type} details…`}
-        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+        className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
       <div className="mt-2 flex justify-end">
         <button onClick={() => { if (body.trim()) { onSubmit(type, body.trim()); setBody(""); } }}
           disabled={!body.trim()} className="btn-primary btn-primary-hover !py-2 !px-4 text-sm disabled:opacity-50">
@@ -386,15 +386,15 @@ function FollowUpsSection({ items, onAdd, onComplete }: {
       </div>
       <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
         <input placeholder="Follow-up task" value={title} onChange={e => setTitle(e.target.value)}
-          className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+          className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         <input type="datetime-local" value={dueAt} onChange={e => setDueAt(e.target.value)}
-          className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+          className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         <button disabled={!title.trim() || !dueAt}
           onClick={() => { onAdd({ title: title.trim(), due_at: new Date(dueAt).toISOString(), notes: notes || undefined }); setTitle(""); setDueAt(""); setNotes(""); }}
           className="btn-primary btn-primary-hover !py-2 !px-4 text-sm disabled:opacity-50">Add</button>
       </div>
       <input placeholder="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)}
-        className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+        className="mt-2 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
     </div>
   );
 }
