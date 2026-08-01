@@ -54,6 +54,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/help-center", changefreq: "monthly", priority: "0.5" },
   { path: "/get-app", changefreq: "monthly", priority: "0.7" },
   { path: "/property-requests", changefreq: "daily", priority: "0.8" },
+  { path: "/kenya", changefreq: "weekly", priority: "0.8" },
 ];
 
 
@@ -71,6 +72,13 @@ export const Route = createFileRoute("/sitemap.xml")({
             entries.push({ path: `/locations/${cSlug}/${toSlug(town)}`, changefreq: "weekly", priority: "0.5" });
           }
         }
+
+        // Programmatic type × category × location landing pages
+        for (const combo of allCombos()) {
+          entries.push({ path: `/kenya/${combo.slug}`, changefreq: "weekly", priority: "0.6" });
+        }
+
+
 
         try {
           const { data: reqs } = await supabase
