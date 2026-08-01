@@ -439,6 +439,15 @@ function Detail() {
                 className="btn-primary"
               />
             )}
+            {ownerId && (
+              <ApplyToRentButton
+                propertyId={propertyKey}
+                propertyTitle={p.title}
+                category={p.category}
+                className="btn-secondary"
+              />
+            )}
+
             <button onClick={() => toggleFav(propertyKey)} className={`btn-ghost ${isFavorite(propertyKey) ? "text-secondary" : ""}`} aria-pressed={isFavorite(propertyKey)}>
               <Heart className={`h-4 w-4 ${isFavorite(propertyKey) ? "fill-current" : ""}`} /> {isFavorite(propertyKey) ? "Saved" : "Save"}
             </button>
