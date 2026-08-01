@@ -1621,6 +1621,63 @@ export type Database = {
         }
         Relationships: []
       }
+      market_snapshots: {
+        Row: {
+          avg_days_on_market: number | null
+          avg_price: number | null
+          avg_price_per_bedroom: number | null
+          category: string | null
+          county: string | null
+          created_at: string
+          id: string
+          listing_count: number
+          max_price: number | null
+          median_price: number | null
+          min_price: number | null
+          new_listings: number
+          period: string
+          property_type: string | null
+          town: string | null
+          updated_at: string
+        }
+        Insert: {
+          avg_days_on_market?: number | null
+          avg_price?: number | null
+          avg_price_per_bedroom?: number | null
+          category?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          listing_count?: number
+          max_price?: number | null
+          median_price?: number | null
+          min_price?: number | null
+          new_listings?: number
+          period: string
+          property_type?: string | null
+          town?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avg_days_on_market?: number | null
+          avg_price?: number | null
+          avg_price_per_bedroom?: number | null
+          category?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          listing_count?: number
+          max_price?: number | null
+          median_price?: number | null
+          min_price?: number | null
+          new_listings?: number
+          period?: string
+          property_type?: string | null
+          town?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       match_preferences: {
         Row: {
           created_at: string
@@ -4124,6 +4181,7 @@ export type Database = {
         Returns: boolean
       }
       claim_referral: { Args: { _code: string }; Returns: boolean }
+      estimate_property_value: { Args: { _property_id: string }; Returns: Json }
       expire_listing_packages: { Args: never; Returns: undefined }
       expire_offers: { Args: never; Returns: number }
       expire_verification_subscriptions: { Args: never; Returns: number }
@@ -4140,6 +4198,7 @@ export type Database = {
         Args: { _p: Database["public"]["Tables"]["profiles"]["Row"] }
         Returns: boolean
       }
+      owns_property_image_path: { Args: { _name: string }; Returns: boolean }
       phone_in_use: { Args: { _phone: string }; Returns: boolean }
       property_investment_score: {
         Args: { _property_id: string }
@@ -4154,6 +4213,7 @@ export type Database = {
           total: number
         }[]
       }
+      refresh_market_snapshots: { Args: never; Returns: number }
       run_saved_search_alerts: { Args: never; Returns: number }
       send_listing_freshness_reminders: { Args: never; Returns: number }
       send_subscription_reminders: { Args: never; Returns: number }
