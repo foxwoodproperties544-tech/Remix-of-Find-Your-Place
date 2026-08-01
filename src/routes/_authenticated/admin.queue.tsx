@@ -5,8 +5,10 @@ import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { listPendingAgentListings, moderateListing } from "@/lib/founding.functions";
 import { formatKsh } from "@/lib/mock-data";
-import { ShieldCheck, CheckCircle2, XCircle, ExternalLink, BadgeCheck, AlertTriangle, Loader2, Sparkles } from "lucide-react";
+import { ShieldCheck, CheckCircle2, XCircle, ExternalLink, BadgeCheck, AlertTriangle, Loader2, Sparkles, Gauge, Copy } from "lucide-react";
+import { listingQualityScore } from "@/lib/listing-quality";
 import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/_authenticated/admin/queue")({
   component: ModerationQueue,
