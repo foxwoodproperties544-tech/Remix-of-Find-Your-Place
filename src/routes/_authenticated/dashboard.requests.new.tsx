@@ -147,12 +147,13 @@ function NewRequest() {
         contact_phone: f.contact_phone || null,
         contact_email: f.contact_email || null,
         package_slug: f.package_slug,
-        is_featured: !!pkg?.is_featured,
-        is_urgent: !!pkg?.is_urgent,
+        // is_featured / is_urgent are privileged: the database decides them
+        // from the paid package, never the browser.
         status,
       };
-      const { error } = await supabase.from("property_requests" as any).insert(payload);
+      const { error } = await supabase.from("property_requests" as any).insert(payload).select("id").single();
       if (error) throw error;
+
       toast.success(status === "draft" ? "Draft saved" : "Request published");
       navigate({ to: "/dashboard/requests" });
     } catch (e: any) {
