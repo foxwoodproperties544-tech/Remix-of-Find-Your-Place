@@ -226,6 +226,8 @@ export function Header() {
                         key={m.to}
                         to={m.to}
                         role="menuitem"
+                        aria-current={active ? "page" : undefined}
+
                         onClick={() => setRequestsOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
                       >
@@ -284,6 +286,8 @@ export function Header() {
                         key={m.to}
                         to={m.to}
                         role="menuitem"
+                        aria-current={active ? "page" : undefined}
+
                         onClick={() => setAgentsOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
                       >
