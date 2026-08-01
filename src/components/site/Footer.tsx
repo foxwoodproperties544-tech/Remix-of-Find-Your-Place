@@ -73,6 +73,8 @@ export function Footer() {
             <li><Link to="/properties" search={{ category: "For Rent" } as any} className="hover:text-secondary">Rent</Link></li>
             <li><Link to="/properties" search={{ category: "For Lease" } as any} className="hover:text-secondary">Lease</Link></li>
             <li><Link to="/properties" search={{ type: "Airbnbs" } as any} className="hover:text-secondary">Airbnbs</Link></li>
+            <li><Link to="/kenya" className="hover:text-secondary">Kenya Property Guides</Link></li>
+            <li><Link to="/locations" className="hover:text-secondary">Browse by Location</Link></li>
             <li><Link to="/blog" className="hover:text-secondary">Blog</Link></li>
           </ul>
         </div>
