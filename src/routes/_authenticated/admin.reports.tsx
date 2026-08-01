@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useRoles } from "@/hooks/use-role";
 import { listPropertyReports, resolvePropertyReport } from "@/lib/reports.functions";
+import { escalateReport } from "@/lib/ops.functions";
 import { formatKsh } from "@/lib/mock-data";
 import { Flag, ExternalLink, CheckCircle2, EyeOff, Trash2, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/admin/reports")({
 
 const TABS = [
   { key: "open", label: "Open" },
+  { key: "reviewing", label: "Escalated" },
   { key: "resolved", label: "Resolved" },
   { key: "dismissed", label: "Dismissed" },
   { key: "all", label: "All" },
@@ -48,6 +50,19 @@ function ReportsQueue() {
       setNote("");
     },
     onError: (e: any) => toast.error(e?.message ?? "Action failed"),
+  });
+
+  const escalateFn = useServerFn(escalateReport);
+  const escalate = useMutation({
+    mutationFn: (v: { reportId: string; severity: "high" | "critical"; internalNotes?: string }) =>
+      escalateFn({ data: v }),
+    onSuccess: () => {
+      toast.success("Report escalated to the fraud queue");
+      qc.invalidateQueries({ queryKey: ["admin-reports"] });
+      setNoteFor(null);
+      setNote("");
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Escalation failed"),
   });
 
   if (loading) return <div className="p-6 text-sm text-muted-foreground">Loading…</div>;
@@ -108,6 +123,11 @@ function ReportsQueue() {
                     <span className="rounded-full bg-destructive/10 text-destructive text-xs px-2 py-0.5 font-semibold">
                       {r.status}
                     </span>
+                    {r.severity && r.severity !== "normal" && (
+                      <span className="rounded-full bg-secondary text-secondary-foreground text-xs px-2 py-0.5 font-semibold uppercase">
+                        {r.severity}
+                      </span>
+                    )}
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
                     {r.property ? `${r.property.town}, ${r.property.county} · ${formatKsh(Number(r.property.price))}` : "—"}
@@ -133,7 +153,7 @@ function ReportsQueue() {
                       <ExternalLink className="h-3.5 w-3.5" /> Preview
                     </Link>
                   )}
-                  {r.status === "open" && (
+                  {(r.status === "open" || r.status === "reviewing") && (
                     <>
                       <button
                         onClick={() => setNoteFor(noteFor === r.id ? null : r.id)}
@@ -141,6 +161,23 @@ function ReportsQueue() {
                       >
                         Add note & act
                       </button>
+                      <button
+                        onClick={() => escalate.mutate({ reportId: r.id, severity: "high", internalNotes: note || undefined })}
+                        disabled={escalate.isPending}
+                        className="btn-ghost text-xs !py-1.5 text-secondary"
+                      >
+                        <ShieldCheck className="h-3.5 w-3.5" /> Escalate
+                      </button>
+                      <button
+                        onClick={() => escalate.mutate({ reportId: r.id, severity: "critical", internalNotes: note || undefined })}
+                        disabled={escalate.isPending}
+                        className="btn-ghost text-xs !py-1.5 text-destructive"
+                      >
+                        <ShieldCheck className="h-3.5 w-3.5" /> Critical
+                      </button>
+                      <Link to="/admin/trust-safety" className="btn-ghost text-xs !py-1.5">
+                        Trust &amp; safety
+                      </Link>
                       <button
                         onClick={() => act.mutate({ reportId: r.id, action: "dismiss" })}
                         disabled={act.isPending}

@@ -53,6 +53,7 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/dashboard", label: "My listings", icon: Home, end: true },
         { to: "/dashboard/new", label: "New listing", icon: PlusCircle },
         { to: "/dashboard/bulk-import", label: "Bulk import (CSV)", icon: FileText },
+        { to: "/dashboard/appeal", label: "Appeal a suspension", icon: FileText },
         { to: "/dashboard/inquiries", label: "Inquiries", icon: Inbox },
         { to: "/dashboard/leads", label: "CRM · Leads", icon: Users2 },
         { to: "/dashboard/crm", label: "CRM board", icon: LayoutDashboard },
@@ -84,6 +85,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/offers", label: "Offer management", icon: Handshake },
         { to: "/admin/viewings", label: "Viewings oversight", icon: CalendarCheck },
         { to: "/admin/reports", label: "Flagged listings", icon: ShieldCheck },
+        { to: "/admin/trust-safety", label: "Trust & safety", icon: ShieldCheck },
+        { to: "/admin/support-view", label: "Support view (read-only)", icon: LifeBuoy },
         { to: "/admin/reviews", label: "Review moderation", icon: ShieldCheck },
         { to: "/admin/deletion-requests", label: "Deletion requests", icon: ShieldCheck },
 
