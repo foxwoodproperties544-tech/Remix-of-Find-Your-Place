@@ -180,9 +180,9 @@ export function Header() {
           {nav.map((n, i) => (
             <Link key={i} to={n.to as any} search={(n as any).search}
               data-nav-item={n.label}
-              className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+              className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:bg-secondary hover:text-secondary-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
               activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
-              activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }}
+              activeProps={{ className: "bg-primary text-primary-foreground font-semibold ring-1 ring-primary/40", "aria-current": "page" }}
             >{navLabel(n.label)}</Link>
           ))}
 
@@ -204,7 +204,7 @@ export function Header() {
               aria-expanded={requestsOpen}
               aria-controls={requestsOpen ? "requests-menu" : undefined}
               onClick={() => setRequestsOpen((v) => !v)}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive || requestsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive || requestsOpen ? "bg-primary text-primary-foreground" : "text-foreground/75 hover:bg-secondary hover:text-secondary-foreground"}`}
             >
               Property Requests <ChevronDown className={`h-3.5 w-3.5 transition-transform ${requestsOpen ? "rotate-180" : ""}`} />
             </button>
@@ -264,7 +264,7 @@ export function Header() {
               aria-expanded={agentsOpen}
               aria-controls={agentsOpen ? "agents-menu" : undefined}
               onClick={() => setAgentsOpen((v) => !v)}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive || agentsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive || agentsOpen ? "bg-primary text-primary-foreground" : "text-foreground/75 hover:bg-secondary hover:text-secondary-foreground"}`}
             >
               Agents <ChevronDown className={`h-3.5 w-3.5 transition-transform ${agentsOpen ? "rotate-180" : ""}`} />
             </button>
@@ -334,7 +334,7 @@ export function Header() {
                   return openedByHover ? true : !current;
                 })
               }
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive || moreOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive || moreOpen ? "bg-primary text-primary-foreground" : "text-foreground/75 hover:bg-secondary hover:text-secondary-foreground"}`}
             >
               More <ChevronDown className={`h-3.5 w-3.5 transition-transform ${moreOpen ? "rotate-180" : ""}`} />
             </button>
@@ -373,8 +373,8 @@ export function Header() {
               </div>
             )}
           </div>
-          <Link to="/blog" data-nav-item="Blog" activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Blog")}</Link>
-          <Link to="/contact" data-nav-item="Contact Us" activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Contact Us")}</Link>
+          <Link to="/blog" data-nav-item="Blog" activeProps={{ className: "bg-primary text-primary-foreground font-semibold ring-1 ring-primary/40", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:bg-secondary hover:text-secondary-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Blog")}</Link>
+          <Link to="/contact" data-nav-item="Contact Us" activeProps={{ className: "bg-primary text-primary-foreground font-semibold ring-1 ring-primary/40", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:bg-secondary hover:text-secondary-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Contact Us")}</Link>
 
         </nav>
         <div className="hidden md:flex items-center gap-2">
@@ -383,12 +383,12 @@ export function Header() {
             onClick={() => setSearchOpen(true)}
             aria-label="Search properties, locations, categories (Ctrl+K)"
             title="Search (Ctrl+K)"
-            className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"
+            className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:bg-secondary hover:text-secondary-foreground transition-colors"
           >
             <Search className="h-4 w-4" />
           </button>
           <LanguageToggle />
-          <a href="tel:+254759556026" onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("call", "generic")); }} aria-label="Call Foxwood Properties on +254 759 556 026" title="+254 759 556 026" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"><Phone className="h-4 w-4" /></a>
+          <a href="tel:+254759556026" onClick={() => { void import("@/lib/support").then(m => m.trackSupportClick("call", "generic")); }} aria-label="Call Foxwood Properties on +254 759 556 026" title="+254 759 556 026" className="grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:bg-secondary hover:text-secondary-foreground transition-colors"><Phone className="h-4 w-4" /></a>
           {user ? (
             <div className="relative">
               <button onClick={() => setMenu(!menu)} className="grid h-10 w-10 place-items-center rounded-full bg-primary text-primary-foreground font-semibold text-sm">
@@ -553,7 +553,7 @@ function LanguageToggle() {
       onClick={() => setLang(lang === "en" ? "sw" : "en")}
       aria-label={`Switch language to ${lang === "en" ? "Swahili" : "English"}`}
       title={lang === "en" ? "Badilisha lugha — Kiswahili" : "Switch language — English"}
-      className="hidden md:grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors"
+      className="hidden md:grid h-10 w-10 place-items-center rounded-full border border-border text-foreground/75 hover:bg-secondary hover:text-secondary-foreground transition-colors"
     >
       <Languages className="h-4 w-4" />
       <span className="sr-only">{lang.toUpperCase()}</span>
