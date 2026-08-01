@@ -82,7 +82,12 @@
   --field-focus: oklch(0.31 0.03 195);
   --field-border: oklch(0.42 0.03 195);
   --field-foreground: oklch(0.97 0.005 200);
+  /* Slightly brighter orange on dark surfaces, still with deep-ember text
+     so dropdown hover/active states keep >= 4.5:1 contrast. */
+  --secondary: oklch(0.72 0.19 34);
+  --secondary-foreground: oklch(0.17 0.04 32);
 }
+
 
 
 @layer base {
