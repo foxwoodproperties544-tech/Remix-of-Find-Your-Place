@@ -23,28 +23,50 @@ for (const theme of ["light", "dark"] as const) {
       }
       const colors = await page.evaluate((sel) => {
         // Chrome returns oklch()/color-mix() verbatim from `fillStyle`, so
-        // paint each colour onto a 1x1 canvas and read the sRGB pixel back.
+        // paint each colour onto a 1x1 canvas and read back sRGB + alpha.
         const canvas = document.createElement("canvas");
         canvas.width = canvas.height = 1;
         const ctx = canvas.getContext("2d")!;
-        const to = (v: string) => {
+        const rgba = (v: string): [number, number, number, number] => {
           ctx.clearRect(0, 0, 1, 1);
           ctx.fillStyle = "#000";
           ctx.fillStyle = v;
           ctx.fillRect(0, 0, 1, 1);
-          const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-          return `rgb(${r}, ${g}, ${b})`;
+          const d = ctx.getImageData(0, 0, 1, 1).data;
+          return [d[0], d[1], d[2], d[3] / 255];
+        };
+        // Composite a field's background over its ancestors so translucent
+        // fields (e.g. bg-background/10 on the teal footer) resolve correctly.
+        const effectiveBg = (el: HTMLElement): [number, number, number] => {
+          const stack: [number, number, number, number][] = [];
+          let node: HTMLElement | null = el;
+          while (node) {
+            const c = rgba(getComputedStyle(node).backgroundColor);
+            if (c[3] > 0) stack.push(c);
+            if (c[3] >= 1) break;
+            node = node.parentElement;
+          }
+          let [r, g, b] = stack.length && stack[stack.length - 1][3] >= 1
+            ? [stack[stack.length - 1][0], stack[stack.length - 1][1], stack[stack.length - 1][2]]
+            : [255, 255, 255];
+          for (let i = stack.length - 1; i >= 0; i--) {
+            const [sr, sg, sb, sa] = stack[i];
+            r = sr * sa + r * (1 - sa);
+            g = sg * sa + g * (1 - sa);
+            b = sb * sa + b * (1 - sa);
+          }
+          return [Math.round(r), Math.round(g), Math.round(b)];
         };
         return [...document.querySelectorAll(sel)].map((e) => {
-          const s = getComputedStyle(e as HTMLElement);
-          // Transparent fields inherit the nearest painted ancestor background.
-          let rawBg = s.backgroundColor;
-          let walker = (e as HTMLElement).parentElement;
-          while ((rawBg === "rgba(0, 0, 0, 0)" || rawBg === "transparent") && walker) {
-            rawBg = getComputedStyle(walker).backgroundColor;
-            walker = walker.parentElement;
-          }
-          return { bg: to(rawBg), fg: to(s.color) };
+          const el = e as HTMLElement;
+          const s = getComputedStyle(el);
+          const [br, bg2, bb] = effectiveBg(el);
+          const [fr, fg2, fb, fa] = rgba(s.color);
+          const blend = (c: number, back: number) => Math.round(c * fa + back * (1 - fa));
+          return {
+            bg: `rgb(${br}, ${bg2}, ${bb})`,
+            fg: `rgb(${blend(fr, br)}, ${blend(fg2, bg2)}, ${blend(fb, bb)})`,
+          };
         });
       }, FIELD_SELECTOR);
 
