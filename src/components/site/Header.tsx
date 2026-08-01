@@ -227,16 +227,15 @@ export function Header() {
                         to={m.to}
                         role="menuitem"
                         aria-current={active ? "page" : undefined}
-
                         onClick={() => setRequestsOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary text-primary-foreground" : ""}`}
                       >
-                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary-foreground/20 text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
                         </span>
                         <span className="min-w-0">
-                          <span className={`block font-semibold ${active ? "text-primary" : ""}`}>{m.label}</span>
-                          <span className="block text-xs text-muted-foreground">{m.desc}</span>
+                          <span className={`block font-semibold ${active ? "text-primary-foreground" : ""}`}>{m.label}</span>
+                          <span className={`block text-xs ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{m.desc}</span>
                         </span>
                       </Link>
                     );
@@ -287,16 +286,15 @@ export function Header() {
                         to={m.to}
                         role="menuitem"
                         aria-current={active ? "page" : undefined}
-
                         onClick={() => setAgentsOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary text-primary-foreground" : ""}`}
                       >
-                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary-foreground/20 text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
                         </span>
                         <span className="min-w-0">
-                          <span className={`block font-semibold ${active ? "text-primary" : ""}`}>{m.label}</span>
-                          <span className="block text-xs text-muted-foreground">{m.desc}</span>
+                          <span className={`block font-semibold ${active ? "text-primary-foreground" : ""}`}>{m.label}</span>
+                          <span className={`block text-xs ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{m.desc}</span>
                         </span>
                       </Link>
                     );
@@ -359,12 +357,12 @@ export function Header() {
                         onClick={() => setMoreOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary text-primary-foreground" : ""}`}
                       >
-                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary-foreground/20 text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
                         </span>
                         <span className="min-w-0">
-                          <span className={`block font-semibold ${active ? "text-primary" : ""}`}>{m.label}</span>
-                          <span className="block text-xs text-muted-foreground">{m.desc}</span>
+                          <span className={`block font-semibold ${active ? "text-primary-foreground" : ""}`}>{m.label}</span>
+                          <span className={`block text-xs ${active ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{m.desc}</span>
                         </span>
                       </Link>
                     );
