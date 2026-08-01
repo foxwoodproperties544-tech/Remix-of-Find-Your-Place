@@ -52,6 +52,19 @@ function ReportsQueue() {
     onError: (e: any) => toast.error(e?.message ?? "Action failed"),
   });
 
+  const escalateFn = useServerFn(escalateReport);
+  const escalate = useMutation({
+    mutationFn: (v: { reportId: string; severity: "high" | "critical"; internalNotes?: string }) =>
+      escalateFn({ data: v }),
+    onSuccess: () => {
+      toast.success("Report escalated to the fraud queue");
+      qc.invalidateQueries({ queryKey: ["admin-reports"] });
+      setNoteFor(null);
+      setNote("");
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Escalation failed"),
+  });
+
   if (loading) return <div className="p-6 text-sm text-muted-foreground">Loading…</div>;
   if (!isAdmin) return <div className="p-6">Admins only.</div>;
 
