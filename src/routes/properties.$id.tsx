@@ -645,6 +645,24 @@ function Detail() {
               />
             </div>
           )}
+          {ownerId && (
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h3 className="font-bold">Ask the agent</h3>
+              <p className="mt-1 text-xs text-muted-foreground">Keep every question and answer in one secure Foxwood inbox.</p>
+              <MessageAgentButton
+                propertyId={propertyKey}
+                propertyTitle={p.title}
+                className="btn-ghost mt-3 w-full justify-center"
+              />
+              <ApplyToRentButton
+                propertyId={propertyKey}
+                propertyTitle={p.title}
+                category={p.category}
+                className="btn-primary mt-2 w-full justify-center"
+              />
+            </div>
+          )}
+
           <div className="rounded-2xl border border-border bg-card p-5">
             <h3 className="font-bold">See it in person</h3>
             <p className="mt-1 text-xs text-muted-foreground">Pick a slot that suits you — in person, virtual or at the next open house.</p>
