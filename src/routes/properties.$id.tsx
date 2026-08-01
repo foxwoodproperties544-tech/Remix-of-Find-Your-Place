@@ -604,6 +604,10 @@ function Detail() {
             category={p.category}
           />
 
+          {/* Comparable-based value estimate */}
+          {/^[0-9a-fA-F-]{36}$/.test(propertyKey) && <ValuationEstimateCard propertyId={propertyKey} />}
+
+
           {/* Property history timeline */}
           <PropertyTimeline propertyId={propertyKey} propertyKey={propertyKey} />
 
