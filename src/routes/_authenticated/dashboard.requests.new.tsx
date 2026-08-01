@@ -295,11 +295,25 @@ function NewRequest() {
             </Field>
 
             <div className="flex flex-wrap gap-2 pt-2">
-              <button disabled={saving} onClick={() => save("draft")} className="rounded-full border border-border px-5 py-2 text-sm font-semibold hover:bg-muted">Save draft</button>
-              <button disabled={saving} onClick={() => save("active")} className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-                {saving ? "Publishing…" : "Publish request"}
+              <button
+                type="button"
+                disabled={saving || authLoading}
+                onClick={() => save("draft")}
+                className="rounded-full border border-border px-5 py-2 text-sm font-semibold hover:bg-muted disabled:opacity-50"
+              >
+                {saving ? "Saving…" : "Save draft"}
+              </button>
+              <button
+                type="button"
+                data-testid="publish-request"
+                disabled={saving || authLoading}
+                onClick={() => save("active")}
+                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {saving ? "Publishing…" : authLoading ? "Loading…" : "Publish request"}
               </button>
             </div>
+
           </>
         )}
 
