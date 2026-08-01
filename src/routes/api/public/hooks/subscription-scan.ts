@@ -44,13 +44,15 @@ export const Route = createFileRoute("/api/public/hooks/subscription-scan")({
 
         // Recurring digests / sweeps — failures here are logged but must not block the run.
         const extras: Record<string, number | string> = {};
-        const steps: { key: string; fn: "run_saved_search_alerts" | "send_listing_freshness_reminders" | "send_verification_sub_reminders" | "expire_offers" | "expire_verification_subscriptions" }[] = [
+        const steps: { key: string; fn: "run_saved_search_alerts" | "send_listing_freshness_reminders" | "send_verification_sub_reminders" | "expire_offers" | "expire_verification_subscriptions" | "refresh_market_snapshots" }[] = [
           { key: "savedSearchMatches", fn: "run_saved_search_alerts" },
           { key: "freshnessReminders", fn: "send_listing_freshness_reminders" },
           { key: "verificationReminders", fn: "send_verification_sub_reminders" },
           { key: "offersExpired", fn: "expire_offers" },
           { key: "verificationsLapsed", fn: "expire_verification_subscriptions" },
+          { key: "marketSnapshots", fn: "refresh_market_snapshots" },
         ];
+
         for (const s of steps) {
           const { data: n, error } = await supabaseAdmin.rpc(s.fn);
           extras[s.key] = error ? `error: ${error.message}` : ((n as number) ?? 0);
