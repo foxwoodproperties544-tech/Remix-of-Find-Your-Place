@@ -55,9 +55,11 @@
   --primary: oklch(0.51 0.08 180);
   --primary-foreground: oklch(0.99 0 0);
   --primary-soft: oklch(0.96 0.02 180);
-  /* secondary orange #FE4C25 */
+  /* secondary orange #FE4C25 — foreground is deep ember so text on the
+     orange hover/active state clears WCAG AA (5.4:1) instead of 3.35:1. */
   --secondary: oklch(0.68 0.21 32);
-  --secondary-foreground: oklch(0.99 0 0);
+  --secondary-foreground: oklch(0.19 0.05 32);
+
   --accent: oklch(0.96 0.02 180);
   --accent-foreground: oklch(0.35 0.06 180);
   --muted: oklch(0.97 0.005 250);
