@@ -57,7 +57,6 @@ export const SEO_LOCATIONS: { county: string; town?: string }[] = [
 function allowed(type: PropertyType, category: Category): boolean {
   if (type === "Airbnbs" || type === "Holiday Homes") return category !== "For Lease";
   if (type === "Land / Plots" || type === "Farms") return category !== "For Rent";
-  if (type === "Warehouses" || type === "Office Spaces" || type === "Shops") return category !== "For Sale" || true;
   return true;
 }
 
