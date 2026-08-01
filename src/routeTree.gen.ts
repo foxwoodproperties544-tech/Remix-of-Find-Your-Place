@@ -86,6 +86,7 @@ import { Route as AuthenticatedDashboardOffersRouteImport } from './routes/_auth
 import { Route as AuthenticatedDashboardNewRouteImport } from './routes/_authenticated/dashboard.new'
 import { Route as AuthenticatedDashboardMyAppointmentsRouteImport } from './routes/_authenticated/dashboard.my-appointments'
 import { Route as AuthenticatedDashboardMyAdsRouteImport } from './routes/_authenticated/dashboard.my-ads'
+import { Route as AuthenticatedDashboardMessagesRouteImport } from './routes/_authenticated/dashboard.messages'
 import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authenticated/dashboard.leads'
 import { Route as AuthenticatedDashboardKycRouteImport } from './routes/_authenticated/dashboard.kyc'
 import { Route as AuthenticatedDashboardInsightsRouteImport } from './routes/_authenticated/dashboard.insights'
@@ -550,6 +551,12 @@ const AuthenticatedDashboardMyAdsRoute =
   AuthenticatedDashboardMyAdsRouteImport.update({
     id: '/dashboard/my-ads',
     path: '/dashboard/my-ads',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDashboardMessagesRoute =
+  AuthenticatedDashboardMessagesRouteImport.update({
+    id: '/dashboard/messages',
+    path: '/dashboard/messages',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDashboardLeadsRoute =
@@ -1030,6 +1037,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/dashboard/messages': typeof AuthenticatedDashboardMessagesRoute
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
@@ -1171,6 +1179,7 @@ export interface FileRoutesByTo {
   '/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/dashboard/messages': typeof AuthenticatedDashboardMessagesRoute
   '/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/dashboard/new': typeof AuthenticatedDashboardNewRoute
@@ -1312,6 +1321,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/insights': typeof AuthenticatedDashboardInsightsRoute
   '/_authenticated/dashboard/kyc': typeof AuthenticatedDashboardKycRoute
   '/_authenticated/dashboard/leads': typeof AuthenticatedDashboardLeadsRouteWithChildren
+  '/_authenticated/dashboard/messages': typeof AuthenticatedDashboardMessagesRoute
   '/_authenticated/dashboard/my-ads': typeof AuthenticatedDashboardMyAdsRoute
   '/_authenticated/dashboard/my-appointments': typeof AuthenticatedDashboardMyAppointmentsRoute
   '/_authenticated/dashboard/new': typeof AuthenticatedDashboardNewRoute
@@ -1456,6 +1466,7 @@ export interface FileRouteTypes {
     | '/dashboard/insights'
     | '/dashboard/kyc'
     | '/dashboard/leads'
+    | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
@@ -1597,6 +1608,7 @@ export interface FileRouteTypes {
     | '/dashboard/insights'
     | '/dashboard/kyc'
     | '/dashboard/leads'
+    | '/dashboard/messages'
     | '/dashboard/my-ads'
     | '/dashboard/my-appointments'
     | '/dashboard/new'
@@ -1737,6 +1749,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/insights'
     | '/_authenticated/dashboard/kyc'
     | '/_authenticated/dashboard/leads'
+    | '/_authenticated/dashboard/messages'
     | '/_authenticated/dashboard/my-ads'
     | '/_authenticated/dashboard/my-appointments'
     | '/_authenticated/dashboard/new'
@@ -2382,6 +2395,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard/my-ads'
       fullPath: '/dashboard/my-ads'
       preLoaderRoute: typeof AuthenticatedDashboardMyAdsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard/messages': {
+      id: '/_authenticated/dashboard/messages'
+      path: '/dashboard/messages'
+      fullPath: '/dashboard/messages'
+      preLoaderRoute: typeof AuthenticatedDashboardMessagesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard/leads': {
@@ -3032,6 +3052,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardInsightsRoute: typeof AuthenticatedDashboardInsightsRoute
   AuthenticatedDashboardKycRoute: typeof AuthenticatedDashboardKycRoute
   AuthenticatedDashboardLeadsRoute: typeof AuthenticatedDashboardLeadsRouteWithChildren
+  AuthenticatedDashboardMessagesRoute: typeof AuthenticatedDashboardMessagesRoute
   AuthenticatedDashboardMyAdsRoute: typeof AuthenticatedDashboardMyAdsRoute
   AuthenticatedDashboardMyAppointmentsRoute: typeof AuthenticatedDashboardMyAppointmentsRoute
   AuthenticatedDashboardNewRoute: typeof AuthenticatedDashboardNewRoute
@@ -3078,6 +3099,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardKycRoute: AuthenticatedDashboardKycRoute,
   AuthenticatedDashboardLeadsRoute:
     AuthenticatedDashboardLeadsRouteWithChildren,
+  AuthenticatedDashboardMessagesRoute: AuthenticatedDashboardMessagesRoute,
   AuthenticatedDashboardMyAdsRoute: AuthenticatedDashboardMyAdsRoute,
   AuthenticatedDashboardMyAppointmentsRoute:
     AuthenticatedDashboardMyAppointmentsRoute,
