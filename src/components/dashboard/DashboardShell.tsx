@@ -32,6 +32,9 @@ function useNav(): { section: string; items: NavItem[] }[] {
       { to: "/dashboard/viewings", label: "My viewings", icon: CalendarDays, end: true },
       { to: "/dashboard/my-appointments", label: "Legacy appointments", icon: CalendarDays },
       { to: "/dashboard/offers", label: "Offer Center", icon: Handshake, end: true },
+      { to: "/dashboard/messages", label: "Messages", icon: MessageCircle, end: true },
+      { to: "/dashboard/my-applications", label: "My rental applications", icon: FileSignature },
+
       { to: "/dashboard/subscription", label: "My subscription", icon: Crown },
       { to: "/dashboard/payment-history", label: "Payment history", icon: Receipt },
       { to: "/dashboard/blog/new", label: "Write a blog", icon: FileText, end: true },
