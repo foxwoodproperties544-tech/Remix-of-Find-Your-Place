@@ -59,7 +59,10 @@ export const startConversation = createServerFn({ method: "POST" })
         .select("id")
         .maybeSingle();
       if (error) throw new Error(error.message);
-      conversationId = (created as any)?.id;
+      conversationId = (created as any)?.id as string;
+    }
+    if (!conversationId) {
+      throw new Error("Could not open the conversation");
     }
 
     const { error: mErr } = await context.supabase
