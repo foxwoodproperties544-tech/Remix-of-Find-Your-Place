@@ -157,7 +157,9 @@ function NewRequest() {
       toast.success(status === "draft" ? "Draft saved" : "Request published");
       navigate({ to: "/dashboard/requests" });
     } catch (e: any) {
-      toast.error(e.message ?? "Could not save request");
+      const msg = [e?.message, e?.details, e?.hint].filter(Boolean).join(" — ");
+      toast.error(msg || "Could not save request. Please try again.");
+
     } finally {
       setSaving(false);
     }
