@@ -55,9 +55,14 @@ export function Header() {
   const moreButtonRef = useRef<HTMLButtonElement>(null);
   const moreHoverTsRef = useRef<number>(0);
   const agentsRef = useRef<HTMLDivElement>(null);
+  const agentsMenuRef = useRef<HTMLDivElement>(null);
+  const agentsButtonRef = useRef<HTMLButtonElement>(null);
   const [requestsOpen, setRequestsOpen] = useState(false);
   const [mobileRequestsOpen, setMobileRequestsOpen] = useState(false);
   const requestsRef = useRef<HTMLDivElement>(null);
+  const requestsMenuRef = useRef<HTMLDivElement>(null);
+  const requestsButtonRef = useRef<HTMLButtonElement>(null);
+
 
   const { user } = useAuth();
   const { isAdmin } = useRoles();
@@ -83,6 +88,21 @@ export function Header() {
     menuRef: moreMenuRef,
     triggerRef: moreButtonRef,
   });
+
+  useMenuKeyboard({
+    isOpen: requestsOpen,
+    setIsOpen: setRequestsOpen,
+    menuRef: requestsMenuRef,
+    triggerRef: requestsButtonRef,
+  });
+
+  useMenuKeyboard({
+    isOpen: agentsOpen,
+    setIsOpen: setAgentsOpen,
+    menuRef: agentsMenuRef,
+    triggerRef: agentsButtonRef,
+  });
+
 
   useEffect(() => {
     if (!requestsOpen) return;
@@ -174,16 +194,26 @@ export function Header() {
             onMouseLeave={() => setRequestsOpen(false)}
           >
             <button
+              ref={requestsButtonRef}
+              id="requests-button"
               type="button"
               aria-haspopup="menu"
               aria-expanded={requestsOpen}
+              aria-controls={requestsOpen ? "requests-menu" : undefined}
               onClick={() => setRequestsOpen((v) => !v)}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive || requestsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
             >
               Property Requests <ChevronDown className={`h-3.5 w-3.5 transition-transform ${requestsOpen ? "rotate-180" : ""}`} />
             </button>
             {requestsOpen && (
-              <div role="menu" className="absolute right-0 top-full pt-2 w-[22rem]">
+              <div
+                id="requests-menu"
+                ref={requestsMenuRef}
+                role="menu"
+                aria-labelledby="requests-button"
+                className="absolute right-0 top-full pt-2 w-[22rem]"
+              >
+
                 <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
                   {visibleRequestsItems.map((m) => {
                     const Icon = m.icon;
@@ -219,16 +249,26 @@ export function Header() {
             onMouseLeave={() => setAgentsOpen(false)}
           >
             <button
+              ref={agentsButtonRef}
+              id="agents-button"
               type="button"
               aria-haspopup="menu"
               aria-expanded={agentsOpen}
+              aria-controls={agentsOpen ? "agents-menu" : undefined}
               onClick={() => setAgentsOpen((v) => !v)}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive || agentsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
             >
               Agents <ChevronDown className={`h-3.5 w-3.5 transition-transform ${agentsOpen ? "rotate-180" : ""}`} />
             </button>
             {agentsOpen && (
-              <div role="menu" className="absolute right-0 top-full pt-2 w-[22rem]">
+              <div
+                id="agents-menu"
+                ref={agentsMenuRef}
+                role="menu"
+                aria-labelledby="agents-button"
+                className="absolute right-0 top-full pt-2 w-[22rem]"
+              >
+
                 <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
                   {agentsItems.map((m) => {
                     const Icon = m.icon;
