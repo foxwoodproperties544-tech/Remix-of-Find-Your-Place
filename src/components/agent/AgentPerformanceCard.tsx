@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Award, Clock, Home, Handshake, Star, ShieldCheck, Zap, CalendarDays } from "lucide-react";
+import { Award, Clock, Home, Handshake, Star, ShieldCheck, Zap, CalendarDays, Activity } from "lucide-react";
+
 
 export type AgentPerf = {
   active_listings: number;
