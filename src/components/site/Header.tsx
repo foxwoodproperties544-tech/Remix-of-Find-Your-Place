@@ -89,6 +89,21 @@ export function Header() {
     triggerRef: moreButtonRef,
   });
 
+  useMenuKeyboard({
+    isOpen: requestsOpen,
+    setIsOpen: setRequestsOpen,
+    menuRef: requestsMenuRef,
+    triggerRef: requestsButtonRef,
+  });
+
+  useMenuKeyboard({
+    isOpen: agentsOpen,
+    setIsOpen: setAgentsOpen,
+    menuRef: agentsMenuRef,
+    triggerRef: agentsButtonRef,
+  });
+
+
   useEffect(() => {
     if (!requestsOpen) return;
     const onClick = (e: MouseEvent) => {
