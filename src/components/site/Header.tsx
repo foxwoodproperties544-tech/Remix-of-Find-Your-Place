@@ -176,24 +176,29 @@ export function Header() {
           className="min-w-0 flex-shrink rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-label="Foxwood Properties — go to homepage"
         ><Logo /></Link>
-        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary" data-testid="primary-nav">
           {nav.map((n, i) => (
             <Link key={i} to={n.to as any} search={(n as any).search}
+              data-nav-item={n.label}
               className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
               activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
-              activeProps={{ className: "text-primary bg-primary-soft" }}
+              activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }}
             >{navLabel(n.label)}</Link>
           ))}
+
           {/* Property Requests dropdown */}
           <div
             ref={requestsRef}
             className="relative"
             onMouseEnter={() => setRequestsOpen(true)}
-            onMouseLeave={() => setRequestsOpen(false)}
+            onMouseLeave={(e) => { if (!e.currentTarget.contains(document.activeElement)) setRequestsOpen(false); }}
           >
             <button
               ref={requestsButtonRef}
               id="requests-button"
+              data-nav-item="Property Requests"
+              aria-current={requestsActive ? "page" : undefined}
+
               type="button"
               aria-haspopup="menu"
               aria-expanded={requestsOpen}
@@ -221,6 +226,8 @@ export function Header() {
                         key={m.to}
                         to={m.to}
                         role="menuitem"
+                        aria-current={active ? "page" : undefined}
+
                         onClick={() => setRequestsOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
                       >
@@ -244,11 +251,14 @@ export function Header() {
             ref={agentsRef}
             className="relative"
             onMouseEnter={() => setAgentsOpen(true)}
-            onMouseLeave={() => setAgentsOpen(false)}
+            onMouseLeave={(e) => { if (!e.currentTarget.contains(document.activeElement)) setAgentsOpen(false); }}
           >
             <button
               ref={agentsButtonRef}
               id="agents-button"
+              data-nav-item="Agents"
+              aria-current={agentsActive ? "page" : undefined}
+
               type="button"
               aria-haspopup="menu"
               aria-expanded={agentsOpen}
@@ -276,6 +286,8 @@ export function Header() {
                         key={m.to}
                         to={m.to}
                         role="menuitem"
+                        aria-current={active ? "page" : undefined}
+
                         onClick={() => setAgentsOpen(false)}
                         className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
                       >
@@ -301,11 +313,14 @@ export function Header() {
               moreHoverTsRef.current = Date.now();
               setMoreOpen(true);
             }}
-            onMouseLeave={() => setMoreOpen(false)}
+            onMouseLeave={(e) => { if (!e.currentTarget.contains(document.activeElement)) setMoreOpen(false); }}
           >
             <button
               ref={moreButtonRef}
               id="more-button"
+              data-nav-item="More"
+              aria-current={moreActive ? "page" : undefined}
+
               type="button"
               aria-haspopup="menu"
               aria-expanded={moreOpen}
@@ -358,8 +373,9 @@ export function Header() {
               </div>
             )}
           </div>
-          <Link to="/blog" className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Blog")}</Link>
-          <Link to="/contact" className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Contact Us")}</Link>
+          <Link to="/blog" data-nav-item="Blog" activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Blog")}</Link>
+          <Link to="/contact" data-nav-item="Contact Us" activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Contact Us")}</Link>
+
         </nav>
         <div className="hidden md:flex items-center gap-2">
           <button
@@ -414,88 +430,101 @@ export function Header() {
       </div>
       {open && (
         <div className="lg:hidden border-t border-border bg-background">
-          <nav className="container-page flex flex-col py-3">
+          <nav className="container-page flex flex-col py-3" aria-label="Mobile primary" data-testid="mobile-nav">
+            {/* Order must mirror the desktop primary nav:
+                Buy, Rent, Lease, Airbnbs, Property Requests, Agents, More, Blog, Contact Us */}
             {nav.map((n, i) => (
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
+                data-mobile-nav-item={n.label}
+                activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
+                activeProps={{ className: "bg-primary-soft text-primary font-semibold", "aria-current": "page" }}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel(n.label)}</Link>
             ))}
             {/* Mobile Property Requests accordion */}
             <button
               type="button"
+              id="mobile-requests-button"
+              data-mobile-nav-item="Property Requests"
               aria-expanded={mobileRequestsOpen}
+              aria-controls="mobile-requests-panel"
+              aria-current={requestsActive ? "page" : undefined}
               onClick={() => setMobileRequestsOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground ${requestsActive ? "text-primary" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive ? "text-primary bg-primary-soft font-semibold" : ""}`}
             >
               <span>Property Requests</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileRequestsOpen ? "rotate-180" : ""}`} />
             </button>
             {mobileRequestsOpen && (
-              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+              <div id="mobile-requests-panel" aria-labelledby="mobile-requests-button" className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
                 {visibleRequestsItems.map((m) => (
                   <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileRequestsOpen(false); }}
-                    className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground"
-                    activeProps={{ className: "text-primary bg-primary-soft" }}>
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    activeProps={{ className: "text-primary bg-primary-soft font-semibold", "aria-current": "page" }}>
                     {m.label}
                   </Link>
                 ))}
               </div>
             )}
             {/* Mobile Agents accordion */}
-
             <button
               type="button"
+              id="mobile-agents-button"
+              data-mobile-nav-item="Agents"
               aria-expanded={mobileAgentsOpen}
+              aria-controls="mobile-agents-panel"
+              aria-current={agentsActive ? "page" : undefined}
               onClick={() => setMobileAgentsOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground ${agentsActive ? "text-primary" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${agentsActive ? "text-primary bg-primary-soft font-semibold" : ""}`}
             >
               <span>Agents</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileAgentsOpen ? "rotate-180" : ""}`} />
             </button>
-            <div
-              className={`grid overflow-hidden transition-all duration-200 ease-out ${mobileAgentsOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
-            >
-              <div className="min-h-0">
-                <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
-                  {agentsItems.map((m) => {
-                    const active = pathname === m.to;
-                    return (
-                      <Link
-                        key={m.to}
-                        to={m.to}
-                        onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
-                        aria-current={active ? "page" : undefined}
-                        className={`rounded-lg px-3 py-2 text-sm transition-colors ${active ? "bg-secondary text-secondary-foreground font-semibold" : "hover:bg-secondary hover:text-secondary-foreground"}`}
-                      >
-                        {m.label}
-                      </Link>
-                    );
-                  })}
-                </div>
+            {mobileAgentsOpen && (
+              <div id="mobile-agents-panel" aria-labelledby="mobile-agents-button" className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+                {agentsItems.map((m) => {
+                  const active = pathname === m.to;
+                  return (
+                    <Link
+                      key={m.to}
+                      to={m.to}
+                      onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
+                      aria-current={active ? "page" : undefined}
+                      className={`rounded-lg px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft text-primary font-semibold" : "hover:bg-secondary hover:text-secondary-foreground"}`}
+                    >
+                      {m.label}
+                    </Link>
+                  );
+                })}
               </div>
-            </div>
+            )}
             {/* Mobile More accordion */}
             <button
               type="button"
+              id="mobile-more-button"
+              data-mobile-nav-item="More"
               aria-expanded={mobileMoreOpen}
+              aria-controls="mobile-more-panel"
+              aria-current={moreActive ? "page" : undefined}
               onClick={() => setMobileMoreOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground ${moreActive ? "text-primary" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${moreActive ? "text-primary bg-primary-soft font-semibold" : ""}`}
             >
               <span>More</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileMoreOpen ? "rotate-180" : ""}`} />
             </button>
             {mobileMoreOpen && (
-              <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
+              <div id="mobile-more-panel" aria-labelledby="mobile-more-button" className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
                 {moreItems.map((m) => (
                   <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileMoreOpen(false); }}
-                    className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground"
-                    activeProps={{ className: "text-primary bg-primary-soft" }}>
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    activeProps={{ className: "text-primary bg-primary-soft font-semibold", "aria-current": "page" }}>
                     {m.label}
                   </Link>
                 ))}
               </div>
             )}
-            <Link to="/blog" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Blog")}</Link>
-            <Link to="/contact" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Contact Us")}</Link>
+            <Link to="/blog" onClick={() => setOpen(false)} data-mobile-nav-item="Blog" activeProps={{ className: "bg-primary-soft text-primary font-semibold", "aria-current": "page" }} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Blog")}</Link>
+            <Link to="/contact" onClick={() => setOpen(false)} data-mobile-nav-item="Contact Us" activeProps={{ className: "bg-primary-soft text-primary font-semibold", "aria-current": "page" }} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Contact Us")}</Link>
+
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">My listings</Link>
