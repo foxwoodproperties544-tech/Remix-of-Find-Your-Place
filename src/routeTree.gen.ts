@@ -55,6 +55,7 @@ import { Route as ServicesBuyRouteImport } from './routes/services.buy'
 import { Route as PropertyRequestsSlugRouteImport } from './routes/property-requests.$slug'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
+import { Route as DevMenusRouteImport } from './routes/dev.menus'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AgentsBecomeRouteImport } from './routes/agents.become'
 import { Route as AgentsIdRouteImport } from './routes/agents.$id'
@@ -375,6 +376,11 @@ const PropertiesIdRoute = PropertiesIdRouteImport.update({
 const LocationsCountyRoute = LocationsCountyRouteImport.update({
   id: '/locations/$county',
   path: '/locations/$county',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevMenusRoute = DevMenusRouteImport.update({
+  id: '/dev/menus',
+  path: '/dev/menus',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -942,6 +948,7 @@ export interface FileRoutesByFullPath {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/menus': typeof DevMenusRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/property-requests/$slug': typeof PropertyRequestsSlugRoute
@@ -1080,6 +1087,7 @@ export interface FileRoutesByTo {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/menus': typeof DevMenusRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/property-requests/$slug': typeof PropertyRequestsSlugRoute
@@ -1216,6 +1224,7 @@ export interface FileRoutesById {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/menus': typeof DevMenusRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/property-requests/$slug': typeof PropertyRequestsSlugRoute
@@ -1356,6 +1365,7 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
+    | '/dev/menus'
     | '/locations/$county'
     | '/properties/$id'
     | '/property-requests/$slug'
@@ -1494,6 +1504,7 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
+    | '/dev/menus'
     | '/locations/$county'
     | '/properties/$id'
     | '/property-requests/$slug'
@@ -1629,6 +1640,7 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
+    | '/dev/menus'
     | '/locations/$county'
     | '/properties/$id'
     | '/property-requests/$slug'
@@ -1765,6 +1777,7 @@ export interface RootRouteChildren {
   AgentsIdRoute: typeof AgentsIdRoute
   AgentsBecomeRoute: typeof AgentsBecomeRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DevMenusRoute: typeof DevMenusRoute
   LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
   PropertyRequestsSlugRoute: typeof PropertyRequestsSlugRoute
@@ -2113,6 +2126,13 @@ declare module '@tanstack/react-router' {
       path: '/locations/$county'
       fullPath: '/locations/$county'
       preLoaderRoute: typeof LocationsCountyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/menus': {
+      id: '/dev/menus'
+      path: '/dev/menus'
+      fullPath: '/dev/menus'
+      preLoaderRoute: typeof DevMenusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -3073,6 +3093,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgentsIdRoute: AgentsIdRoute,
   AgentsBecomeRoute: AgentsBecomeRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DevMenusRoute: DevMenusRoute,
   LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
   PropertyRequestsSlugRoute: PropertyRequestsSlugRoute,
@@ -3101,13 +3122,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
