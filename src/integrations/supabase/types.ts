@@ -904,6 +904,85 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_messages: {
+        Row: {
+          attachments: string[]
+          body: string | null
+          conversation_id: string
+          created_at: string
+          id: string
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          attachments?: string[]
+          body?: string | null
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          attachments?: string[]
+          body?: string | null
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          agent_id: string
+          buyer_id: string
+          created_at: string
+          id: string
+          last_message_at: string
+          property_id: string | null
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          buyer_id: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          property_id?: string | null
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          buyer_id?: string
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          property_id?: string | null
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_templates: {
         Row: {
           active: boolean
@@ -3116,6 +3195,83 @@ export type Database = {
         }
         Relationships: []
       }
+      rental_applications: {
+        Row: {
+          agent_id: string | null
+          applicant_id: string
+          created_at: string
+          documents: Json
+          email: string
+          employer: string | null
+          full_name: string
+          id: string
+          monthly_income: number | null
+          move_in_date: string | null
+          notes: string | null
+          occupants: number
+          occupation: string | null
+          pets: boolean
+          phone: string
+          property_id: string
+          reviewed_at: string | null
+          reviewer_notes: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          applicant_id: string
+          created_at?: string
+          documents?: Json
+          email: string
+          employer?: string | null
+          full_name: string
+          id?: string
+          monthly_income?: number | null
+          move_in_date?: string | null
+          notes?: string | null
+          occupants?: number
+          occupation?: string | null
+          pets?: boolean
+          phone: string
+          property_id: string
+          reviewed_at?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          applicant_id?: string
+          created_at?: string
+          documents?: Json
+          email?: string
+          employer?: string | null
+          full_name?: string
+          id?: string
+          monthly_income?: number | null
+          move_in_date?: string | null
+          notes?: string | null
+          occupants?: number
+          occupation?: string | null
+          pets?: boolean
+          phone?: string
+          property_id?: string
+          reviewed_at?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_applications_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       request_packages: {
         Row: {
           active: boolean
@@ -3957,6 +4113,7 @@ export type Database = {
         Args: { _campaign: string; _kind: string }
         Returns: undefined
       }
+      can_access_property_doc: { Args: { _name: string }; Returns: boolean }
       check_and_hit_rate_limit: {
         Args: {
           _bucket: string
