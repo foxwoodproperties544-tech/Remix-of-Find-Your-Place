@@ -41,9 +41,19 @@ for (const theme of ["light", "dark"] as const) {
           const stack: [number, number, number, number][] = [];
           let node: HTMLElement | null = el;
           while (node) {
-            const c = rgba(getComputedStyle(node).backgroundColor);
+            const cs = getComputedStyle(node);
+            const c = rgba(cs.backgroundColor);
             if (c[3] > 0) stack.push(c);
             if (c[3] >= 1) break;
+            // Gradient backgrounds paint too: approximate with the first stop.
+            const stop = cs.backgroundImage.match(/(oklch|oklab|rgba?|hsla?|color-mix)\([^()]*(\([^()]*\))?[^()]*\)/);
+            if (stop) {
+              const g = rgba(stop[0]);
+              if (g[3] > 0) {
+                stack.push(g);
+                if (g[3] >= 1) break;
+              }
+            }
             node = node.parentElement;
           }
           let [r, g, b] = stack.length && stack[stack.length - 1][3] >= 1
