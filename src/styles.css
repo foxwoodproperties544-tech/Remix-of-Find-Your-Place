@@ -65,7 +65,6 @@
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.92 0.008 250);
   --input: oklch(0.92 0.008 250);
-  --input: oklch(0.92 0.008 250);
   --ring: oklch(0.51 0.08 180);
   /* Very light tint so every fillable field is obvious without hurting contrast */
   --field: oklch(0.975 0.012 180);
