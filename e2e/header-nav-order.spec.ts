@@ -12,6 +12,29 @@ const EXPECTED = [
   "Contact Us",
 ];
 
+/** The consent banner can cover the header until dismissed. */
+async function dismissConsent(page: Page) {
+  const accept = page.getByRole("button", { name: /accept all/i });
+  if (await accept.isVisible().catch(() => false)) {
+    await accept.click().catch(() => {});
+    await page.waitForTimeout(200);
+  }
+}
+
+/** Clicks until the target becomes visible (first click can precede hydration). */
+async function openUntilVisible(page: Page, trigger: Page["locator"] extends never ? never : ReturnType<Page["locator"]>, target: ReturnType<Page["locator"]>) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await trigger.click();
+    try {
+      await target.waitFor({ state: "visible", timeout: 3000 });
+      return;
+    } catch {
+      await page.waitForTimeout(600);
+    }
+  }
+  await expect(target).toBeVisible();
+}
+
 async function setTheme(page: Page, theme: "light" | "dark") {
   await page.evaluate((t) => {
     document.documentElement.classList.toggle("dark", t === "dark");
@@ -32,9 +55,11 @@ for (const theme of ["light", "dark"] as const) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
     await setTheme(page, theme);
-    await page.getByRole("button", { name: "Toggle menu" }).click();
+    await dismissConsent(page);
+    const toggle = page.getByRole("button", { name: "Toggle menu" });
+    await toggle.waitFor();
     const items = page.locator('[data-testid="mobile-nav"] [data-mobile-nav-item]');
-    await expect(items.first()).toBeVisible();
+    await openUntilVisible(page, toggle, items.first());
     expect(await items.evaluateAll((els) => els.map((e) => e.getAttribute("data-mobile-nav-item")))).toEqual(EXPECTED);
   });
 }
@@ -42,14 +67,25 @@ for (const theme of ["light", "dark"] as const) {
 test("submenus open, trap focus and close with the keyboard", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
+  await dismissConsent(page);
 
   for (const id of ["requests", "agents", "more"]) {
     const trigger = page.locator(`#${id}-button`);
-    await trigger.focus();
-
-    // ArrowDown opens the menu and moves focus to the first item.
-    await page.keyboard.press("ArrowDown");
+    await trigger.waitFor();
     const menu = page.locator(`#${id}-menu`);
+
+    // ArrowDown opens the menu and moves focus to the first item. Retry: the
+    // first key press can land before hydration attaches the handler.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await trigger.focus();
+      await page.keyboard.press("ArrowDown");
+      try {
+        await menu.waitFor({ state: "visible", timeout: 3000 });
+        break;
+      } catch {
+        await page.waitForTimeout(600);
+      }
+    }
     await expect(menu).toBeVisible();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");
     const focusedInMenu = await page.evaluate(
