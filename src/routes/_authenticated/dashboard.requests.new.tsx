@@ -27,13 +27,14 @@ const schema = z.object({
 });
 
 function NewRequest() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [captcha, setCaptcha] = useState("");
   const [a] = useState(() => Math.floor(Math.random() * 8) + 2);
   const [b] = useState(() => Math.floor(Math.random() * 8) + 2);
+
 
   const { data: packages } = useQuery({ queryKey: ["request-packages", "buyer"], queryFn: () => fetchRequestPackages("buyer") });
 
@@ -73,7 +74,15 @@ function NewRequest() {
   const pkg = packages?.find((p) => p.slug === f.package_slug);
 
   async function save(status: "draft" | "active") {
-    if (!user) return;
+    if (authLoading) {
+      toast.info("Just a moment — finishing sign-in…");
+      return;
+    }
+    if (!user) {
+      toast.error("Please sign in again to submit your request.");
+      navigate({ to: "/auth" });
+      return;
+    }
     const parsed = schema.safeParse({
       title: f.title,
       property_type: f.property_type,
@@ -83,12 +92,24 @@ function NewRequest() {
       budget_max: f.budget_max ? Number(f.budget_max) : null,
     });
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0].message);
+      const issue = parsed.error.issues[0];
+      // Send the user back to the step that holds the offending field.
+      const field = String(issue.path[0] ?? "");
+      setStep(field === "description" ? 1 : 0);
+      toast.error(issue.message);
+      return;
+    }
+    const min = f.budget_min ? Number(f.budget_min) : null;
+    const max = f.budget_max ? Number(f.budget_max) : null;
+    if (min != null && max != null && min > max) {
+      setStep(0);
+      toast.error("Budget min cannot be greater than budget max");
       return;
     }
     if (status === "active" && Number(captcha) !== a + b) {
       toast.error("Please answer the spam check correctly");
       return;
+
     }
     setSaving(true);
     try {
@@ -126,16 +147,19 @@ function NewRequest() {
         contact_phone: f.contact_phone || null,
         contact_email: f.contact_email || null,
         package_slug: f.package_slug,
-        is_featured: !!pkg?.is_featured,
-        is_urgent: !!pkg?.is_urgent,
+        // is_featured / is_urgent are privileged: the database decides them
+        // from the paid package, never the browser.
         status,
       };
-      const { error } = await supabase.from("property_requests" as any).insert(payload);
+      const { error } = await supabase.from("property_requests" as any).insert(payload).select("id").single();
       if (error) throw error;
+
       toast.success(status === "draft" ? "Draft saved" : "Request published");
       navigate({ to: "/dashboard/requests" });
     } catch (e: any) {
-      toast.error(e.message ?? "Could not save request");
+      const msg = [e?.message, e?.details, e?.hint].filter(Boolean).join(" — ");
+      toast.error(msg || "Could not save request. Please try again.");
+
     } finally {
       setSaving(false);
     }
@@ -271,11 +295,25 @@ function NewRequest() {
             </Field>
 
             <div className="flex flex-wrap gap-2 pt-2">
-              <button disabled={saving} onClick={() => save("draft")} className="rounded-full border border-border px-5 py-2 text-sm font-semibold hover:bg-muted">Save draft</button>
-              <button disabled={saving} onClick={() => save("active")} className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-                {saving ? "Publishing…" : "Publish request"}
+              <button
+                type="button"
+                disabled={saving || authLoading}
+                onClick={() => save("draft")}
+                className="rounded-full border border-border px-5 py-2 text-sm font-semibold hover:bg-muted disabled:opacity-50"
+              >
+                {saving ? "Saving…" : "Save draft"}
+              </button>
+              <button
+                type="button"
+                data-testid="publish-request"
+                disabled={saving || authLoading}
+                onClick={() => save("active")}
+                className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {saving ? "Publishing…" : authLoading ? "Loading…" : "Publish request"}
               </button>
             </div>
+
           </>
         )}
 
