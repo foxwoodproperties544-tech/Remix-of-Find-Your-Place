@@ -191,7 +191,7 @@ export function Header() {
             ref={requestsRef}
             className="relative"
             onMouseEnter={() => setRequestsOpen(true)}
-            onMouseLeave={() => setRequestsOpen(false)}
+            onMouseLeave={(e) => { if (!e.currentTarget.contains(document.activeElement)) setRequestsOpen(false); }}
           >
             <button
               ref={requestsButtonRef}
@@ -251,7 +251,7 @@ export function Header() {
             ref={agentsRef}
             className="relative"
             onMouseEnter={() => setAgentsOpen(true)}
-            onMouseLeave={() => setAgentsOpen(false)}
+            onMouseLeave={(e) => { if (!e.currentTarget.contains(document.activeElement)) setAgentsOpen(false); }}
           >
             <button
               ref={agentsButtonRef}
@@ -313,7 +313,7 @@ export function Header() {
               moreHoverTsRef.current = Date.now();
               setMoreOpen(true);
             }}
-            onMouseLeave={() => setMoreOpen(false)}
+            onMouseLeave={(e) => { if (!e.currentTarget.contains(document.activeElement)) setMoreOpen(false); }}
           >
             <button
               ref={moreButtonRef}
