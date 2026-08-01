@@ -358,6 +358,8 @@ export function Header() {
               </div>
             )}
           </div>
+          <Link to="/blog" className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Blog")}</Link>
+          <Link to="/contact" className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Contact Us")}</Link>
         </nav>
         <div className="hidden md:flex items-center gap-2">
           <button
