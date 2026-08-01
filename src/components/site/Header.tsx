@@ -196,6 +196,9 @@ export function Header() {
             <button
               ref={requestsButtonRef}
               id="requests-button"
+              data-nav-item="Property Requests"
+              aria-current={requestsActive ? "page" : undefined}
+
               type="button"
               aria-haspopup="menu"
               aria-expanded={requestsOpen}
@@ -251,6 +254,9 @@ export function Header() {
             <button
               ref={agentsButtonRef}
               id="agents-button"
+              data-nav-item="Agents"
+              aria-current={agentsActive ? "page" : undefined}
+
               type="button"
               aria-haspopup="menu"
               aria-expanded={agentsOpen}
@@ -308,6 +314,9 @@ export function Header() {
             <button
               ref={moreButtonRef}
               id="more-button"
+              data-nav-item="More"
+              aria-current={moreActive ? "page" : undefined}
+
               type="button"
               aria-haspopup="menu"
               aria-expanded={moreOpen}
