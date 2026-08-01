@@ -10,10 +10,11 @@ interface UseMenuKeyboardOptions {
 /**
  * WAI-ARIA keyboard support for a disclosure menu (button + menu).
  *
- * - Opens and focuses the first item on trigger ArrowDown.
+ * - Opens and focuses the first item on trigger ArrowDown (last item on ArrowUp).
  * - Cycles through items with ArrowDown/ArrowUp.
  * - Home/End jump to first/last item.
- * - Tab closes the menu (focus moves naturally to the next page element).
+ * - Tab / Shift+Tab are trapped inside the menu: focus cycles through the menu
+ *   items (plus the trigger) instead of escaping to the rest of the page.
  * - Escape closes the menu and returns focus to the trigger.
  */
 export function useMenuKeyboard({
@@ -49,11 +50,13 @@ export function useMenuKeyboard({
     const onTriggerKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         e.preventDefault();
+        const wantsLast = e.key === "ArrowUp";
         setIsOpen(true);
-        // Wait for menu render then focus first item.
+        // Wait for menu render then focus the first (or last) item.
         requestAnimationFrame(() => {
           refreshItems();
-          itemsRef.current[0]?.focus();
+          const items = itemsRef.current;
+          (wantsLast ? items[items.length - 1] : items[0])?.focus();
         });
       }
     };
@@ -78,7 +81,10 @@ export function useMenuKeyboard({
 
     const onMenuKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;
-      if (!menu.contains(target)) return;
+      const trigger = triggerRef.current;
+      const insideMenu = menu.contains(target);
+      const onTrigger = !!trigger && (trigger === target || trigger.contains(target));
+      if (!insideMenu && !onTrigger) return;
 
       refreshItems();
       const items = itemsRef.current;
@@ -104,11 +110,20 @@ export function useMenuKeyboard({
         case "Escape":
           e.preventDefault();
           setIsOpen(false);
+          trigger?.focus();
           break;
-        case "Tab":
-          // Let Tab move focus, but close the menu so it doesn't feel like a trap.
-          setIsOpen(false);
+        case "Tab": {
+          // Focus trap: cycle through [trigger, ...items] without leaving the menu.
+          if (items.length === 0) return;
+          e.preventDefault();
+          const ring: HTMLElement[] = trigger ? [trigger, ...items] : items;
+          const idx = ring.indexOf(document.activeElement as HTMLElement);
+          const next = e.shiftKey
+            ? (idx <= 0 ? ring.length - 1 : idx - 1)
+            : (idx === -1 || idx + 1 >= ring.length ? 0 : idx + 1);
+          ring[next]?.focus();
           break;
+        }
       }
     };
 
