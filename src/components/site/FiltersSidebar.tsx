@@ -62,7 +62,7 @@ export function FiltersSidebar({ state, townOptions, onChange, onClear }: Filter
       </Section>
 
       <Section title="Property type" defaultOpen>
-        <select value={state.type} onChange={(e) => onChange({ type: e.target.value })} className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
+        <select aria-label="Property type" value={state.type} onChange={(e) => onChange({ type: e.target.value })} className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
           <option value="">All types</option>
           {TYPE_GROUPS.map((g) => (
             <optgroup key={g.label} label={g.label}>
@@ -74,7 +74,7 @@ export function FiltersSidebar({ state, townOptions, onChange, onClear }: Filter
 
       <Section title="Location" defaultOpen>
         <div className="space-y-2">
-          <select value={state.county} onChange={(e) => onChange({ county: e.target.value, town: "" })} className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
+          <select aria-label="County" value={state.county} onChange={(e) => onChange({ county: e.target.value, town: "" })} className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
             <option value="">All counties</option>
             {counties.map((c) => <option key={c}>{c}</option>)}
           </select>

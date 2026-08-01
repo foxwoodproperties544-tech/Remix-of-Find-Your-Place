@@ -73,6 +73,7 @@ export function RadiusFilter({ value, onChange, matchCount }: Props) {
 
       <div className="mt-3 space-y-2">
         <select
+          aria-label="Search centre point"
           value={RADIUS_PLACES.includes(value.nearLabel) ? value.nearLabel : ""}
           onChange={(e) => pickPlace(e.target.value)}
           className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"

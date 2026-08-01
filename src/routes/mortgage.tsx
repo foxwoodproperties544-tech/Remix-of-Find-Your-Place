@@ -100,14 +100,14 @@ function Field({ label, value, onChange, min, max, step, format, hint }: {
   return (
     <div>
       <div className="flex items-baseline justify-between">
-        <label className="text-sm font-medium">{label}</label>
+        <span className="text-sm font-medium">{label}</span>
         <span className="text-sm font-bold text-primary">{format(value)}</span>
       </div>
-      <input type="range" min={min} max={max} step={step} value={value}
+      <input type="range" aria-label={`${label} slider`} min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full mt-2 accent-primary" />
       <div className="mt-2 flex items-center gap-2">
-        <input type="number" min={min} max={max} step={step} value={value}
+        <input type="number" aria-label={label} min={min} max={max} step={step} value={value}
           onChange={(e) => onChange(Number(e.target.value))}
           className="flex-1 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         {hint && <span className="text-xs text-muted-foreground">{hint}</span>}
