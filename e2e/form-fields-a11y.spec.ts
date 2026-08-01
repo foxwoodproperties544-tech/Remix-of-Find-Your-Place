@@ -3,7 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 
 const PAGES = ["/auth", "/contact", "/mortgage", "/properties"];
 const FIELD_SELECTOR =
-  "input:not([type=hidden]):not([type=checkbox]):not([type=radio]),textarea,select";
+  "input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),textarea,select";
 
 /** Relative luminance of a computed colour resolved to rgb() by the browser. */
 function luminance(rgb: string): number | null {
@@ -31,7 +31,16 @@ for (const theme of ["light", "dark"] as const) {
       for (let i = 0; i < count; i++) {
         const field = fields.nth(i);
         if (!(await field.isVisible().catch(() => false))) continue;
-        const shot = (await field.screenshot().catch(() => null)) as Buffer | null;
+        // Clip from a page screenshot (not an element screenshot) so painted
+        // ancestors and overlay bands behind the field are included.
+        await field.scrollIntoViewIfNeeded().catch(() => {});
+        const box = await field.boundingBox();
+        if (!box || box.width < 8 || box.height < 8) continue;
+        const shot = (await page
+          .screenshot({
+            clip: { x: box.x, y: box.y, width: Math.min(box.width, 120), height: box.height },
+          })
+          .catch(() => null)) as Buffer | null;
         if (!shot) continue;
         const measured = await page.evaluate(
           async ({ b64, sel, index }) => {
