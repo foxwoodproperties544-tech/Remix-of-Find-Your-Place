@@ -194,16 +194,26 @@ export function Header() {
             onMouseLeave={() => setRequestsOpen(false)}
           >
             <button
+              ref={requestsButtonRef}
+              id="requests-button"
               type="button"
               aria-haspopup="menu"
               aria-expanded={requestsOpen}
+              aria-controls={requestsOpen ? "requests-menu" : undefined}
               onClick={() => setRequestsOpen((v) => !v)}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${requestsActive || requestsOpen ? "text-primary bg-primary-soft" : "text-foreground/75 hover:text-primary hover:bg-primary-soft"}`}
             >
               Property Requests <ChevronDown className={`h-3.5 w-3.5 transition-transform ${requestsOpen ? "rotate-180" : ""}`} />
             </button>
             {requestsOpen && (
-              <div role="menu" className="absolute right-0 top-full pt-2 w-[22rem]">
+              <div
+                id="requests-menu"
+                ref={requestsMenuRef}
+                role="menu"
+                aria-labelledby="requests-button"
+                className="absolute right-0 top-full pt-2 w-[22rem]"
+              >
+
                 <div className="rounded-2xl border border-border bg-card shadow-glow p-2">
                   {visibleRequestsItems.map((m) => {
                     const Icon = m.icon;
