@@ -1,59 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import { APPLICATION_STATUSES } from "./rentals";
 
-export const APPLICATION_STATUSES = [
-  "submitted",
-  "under_review",
-  "shortlisted",
-  "approved",
-  "rejected",
-  "withdrawn",
-] as const;
-
-export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
-
-export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
-  submitted: "Submitted",
-  under_review: "Under review",
-  shortlisted: "Shortlisted",
-  approved: "Approved",
-  rejected: "Rejected",
-  withdrawn: "Withdrawn",
-};
-
-export const APPLICATION_STATUS_CLASS: Record<ApplicationStatus, string> = {
-  submitted: "bg-muted text-muted-foreground",
-  under_review: "bg-primary-soft text-primary",
-  shortlisted: "bg-secondary/15 text-secondary",
-  approved: "bg-emerald-500/15 text-emerald-600",
-  rejected: "bg-destructive/10 text-destructive",
-  withdrawn: "bg-muted text-muted-foreground",
-};
-
-export interface RentalApplication {
-  id: string;
-  property_id: string;
-  applicant_id: string;
-  agent_id: string | null;
-  full_name: string;
-  email: string;
-  phone: string;
-  occupation: string | null;
-  employer: string | null;
-  monthly_income: number | null;
-  move_in_date: string | null;
-  occupants: number;
-  pets: boolean;
-  notes: string | null;
-  documents: { name: string; url: string }[];
-  status: ApplicationStatus;
-  reviewer_notes: string | null;
-  reviewed_at: string | null;
-  created_at: string;
-  updated_at: string;
-  property?: { id: string; title: string; slug: string | null; price: number; town: string | null } | null;
-}
 
 async function rateLimit(context: any, bucket: string, limit: number, windowSeconds: number) {
   const { data, error } = await context.supabase.rpc("check_and_hit_rate_limit", {
