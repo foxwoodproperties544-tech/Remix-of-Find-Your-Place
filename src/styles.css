@@ -55,9 +55,11 @@
   --primary: oklch(0.51 0.08 180);
   --primary-foreground: oklch(0.99 0 0);
   --primary-soft: oklch(0.96 0.02 180);
-  /* secondary orange #FE4C25 */
+  /* secondary orange #FE4C25 — foreground is deep ember so text on the
+     orange hover/active state clears WCAG AA (5.4:1) instead of 3.35:1. */
   --secondary: oklch(0.68 0.21 32);
-  --secondary-foreground: oklch(0.99 0 0);
+  --secondary-foreground: oklch(0.19 0.05 32);
+
   --accent: oklch(0.96 0.02 180);
   --accent-foreground: oklch(0.35 0.06 180);
   --muted: oklch(0.97 0.005 250);
@@ -80,7 +82,12 @@
   --field-focus: oklch(0.31 0.03 195);
   --field-border: oklch(0.42 0.03 195);
   --field-foreground: oklch(0.97 0.005 200);
+  /* Slightly brighter orange on dark surfaces, still with deep-ember text
+     so dropdown hover/active states keep >= 4.5:1 contrast. */
+  --secondary: oklch(0.72 0.19 34);
+  --secondary-foreground: oklch(0.17 0.04 32);
 }
+
 
 
 @layer base {
@@ -142,7 +149,49 @@
     background-color: var(--color-muted);
   }
   ::placeholder { color: var(--color-muted-foreground); opacity: 1; }
+
+  /* ---- Dropdown / menu items -------------------------------------------
+     Visible keyboard focus for every menu surface (Radix dropdown, select,
+     menubar, context menu, command palette) plus the header's custom menus. */
+  [role="menuitem"]:focus-visible,
+  [role="menuitemcheckbox"]:focus-visible,
+  [role="menuitemradio"]:focus-visible,
+  [role="option"]:focus-visible,
+  [data-radix-collection-item]:focus-visible,
+  [data-menu-item]:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: -2px;
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ring) 30%, transparent);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Disabled items: suppress hover/active feedback, keep readable text. */
+  [role="menuitem"][data-disabled],
+  [role="menuitemcheckbox"][data-disabled],
+  [role="menuitemradio"][data-disabled],
+  [role="option"][data-disabled],
+  [data-radix-collection-item][data-disabled],
+  [role="menuitem"][aria-disabled="true"],
+  [role="option"][aria-disabled="true"],
+  [data-menu-item][aria-disabled="true"],
+  [data-menu-item]:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 1;
+    background-color: transparent;
+    color: color-mix(in oklab, var(--color-secondary-foreground) 72%, var(--color-popover));
+  }
+  [role="menuitem"][data-disabled]:hover,
+  [role="option"][data-disabled]:hover,
+  [data-radix-collection-item][data-disabled]:hover,
+  [role="menuitem"][aria-disabled="true"]:hover,
+  [role="option"][aria-disabled="true"]:hover,
+  [data-menu-item][aria-disabled="true"]:hover {
+    background-color: transparent;
+    color: color-mix(in oklab, var(--color-secondary-foreground) 72%, var(--color-popover));
+  }
 }
+
 
 
 @utility container-page {
