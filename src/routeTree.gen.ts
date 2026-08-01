@@ -56,6 +56,7 @@ import { Route as PropertyRequestsSlugRouteImport } from './routes/property-requ
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
 import { Route as DevMenusRouteImport } from './routes/dev.menus'
+import { Route as DevButtonsRouteImport } from './routes/dev.buttons'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AgentsBecomeRouteImport } from './routes/agents.become'
 import { Route as AgentsIdRouteImport } from './routes/agents.$id'
@@ -381,6 +382,11 @@ const LocationsCountyRoute = LocationsCountyRouteImport.update({
 const DevMenusRoute = DevMenusRouteImport.update({
   id: '/dev/menus',
   path: '/dev/menus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevButtonsRoute = DevButtonsRouteImport.update({
+  id: '/dev/buttons',
+  path: '/dev/buttons',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -948,6 +954,7 @@ export interface FileRoutesByFullPath {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/buttons': typeof DevButtonsRoute
   '/dev/menus': typeof DevMenusRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
@@ -1087,6 +1094,7 @@ export interface FileRoutesByTo {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/buttons': typeof DevButtonsRoute
   '/dev/menus': typeof DevMenusRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
@@ -1224,6 +1232,7 @@ export interface FileRoutesById {
   '/agents/$id': typeof AgentsIdRoute
   '/agents/become': typeof AgentsBecomeRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dev/buttons': typeof DevButtonsRoute
   '/dev/menus': typeof DevMenusRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
@@ -1365,6 +1374,7 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
+    | '/dev/buttons'
     | '/dev/menus'
     | '/locations/$county'
     | '/properties/$id'
@@ -1504,6 +1514,7 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
+    | '/dev/buttons'
     | '/dev/menus'
     | '/locations/$county'
     | '/properties/$id'
@@ -1640,6 +1651,7 @@ export interface FileRouteTypes {
     | '/agents/$id'
     | '/agents/become'
     | '/blog/$slug'
+    | '/dev/buttons'
     | '/dev/menus'
     | '/locations/$county'
     | '/properties/$id'
@@ -1777,6 +1789,7 @@ export interface RootRouteChildren {
   AgentsIdRoute: typeof AgentsIdRoute
   AgentsBecomeRoute: typeof AgentsBecomeRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DevButtonsRoute: typeof DevButtonsRoute
   DevMenusRoute: typeof DevMenusRoute
   LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
@@ -2133,6 +2146,13 @@ declare module '@tanstack/react-router' {
       path: '/dev/menus'
       fullPath: '/dev/menus'
       preLoaderRoute: typeof DevMenusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/buttons': {
+      id: '/dev/buttons'
+      path: '/dev/buttons'
+      fullPath: '/dev/buttons'
+      preLoaderRoute: typeof DevButtonsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
@@ -3093,6 +3113,7 @@ const rootRouteChildren: RootRouteChildren = {
   AgentsIdRoute: AgentsIdRoute,
   AgentsBecomeRoute: AgentsBecomeRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DevButtonsRoute: DevButtonsRoute,
   DevMenusRoute: DevMenusRoute,
   LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
