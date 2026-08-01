@@ -20,6 +20,15 @@ async function setTheme(page: Page, theme: (typeof THEMES)[number]) {
   await page.waitForTimeout(150);
 }
 
+/** Dismiss the cookie banner so it never covers the snapshot area. */
+async function dismissConsent(page: Page) {
+  const accept = page.getByRole("button", { name: /accept all/i });
+  if (await accept.isVisible().catch(() => false)) {
+    await accept.click().catch(() => {});
+    await page.waitForTimeout(200);
+  }
+}
+
 async function calmPage(page: Page) {
   // Freeze animations/transitions so snapshots are deterministic.
   await page.addStyleTag({
@@ -33,6 +42,7 @@ for (const theme of THEMES) {
       await page.setViewportSize({ width: 1280, height: 900 });
       await page.goto("/dev/buttons", { waitUntil: "domcontentloaded" });
       await setTheme(page, theme);
+      await dismissConsent(page);
       await calmPage(page);
       const row = page.getByTestId("variant-row");
       await row.waitFor();
@@ -63,6 +73,7 @@ for (const theme of THEMES) {
       await page.setViewportSize({ width: 1280, height: 900 });
       await page.goto("/blog", { waitUntil: "domcontentloaded" });
       await setTheme(page, theme);
+      await dismissConsent(page);
       await calmPage(page);
       const nav = page.getByTestId("primary-nav");
       await nav.waitFor();
@@ -82,10 +93,20 @@ for (const theme of THEMES) {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto("/blog", { waitUntil: "domcontentloaded" });
       await setTheme(page, theme);
+      await dismissConsent(page);
       await calmPage(page);
-      await page.getByRole("button", { name: "Toggle menu" }).click();
+      const toggle = page.getByRole("button", { name: "Toggle menu" });
+      await toggle.waitFor();
       const nav = page.getByTestId("mobile-nav");
-      await nav.waitFor();
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await toggle.click();
+        try {
+          await nav.waitFor({ state: "visible", timeout: 3000 });
+          break;
+        } catch {
+          await page.waitForTimeout(600);
+        }
+      }
       await page.waitForTimeout(150);
 
       await expect(nav).toHaveScreenshot(`mobile-nav-active-${theme}.png`, {

@@ -42,38 +42,77 @@ async function setTheme(page: Page, theme: (typeof THEMES)[number]) {
   }, theme);
 }
 
+/**
+ * Chrome reports oklch()/color-mix() verbatim, so every colour is normalised
+ * to sRGB by painting it onto a 1x1 canvas and reading the pixel back.
+ */
+const NORMALISER = `(() => {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 1;
+  const ctx = canvas.getContext("2d");
+  return (value) => {
+    ctx.clearRect(0, 0, 1, 1);
+    ctx.fillStyle = "#000";
+    ctx.fillStyle = value;
+    ctx.fillRect(0, 0, 1, 1);
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+    return "rgb(" + r + ", " + g + ", " + b + ")";
+  };
+})()`;
+
 /** Resolved token colours (rgb strings) for the current theme. */
 async function tokens(page: Page) {
-  return page.evaluate(() => {
-    const probe = document.createElement("div");
-    document.body.appendChild(probe);
-    const read = (value: string) => {
-      probe.style.color = value;
-      const c = getComputedStyle(probe).color;
-      return c;
+  return page.evaluate(`(() => {
+    const toRgb = ${NORMALISER};
+    const cs = getComputedStyle(document.documentElement);
+    const v = (name) => toRgb(cs.getPropertyValue(name).trim());
+    return {
+      secondary: v("--secondary"),
+      secondaryForeground: v("--secondary-foreground"),
+      primary: v("--primary"),
+      primaryForeground: v("--primary-foreground"),
     };
-    const out = {
-      secondary: read("var(--color-secondary)"),
-      secondaryForeground: read("var(--color-secondary-foreground)"),
-      primary: read("var(--color-primary)"),
-      primaryForeground: read("var(--color-primary-foreground)"),
-    };
-    probe.remove();
-    return out;
-  });
+  })()`) as Promise<Record<"secondary" | "secondaryForeground" | "primary" | "primaryForeground", string>>;
 }
 
 async function styleOf(el: Locator) {
   return el.evaluate((node) => {
-    const s = getComputedStyle(node);
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1;
+    const ctx = canvas.getContext("2d")!;
+    const toRgb = (value: string) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = "#000";
+      ctx.fillStyle = value;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+      return `rgb(${r}, ${g}, ${b})`;
+    };
+    const s = getComputedStyle(node as Element);
+    let rawBg = s.backgroundColor;
+    let walker = (node as Element).parentElement;
+    while ((rawBg === "rgba(0, 0, 0, 0)" || rawBg === "transparent") && walker) {
+      rawBg = getComputedStyle(walker).backgroundColor;
+      walker = walker.parentElement;
+    }
     return {
-      color: s.color,
-      background: s.backgroundColor,
-      outlineColor: s.outlineColor,
+      color: toRgb(s.color),
+      background: toRgb(rawBg),
+      rawBackground: s.backgroundColor,
+      outlineColor: toRgb(s.outlineColor),
       outlineWidth: s.outlineWidth,
       boxShadow: s.boxShadow,
     };
   });
+}
+
+/** Dismiss the cookie banner so it never intercepts clicks/hovers. */
+async function dismissConsent(page: Page) {
+  const accept = page.getByRole("button", { name: /accept all/i });
+  if (await accept.isVisible().catch(() => false)) {
+    await accept.click().catch(() => {});
+    await page.waitForTimeout(200);
+  }
 }
 
 function isWhite(color: string) {
@@ -137,6 +176,7 @@ for (const theme of THEMES) {
       await page.setViewportSize({ width: 1280, height: 900 });
       await page.goto("/blog", { waitUntil: "domcontentloaded" });
       await setTheme(page, theme);
+      await dismissConsent(page);
       const nav = page.getByTestId("primary-nav");
       await nav.waitFor();
       const t = await tokens(page);
@@ -167,9 +207,20 @@ for (const theme of THEMES) {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto("/blog", { waitUntil: "domcontentloaded" });
       await setTheme(page, theme);
-      await page.getByRole("button", { name: "Toggle menu" }).click();
+      await dismissConsent(page);
+      const toggle = page.getByRole("button", { name: "Toggle menu" });
+      await toggle.waitFor();
       const nav = page.getByTestId("mobile-nav");
-      await nav.waitFor();
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await toggle.click();
+        try {
+          await nav.waitFor({ state: "visible", timeout: 3000 });
+          break;
+        } catch {
+          await page.waitForTimeout(600);
+        }
+      }
+      await expect(nav).toBeVisible();
       const t = await tokens(page);
 
       const active = nav.locator('[aria-current="page"]').first();
