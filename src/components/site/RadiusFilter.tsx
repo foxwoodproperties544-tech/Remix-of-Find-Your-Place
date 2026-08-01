@@ -97,6 +97,7 @@ export function RadiusFilter({ value, onChange, matchCount }: Props) {
         <div>
           <label className="text-xs text-muted-foreground">Within</label>
           <select
+            aria-label="Search radius"
             value={value.radius || "10"}
             disabled={!active}
             onChange={(e) => onChange({ radius: e.target.value })}

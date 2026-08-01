@@ -118,14 +118,14 @@ export function FiltersSidebar({ state, townOptions, onChange, onClear }: Filter
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs text-muted-foreground">Min beds</label>
-            <select value={state.minBeds} onChange={(e) => onChange({ minBeds: e.target.value })} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
+            <select aria-label="Minimum bedrooms" value={state.minBeds} onChange={(e) => onChange({ minBeds: e.target.value })} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
               <option value="">Any</option>
               {[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n}+</option>)}
             </select>
           </div>
           <div>
             <label className="text-xs text-muted-foreground">Min baths</label>
-            <select value={state.minBaths} onChange={(e) => onChange({ minBaths: e.target.value })} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
+            <select aria-label="Minimum bathrooms" value={state.minBaths} onChange={(e) => onChange({ minBaths: e.target.value })} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm">
               <option value="">Any</option>
               {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n}+</option>)}
             </select>
