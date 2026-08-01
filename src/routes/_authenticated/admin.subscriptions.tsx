@@ -176,7 +176,7 @@ function AdminSubscriptions() {
             {(["tier", "listing", "blog", "ad"] as const).map((k) => (
               <label key={k} className="flex items-center justify-between gap-2">
                 <span className="capitalize text-muted-foreground">{k}</span>
-                <input name={k} type="number" min={0} max={60} defaultValue={(grace as any)?.[k] ?? 3} className="w-16 rounded border border-border bg-background px-2 py-1 text-right" />
+                <input name={k} type="number" min={0} max={60} defaultValue={(grace as any)?.[k] ?? 3} className="w-16 rounded border border-border bg-field px-2 py-1 text-right" />
               </label>
             ))}
           </div>

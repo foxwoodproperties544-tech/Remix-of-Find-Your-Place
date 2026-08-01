@@ -154,7 +154,7 @@ function AdminUsers() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2 flex-wrap">
                       <select
-                        className="rounded-md border border-border bg-background text-xs px-2 py-1"
+                        className="rounded-md border border-border bg-field text-xs px-2 py-1"
                         defaultValue=""
                         onChange={(e) => {
                           const role = e.target.value as any;

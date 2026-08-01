@@ -304,7 +304,7 @@ function ProfilePage() {
         <Section title="About you" description="Explain who you are, what you specialise in, and why buyers should trust you.">
           <Field label="Bio" required hint={`${form.bio.length}/800 characters — aim for 60+`}>
             <textarea
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm min-h-[160px]"
+              className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm min-h-[160px]"
               value={form.bio}
               onChange={(e) => setForm({ ...form, bio: e.target.value.slice(0, 800) })}
               placeholder="e.g. I'm a Nairobi-based property consultant with 6 years helping first-time buyers find land in Kajiado and Kiambu. I handle everything from site visits and price negotiation to title transfer."
@@ -528,7 +528,7 @@ function Input(props: { value: string; onChange: (v: string) => void; placeholde
   return (
     <input
       type={props.type ?? "text"}
-      className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+      className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"
       value={props.value}
       onChange={(e) => props.onChange(e.target.value)}
       placeholder={props.placeholder}
@@ -541,7 +541,7 @@ function Input(props: { value: string; onChange: (v: string) => void; placeholde
 function Select({ value, onChange, children, disabled }: { value: string; onChange: (v: string) => void; children: React.ReactNode; disabled?: boolean }) {
   return (
     <select
-      className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm disabled:opacity-50"
+      className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm disabled:opacity-50"
       value={value}
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
