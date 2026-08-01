@@ -162,7 +162,13 @@ for (const theme of THEMES) {
       await page.goto("/dev/buttons", { waitUntil: "domcontentloaded" });
       await setTheme(page, theme);
       const btn = page.getByTestId("btn-default");
-      await btn.focus();
+      // Keyboard focus (not programmatic) is what triggers :focus-visible.
+      await page.keyboard.press("Tab");
+      for (let i = 0; i < 40; i++) {
+        if (await btn.evaluate((el) => el === document.activeElement)) break;
+        await page.keyboard.press("Tab");
+      }
+      await expect(btn).toBeFocused();
       await btn.hover();
       await page.waitForTimeout(120);
       const s = await styleOf(btn);
