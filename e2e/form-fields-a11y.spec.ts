@@ -34,7 +34,11 @@ for (const theme of ["light", "dark"] as const) {
         // Clip from a page screenshot (not an element screenshot) so painted
         // ancestors and overlay bands behind the field are included.
         await field.scrollIntoViewIfNeeded().catch(() => {});
-        const box = await field.boundingBox();
+        // boundingBox() is document-relative; screenshot clips are viewport-relative.
+        const box = await field.evaluate((el) => {
+          const r = (el as HTMLElement).getBoundingClientRect();
+          return { x: r.x, y: r.y, width: r.width, height: r.height };
+        });
         if (!box || box.width < 8 || box.height < 8) continue;
         const shot = (await page
           .screenshot({
