@@ -376,7 +376,7 @@ function List() {
                   className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold border transition ${favsOnly ? "bg-secondary text-secondary-foreground border-secondary" : "bg-background text-foreground border-border hover:border-primary/40"}`}>
                   <Heart className={"h-3.5 w-3.5 " + (favsOnly ? "fill-current" : "")} /> Favorites
                 </button>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="rounded-full border border-border px-3 py-2 text-xs bg-field font-medium">
+                <select aria-label="Sort properties" value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="rounded-full border border-border px-3 py-2 text-xs bg-field font-medium">
                   <option value="newest">Newest</option>
                   <option value="price-asc">Price: Low to High</option>
                   <option value="price-desc">Price: High to Low</option>

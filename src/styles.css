@@ -34,6 +34,7 @@
   --color-input: var(--input);
   --color-field: var(--field);
   --color-field-focus: var(--field-focus);
+  --color-field-foreground: var(--field-foreground);
   --color-ring: var(--ring);
   --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -8px rgb(15 23 42 / 0.08);
   --shadow-glow: 0 20px 60px -20px color-mix(in oklab, var(--primary) 45%, transparent);
@@ -69,6 +70,16 @@
   /* Very light tint so every fillable field is obvious without hurting contrast */
   --field: oklch(0.975 0.012 180);
   --field-focus: oklch(0.995 0.004 180);
+  --field-border: oklch(0.88 0.02 180);
+  --field-foreground: oklch(0.19 0.02 250);
+}
+
+/* Dark theme: keep fields visibly distinct from the page without losing contrast. */
+.dark {
+  --field: oklch(0.26 0.02 200);
+  --field-focus: oklch(0.31 0.03 195);
+  --field-border: oklch(0.42 0.03 195);
+  --field-foreground: oklch(0.97 0.005 200);
 }
 
 
@@ -88,16 +99,51 @@
   textarea,
   select {
     background-color: var(--color-field);
+    color: var(--field-foreground);
   }
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"]):not([type="button"]):focus,
   textarea:focus,
-  select:focus {
+  select:focus,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="submit"]):not([type="button"]):focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
     background-color: var(--color-field-focus);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ring) 35%, transparent);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
   }
+
+  /* Checkboxes and radios get the same tint + focus ring treatment. */
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="range"],
+  input[type="file"] {
+    accent-color: var(--color-primary);
+  }
+  input[type="checkbox"]:not(:checked),
+  input[type="radio"]:not(:checked) {
+    background-color: var(--color-field);
+    border-color: var(--field-border);
+  }
+  input[type="checkbox"]:focus-visible,
+  input[type="radio"]:focus-visible,
+  input[type="range"]:focus-visible,
+  input[type="file"]:focus-visible,
+  [role="checkbox"]:focus-visible,
+  [role="radio"]:focus-visible,
+  [role="switch"]:focus-visible,
+  [role="combobox"]:focus-visible {
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ring) 35%, transparent);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
   input:disabled, textarea:disabled, select:disabled {
     background-color: var(--color-muted);
   }
+  ::placeholder { color: var(--color-muted-foreground); opacity: 1; }
 }
+
 
 @utility container-page {
   width: 100%;
@@ -113,7 +159,7 @@
   border-radius: 0.5rem;
   border: 1px solid var(--color-border);
   background-color: var(--color-field);
-  color: var(--color-foreground);
+  color: var(--field-foreground);
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   outline: none;

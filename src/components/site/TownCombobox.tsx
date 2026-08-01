@@ -57,6 +57,7 @@ export function TownCombobox({ county, value, onChange, placeholder, extraOption
           role="combobox"
           aria-expanded={open}
           aria-autocomplete="list"
+          aria-label="Search town or area"
         />
         <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1">
           {query && (
