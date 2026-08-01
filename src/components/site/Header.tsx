@@ -224,7 +224,7 @@ export function Header() {
                         to={m.to}
                         role="menuitem"
                         onClick={() => setRequestsOpen(false)}
-                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
                       >
                         <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
@@ -279,7 +279,7 @@ export function Header() {
                         to={m.to}
                         role="menuitem"
                         onClick={() => setAgentsOpen(false)}
-                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
                       >
                         <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
@@ -344,7 +344,7 @@ export function Header() {
                         role="menuitem"
                         aria-current={active ? "page" : undefined}
                         onClick={() => setMoreOpen(false)}
-                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary-soft/60" : ""}`}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
                       >
                         <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
@@ -381,20 +381,20 @@ export function Header() {
               {menu && (
                 <div onMouseLeave={() => setMenu(false)} className="absolute right-0 mt-2 w-56 rounded-xl border border-border bg-card shadow-glow p-1.5 text-sm">
                   <div className="px-3 py-2 text-xs text-muted-foreground truncate">{user.email}</div>
-                  <Link to="/dashboard" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><LayoutDashboard className="h-4 w-4" /> My listings</Link>
-                  <Link to="/dashboard/requests" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Inbox className="h-4 w-4" /> My property requests</Link>
-                  <Link to="/dashboard/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PlusCircle className="h-4 w-4" /> Post listing</Link>
-                  <Link to="/dashboard/blog/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><PenSquare className="h-4 w-4" /> Write a blog</Link>
-                  <Link to="/dashboard/blog" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><FileText className="h-4 w-4" /> My blog posts</Link>
-                  <Link to="/dashboard/inquiries" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Inbox className="h-4 w-4" /> Inquiries</Link>
-                  <Link to="/dashboard/appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><CalendarClock className="h-4 w-4" /> Appointments</Link>
-                  <Link to="/dashboard/my-appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><CalendarClock className="h-4 w-4" /> My viewings</Link>
-                  <Link to="/dashboard/leads" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><UsersIcon className="h-4 w-4" /> Leads (CRM)</Link>
-                  <Link to="/dashboard/crm" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><TrendingUp className="h-4 w-4" /> CRM Insights</Link>
-                  <Link to="/favorites" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Heart className="h-4 w-4" /> Favorites</Link>
-                  <Link to="/saved-searches" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted"><Bell className="h-4 w-4" /> Saved searches</Link>
-                  {isAdmin && <Link to="/admin" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted text-primary"><ShieldCheck className="h-4 w-4" /> Admin</Link>}
-                  <button onClick={signOut} className="w-full flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-muted text-left"><LogOut className="h-4 w-4" /> Sign out</button>
+                  <Link to="/dashboard" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><LayoutDashboard className="h-4 w-4" /> My listings</Link>
+                  <Link to="/dashboard/requests" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><Inbox className="h-4 w-4" /> My property requests</Link>
+                  <Link to="/dashboard/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><PlusCircle className="h-4 w-4" /> Post listing</Link>
+                  <Link to="/dashboard/blog/new" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><PenSquare className="h-4 w-4" /> Write a blog</Link>
+                  <Link to="/dashboard/blog" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><FileText className="h-4 w-4" /> My blog posts</Link>
+                  <Link to="/dashboard/inquiries" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><Inbox className="h-4 w-4" /> Inquiries</Link>
+                  <Link to="/dashboard/appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><CalendarClock className="h-4 w-4" /> Appointments</Link>
+                  <Link to="/dashboard/my-appointments" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><CalendarClock className="h-4 w-4" /> My viewings</Link>
+                  <Link to="/dashboard/leads" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><UsersIcon className="h-4 w-4" /> Leads (CRM)</Link>
+                  <Link to="/dashboard/crm" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><TrendingUp className="h-4 w-4" /> CRM Insights</Link>
+                  <Link to="/favorites" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><Heart className="h-4 w-4" /> Favorites</Link>
+                  <Link to="/saved-searches" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground"><Bell className="h-4 w-4" /> Saved searches</Link>
+                  {isAdmin && <Link to="/admin" onClick={() => setMenu(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground text-primary"><ShieldCheck className="h-4 w-4" /> Admin</Link>}
+                  <button onClick={signOut} className="w-full flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-secondary hover:text-secondary-foreground text-left"><LogOut className="h-4 w-4" /> Sign out</button>
                 </div>
               )}
             </div>
@@ -417,14 +417,14 @@ export function Header() {
           <nav className="container-page flex flex-col py-3">
             {nav.map((n, i) => (
               <Link key={i} to={n.to as any} search={(n as any).search} onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">{navLabel(n.label)}</Link>
+                className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel(n.label)}</Link>
             ))}
             {/* Mobile Property Requests accordion */}
             <button
               type="button"
               aria-expanded={mobileRequestsOpen}
               onClick={() => setMobileRequestsOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${requestsActive ? "text-primary" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground ${requestsActive ? "text-primary" : ""}`}
             >
               <span>Property Requests</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileRequestsOpen ? "rotate-180" : ""}`} />
@@ -433,7 +433,7 @@ export function Header() {
               <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
                 {visibleRequestsItems.map((m) => (
                   <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileRequestsOpen(false); }}
-                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground"
                     activeProps={{ className: "text-primary bg-primary-soft" }}>
                     {m.label}
                   </Link>
@@ -446,7 +446,7 @@ export function Header() {
               type="button"
               aria-expanded={mobileAgentsOpen}
               onClick={() => setMobileAgentsOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${agentsActive ? "text-primary" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground ${agentsActive ? "text-primary" : ""}`}
             >
               <span>Agents</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileAgentsOpen ? "rotate-180" : ""}`} />
@@ -464,7 +464,7 @@ export function Header() {
                         to={m.to}
                         onClick={() => { setOpen(false); setMobileAgentsOpen(false); }}
                         aria-current={active ? "page" : undefined}
-                        className={`rounded-lg px-3 py-2 text-sm transition-colors ${active ? "bg-primary-soft text-primary font-semibold" : "hover:bg-muted"}`}
+                        className={`rounded-lg px-3 py-2 text-sm transition-colors ${active ? "bg-secondary text-secondary-foreground font-semibold" : "hover:bg-secondary hover:text-secondary-foreground"}`}
                       >
                         {m.label}
                       </Link>
@@ -478,7 +478,7 @@ export function Header() {
               type="button"
               aria-expanded={mobileMoreOpen}
               onClick={() => setMobileMoreOpen((v) => !v)}
-              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted ${moreActive ? "text-primary" : ""}`}
+              className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground ${moreActive ? "text-primary" : ""}`}
             >
               <span>More</span>
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileMoreOpen ? "rotate-180" : ""}`} />
@@ -487,7 +487,7 @@ export function Header() {
               <div className="pl-3 border-l border-border ml-3 my-1 flex flex-col">
                 {moreItems.map((m) => (
                   <Link key={m.to} to={m.to} onClick={() => { setOpen(false); setMobileMoreOpen(false); }}
-                    className="rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                    className="rounded-lg px-3 py-2 text-sm hover:bg-secondary hover:text-secondary-foreground"
                     activeProps={{ className: "text-primary bg-primary-soft" }}>
                     {m.label}
                   </Link>
@@ -496,15 +496,15 @@ export function Header() {
             )}
             {user ? (
               <>
-                <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">My listings</Link>
-                <Link to="/dashboard/blog/new" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Write a blog</Link>
-                <Link to="/dashboard/blog" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">My blog posts</Link>
-                <Link to="/favorites" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Favorites</Link>
-                {isAdmin && <Link to="/admin" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted text-primary">Admin</Link>}
-                <button onClick={() => { setOpen(false); signOut(); }} className="text-left rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Sign out</button>
+                <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">My listings</Link>
+                <Link to="/dashboard/blog/new" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">Write a blog</Link>
+                <Link to="/dashboard/blog" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">My blog posts</Link>
+                <Link to="/favorites" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">Favorites</Link>
+                {isAdmin && <Link to="/admin" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground text-primary">Admin</Link>}
+                <button onClick={() => { setOpen(false); signOut(); }} className="text-left rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">Sign out</button>
               </>
             ) : (
-              <Link to="/auth" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted">Sign in</Link>
+              <Link to="/auth" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">Sign in</Link>
             )}
             <Link to={user ? "/dashboard/new" : "/auth"} onClick={() => setOpen(false)} className="btn-primary btn-primary-hover mt-2">List Property</Link>
           </nav>
