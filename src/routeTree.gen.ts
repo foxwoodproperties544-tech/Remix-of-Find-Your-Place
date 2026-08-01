@@ -99,6 +99,7 @@ import { Route as AuthenticatedDashboardBookingsRouteImport } from './routes/_au
 import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authenticated/dashboard.blog'
 import { Route as AuthenticatedDashboardAvailabilityRouteImport } from './routes/_authenticated/dashboard.availability'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
+import { Route as AuthenticatedDashboardApplicationsRouteImport } from './routes/_authenticated/dashboard.applications'
 import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
 import { Route as AuthenticatedDashboardAdAnalyticsRouteImport } from './routes/_authenticated/dashboard.ad-analytics'
 import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
@@ -633,6 +634,12 @@ const AuthenticatedDashboardAppointmentsRoute =
     path: '/dashboard/appointments',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardApplicationsRoute =
+  AuthenticatedDashboardApplicationsRouteImport.update({
+    id: '/dashboard/applications',
+    path: '/dashboard/applications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardAdvertiseRoute =
   AuthenticatedDashboardAdvertiseRouteImport.update({
     id: '/dashboard/advertise',
@@ -1039,6 +1046,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
+  '/dashboard/applications': typeof AuthenticatedDashboardApplicationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
@@ -1184,6 +1192,7 @@ export interface FileRoutesByTo {
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
+  '/dashboard/applications': typeof AuthenticatedDashboardApplicationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
   '/dashboard/bookings': typeof AuthenticatedDashboardBookingsRoute
@@ -1326,6 +1335,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/_authenticated/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
+  '/_authenticated/dashboard/applications': typeof AuthenticatedDashboardApplicationsRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
   '/_authenticated/dashboard/blog': typeof AuthenticatedDashboardBlogRouteWithChildren
@@ -1473,6 +1483,7 @@ export interface FileRouteTypes {
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
+    | '/dashboard/applications'
     | '/dashboard/appointments'
     | '/dashboard/availability'
     | '/dashboard/blog'
@@ -1618,6 +1629,7 @@ export interface FileRouteTypes {
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
+    | '/dashboard/applications'
     | '/dashboard/appointments'
     | '/dashboard/availability'
     | '/dashboard/bookings'
@@ -1759,6 +1771,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/account'
     | '/_authenticated/dashboard/ad-analytics'
     | '/_authenticated/dashboard/advertise'
+    | '/_authenticated/dashboard/applications'
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/availability'
     | '/_authenticated/dashboard/blog'
@@ -2512,6 +2525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAppointmentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/applications': {
+      id: '/_authenticated/dashboard/applications'
+      path: '/dashboard/applications'
+      fullPath: '/dashboard/applications'
+      preLoaderRoute: typeof AuthenticatedDashboardApplicationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/advertise': {
       id: '/_authenticated/dashboard/advertise'
       path: '/dashboard/advertise'
@@ -3096,6 +3116,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAccountRoute: typeof AuthenticatedDashboardAccountRoute
   AuthenticatedDashboardAdAnalyticsRoute: typeof AuthenticatedDashboardAdAnalyticsRoute
   AuthenticatedDashboardAdvertiseRoute: typeof AuthenticatedDashboardAdvertiseRoute
+  AuthenticatedDashboardApplicationsRoute: typeof AuthenticatedDashboardApplicationsRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardAvailabilityRoute: typeof AuthenticatedDashboardAvailabilityRoute
   AuthenticatedDashboardBlogRoute: typeof AuthenticatedDashboardBlogRouteWithChildren
@@ -3139,6 +3160,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardAdAnalyticsRoute:
     AuthenticatedDashboardAdAnalyticsRoute,
   AuthenticatedDashboardAdvertiseRoute: AuthenticatedDashboardAdvertiseRoute,
+  AuthenticatedDashboardApplicationsRoute:
+    AuthenticatedDashboardApplicationsRoute,
   AuthenticatedDashboardAppointmentsRoute:
     AuthenticatedDashboardAppointmentsRoute,
   AuthenticatedDashboardAvailabilityRoute:
