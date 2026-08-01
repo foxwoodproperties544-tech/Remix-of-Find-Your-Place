@@ -44,7 +44,7 @@ function luminance([r, g, b]: number[]) {
   return 0.2126 * srgb(r) + 0.7152 * srgb(g) + 0.0722 * srgb(b);
 }
 function parseRgb(value: string): number[] {
-  const m = value.match(/\d+(\.\d+)?/g);
+  const m = value.match(/-?\d+(\.\d+)?/g);
   if (!m) throw new Error(`cannot parse color: ${value}`);
   return [Number(m[0]), Number(m[1]), Number(m[2])];
 }
@@ -57,14 +57,33 @@ function contrast(fg: string, bg: string) {
 
 async function colorsOf(el: Locator) {
   return el.evaluate((node) => {
+    // Chrome reports oklch()/color-mix() verbatim, so normalise every colour
+    // to sRGB by painting it onto a canvas and reading the pixel back.
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1;
+    const ctx = canvas.getContext("2d")!;
+    const toRgb = (value: string) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = "#000";
+      ctx.fillStyle = value;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+      return `rgb(${r}, ${g}, ${b})`;
+    };
     const cs = getComputedStyle(node as Element);
-    let bg = cs.backgroundColor;
+    let rawBg = cs.backgroundColor;
     let walker = (node as Element).parentElement;
-    while (bg === "rgba(0, 0, 0, 0)" && walker) {
-      bg = getComputedStyle(walker).backgroundColor;
+    while ((rawBg === "rgba(0, 0, 0, 0)" || rawBg === "transparent") && walker) {
+      rawBg = getComputedStyle(walker).backgroundColor;
       walker = walker.parentElement;
     }
-    return { color: cs.color, background: bg, outlineWidth: cs.outlineWidth, boxShadow: cs.boxShadow };
+    return {
+      color: toRgb(cs.color),
+      background: toRgb(rawBg),
+      rawBackground: rawBg,
+      outlineWidth: cs.outlineWidth,
+      boxShadow: cs.boxShadow,
+    };
   });
 }
 
@@ -103,7 +122,7 @@ test.describe("Menu visual regression + contrast", () => {
       await expect(dm).toHaveScreenshot(`dropdown-menu-${theme}.png`, { maxDiffPixelRatio: 0.02 });
 
       const hovered = await colorsOf(dmItem);
-      expect(hovered.background).not.toBe("rgba(0, 0, 0, 0)");
+      expect(hovered.rawBackground).not.toBe("rgba(0, 0, 0, 0)");
       expect(contrast(hovered.color, hovered.background)).toBeGreaterThanOrEqual(4.5);
 
       // Disabled item: no hover/active tint, still readable.
