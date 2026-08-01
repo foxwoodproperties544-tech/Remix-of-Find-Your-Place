@@ -16,6 +16,20 @@ import { test, expect, type Page, type Locator } from "@playwright/test";
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:8080";
 const THEMES = ["light", "dark"] as const;
 
+async function openMenu(page: Page, trigger: Locator, panel: Locator, opts: { right?: boolean } = {}) {
+  // Retry the click: the first one can land before hydration completes.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await trigger.click(opts.right ? { button: "right" } : {});
+    try {
+      await panel.waitFor({ state: "visible", timeout: 2000 });
+      return;
+    } catch {
+      await page.waitForTimeout(500);
+    }
+  }
+  await expect(panel).toBeVisible();
+}
+
 async function setTheme(page: Page, theme: (typeof THEMES)[number]) {
   await page.evaluate((t) => {
     document.documentElement.classList.toggle("dark", t === "dark");
@@ -58,13 +72,12 @@ test.describe("Menu visual regression + contrast", () => {
   for (const theme of THEMES) {
     test(`header More dropdown renders consistently (${theme})`, async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
-      await page.goto(`${BASE_URL}/`);
+      await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle" });
       await setTheme(page, theme);
 
       const moreButton = page.getByRole("button", { name: /^More$/ });
-      await moreButton.click();
       const menu = page.locator("#more-menu");
-      await expect(menu).toBeVisible();
+      await openMenu(page, moreButton, menu);
 
       const item = menu.getByRole("menuitem").first();
       await item.hover();
@@ -77,13 +90,12 @@ test.describe("Menu visual regression + contrast", () => {
 
     test(`dropdown / select / menubar / context menus (${theme})`, async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 1000 });
-      await page.goto(`${BASE_URL}/dev/menus`);
+      await page.goto(`${BASE_URL}/dev/menus`, { waitUntil: "networkidle" });
       await setTheme(page, theme);
 
       // --- Dropdown menu -------------------------------------------------
-      await page.getByTestId("dm-trigger").click();
       const dm = page.getByTestId("dm-content");
-      await expect(dm).toBeVisible();
+      await openMenu(page, page.getByTestId("dm-trigger"), dm);
 
       const dmItem = page.getByTestId("dm-item");
       await dmItem.hover();
@@ -112,9 +124,8 @@ test.describe("Menu visual regression + contrast", () => {
       await page.keyboard.press("Escape");
 
       // --- Select --------------------------------------------------------
-      await page.getByTestId("sel-trigger").click();
       const sel = page.getByTestId("sel-content");
-      await expect(sel).toBeVisible();
+      await openMenu(page, page.getByTestId("sel-trigger"), sel);
       await page.getByRole("option", { name: "Nairobi" }).hover();
       await page.waitForTimeout(150);
       await expect(sel).toHaveScreenshot(`select-menu-${theme}.png`, { maxDiffPixelRatio: 0.02 });
@@ -123,18 +134,16 @@ test.describe("Menu visual regression + contrast", () => {
       await page.keyboard.press("Escape");
 
       // --- Menubar -------------------------------------------------------
-      await page.getByTestId("mb-trigger").click();
       const mb = page.getByTestId("mb-content");
-      await expect(mb).toBeVisible();
+      await openMenu(page, page.getByTestId("mb-trigger"), mb);
       await page.getByTestId("mb-item").hover();
       await page.waitForTimeout(150);
       await expect(mb).toHaveScreenshot(`menubar-menu-${theme}.png`, { maxDiffPixelRatio: 0.02 });
       await page.keyboard.press("Escape");
 
       // --- Context menu ---------------------------------------------------
-      await page.getByTestId("cm-trigger").click({ button: "right" });
       const cm = page.getByTestId("cm-content");
-      await expect(cm).toBeVisible();
+      await openMenu(page, page.getByTestId("cm-trigger"), cm, { right: true });
       await page.getByTestId("cm-item").hover();
       await page.waitForTimeout(150);
       await expect(cm).toHaveScreenshot(`context-menu-${theme}.png`, { maxDiffPixelRatio: 0.02 });
