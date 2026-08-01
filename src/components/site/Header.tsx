@@ -494,6 +494,8 @@ export function Header() {
                 ))}
               </div>
             )}
+            <Link to="/blog" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Blog")}</Link>
+            <Link to="/contact" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">{navLabel("Contact Us")}</Link>
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-secondary hover:text-secondary-foreground">My listings</Link>
