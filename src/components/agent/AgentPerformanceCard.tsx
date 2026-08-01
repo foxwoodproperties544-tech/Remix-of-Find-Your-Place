@@ -137,6 +137,10 @@ export function AgentPerformanceCard({ agentId }: { agentId: string }) {
         <Award className="h-5 w-5 text-primary" /> Agent performance
       </h2>
 
+      <AgentActivityBadges agentId={agentId} className="mt-3" />
+
+
+
       {badges.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {badges.map((b) => (
