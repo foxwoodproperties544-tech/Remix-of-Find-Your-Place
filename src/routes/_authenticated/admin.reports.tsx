@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/admin/reports")({
 
 const TABS = [
   { key: "open", label: "Open" },
+  { key: "reviewing", label: "Escalated" },
   { key: "resolved", label: "Resolved" },
   { key: "dismissed", label: "Dismissed" },
   { key: "all", label: "All" },
