@@ -126,12 +126,55 @@ export const listPendingAgentListings = createServerFn({ method: "GET" })
     }
     const profileById = new Map((profiles ?? []).map((p) => [p.id, p]));
 
+    // --- Duplicate photo detection -------------------------------------------------
+    // Collect the perceptual hashes of the queued listings, then look for the same
+    // hashes registered by a DIFFERENT owner (or a different, already-published listing).
+    const propIds = (props ?? []).map((p) => p.id);
+    const dupByProperty = new Map<string, { hashes: number; matches: number; owners: number }>();
+    if (propIds.length) {
+      const { data: myHashes } = await supabaseAdmin
+        .from("property_image_hashes")
+        .select("property_id, owner_id, image_hash")
+        .in("property_id", propIds);
+      const hashes = Array.from(new Set((myHashes ?? []).map((h) => h.image_hash)));
+      if (hashes.length) {
+        const { data: allHashes } = await supabaseAdmin
+          .from("property_image_hashes")
+          .select("property_id, owner_id, image_hash")
+          .in("image_hash", hashes);
+        const byHash = new Map<string, { property_id: string; owner_id: string }[]>();
+        for (const h of allHashes ?? []) {
+          const arr = byHash.get(h.image_hash) ?? [];
+          arr.push({ property_id: h.property_id, owner_id: h.owner_id });
+          byHash.set(h.image_hash, arr);
+        }
+        for (const h of myHashes ?? []) {
+          const others = (byHash.get(h.image_hash) ?? []).filter((o) => o.property_id !== h.property_id);
+          if (!others.length) continue;
+          const cur = dupByProperty.get(h.property_id) ?? { hashes: 0, matches: 0, owners: 0 };
+          cur.hashes += 1;
+          cur.matches += others.length;
+          cur.owners += others.filter((o) => o.owner_id !== h.owner_id).length;
+          dupByProperty.set(h.property_id, cur);
+        }
+      }
+    }
+
     return (props ?? []).map((p) => {
       const prof = profileById.get(p.owner_id) as any;
       const pubCount = pubByOwner.get(p.owner_id) ?? 0;
       const quota = Number(prof?.listing_quota ?? 0);
+      const dup = dupByProperty.get(p.id) ?? null;
       return {
         ...p,
+        duplicate: dup
+          ? {
+              photos: dup.hashes,
+              matches: dup.matches,
+              cross_owner: dup.owners > 0,
+              severity: dup.owners > 0 ? ("high" as const) : ("low" as const),
+            }
+          : null,
         owner: prof
           ? {
               ...prof,
@@ -144,6 +187,7 @@ export const listPendingAgentListings = createServerFn({ method: "GET" })
           : null,
       };
     });
+
   });
 
 export const moderateListing = createServerFn({ method: "POST" })
