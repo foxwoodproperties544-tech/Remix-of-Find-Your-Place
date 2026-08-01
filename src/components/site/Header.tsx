@@ -32,6 +32,8 @@ const agentsItems = [
 
 const moreItems = [
   { to: "/about-us", label: "About Us", icon: Info, desc: "Learn more about Foxwood Properties" },
+  { to: "/market-reports", label: "Market Reports", icon: TrendingUp, desc: "Median prices and trends across Kenya" },
+
   { to: "/listing-packages", label: "Listing Packages", icon: Home, desc: "Post a property with the right visibility" },
   { to: "/advertising-packages", label: "Advertising Packages", icon: Megaphone, desc: "Homepage, sidebar, search & blog banners" },
   { to: "/blog-submission-packages", label: "Blog Submission Packages", icon: PenSquare, desc: "Publish articles to Kenya's property audience" },

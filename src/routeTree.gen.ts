@@ -16,6 +16,7 @@ import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as PropertySitemapDotxmlRouteImport } from './routes/property-sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MortgageRouteImport } from './routes/mortgage'
+import { Route as MarketReportsRouteImport } from './routes/market-reports'
 import { Route as ListingPackagesRouteImport } from './routes/listing-packages'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as HelpCenterRouteImport } from './routes/help-center'
@@ -189,6 +190,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const MortgageRoute = MortgageRouteImport.update({
   id: '/mortgage',
   path: '/mortgage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketReportsRoute = MarketReportsRouteImport.update({
+  id: '/market-reports',
+  path: '/market-reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListingPackagesRoute = ListingPackagesRouteImport.update({
@@ -987,6 +993,7 @@ export interface FileRoutesByFullPath {
   '/help-center': typeof HelpCenterRoute
   '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
+  '/market-reports': typeof MarketReportsRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
@@ -1134,6 +1141,7 @@ export interface FileRoutesByTo {
   '/help-center': typeof HelpCenterRoute
   '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
+  '/market-reports': typeof MarketReportsRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
@@ -1278,6 +1286,7 @@ export interface FileRoutesById {
   '/help-center': typeof HelpCenterRoute
   '/how-it-works': typeof HowItWorksRoute
   '/listing-packages': typeof ListingPackagesRoute
+  '/market-reports': typeof MarketReportsRoute
   '/mortgage': typeof MortgageRoute
   '/privacy': typeof PrivacyRoute
   '/property-sitemap.xml': typeof PropertySitemapDotxmlRoute
@@ -1427,6 +1436,7 @@ export interface FileRouteTypes {
     | '/help-center'
     | '/how-it-works'
     | '/listing-packages'
+    | '/market-reports'
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
@@ -1574,6 +1584,7 @@ export interface FileRouteTypes {
     | '/help-center'
     | '/how-it-works'
     | '/listing-packages'
+    | '/market-reports'
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
@@ -1717,6 +1728,7 @@ export interface FileRouteTypes {
     | '/help-center'
     | '/how-it-works'
     | '/listing-packages'
+    | '/market-reports'
     | '/mortgage'
     | '/privacy'
     | '/property-sitemap.xml'
@@ -1866,6 +1878,7 @@ export interface RootRouteChildren {
   HelpCenterRoute: typeof HelpCenterRoute
   HowItWorksRoute: typeof HowItWorksRoute
   ListingPackagesRoute: typeof ListingPackagesRoute
+  MarketReportsRoute: typeof MarketReportsRoute
   MortgageRoute: typeof MortgageRoute
   PrivacyRoute: typeof PrivacyRoute
   PropertySitemapDotxmlRoute: typeof PropertySitemapDotxmlRoute
@@ -1955,6 +1968,13 @@ declare module '@tanstack/react-router' {
       path: '/mortgage'
       fullPath: '/mortgage'
       preLoaderRoute: typeof MortgageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/market-reports': {
+      id: '/market-reports'
+      path: '/market-reports'
+      fullPath: '/market-reports'
+      preLoaderRoute: typeof MarketReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/listing-packages': {
@@ -3268,6 +3288,7 @@ const rootRouteChildren: RootRouteChildren = {
   HelpCenterRoute: HelpCenterRoute,
   HowItWorksRoute: HowItWorksRoute,
   ListingPackagesRoute: ListingPackagesRoute,
+  MarketReportsRoute: MarketReportsRoute,
   MortgageRoute: MortgageRoute,
   PrivacyRoute: PrivacyRoute,
   PropertySitemapDotxmlRoute: PropertySitemapDotxmlRoute,

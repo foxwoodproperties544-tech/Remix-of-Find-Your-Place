@@ -26,6 +26,8 @@ import { VerificationScoreCard } from "@/components/property/VerificationScoreCa
 import { InvestmentScoreCard } from "@/components/property/InvestmentScoreCard";
 import { PropertyTimeline } from "@/components/property/PropertyTimeline";
 import { PriceHistoryCard } from "@/components/property/PriceHistoryCard";
+import { ValuationEstimateCard } from "@/components/market/ValuationEstimateCard";
+
 import { LatestPriceChangeBadge } from "@/components/property/PriceChangeBadge";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { BookViewingButton } from "@/components/viewings/BookViewingButton";
@@ -603,6 +605,10 @@ function Detail() {
             town={p.town}
             category={p.category}
           />
+
+          {/* Comparable-based value estimate */}
+          {/^[0-9a-fA-F-]{36}$/.test(propertyKey) && <ValuationEstimateCard propertyId={propertyKey} />}
+
 
           {/* Property history timeline */}
           <PropertyTimeline propertyId={propertyKey} propertyKey={propertyKey} />
