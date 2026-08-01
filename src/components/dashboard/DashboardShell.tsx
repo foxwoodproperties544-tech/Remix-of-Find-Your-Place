@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard, Home, PlusCircle, Inbox, Users2, CalendarDays, CalendarCheck,
   Star, Search, Heart, ShieldCheck, FileText, Settings, LogOut, Menu, X, Bell, UserCog, Receipt, Crown, RefreshCw,
-  Phone, MessageCircle, Handshake, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2, LineChart,
+  Phone, MessageCircle, Handshake, LifeBuoy, SlidersHorizontal, CheckCircle2, Building2, LineChart, FileSignature,
 } from "lucide-react";
 import { toast } from "sonner";
 
