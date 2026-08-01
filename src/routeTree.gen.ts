@@ -102,13 +102,16 @@ import { Route as AuthenticatedDashboardBlogRouteImport } from './routes/_authen
 import { Route as AuthenticatedDashboardAvailabilityRouteImport } from './routes/_authenticated/dashboard.availability'
 import { Route as AuthenticatedDashboardAppointmentsRouteImport } from './routes/_authenticated/dashboard.appointments'
 import { Route as AuthenticatedDashboardApplicationsRouteImport } from './routes/_authenticated/dashboard.applications'
+import { Route as AuthenticatedDashboardAppealRouteImport } from './routes/_authenticated/dashboard.appeal'
 import { Route as AuthenticatedDashboardAdvertiseRouteImport } from './routes/_authenticated/dashboard.advertise'
 import { Route as AuthenticatedDashboardAdAnalyticsRouteImport } from './routes/_authenticated/dashboard.ad-analytics'
 import { Route as AuthenticatedDashboardAccountRouteImport } from './routes/_authenticated/dashboard.account'
 import { Route as AuthenticatedAdminViewingsRouteImport } from './routes/_authenticated/admin.viewings'
 import { Route as AuthenticatedAdminVerificationsRouteImport } from './routes/_authenticated/admin.verifications'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
+import { Route as AuthenticatedAdminTrustSafetyRouteImport } from './routes/_authenticated/admin.trust-safety'
 import { Route as AuthenticatedAdminTierPlansRouteImport } from './routes/_authenticated/admin.tier-plans'
+import { Route as AuthenticatedAdminSupportViewRouteImport } from './routes/_authenticated/admin.support-view'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminSubscriptionsRouteImport } from './routes/_authenticated/admin.subscriptions'
 import { Route as AuthenticatedAdminScanRunsRouteImport } from './routes/_authenticated/admin.scan-runs'
@@ -138,6 +141,7 @@ import { Route as AuthenticatedDashboardOffersIndexRouteImport } from './routes/
 import { Route as AuthenticatedDashboardMessagesIndexRouteImport } from './routes/_authenticated/dashboard.messages.index'
 import { Route as AuthenticatedDashboardBlogIndexRouteImport } from './routes/_authenticated/dashboard.blog.index'
 import { Route as ApiPublicHooksSubscriptionScanRouteImport } from './routes/api/public/hooks/subscription-scan'
+import { Route as ApiPublicFeedsListingsDotxmlRouteImport } from './routes/api/public/feeds/listings[.]xml'
 import { Route as AuthenticatedDashboardViewingsIdRouteImport } from './routes/_authenticated/dashboard.viewings.$id'
 import { Route as AuthenticatedDashboardVerifyIdRouteImport } from './routes/_authenticated/dashboard.verify.$id'
 import { Route as AuthenticatedDashboardRequestsNewRouteImport } from './routes/_authenticated/dashboard.requests.new'
@@ -653,6 +657,12 @@ const AuthenticatedDashboardApplicationsRoute =
     path: '/dashboard/applications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardAppealRoute =
+  AuthenticatedDashboardAppealRouteImport.update({
+    id: '/dashboard/appeal',
+    path: '/dashboard/appeal',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardAdvertiseRoute =
   AuthenticatedDashboardAdvertiseRouteImport.update({
     id: '/dashboard/advertise',
@@ -688,10 +698,22 @@ const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminTrustSafetyRoute =
+  AuthenticatedAdminTrustSafetyRouteImport.update({
+    id: '/trust-safety',
+    path: '/trust-safety',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminTierPlansRoute =
   AuthenticatedAdminTierPlansRouteImport.update({
     id: '/tier-plans',
     path: '/tier-plans',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSupportViewRoute =
+  AuthenticatedAdminSupportViewRouteImport.update({
+    id: '/support-view',
+    path: '/support-view',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminSupportRoute =
@@ -861,6 +883,12 @@ const ApiPublicHooksSubscriptionScanRoute =
   ApiPublicHooksSubscriptionScanRouteImport.update({
     id: '/api/public/hooks/subscription-scan',
     path: '/api/public/hooks/subscription-scan',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicFeedsListingsDotxmlRoute =
+  ApiPublicFeedsListingsDotxmlRouteImport.update({
+    id: '/api/public/feeds/listings.xml',
+    path: '/api/public/feeds/listings.xml',
     getParentRoute: () => rootRouteImport,
   } as any)
 const AuthenticatedDashboardViewingsIdRoute =
@@ -1053,13 +1081,16 @@ export interface FileRoutesByFullPath {
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
+  '/admin/support-view': typeof AuthenticatedAdminSupportViewRoute
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
+  '/admin/trust-safety': typeof AuthenticatedAdminTrustSafetyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
+  '/dashboard/appeal': typeof AuthenticatedDashboardAppealRoute
   '/dashboard/applications': typeof AuthenticatedDashboardApplicationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
@@ -1111,6 +1142,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
+  '/api/public/feeds/listings.xml': typeof ApiPublicFeedsListingsDotxmlRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/messages/': typeof AuthenticatedDashboardMessagesIndexRoute
@@ -1201,13 +1233,16 @@ export interface FileRoutesByTo {
   '/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
+  '/admin/support-view': typeof AuthenticatedAdminSupportViewRoute
   '/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
+  '/admin/trust-safety': typeof AuthenticatedAdminTrustSafetyRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
+  '/dashboard/appeal': typeof AuthenticatedDashboardAppealRoute
   '/dashboard/applications': typeof AuthenticatedDashboardApplicationsRoute
   '/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
@@ -1254,6 +1289,7 @@ export interface FileRoutesByTo {
   '/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
+  '/api/public/feeds/listings.xml': typeof ApiPublicFeedsListingsDotxmlRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/dashboard/blog': typeof AuthenticatedDashboardBlogIndexRoute
   '/dashboard/messages': typeof AuthenticatedDashboardMessagesIndexRoute
@@ -1346,13 +1382,16 @@ export interface FileRoutesById {
   '/_authenticated/admin/scan-runs': typeof AuthenticatedAdminScanRunsRoute
   '/_authenticated/admin/subscriptions': typeof AuthenticatedAdminSubscriptionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
+  '/_authenticated/admin/support-view': typeof AuthenticatedAdminSupportViewRoute
   '/_authenticated/admin/tier-plans': typeof AuthenticatedAdminTierPlansRoute
+  '/_authenticated/admin/trust-safety': typeof AuthenticatedAdminTrustSafetyRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/verifications': typeof AuthenticatedAdminVerificationsRoute
   '/_authenticated/admin/viewings': typeof AuthenticatedAdminViewingsRoute
   '/_authenticated/dashboard/account': typeof AuthenticatedDashboardAccountRoute
   '/_authenticated/dashboard/ad-analytics': typeof AuthenticatedDashboardAdAnalyticsRoute
   '/_authenticated/dashboard/advertise': typeof AuthenticatedDashboardAdvertiseRoute
+  '/_authenticated/dashboard/appeal': typeof AuthenticatedDashboardAppealRoute
   '/_authenticated/dashboard/applications': typeof AuthenticatedDashboardApplicationsRoute
   '/_authenticated/dashboard/appointments': typeof AuthenticatedDashboardAppointmentsRoute
   '/_authenticated/dashboard/availability': typeof AuthenticatedDashboardAvailabilityRoute
@@ -1404,6 +1443,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/requests/new': typeof AuthenticatedDashboardRequestsNewRoute
   '/_authenticated/dashboard/verify/$id': typeof AuthenticatedDashboardVerifyIdRoute
   '/_authenticated/dashboard/viewings/$id': typeof AuthenticatedDashboardViewingsIdRoute
+  '/api/public/feeds/listings.xml': typeof ApiPublicFeedsListingsDotxmlRoute
   '/api/public/hooks/subscription-scan': typeof ApiPublicHooksSubscriptionScanRoute
   '/_authenticated/dashboard/blog/': typeof AuthenticatedDashboardBlogIndexRoute
   '/_authenticated/dashboard/messages/': typeof AuthenticatedDashboardMessagesIndexRoute
@@ -1496,13 +1536,16 @@ export interface FileRouteTypes {
     | '/admin/scan-runs'
     | '/admin/subscriptions'
     | '/admin/support'
+    | '/admin/support-view'
     | '/admin/tier-plans'
+    | '/admin/trust-safety'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/viewings'
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
+    | '/dashboard/appeal'
     | '/dashboard/applications'
     | '/dashboard/appointments'
     | '/dashboard/availability'
@@ -1554,6 +1597,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
     | '/dashboard/viewings/$id'
+    | '/api/public/feeds/listings.xml'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog/'
     | '/dashboard/messages/'
@@ -1644,13 +1688,16 @@ export interface FileRouteTypes {
     | '/admin/scan-runs'
     | '/admin/subscriptions'
     | '/admin/support'
+    | '/admin/support-view'
     | '/admin/tier-plans'
+    | '/admin/trust-safety'
     | '/admin/users'
     | '/admin/verifications'
     | '/admin/viewings'
     | '/dashboard/account'
     | '/dashboard/ad-analytics'
     | '/dashboard/advertise'
+    | '/dashboard/appeal'
     | '/dashboard/applications'
     | '/dashboard/appointments'
     | '/dashboard/availability'
@@ -1697,6 +1744,7 @@ export interface FileRouteTypes {
     | '/dashboard/requests/new'
     | '/dashboard/verify/$id'
     | '/dashboard/viewings/$id'
+    | '/api/public/feeds/listings.xml'
     | '/api/public/hooks/subscription-scan'
     | '/dashboard/blog'
     | '/dashboard/messages'
@@ -1788,13 +1836,16 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/scan-runs'
     | '/_authenticated/admin/subscriptions'
     | '/_authenticated/admin/support'
+    | '/_authenticated/admin/support-view'
     | '/_authenticated/admin/tier-plans'
+    | '/_authenticated/admin/trust-safety'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/verifications'
     | '/_authenticated/admin/viewings'
     | '/_authenticated/dashboard/account'
     | '/_authenticated/dashboard/ad-analytics'
     | '/_authenticated/dashboard/advertise'
+    | '/_authenticated/dashboard/appeal'
     | '/_authenticated/dashboard/applications'
     | '/_authenticated/dashboard/appointments'
     | '/_authenticated/dashboard/availability'
@@ -1846,6 +1897,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/requests/new'
     | '/_authenticated/dashboard/verify/$id'
     | '/_authenticated/dashboard/viewings/$id'
+    | '/api/public/feeds/listings.xml'
     | '/api/public/hooks/subscription-scan'
     | '/_authenticated/dashboard/blog/'
     | '/_authenticated/dashboard/messages/'
@@ -1916,6 +1968,7 @@ export interface RootRouteChildren {
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
   BlogTagTagRoute: typeof BlogTagTagRoute
   BlogAuthorsIndexRoute: typeof BlogAuthorsIndexRoute
+  ApiPublicFeedsListingsDotxmlRoute: typeof ApiPublicFeedsListingsDotxmlRoute
   ApiPublicHooksSubscriptionScanRoute: typeof ApiPublicHooksSubscriptionScanRoute
 }
 
@@ -2572,6 +2625,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardApplicationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard/appeal': {
+      id: '/_authenticated/dashboard/appeal'
+      path: '/dashboard/appeal'
+      fullPath: '/dashboard/appeal'
+      preLoaderRoute: typeof AuthenticatedDashboardAppealRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard/advertise': {
       id: '/_authenticated/dashboard/advertise'
       path: '/dashboard/advertise'
@@ -2614,11 +2674,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/trust-safety': {
+      id: '/_authenticated/admin/trust-safety'
+      path: '/trust-safety'
+      fullPath: '/admin/trust-safety'
+      preLoaderRoute: typeof AuthenticatedAdminTrustSafetyRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/tier-plans': {
       id: '/_authenticated/admin/tier-plans'
       path: '/tier-plans'
       fullPath: '/admin/tier-plans'
       preLoaderRoute: typeof AuthenticatedAdminTierPlansRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/support-view': {
+      id: '/_authenticated/admin/support-view'
+      path: '/support-view'
+      fullPath: '/admin/support-view'
+      preLoaderRoute: typeof AuthenticatedAdminSupportViewRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/support': {
@@ -2824,6 +2898,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSubscriptionScanRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/feeds/listings.xml': {
+      id: '/api/public/feeds/listings.xml'
+      path: '/api/public/feeds/listings.xml'
+      fullPath: '/api/public/feeds/listings.xml'
+      preLoaderRoute: typeof ApiPublicFeedsListingsDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/dashboard/viewings/$id': {
       id: '/_authenticated/dashboard/viewings/$id'
       path: '/$id'
@@ -2992,7 +3073,9 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminScanRunsRoute: typeof AuthenticatedAdminScanRunsRoute
   AuthenticatedAdminSubscriptionsRoute: typeof AuthenticatedAdminSubscriptionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
+  AuthenticatedAdminSupportViewRoute: typeof AuthenticatedAdminSupportViewRoute
   AuthenticatedAdminTierPlansRoute: typeof AuthenticatedAdminTierPlansRoute
+  AuthenticatedAdminTrustSafetyRoute: typeof AuthenticatedAdminTrustSafetyRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminVerificationsRoute: typeof AuthenticatedAdminVerificationsRoute
   AuthenticatedAdminViewingsRoute: typeof AuthenticatedAdminViewingsRoute
@@ -3026,7 +3109,9 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminScanRunsRoute: AuthenticatedAdminScanRunsRoute,
   AuthenticatedAdminSubscriptionsRoute: AuthenticatedAdminSubscriptionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
+  AuthenticatedAdminSupportViewRoute: AuthenticatedAdminSupportViewRoute,
   AuthenticatedAdminTierPlansRoute: AuthenticatedAdminTierPlansRoute,
+  AuthenticatedAdminTrustSafetyRoute: AuthenticatedAdminTrustSafetyRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminVerificationsRoute: AuthenticatedAdminVerificationsRoute,
   AuthenticatedAdminViewingsRoute: AuthenticatedAdminViewingsRoute,
@@ -3156,6 +3241,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardAccountRoute: typeof AuthenticatedDashboardAccountRoute
   AuthenticatedDashboardAdAnalyticsRoute: typeof AuthenticatedDashboardAdAnalyticsRoute
   AuthenticatedDashboardAdvertiseRoute: typeof AuthenticatedDashboardAdvertiseRoute
+  AuthenticatedDashboardAppealRoute: typeof AuthenticatedDashboardAppealRoute
   AuthenticatedDashboardApplicationsRoute: typeof AuthenticatedDashboardApplicationsRoute
   AuthenticatedDashboardAppointmentsRoute: typeof AuthenticatedDashboardAppointmentsRoute
   AuthenticatedDashboardAvailabilityRoute: typeof AuthenticatedDashboardAvailabilityRoute
@@ -3201,6 +3287,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardAdAnalyticsRoute:
     AuthenticatedDashboardAdAnalyticsRoute,
   AuthenticatedDashboardAdvertiseRoute: AuthenticatedDashboardAdvertiseRoute,
+  AuthenticatedDashboardAppealRoute: AuthenticatedDashboardAppealRoute,
   AuthenticatedDashboardApplicationsRoute:
     AuthenticatedDashboardApplicationsRoute,
   AuthenticatedDashboardAppointmentsRoute:
@@ -3326,6 +3413,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
   BlogTagTagRoute: BlogTagTagRoute,
   BlogAuthorsIndexRoute: BlogAuthorsIndexRoute,
+  ApiPublicFeedsListingsDotxmlRoute: ApiPublicFeedsListingsDotxmlRoute,
   ApiPublicHooksSubscriptionScanRoute: ApiPublicHooksSubscriptionScanRoute,
 }
 export const routeTree = rootRouteImport

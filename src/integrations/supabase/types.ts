@@ -214,6 +214,42 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_appeals: {
+        Row: {
+          body: string
+          created_at: string
+          decision_note: string | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          decision_note?: string | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          decision_note?: string | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       agent_availability: {
         Row: {
           allow_in_person: boolean
@@ -2102,6 +2138,10 @@ export type Database = {
           specialties: string[]
           subscription_started_at: string | null
           subscription_suspended: boolean
+          suspended: boolean
+          suspended_at: string | null
+          suspended_by: string | null
+          suspension_reason: string | null
           tier: string
           tier_expires_at: string | null
           tiktok_url: string | null
@@ -2161,6 +2201,10 @@ export type Database = {
           specialties?: string[]
           subscription_started_at?: string | null
           subscription_suspended?: boolean
+          suspended?: boolean
+          suspended_at?: string | null
+          suspended_by?: string | null
+          suspension_reason?: string | null
           tier?: string
           tier_expires_at?: string | null
           tiktok_url?: string | null
@@ -2220,6 +2264,10 @@ export type Database = {
           specialties?: string[]
           subscription_started_at?: string | null
           subscription_suspended?: boolean
+          suspended?: boolean
+          suspended_at?: string | null
+          suspended_by?: string | null
+          suspension_reason?: string | null
           tier?: string
           tier_expires_at?: string | null
           tiktok_url?: string | null
@@ -2704,39 +2752,51 @@ export type Database = {
         Row: {
           created_at: string
           details: string | null
+          escalated_at: string | null
+          escalated_by: string | null
           id: string
+          internal_notes: string | null
           property_id: string
           reason: string
           reporter_id: string | null
           resolution: string | null
           reviewed_at: string | null
           reviewed_by: string | null
+          severity: string
           status: string
           updated_at: string
         }
         Insert: {
           created_at?: string
           details?: string | null
+          escalated_at?: string | null
+          escalated_by?: string | null
           id?: string
+          internal_notes?: string | null
           property_id: string
           reason: string
           reporter_id?: string | null
           resolution?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          severity?: string
           status?: string
           updated_at?: string
         }
         Update: {
           created_at?: string
           details?: string | null
+          escalated_at?: string | null
+          escalated_by?: string | null
           id?: string
+          internal_notes?: string | null
           property_id?: string
           reason?: string
           reporter_id?: string | null
           resolution?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          severity?: string
           status?: string
           updated_at?: string
         }
@@ -3536,6 +3596,30 @@ export type Database = {
         }
         Relationships: []
       }
+      support_sessions: {
+        Row: {
+          admin_id: string
+          created_at: string
+          id: string
+          reason: string
+          target_user_id: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          id?: string
+          reason: string
+          target_user_id: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          target_user_id?: string
+        }
+        Relationships: []
+      }
       support_tickets: {
         Row: {
           admin_response: string | null
@@ -4166,6 +4250,7 @@ export type Database = {
     }
     Functions: {
       agent_performance: { Args: { _agent_id: string }; Returns: Json }
+      archive_expired_listings: { Args: never; Returns: number }
       bump_ad_daily_stat: {
         Args: { _campaign: string; _kind: string }
         Returns: undefined

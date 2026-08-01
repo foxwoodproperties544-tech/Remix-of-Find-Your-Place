@@ -84,6 +84,8 @@ function useNav(): { section: string; items: NavItem[] }[] {
         { to: "/admin/offers", label: "Offer management", icon: Handshake },
         { to: "/admin/viewings", label: "Viewings oversight", icon: CalendarCheck },
         { to: "/admin/reports", label: "Flagged listings", icon: ShieldCheck },
+        { to: "/admin/trust-safety", label: "Trust & safety", icon: ShieldCheck },
+        { to: "/admin/support-view", label: "Support view (read-only)", icon: LifeBuoy },
         { to: "/admin/reviews", label: "Review moderation", icon: ShieldCheck },
         { to: "/admin/deletion-requests", label: "Deletion requests", icon: ShieldCheck },
 
