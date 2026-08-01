@@ -176,14 +176,16 @@ export function Header() {
           className="min-w-0 flex-shrink rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-label="Foxwood Properties — go to homepage"
         ><Logo /></Link>
-        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary" data-testid="primary-nav">
           {nav.map((n, i) => (
             <Link key={i} to={n.to as any} search={(n as any).search}
+              data-nav-item={n.label}
               className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
               activeOptions={{ exact: false, includeSearch: !!(n as any).search }}
-              activeProps={{ className: "text-primary bg-primary-soft" }}
+              activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }}
             >{navLabel(n.label)}</Link>
           ))}
+
           {/* Property Requests dropdown */}
           <div
             ref={requestsRef}
@@ -358,8 +360,9 @@ export function Header() {
               </div>
             )}
           </div>
-          <Link to="/blog" className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Blog")}</Link>
-          <Link to="/contact" className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Contact Us")}</Link>
+          <Link to="/blog" data-nav-item="Blog" activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Blog")}</Link>
+          <Link to="/contact" data-nav-item="Contact Us" activeProps={{ className: "text-primary bg-primary-soft font-semibold ring-1 ring-primary/30", "aria-current": "page" }} className="rounded-full px-3 py-2 text-sm font-medium text-foreground/75 hover:text-primary hover:bg-primary-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">{navLabel("Contact Us")}</Link>
+
         </nav>
         <div className="hidden md:flex items-center gap-2">
           <button
