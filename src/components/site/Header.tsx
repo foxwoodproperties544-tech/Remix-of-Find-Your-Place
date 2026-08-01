@@ -229,7 +229,7 @@ export function Header() {
                         aria-current={active ? "page" : undefined}
 
                         onClick={() => setRequestsOpen(false)}
-                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary text-primary-foreground" : ""}`}
                       >
                         <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
@@ -289,7 +289,7 @@ export function Header() {
                         aria-current={active ? "page" : undefined}
 
                         onClick={() => setAgentsOpen(false)}
-                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary text-primary-foreground" : ""}`}
                       >
                         <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />
@@ -357,7 +357,7 @@ export function Header() {
                         role="menuitem"
                         aria-current={active ? "page" : undefined}
                         onClick={() => setMoreOpen(false)}
-                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-secondary text-secondary-foreground" : ""}`}
+                        className={`flex items-start gap-3 rounded-xl p-3 text-sm hover:bg-secondary hover:text-secondary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${active ? "bg-primary text-primary-foreground" : ""}`}
                       >
                         <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${active ? "bg-primary text-primary-foreground" : "bg-primary-soft text-primary"}`}>
                           <Icon className="h-4 w-4" />

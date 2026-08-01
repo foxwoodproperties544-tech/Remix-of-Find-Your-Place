@@ -57,8 +57,8 @@
   --primary-soft: oklch(0.96 0.02 180);
   /* secondary orange #FE4C25 — foreground is deep ember so text on the
      orange hover/active state clears WCAG AA (5.4:1) instead of 3.35:1. */
-  --secondary: oklch(0.68 0.21 32);
-  --secondary-foreground: oklch(0.19 0.05 32);
+  --secondary: oklch(0.6 0.2 32);
+  --secondary-foreground: oklch(1 0 0);
 
   --accent: oklch(0.96 0.02 180);
   --accent-foreground: oklch(0.35 0.06 180);
@@ -84,8 +84,8 @@
   --field-foreground: oklch(0.97 0.005 200);
   /* Slightly brighter orange on dark surfaces, still with deep-ember text
      so dropdown hover/active states keep >= 4.5:1 contrast. */
-  --secondary: oklch(0.72 0.19 34);
-  --secondary-foreground: oklch(0.17 0.04 32);
+  --secondary: oklch(0.62 0.2 34);
+  --secondary-foreground: oklch(1 0 0);
 }
 
 
@@ -179,7 +179,7 @@
     cursor: not-allowed;
     opacity: 1;
     background-color: transparent;
-    color: color-mix(in oklab, var(--color-secondary-foreground) 72%, var(--color-popover));
+    color: color-mix(in oklab, var(--color-popover-foreground) 55%, var(--color-popover));
   }
   [role="menuitem"][data-disabled]:hover,
   [role="option"][data-disabled]:hover,
@@ -188,7 +188,7 @@
   [role="option"][aria-disabled="true"]:hover,
   [data-menu-item][aria-disabled="true"]:hover {
     background-color: transparent;
-    color: color-mix(in oklab, var(--color-secondary-foreground) 72%, var(--color-popover));
+    color: color-mix(in oklab, var(--color-popover-foreground) 55%, var(--color-popover));
   }
 }
 
