@@ -30,6 +30,9 @@ import { LatestPriceChangeBadge } from "@/components/property/PriceChangeBadge";
 import { AgentPerformanceCard } from "@/components/agent/AgentPerformanceCard";
 import { BookViewingButton } from "@/components/viewings/BookViewingButton";
 import { MakeOfferButton } from "@/components/offers/MakeOfferButton";
+import { ApplyToRentButton } from "@/components/rentals/ApplyToRentButton";
+import { MessageAgentButton } from "@/components/messaging/MessageAgentButton";
+
 import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/properties/$id")({
