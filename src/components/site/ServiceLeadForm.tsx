@@ -62,7 +62,7 @@ export function ServiceLeadForm({ service }: { service: string }) {
     );
   }
 
-  const input = "w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary transition-colors";
+  const input = "w-full rounded-lg border border-border bg-field px-4 py-2.5 text-sm outline-none focus:border-primary transition-colors";
   const err = (k: keyof typeof form) => errors[k] && <p className="mt-1 text-xs text-destructive">{errors[k]}</p>;
 
   return (

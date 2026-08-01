@@ -140,7 +140,7 @@ function EditListing() {
     finally { setSaving(false); }
   }
 
-  const input = "w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary";
+  const input = "w-full rounded-lg border border-border bg-field px-4 py-2.5 text-sm outline-none focus:border-primary";
   const label = "text-xs font-semibold text-foreground/80";
 
   return (

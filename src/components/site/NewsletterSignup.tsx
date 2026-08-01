@@ -64,7 +64,7 @@ export function NewsletterSignup({ variant = "footer" }: { variant?: "footer" | 
         className={
           isFooter
             ? "flex-1 min-w-0 rounded-full border border-primary-foreground/30 bg-background/10 backdrop-blur px-4 py-2 text-sm text-primary-foreground placeholder:text-primary-foreground/60 outline-none focus:border-secondary"
-            : "flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+            : "flex-1 min-w-0 rounded-lg border border-border bg-field px-3 py-2 text-sm outline-none focus:border-primary"
         }
       />
       <button

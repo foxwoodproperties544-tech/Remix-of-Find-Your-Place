@@ -329,7 +329,7 @@ function NewListing() {
   }
 
 
-  const input = "w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary transition-colors";
+  const input = "w-full rounded-lg border border-border bg-field px-4 py-2.5 text-sm outline-none focus:border-primary transition-colors";
   const label = "text-xs font-semibold text-foreground/80";
   const errCls = (k: keyof Errors) => errors[k] ? "border-destructive focus:border-destructive" : "";
   const errText = (k: keyof Errors) => errors[k] ? <div data-error="true" className="mt-1 text-xs text-destructive">{errors[k]}</div> : null;

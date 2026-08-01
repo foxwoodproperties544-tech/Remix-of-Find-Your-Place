@@ -26,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/admin/settings/about")({
 });
 
 type Stat = { label: string; value: number; suffix: string };
-const inputCls = "w-full rounded-md border border-border bg-background px-3 py-2 text-sm";
+const inputCls = "w-full rounded-md border border-border bg-field px-3 py-2 text-sm";
 
 async function imageDataUrl(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) throw new Error("Choose an image file");
