@@ -40,6 +40,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertyRequestsIndexRouteImport } from './routes/property-requests.index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
+import { Route as KenyaIndexRouteImport } from './routes/kenya.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AgentsIndexRouteImport } from './routes/agents.index'
 import { Route as TeamKennedyMutuaRouteImport } from './routes/team.kennedy-mutua'
@@ -55,6 +56,7 @@ import { Route as ServicesBuyRouteImport } from './routes/services.buy'
 import { Route as PropertyRequestsSlugRouteImport } from './routes/property-requests.$slug'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as LocationsCountyRouteImport } from './routes/locations.$county'
+import { Route as KenyaSlugRouteImport } from './routes/kenya.$slug'
 import { Route as DevMenusRouteImport } from './routes/dev.menus'
 import { Route as DevButtonsRouteImport } from './routes/dev.buttons'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -304,6 +306,11 @@ const LocationsIndexRoute = LocationsIndexRouteImport.update({
   path: '/locations/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KenyaIndexRoute = KenyaIndexRouteImport.update({
+  id: '/kenya/',
+  path: '/kenya/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -377,6 +384,11 @@ const PropertiesIdRoute = PropertiesIdRouteImport.update({
 const LocationsCountyRoute = LocationsCountyRouteImport.update({
   id: '/locations/$county',
   path: '/locations/$county',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KenyaSlugRoute = KenyaSlugRouteImport.update({
+  id: '/kenya/$slug',
+  path: '/kenya/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevMenusRoute = DevMenusRouteImport.update({
@@ -956,6 +968,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/buttons': typeof DevButtonsRoute
   '/dev/menus': typeof DevMenusRoute
+  '/kenya/$slug': typeof KenyaSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/property-requests/$slug': typeof PropertyRequestsSlugRoute
@@ -971,6 +984,7 @@ export interface FileRoutesByFullPath {
   '/team/kennedy-mutua': typeof TeamKennedyMutuaRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/kenya/': typeof KenyaIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/property-requests/': typeof PropertyRequestsIndexRoute
@@ -1096,6 +1110,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/buttons': typeof DevButtonsRoute
   '/dev/menus': typeof DevMenusRoute
+  '/kenya/$slug': typeof KenyaSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/property-requests/$slug': typeof PropertyRequestsSlugRoute
@@ -1111,6 +1126,7 @@ export interface FileRoutesByTo {
   '/team/kennedy-mutua': typeof TeamKennedyMutuaRoute
   '/agents': typeof AgentsIndexRoute
   '/blog': typeof BlogIndexRoute
+  '/kenya': typeof KenyaIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/properties': typeof PropertiesIndexRoute
   '/property-requests': typeof PropertyRequestsIndexRoute
@@ -1234,6 +1250,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/dev/buttons': typeof DevButtonsRoute
   '/dev/menus': typeof DevMenusRoute
+  '/kenya/$slug': typeof KenyaSlugRoute
   '/locations/$county': typeof LocationsCountyRouteWithChildren
   '/properties/$id': typeof PropertiesIdRoute
   '/property-requests/$slug': typeof PropertyRequestsSlugRoute
@@ -1249,6 +1266,7 @@ export interface FileRoutesById {
   '/team/kennedy-mutua': typeof TeamKennedyMutuaRoute
   '/agents/': typeof AgentsIndexRoute
   '/blog/': typeof BlogIndexRoute
+  '/kenya/': typeof KenyaIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/properties/': typeof PropertiesIndexRoute
   '/property-requests/': typeof PropertyRequestsIndexRoute
@@ -1376,6 +1394,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/buttons'
     | '/dev/menus'
+    | '/kenya/$slug'
     | '/locations/$county'
     | '/properties/$id'
     | '/property-requests/$slug'
@@ -1391,6 +1410,7 @@ export interface FileRouteTypes {
     | '/team/kennedy-mutua'
     | '/agents/'
     | '/blog/'
+    | '/kenya/'
     | '/locations/'
     | '/properties/'
     | '/property-requests/'
@@ -1516,6 +1536,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/buttons'
     | '/dev/menus'
+    | '/kenya/$slug'
     | '/locations/$county'
     | '/properties/$id'
     | '/property-requests/$slug'
@@ -1531,6 +1552,7 @@ export interface FileRouteTypes {
     | '/team/kennedy-mutua'
     | '/agents'
     | '/blog'
+    | '/kenya'
     | '/locations'
     | '/properties'
     | '/property-requests'
@@ -1653,6 +1675,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dev/buttons'
     | '/dev/menus'
+    | '/kenya/$slug'
     | '/locations/$county'
     | '/properties/$id'
     | '/property-requests/$slug'
@@ -1668,6 +1691,7 @@ export interface FileRouteTypes {
     | '/team/kennedy-mutua'
     | '/agents/'
     | '/blog/'
+    | '/kenya/'
     | '/locations/'
     | '/properties/'
     | '/property-requests/'
@@ -1791,6 +1815,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   DevButtonsRoute: typeof DevButtonsRoute
   DevMenusRoute: typeof DevMenusRoute
+  KenyaSlugRoute: typeof KenyaSlugRoute
   LocationsCountyRoute: typeof LocationsCountyRouteWithChildren
   PropertiesIdRoute: typeof PropertiesIdRoute
   PropertyRequestsSlugRoute: typeof PropertyRequestsSlugRoute
@@ -1806,6 +1831,7 @@ export interface RootRouteChildren {
   TeamKennedyMutuaRoute: typeof TeamKennedyMutuaRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  KenyaIndexRoute: typeof KenyaIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   PropertyRequestsIndexRoute: typeof PropertyRequestsIndexRoute
@@ -2036,6 +2062,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kenya/': {
+      id: '/kenya/'
+      path: '/kenya'
+      fullPath: '/kenya/'
+      preLoaderRoute: typeof KenyaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -2139,6 +2172,13 @@ declare module '@tanstack/react-router' {
       path: '/locations/$county'
       fullPath: '/locations/$county'
       preLoaderRoute: typeof LocationsCountyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kenya/$slug': {
+      id: '/kenya/$slug'
+      path: '/kenya/$slug'
+      fullPath: '/kenya/$slug'
+      preLoaderRoute: typeof KenyaSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/menus': {
@@ -3115,6 +3155,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   DevButtonsRoute: DevButtonsRoute,
   DevMenusRoute: DevMenusRoute,
+  KenyaSlugRoute: KenyaSlugRoute,
   LocationsCountyRoute: LocationsCountyRouteWithChildren,
   PropertiesIdRoute: PropertiesIdRoute,
   PropertyRequestsSlugRoute: PropertyRequestsSlugRoute,
@@ -3130,6 +3171,7 @@ const rootRouteChildren: RootRouteChildren = {
   TeamKennedyMutuaRoute: TeamKennedyMutuaRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  KenyaIndexRoute: KenyaIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   PropertyRequestsIndexRoute: PropertyRequestsIndexRoute,
