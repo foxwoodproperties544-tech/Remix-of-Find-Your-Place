@@ -89,14 +89,14 @@ function AdminNotifications() {
         <div className="mt-4 rounded-2xl border border-border bg-card p-5">
           <h3 className="font-semibold">Send broadcast</h3>
           <div className="mt-3 grid gap-3 md:grid-cols-2">
-            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
-            <select value={form.audience} onChange={(e) => setForm({ ...form, audience: e.target.value as any })} className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
+            <select value={form.audience} onChange={(e) => setForm({ ...form, audience: e.target.value as any })} className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
               <option value="all">All users</option>
               <option value="agents">Agents only</option>
               <option value="verified">Verified only</option>
             </select>
-            <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Message body" rows={3} className="md:col-span-2 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
-            <input value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} placeholder="Link (optional, e.g. /properties)" className="md:col-span-2 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+            <textarea value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Message body" rows={3} className="md:col-span-2 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
+            <input value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} placeholder="Link (optional, e.g. /properties)" className="md:col-span-2 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
           <div className="mt-3 flex justify-end gap-2">
             <button onClick={() => setOpenCast(false)} className="btn-ghost text-sm">Cancel</button>
@@ -110,7 +110,7 @@ function AdminNotifications() {
       <div className="mt-6 flex items-center gap-2 flex-wrap">
         <div className="relative max-w-md flex-1 min-w-[220px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search title, body, recipient…" className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search title, body, recipient…" className="w-full rounded-lg border border-border bg-field pl-9 pr-3 py-2 text-sm" />
         </div>
         <div className="inline-flex rounded-lg border border-border overflow-hidden text-sm">
           {(["all", "unread", "read"] as const).map((s) => (

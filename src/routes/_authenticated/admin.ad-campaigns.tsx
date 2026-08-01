@@ -131,7 +131,7 @@ function AdminAdCampaigns() {
             <div className="p-4 border-b border-border font-semibold">Reject "{rejectFor.title}"</div>
             <div className="p-4">
               <label className="text-xs font-semibold">Reason (shown to advertiser)</label>
-              <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="mt-1 w-full min-h-[100px] rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              <textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="mt-1 w-full min-h-[100px] rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             </div>
             <div className="p-4 border-t border-border flex justify-end gap-2">
               <button onClick={() => { setRejectFor(null); setNotes(""); }} className="btn-ghost text-sm">Cancel</button>

@@ -119,9 +119,9 @@ function LeadsPage() {
           </div>
         )}
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, email, phone"
-          className="rounded-full border border-border bg-background px-4 py-2 text-sm min-w-[220px] focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          className="rounded-full border border-border bg-field px-4 py-2 text-sm min-w-[220px] focus:outline-none focus:ring-2 focus:ring-primary/30" />
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as any)}
-          className="rounded-full border border-border bg-background px-4 py-2 text-sm">
+          className="rounded-full border border-border bg-field px-4 py-2 text-sm">
           <option value="all">All statuses</option>
           {LEAD_STATUSES.map(s => <option key={s} value={s}>{LEAD_STATUS_LABEL[s]}</option>)}
         </select>

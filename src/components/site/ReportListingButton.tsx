@@ -68,7 +68,7 @@ export function ReportListingButton({ propertyId }: { propertyId: string }) {
           <select
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+            className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm outline-none focus:border-primary"
           >
             {REASONS.map((r) => (
               <option key={r} value={r}>
@@ -82,7 +82,7 @@ export function ReportListingButton({ propertyId }: { propertyId: string }) {
             rows={3}
             maxLength={1000}
             placeholder="Add any details that help us investigate (optional)"
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+            className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm outline-none focus:border-primary"
           />
           <div className="flex justify-end gap-2">
             <button onClick={() => setOpen(false)} className="btn-ghost text-xs">

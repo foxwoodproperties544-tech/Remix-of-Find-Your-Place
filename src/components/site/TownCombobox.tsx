@@ -34,7 +34,7 @@ export function TownCombobox({ county, value, onChange, placeholder, extraOption
 
   const results = useMemo(() => fuzzySearch(pool, query, (x) => x, 8).map((r) => r.item), [pool, query]);
 
-  const base = "w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none transition-colors";
+  const base = "w-full rounded-lg border bg-field px-3 py-2 text-sm outline-none transition-colors";
   const border = error ? "border-destructive focus:border-destructive" : "border-border focus:border-primary";
 
   function pick(v: string) { onChange(v); setQuery(v); setOpen(false); }

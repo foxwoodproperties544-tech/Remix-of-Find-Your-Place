@@ -75,7 +75,7 @@ function ReferralsPage() {
           <div className="mt-4 flex items-center gap-2 flex-wrap">
             <input
               readOnly value={shareLink}
-              className="flex-1 min-w-[240px] rounded-lg border border-border bg-background px-3 py-2 text-sm font-mono"
+              className="flex-1 min-w-[240px] rounded-lg border border-border bg-field px-3 py-2 text-sm font-mono"
             />
             <button onClick={copyLink} className="btn-ghost text-sm">
               {copied ? <><Check className="h-4 w-4" /> Copied</> : <><Copy className="h-4 w-4" /> Copy</>}

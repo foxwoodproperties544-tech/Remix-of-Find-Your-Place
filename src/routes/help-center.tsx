@@ -164,20 +164,20 @@ function HelpCenterPage() {
                 <div className="grid gap-1.5">
                   <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Subject</label>
                   <input value={subject} onChange={(e) => setSubject(e.target.value)} maxLength={140} required
-                    className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                    className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-1.5">
                     <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Category</label>
                     <select value={category} onChange={(e) => setCategory(e.target.value)}
-                      className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+                      className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
                       {CATEGORIES.map((c) => <option key={c.v} value={c.v}>{c.l}</option>)}
                     </select>
                   </div>
                   <div className="grid gap-1.5">
                     <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Priority</label>
                     <select value={priority} onChange={(e) => setPriority(e.target.value)}
-                      className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+                      className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
                       {PRIORITIES.map((p) => <option key={p.v} value={p.v}>{p.l}</option>)}
                     </select>
                   </div>
@@ -185,7 +185,7 @@ function HelpCenterPage() {
                 <div className="grid gap-1.5">
                   <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Describe your issue</label>
                   <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={6} maxLength={4000} required
-                    className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                    className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
                 </div>
                 <div className="grid gap-1.5">
                   <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Screenshot (optional, max 5MB)</label>

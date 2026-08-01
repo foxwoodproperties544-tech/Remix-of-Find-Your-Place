@@ -114,10 +114,10 @@ export function BlogComments({ postId }: { postId: string }) {
             </div>
             <input value={name} onChange={(e) => setName(e.target.value)} maxLength={80}
               placeholder="Your display name (optional)"
-              className="w-full mb-2 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="w-full mb-2 rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={4000} rows={4}
               placeholder="Share your thoughts…"
-              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             <div className="mt-3 flex items-center justify-between gap-3">
               <span className="text-xs text-muted-foreground">Comments are moderated before publishing.</span>
               <button type="button" onClick={submit} disabled={submitting}

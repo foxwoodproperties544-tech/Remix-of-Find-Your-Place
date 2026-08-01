@@ -194,12 +194,12 @@ function MyAds() {
               <div>
                 <label className="text-xs font-semibold">Start</label>
                 <input type="datetime-local" value={startsAt} onChange={(e) => setStartsAt(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                  className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
               </div>
               <div>
                 <label className="text-xs font-semibold">End</label>
                 <input type="datetime-local" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+                  className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
               </div>
               <p className="text-xs text-muted-foreground">The ad only renders publicly between Start and End (in addition to its status).</p>
             </div>

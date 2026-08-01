@@ -129,11 +129,11 @@ function AdminAnalytics() {
       <div className="mt-4 rounded-2xl border border-border bg-card p-4 flex flex-wrap items-end gap-3">
         <div>
           <label className="text-xs text-muted-foreground block">From</label>
-          <input type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+          <input type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)} className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         </div>
         <div>
           <label className="text-xs text-muted-foreground block">To</label>
-          <input type="date" value={to} min={from} max={isoDay(new Date())} onChange={(e) => setTo(e.target.value)} className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+          <input type="date" value={to} min={from} max={isoDay(new Date())} onChange={(e) => setTo(e.target.value)} className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
         </div>
         <div className="flex gap-1">
           {[7, 30, 90, 365].map((d) => (

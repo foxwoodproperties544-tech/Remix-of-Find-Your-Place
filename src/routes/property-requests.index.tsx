@@ -83,7 +83,7 @@ function BrowseRequests() {
             <label className="text-sm text-muted-foreground" htmlFor="req-sort">Sort</label>
             <select
               id="req-sort"
-              className="rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              className="rounded-lg border border-border bg-field px-3 py-2 text-sm"
               value={f.sort ?? "newest"}
               onChange={(e) => set("sort", e.target.value as RequestSort)}
             >

@@ -184,7 +184,7 @@ function Account() {
             <Field label="Company (optional)" value={company} onChange={setCompany} />
             <div className="sm:col-span-2">
               <label className="text-xs font-semibold text-muted-foreground">About you</label>
-              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
             </div>
           </div>
           <div className="mt-4 flex justify-end">
@@ -263,7 +263,7 @@ function Field({ label, value, onChange, placeholder }: { label: string; value: 
   return (
     <div>
       <label className="text-xs font-semibold text-muted-foreground">{label}</label>
-      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="mt-1 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm" />
     </div>
   );
 }

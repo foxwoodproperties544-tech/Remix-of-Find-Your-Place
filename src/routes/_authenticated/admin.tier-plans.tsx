@@ -142,15 +142,15 @@ function AdminTierPlans() {
             </div>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <label className="block text-sm">Name<input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2" /></label>
-                <label className="block text-sm">Slug (lowercase, unique)<input value={editing.slug} onChange={(e) => setEditing({ ...editing, slug: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "") })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2" /></label>
-                <label className="block text-sm">Price (KES, 0 = free)<input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2" /></label>
-                <label className="block text-sm">Listing quota (999 = unlimited)<input type="number" value={editing.listing_quota} onChange={(e) => setEditing({ ...editing, listing_quota: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2" /></label>
-                <label className="block text-sm">Duration days<input type="number" value={editing.duration_days} onChange={(e) => setEditing({ ...editing, duration_days: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2" /></label>
-                <label className="block text-sm">Sort order<input type="number" value={editing.sort_order} onChange={(e) => setEditing({ ...editing, sort_order: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2" /></label>
+                <label className="block text-sm">Name<input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-field px-3 py-2" /></label>
+                <label className="block text-sm">Slug (lowercase, unique)<input value={editing.slug} onChange={(e) => setEditing({ ...editing, slug: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "") })} className="mt-1 w-full rounded-md border border-border bg-field px-3 py-2" /></label>
+                <label className="block text-sm">Price (KES, 0 = free)<input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-field px-3 py-2" /></label>
+                <label className="block text-sm">Listing quota (999 = unlimited)<input type="number" value={editing.listing_quota} onChange={(e) => setEditing({ ...editing, listing_quota: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-field px-3 py-2" /></label>
+                <label className="block text-sm">Duration days<input type="number" value={editing.duration_days} onChange={(e) => setEditing({ ...editing, duration_days: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-field px-3 py-2" /></label>
+                <label className="block text-sm">Sort order<input type="number" value={editing.sort_order} onChange={(e) => setEditing({ ...editing, sort_order: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-field px-3 py-2" /></label>
               </div>
               <label className="block text-sm">Perks (one per line)
-                <textarea rows={6} value={editing.perks} onChange={(e) => setEditing({ ...editing, perks: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 font-mono text-xs" />
+                <textarea rows={6} value={editing.perks} onChange={(e) => setEditing({ ...editing, perks: e.target.value })} className="mt-1 w-full rounded-md border border-border bg-field px-3 py-2 font-mono text-xs" />
               </label>
               <div className="flex items-center gap-6 text-sm">
                 <label className="inline-flex items-center gap-2"><input type="checkbox" checked={!!editing.highlight} onChange={(e) => setEditing({ ...editing, highlight: e.target.checked })} /> Highlight (Popular badge)</label>

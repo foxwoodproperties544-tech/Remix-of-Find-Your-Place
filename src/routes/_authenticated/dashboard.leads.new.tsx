@@ -117,7 +117,7 @@ function NewLead() {
   );
 }
 
-const inputCls = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
+const inputCls = "w-full rounded-lg border border-border bg-field px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30";
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">

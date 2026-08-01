@@ -115,7 +115,7 @@ function SecurityPage() {
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
                   placeholder="6-digit code"
                   inputMode="numeric"
-                  className="w-40 rounded-lg border border-border bg-background px-3 py-2 text-sm font-mono tracking-widest"
+                  className="w-40 rounded-lg border border-border bg-field px-3 py-2 text-sm font-mono tracking-widest"
                 />
                 <button onClick={verifyEnroll} disabled={verifying || otp.length !== 6} className="rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold hover:opacity-90 disabled:opacity-60">
                   {verifying ? "Verifying…" : "Verify & activate"}

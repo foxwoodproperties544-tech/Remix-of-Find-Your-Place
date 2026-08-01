@@ -80,7 +80,7 @@ export function MpesaModal({ open, onClose, title, amountKes, initiate, onSucces
               <input
                 type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
                 placeholder="07XX XXX XXX" autoFocus
-                className="mt-1 w-full h-11 px-3 rounded-lg border border-border bg-background"
+                className="mt-1 w-full h-11 px-3 rounded-lg border border-border bg-field"
               />
               <span className="text-xs text-muted-foreground">Format: 07XX, 01XX, or 2547XX</span>
             </label>

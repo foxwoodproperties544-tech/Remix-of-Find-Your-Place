@@ -110,12 +110,12 @@ function SupportSettings() {
           <div className="grid gap-1.5">
             <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Start</label>
             <input type="time" value={start} onChange={(e) => setStart(e.target.value)}
-              className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
           <div className="grid gap-1.5">
             <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">End</label>
             <input type="time" value={end} onChange={(e) => setEnd(e.target.value)}
-              className="rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+              className="rounded-lg border border-border bg-field px-3 py-2 text-sm" />
           </div>
         </div>
 
@@ -137,7 +137,7 @@ function SupportSettings() {
         <div className="grid gap-1.5">
           <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Timezone</label>
           <input value={timezone} onChange={(e) => setTimezone(e.target.value)}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm" placeholder="Africa/Nairobi" />
+            className="rounded-lg border border-border bg-field px-3 py-2 text-sm" placeholder="Africa/Nairobi" />
           <div className="text-[11px] text-muted-foreground">Standard IANA name. Currently used only for display.</div>
         </div>
       </div>

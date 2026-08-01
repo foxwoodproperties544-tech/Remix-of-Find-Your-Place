@@ -109,14 +109,14 @@ function InsightsPage() {
             type="date"
             value={from}
             onChange={(e) => setFrom(e.target.value)}
-            className="rounded-md border border-border bg-background text-sm px-2 py-1"
+            className="rounded-md border border-border bg-field text-sm px-2 py-1"
           />
           <label className="text-xs text-muted-foreground">To</label>
           <input
             type="date"
             value={to}
             onChange={(e) => setTo(e.target.value)}
-            className="rounded-md border border-border bg-background text-sm px-2 py-1"
+            className="rounded-md border border-border bg-field text-sm px-2 py-1"
           />
           <button
             onClick={exportListingsCsv}

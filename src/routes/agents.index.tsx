@@ -138,7 +138,7 @@ function OurAgentsPage() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by name, agency, or keyword…"
-              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2.5 text-sm outline-none focus:border-primary"
+              className="w-full rounded-lg border border-border bg-field pl-9 pr-3 py-2.5 text-sm outline-none focus:border-primary"
             />
           </div>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
@@ -342,7 +342,7 @@ function FilterSelect({ label, value, onChange, options }: { label: string; valu
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"
       >
         <option value="">All {label.toLowerCase()}s</option>
         {options.map((o) => <option key={o} value={o}>{o}</option>)}

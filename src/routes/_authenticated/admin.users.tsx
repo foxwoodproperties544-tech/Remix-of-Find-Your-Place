@@ -100,7 +100,7 @@ function AdminUsers() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search name, email, company…"
-          className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm"
+          className="w-full rounded-lg border border-border bg-field pl-9 pr-3 py-2 text-sm"
         />
       </div>
 
@@ -154,7 +154,7 @@ function AdminUsers() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2 flex-wrap">
                       <select
-                        className="rounded-md border border-border bg-background text-xs px-2 py-1"
+                        className="rounded-md border border-border bg-field text-xs px-2 py-1"
                         defaultValue=""
                         onChange={(e) => {
                           const role = e.target.value as any;
@@ -214,7 +214,7 @@ function AdminUsers() {
               onChange={(e) => setReason(e.target.value)}
               rows={4}
               placeholder="Reason (optional but recommended)"
-              className="mt-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              className="mt-3 w-full rounded-lg border border-border bg-field px-3 py-2 text-sm"
             />
             <div className="mt-3 flex justify-end gap-2">
               <button onClick={() => setRejectFor(null)} className="btn-ghost text-sm">Cancel</button>

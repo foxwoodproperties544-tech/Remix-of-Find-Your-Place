@@ -190,10 +190,10 @@ function TicketsPanel() {
           <div className="relative flex-1 min-w-[180px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search subject, body, user"
-              className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm" />
+              className="w-full rounded-lg border border-border bg-field pl-9 pr-3 py-2 text-sm" />
           </div>
           <select value={status} onChange={(e) => setStatus(e.target.value)}
-            className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
             <option value="open">Open</option>
             <option value="in_progress">In progress</option>
             <option value="waiting_user">Waiting on user</option>
@@ -263,12 +263,12 @@ function TicketsPanel() {
             <div className="grid gap-2">
               <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Your reply</label>
               <textarea value={reply} onChange={(e) => setReply(e.target.value)} rows={6}
-                className="rounded-lg border border-border bg-background px-3 py-2 text-sm"
+                className="rounded-lg border border-border bg-field px-3 py-2 text-sm"
                 placeholder="Write a response to the user…" />
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}
-                className="rounded-lg border border-border bg-background px-3 py-2 text-sm">
+                className="rounded-lg border border-border bg-field px-3 py-2 text-sm">
                 <option value="open">Open</option>
                 <option value="in_progress">In progress</option>
                 <option value="waiting_user">Waiting on user</option>
@@ -430,7 +430,7 @@ function ChatsPanel({ adminUserId }: { adminUserId: string }) {
               <form onSubmit={send} className="p-3 border-t border-border flex items-center gap-2 bg-card">
                 <input value={text} onChange={(e) => setText(e.target.value)}
                   placeholder="Reply as Foxwood support…"
-                  className="flex-1 rounded-full border border-border bg-background px-4 py-2 text-sm outline-none focus:border-primary" />
+                  className="flex-1 rounded-full border border-border bg-field px-4 py-2 text-sm outline-none focus:border-primary" />
                 <button type="submit" disabled={sending || !text.trim()}
                   className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-primary text-primary-foreground disabled:opacity-50">
                   {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
