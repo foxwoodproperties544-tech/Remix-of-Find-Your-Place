@@ -1196,6 +1196,30 @@ export type Database = {
         }
         Relationships: []
       }
+      health_checks: {
+        Row: {
+          id: string
+          last_check: string | null
+          metrics: Json | null
+          service: string
+          status: string
+        }
+        Insert: {
+          id?: string
+          last_check?: string | null
+          metrics?: Json | null
+          service: string
+          status: string
+        }
+        Update: {
+          id?: string
+          last_check?: string | null
+          metrics?: Json | null
+          service?: string
+          status?: string
+        }
+        Relationships: []
+      }
       inquiries: {
         Row: {
           created_at: string
@@ -3662,6 +3686,36 @@ export type Database = {
           subject?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      system_logs: {
+        Row: {
+          created_at: string | null
+          id: string
+          level: string
+          message: string
+          metadata: Json | null
+          source: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          level: string
+          message: string
+          metadata?: Json | null
+          source: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          level?: string
+          message?: string
+          metadata?: Json | null
+          source?: string
+          user_id?: string | null
         }
         Relationships: []
       }
