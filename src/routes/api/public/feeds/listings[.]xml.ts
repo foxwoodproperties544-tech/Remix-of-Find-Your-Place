@@ -1,14 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { supabaseAdmin } from '@/integrations/supabase/client.server';
 
-export const Route = createFileRoute('/api/public/feeds/listings.xml')({
+export const Route = createFileRoute('/api/public/feeds/listings[.]xml')({
   server: {
     handlers: {
       GET: async ({ request }) => {
         const url = new URL(request.url);
         const county = url.searchParams.get('county');
         
-        // Use any cast for the select string to bypass potential transient type mismatches during schema sync
         let query = supabaseAdmin
           .from('properties')
           .select('id, title, description, price, category, property_type, county, town, created_at, updated_at' as any)

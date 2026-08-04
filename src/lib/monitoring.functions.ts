@@ -32,10 +32,9 @@ export const getSystemMetrics = createServerFn({ method: "GET" })
       supabaseAdmin.from("health_checks").select("*"),
     ]);
 
-    // Simple aggregate stats
     const { count: propertyCount } = await supabaseAdmin.from("properties").select("*", { count: 'exact', head: true });
     const { count: userCount } = await supabaseAdmin.from("profiles").select("*", { count: 'exact', head: true });
-    const { count: inquiryCount } = await supabaseAdmin.from("leads").select("*", { count: 'exact', head: true });
+    const { count: inquiryCount } = await supabaseAdmin.from("inquiries").select("*", { count: 'exact', head: true });
 
     return {
       logs: logsResult.data || [],
@@ -51,12 +50,10 @@ export const getSystemMetrics = createServerFn({ method: "GET" })
 
 export const exportDataBackup = createServerFn({ method: "POST" })
   .handler(async () => {
-    // In a real scenario, this would generate a signed URL to a CSV/JSON in storage
-    const tables = ["properties", "profiles", "leads", "blog_posts"] as const;
+    const tables = ["properties", "profiles", "inquiries", "blog_posts"] as const;
     const backup: Record<string, any> = {};
 
     for (const table of tables) {
-      // Use any cast to avoid deep type instantiation issues with dynamic table names in supabase client
       const { data } = await (supabaseAdmin.from(table as any) as any).select("*").limit(1000);
       backup[table] = data || [];
     }
