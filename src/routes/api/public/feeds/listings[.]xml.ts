@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { supabaseAdmin } from '@/integrations/supabase/client.server';
 
-export const Route = createFileRoute('/api/public/feeds/listings[.]xml')({
+export const Route = createFileRoute('/api/public/feeds/listings.xml')({
   server: {
     handlers: {
       GET: async ({ request }) => {
