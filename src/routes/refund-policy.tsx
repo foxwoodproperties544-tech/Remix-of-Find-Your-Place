@@ -1,101 +1,50 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { PageHero } from "@/components/site/PageHero";
-import heroTools from "@/assets/hero-tools.jpg";
-import { renderMarkdown } from "@/lib/markdown";
-import { absoluteUrl, SITE_URL } from "@/lib/site-url";
+import { createFileRoute } from '@tanstack/react-router'
 
-const TITLE = "Refund & Cancellation Policy — Foxwood Properties";
-const DESC =
-  "How refunds, cancellations and renewals work for Foxwood Properties listing packages, advertising packages, blog packages and agent subscriptions.";
-const OG_IMAGE = absoluteUrl(heroTools);
-
-export const Route = createFileRoute("/refund-policy")({
+export const Route = createFileRoute('/refund-policy')({
+  component: RefundPolicyPage,
   head: () => ({
+    title: 'Refund Policy | Foxwood Properties',
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESC },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:type", content: "website" },
-      { property: "og:image", content: OG_IMAGE },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESC },
-      { name: "twitter:image", content: OG_IMAGE },
-    ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/refund-policy` }],
-  }),
-  component: RefundPolicy,
-});
+      { name: 'description', content: 'Refund policy for listing packages and advertising services on Foxwood Properties.' },
+      { property: 'og:title', content: 'Refund Policy | Foxwood Properties' }
+    ]
+  })
+})
 
-const md = `
-Last updated: 26 July 2026.
-
-This policy explains when payments made to **Foxwood Properties** can be refunded or cancelled. It applies to listing packages, advertising packages, blog submission packages, agent and developer subscriptions, and the monthly verification subscription.
-
-## 1. What you are paying for
-All packages purchase **platform access and visibility** for a fixed period — for example a published listing slot, an ad placement, a blog placement or a subscription tier with a listing quota. They do not purchase a sale, a tenant, a specific number of leads, or any other outcome.
-
-## 2. Payment confirmation
-All payments are made by M-Pesa STK push. A payment is only complete once we receive the confirmed callback from Safaricom. Your receipt, activation date and expiry date are always visible under **Dashboard → Payment history**.
-
-## 3. Refund eligibility
-We will refund in full where:
-- You were **charged twice** for the same package or subscription period (duplicate M-Pesa transaction).
-- Payment was deducted but the package was **never activated** on your account.
-- We **reject or remove your listing for a reason caused by us**, such as an administrative error on our side.
-- You bought a package and the paid feature was **unavailable for more than 72 consecutive hours** because of a fault on our platform.
-
-## 4. When refunds are not available
-Refunds are not available where:
-- The package or subscription period has already started and the listing, ad or blog post has been published.
-- A listing was rejected or removed because it breached our Terms — for example inaccurate details, duplicate content, fraudulent documents or a property the lister has no right to market.
-- You simply changed your mind after the package went live.
-- The property sold, let or was withdrawn before the package expired.
-- You did not receive as many enquiries as expected.
-- The account was suspended for abuse, spam or fraud.
-
-## 5. Cancelling before activation
-If your payment has cleared but the listing, ad or blog post has **not yet been approved and published**, you may cancel for a full refund by contacting support before publication.
-
-## 6. Subscriptions and renewals
-- Subscriptions run for the period shown on your plan (typically 30 days) and are **not auto-charged** — you renew manually from your dashboard.
-- Cancelling means you simply do not renew. Your plan features remain active until the expiry date, followed by a short grace period.
-- Part-months are not refunded. Downgrades take effect at the end of the current period.
-- The KSh 1,000/month verification subscription follows the same rule: the Verified badge stays active until expiry, and lapses if not renewed.
-
-## 7. How to request a refund
-Email **hello@foxwoodproperties.co.ke** or WhatsApp **+254 759 556 026** within **14 days** of the payment, including:
-1. The M-Pesa transaction code.
-2. The phone number used to pay.
-3. The listing, ad, blog post or plan the payment relates to.
-4. A short description of the problem.
-
-You can also raise a ticket from the Help Centre so the request is tracked.
-
-## 8. Processing time
-Approved refunds are sent back to the **same M-Pesa number used for payment**, normally within **7 to 14 business days**. Any M-Pesa transaction charges are non-refundable.
-
-## 9. Disputes
-If you are unhappy with a refund decision, reply to the ticket and ask for escalation. A senior member of our team will review it and respond within 5 business days. Nothing in this policy limits your rights under Kenyan consumer law.
-
-## 10. Changes to this policy
-We may update this policy from time to time. The version in force is the one published on this page on the date of your payment.
-`;
-
-function RefundPolicy() {
+function RefundPolicyPage() {
   return (
-    <>
-      <PageHero
-        image={heroTools}
-        size="sm"
-        eyebrow="Legal"
-        title="Refund & Cancellation Policy"
-        subtitle="When packages, ads and subscriptions can be refunded or cancelled."
-      />
-      <article className="container-page py-12 max-w-3xl">
-        <div className="prose-content" dangerouslySetInnerHTML={{ __html: renderMarkdown(md) }} />
-      </article>
-    </>
-  );
+    <div className="container-page py-16 md:py-24">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8">Refund Policy</h1>
+        <div className="prose prose-teal max-w-none space-y-6 text-muted-foreground">
+          <p className="text-lg">Last updated: August 2026</p>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">1. Digital Services</h2>
+            <p>Foxwood Properties provides digital advertising and listing services. Due to the digital nature of these services, which are typically fulfilled or initiated immediately upon payment, all sales are generally final.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">2. Listing Packages</h2>
+            <p>No refunds will be issued for listing packages once a listing has been submitted or approved. If a listing is rejected by an admin for violating our terms of service, the agent may be given the opportunity to edit and resubmit the listing. Refunds for rejected listings are at the sole discretion of Foxwood Properties.</p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">3. Exceptional Circumstances</h2>
+            <p>We may consider refund requests in exceptional circumstances, such as:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Duplicate payments made due to technical errors.</li>
+              <li>Service outages that prevented the delivery of the purchased advertising benefit.</li>
+              <li>Documented unauthorized transactions.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">4. Contact Us</h2>
+            <p>For refund inquiries, please contact our support team at billing@foxwood.co.ke with your transaction ID and a detailed explanation of your request. Requests must be submitted within 7 days of the transaction date.</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  )
 }
