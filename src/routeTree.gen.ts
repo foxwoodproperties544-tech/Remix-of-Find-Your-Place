@@ -74,6 +74,7 @@ import { Route as BlogTagTagRouteImport } from './routes/blog.tag.$tag'
 import { Route as BlogCategoryCategoryRouteImport } from './routes/blog.category.$category'
 import { Route as BlogAuthorIdRouteImport } from './routes/blog.author.$id'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa-callback'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
 import { Route as AuthenticatedDashboardViewingsRouteImport } from './routes/_authenticated/dashboard.viewings'
 import { Route as AuthenticatedDashboardUpgradeRouteImport } from './routes/_authenticated/dashboard.upgrade'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
@@ -124,6 +125,7 @@ import { Route as AuthenticatedAdminPriceHistoryRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminPackagesRouteImport } from './routes/_authenticated/admin.packages'
 import { Route as AuthenticatedAdminOffersRouteImport } from './routes/_authenticated/admin.offers'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin.notifications'
+import { Route as AuthenticatedAdminMonitoringRouteImport } from './routes/_authenticated/admin.monitoring'
 import { Route as AuthenticatedAdminMarketplaceRouteImport } from './routes/_authenticated/admin.marketplace'
 import { Route as AuthenticatedAdminKycRouteImport } from './routes/_authenticated/admin.kyc'
 import { Route as AuthenticatedAdminDeletionRequestsRouteImport } from './routes/_authenticated/admin.deletion-requests'
@@ -489,6 +491,11 @@ const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
   path: '/api/public/mpesa-callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDashboardViewingsRoute =
   AuthenticatedDashboardViewingsRouteImport.update({
     id: '/dashboard/viewings',
@@ -787,6 +794,12 @@ const AuthenticatedAdminNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminMonitoringRoute =
+  AuthenticatedAdminMonitoringRouteImport.update({
+    id: '/monitoring',
+    path: '/monitoring',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminMarketplaceRoute =
   AuthenticatedAdminMarketplaceRouteImport.update({
     id: '/marketplace',
@@ -1069,6 +1082,7 @@ export interface FileRoutesByFullPath {
   '/admin/deletion-requests': typeof AuthenticatedAdminDeletionRequestsRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
+  '/admin/monitoring': typeof AuthenticatedAdminMonitoringRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -1119,6 +1133,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/dashboard/viewings': typeof AuthenticatedDashboardViewingsRouteWithChildren
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1221,6 +1236,7 @@ export interface FileRoutesByTo {
   '/admin/deletion-requests': typeof AuthenticatedAdminDeletionRequestsRoute
   '/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
+  '/admin/monitoring': typeof AuthenticatedAdminMonitoringRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -1266,6 +1282,7 @@ export interface FileRoutesByTo {
   '/dashboard/security': typeof AuthenticatedDashboardSecurityRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1370,6 +1387,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/deletion-requests': typeof AuthenticatedAdminDeletionRequestsRoute
   '/_authenticated/admin/kyc': typeof AuthenticatedAdminKycRoute
   '/_authenticated/admin/marketplace': typeof AuthenticatedAdminMarketplaceRoute
+  '/_authenticated/admin/monitoring': typeof AuthenticatedAdminMonitoringRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/_authenticated/admin/offers': typeof AuthenticatedAdminOffersRoute
   '/_authenticated/admin/packages': typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -1420,6 +1438,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/upgrade': typeof AuthenticatedDashboardUpgradeRoute
   '/_authenticated/dashboard/viewings': typeof AuthenticatedDashboardViewingsRouteWithChildren
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/mpesa-callback': typeof ApiPublicMpesaCallbackRoute
   '/blog/author/$id': typeof BlogAuthorIdRoute
   '/blog/category/$category': typeof BlogCategoryCategoryRoute
@@ -1524,6 +1543,7 @@ export interface FileRouteTypes {
     | '/admin/deletion-requests'
     | '/admin/kyc'
     | '/admin/marketplace'
+    | '/admin/monitoring'
     | '/admin/notifications'
     | '/admin/offers'
     | '/admin/packages'
@@ -1574,6 +1594,7 @@ export interface FileRouteTypes {
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
     | '/dashboard/viewings'
+    | '/api/public/health'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1676,6 +1697,7 @@ export interface FileRouteTypes {
     | '/admin/deletion-requests'
     | '/admin/kyc'
     | '/admin/marketplace'
+    | '/admin/monitoring'
     | '/admin/notifications'
     | '/admin/offers'
     | '/admin/packages'
@@ -1721,6 +1743,7 @@ export interface FileRouteTypes {
     | '/dashboard/security'
     | '/dashboard/subscription'
     | '/dashboard/upgrade'
+    | '/api/public/health'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1824,6 +1847,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/deletion-requests'
     | '/_authenticated/admin/kyc'
     | '/_authenticated/admin/marketplace'
+    | '/_authenticated/admin/monitoring'
     | '/_authenticated/admin/notifications'
     | '/_authenticated/admin/offers'
     | '/_authenticated/admin/packages'
@@ -1874,6 +1898,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/upgrade'
     | '/_authenticated/dashboard/viewings'
+    | '/api/public/health'
     | '/api/public/mpesa-callback'
     | '/blog/author/$id'
     | '/blog/category/$category'
@@ -1963,6 +1988,7 @@ export interface RootRouteChildren {
   LocationsIndexRoute: typeof LocationsIndexRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
   PropertyRequestsIndexRoute: typeof PropertyRequestsIndexRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   BlogAuthorIdRoute: typeof BlogAuthorIdRoute
   BlogCategoryCategoryRoute: typeof BlogCategoryCategoryRoute
@@ -2429,6 +2455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/dashboard/viewings': {
       id: '/_authenticated/dashboard/viewings'
       path: '/dashboard/viewings'
@@ -2779,6 +2812,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminNotificationsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/monitoring': {
+      id: '/_authenticated/admin/monitoring'
+      path: '/monitoring'
+      fullPath: '/admin/monitoring'
+      preLoaderRoute: typeof AuthenticatedAdminMonitoringRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/marketplace': {
       id: '/_authenticated/admin/marketplace'
       path: '/marketplace'
@@ -3061,6 +3101,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminDeletionRequestsRoute: typeof AuthenticatedAdminDeletionRequestsRoute
   AuthenticatedAdminKycRoute: typeof AuthenticatedAdminKycRoute
   AuthenticatedAdminMarketplaceRoute: typeof AuthenticatedAdminMarketplaceRoute
+  AuthenticatedAdminMonitoringRoute: typeof AuthenticatedAdminMonitoringRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
   AuthenticatedAdminOffersRoute: typeof AuthenticatedAdminOffersRoute
   AuthenticatedAdminPackagesRoute: typeof AuthenticatedAdminPackagesRouteWithChildren
@@ -3097,6 +3138,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
     AuthenticatedAdminDeletionRequestsRoute,
   AuthenticatedAdminKycRoute: AuthenticatedAdminKycRoute,
   AuthenticatedAdminMarketplaceRoute: AuthenticatedAdminMarketplaceRoute,
+  AuthenticatedAdminMonitoringRoute: AuthenticatedAdminMonitoringRoute,
   AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
   AuthenticatedAdminOffersRoute: AuthenticatedAdminOffersRoute,
   AuthenticatedAdminPackagesRoute: AuthenticatedAdminPackagesRouteWithChildren,
@@ -3408,6 +3450,7 @@ const rootRouteChildren: RootRouteChildren = {
   LocationsIndexRoute: LocationsIndexRoute,
   PropertiesIndexRoute: PropertiesIndexRoute,
   PropertyRequestsIndexRoute: PropertyRequestsIndexRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   BlogAuthorIdRoute: BlogAuthorIdRoute,
   BlogCategoryCategoryRoute: BlogCategoryCategoryRoute,
@@ -3419,13 +3462,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
