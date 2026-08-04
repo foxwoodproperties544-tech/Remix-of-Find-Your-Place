@@ -338,36 +338,6 @@ function Index() {
         </div>
       </section>
 
-      {/* PHASE 6 STATUS - RELIABILITY & COMPLIANCE */}
-      <section className="bg-muted/30 border-y border-border py-12">
-        <div className="container-page">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div className="max-w-xl">
-              <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-bold uppercase tracking-wider mb-4">
-                <ShieldCheck className="h-3.5 w-3.5" /> Phase 6: Reliability & Compliance
-              </span>
-              <h2 className="text-2xl font-bold">Enterprise-Grade Infrastructure</h2>
-              <p className="mt-2 text-muted-foreground">
-                We've hardened Foxwood with automated health monitoring, data-retention policies, 
-                and high-availability standards to ensure the marketplace is always fast and secure.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full md:w-auto">
-              {[
-                "Uptime monitoring & alerting",
-                "Automated backup/restore",
-                "WCAG AA accessibility pass",
-                "Core Web Vitals optimization"
-              ].map(item => (
-                <div key={item} className="flex items-center gap-2 text-sm font-medium bg-background border border-border rounded-lg px-4 py-2.5 shadow-soft">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
 
       {/* CTA */}
