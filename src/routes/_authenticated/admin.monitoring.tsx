@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { getSystemMetrics, exportDataBackup } from '@/lib/monitoring.functions';
@@ -29,7 +29,7 @@ function MonitoringPage() {
   const { data, isLoading, refetch, isFetching } = useQuery({
     queryKey: ['system-metrics'],
     queryFn: () => fetchMetrics(),
-    refetchInterval: 30000, // Auto refresh every 30s
+    refetchInterval: 30000,
   });
 
   const backupMutation = useMutation({
@@ -49,17 +49,24 @@ function MonitoringPage() {
 
   if (isLoading) {
     return (
-      <DashboardShell title="System Monitoring">
-        <div className="flex items-center justify-center h-64">
-          <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+      <DashboardShell>
+        <div className="p-8">
+          <h1 className="text-2xl font-bold mb-6">System Monitoring</h1>
+          <div className="flex items-center justify-center h-64">
+            <RefreshCw className="h-8 w-8 animate-spin text-primary" />
+          </div>
         </div>
       </DashboardShell>
     );
   }
 
+  const uptime = data?.stats?.uptime || 0;
+
   return (
-    <DashboardShell title="System Monitoring">
-      <div className="space-y-6">
+    <DashboardShell>
+      <div className="p-8 space-y-6">
+        <h1 className="text-2xl font-bold">System Monitoring</h1>
+        
         <div className="flex justify-between items-center">
           <p className="text-muted-foreground text-sm">
             Real-time infrastructure health and system logs.
@@ -86,7 +93,7 @@ function MonitoringPage() {
 
         {/* HEALTH STATUS */}
         <div className="grid gap-4 md:grid-cols-3">
-          {data?.health.map((s: any) => (
+          {data?.health?.map((s: any) => (
             <div key={s.service} className="rounded-xl border border-border bg-card p-4 shadow-soft">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold capitalize">{s.service}</span>
@@ -105,7 +112,7 @@ function MonitoringPage() {
               </div>
               <div className="mt-1 text-[10px] text-muted-foreground flex items-center gap-1">
                 <Clock className="h-3 w-3" />
-                Last check: {formatDistanceToNow(new Date(s.last_check))} ago
+                Last check: {s.last_check ? formatDistanceToNow(new Date(s.last_check)) : 'never'} ago
               </div>
             </div>
           ))}
@@ -114,17 +121,17 @@ function MonitoringPage() {
         {/* KEY STATS */}
         <div className="grid gap-4 md:grid-cols-4">
           {[
-            { label: 'Live Properties', value: data?.stats.properties, icon: Database },
-            { label: 'Active Users', value: data?.stats.users, icon: Users },
-            { label: 'Total Inquiries', value: data?.stats.inquiries, icon: MessageSquare },
-            { label: 'System Uptime', value: `${Math.floor(data?.stats.uptime / 3600)}h ${Math.floor((data?.stats.uptime % 3600) / 60)}m`, icon: ShieldCheck },
+            { label: 'Live Properties', value: data?.stats?.properties, icon: Database },
+            { label: 'Active Users', value: data?.stats?.users, icon: Users },
+            { label: 'Total Inquiries', value: data?.stats?.inquiries, icon: MessageSquare },
+            { label: 'System Uptime', value: `${Math.floor(uptime / 3600)}h ${Math.floor((uptime % 3600) / 60)}m`, icon: ShieldCheck },
           ].map((st) => (
             <div key={st.label} className="rounded-xl border border-border bg-card p-4">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <st.icon className="h-4 w-4" />
                 <span className="text-xs font-medium">{st.label}</span>
               </div>
-              <div className="mt-1 text-xl font-bold">{st.value}</div>
+              <div className="mt-1 text-xl font-bold">{st.value ?? 0}</div>
             </div>
           ))}
         </div>
@@ -148,14 +155,14 @@ function MonitoringPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {data?.logs.length === 0 ? (
+                {(!data?.logs || data.logs.length === 0) ? (
                   <tr>
                     <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">
                       No recent system logs.
                     </td>
                   </tr>
                 ) : (
-                  data?.logs.map((log: any) => (
+                  data.logs.map((log: any) => (
                     <tr key={log.id} className="hover:bg-muted/30 transition-colors">
                       <td className="px-6 py-3 text-xs text-muted-foreground tabular-nums whitespace-nowrap">
                         {new Date(log.created_at).toLocaleString()}

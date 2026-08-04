@@ -27,23 +27,19 @@ export const logSystemEvent = createServerFn({ method: "POST" })
 
 export const getSystemMetrics = createServerFn({ method: "GET" })
   .handler(async () => {
-    // This would be restricted by middleware in a real app, but for now we'll check inside
-    // In a TanStack Start app, we'd use .middleware([requireAdmin])
-    
-    const [logs, health, stats] = await Promise.all([
+    const [logsResult, healthResult] = await Promise.all([
       supabaseAdmin.from("system_logs").select("*").order("created_at", { ascending: false }).limit(50),
       supabaseAdmin.from("health_checks").select("*"),
-      supabaseAdmin.rpc("get_system_stats") // We might need to define this if we want aggregate counts
     ]);
 
-    // Simple aggregate stats if RPC doesn't exist
+    // Simple aggregate stats
     const { count: propertyCount } = await supabaseAdmin.from("properties").select("*", { count: 'exact', head: true });
     const { count: userCount } = await supabaseAdmin.from("profiles").select("*", { count: 'exact', head: true });
     const { count: inquiryCount } = await supabaseAdmin.from("leads").select("*", { count: 'exact', head: true });
 
     return {
-      logs: logs.data || [],
-      health: health.data || [],
+      logs: logsResult.data || [],
+      health: healthResult.data || [],
       stats: {
         properties: propertyCount || 0,
         users: userCount || 0,
@@ -56,12 +52,12 @@ export const getSystemMetrics = createServerFn({ method: "GET" })
 export const exportDataBackup = createServerFn({ method: "POST" })
   .handler(async () => {
     // In a real scenario, this would generate a signed URL to a CSV/JSON in storage
-    // For now, we'll return a subset of critical data as JSON
-    const tables = ["properties", "profiles", "leads", "blog_posts"];
+    const tables = ["properties", "profiles", "leads", "blog_posts"] as const;
     const backup: Record<string, any> = {};
 
     for (const table of tables) {
-      const { data } = await supabaseAdmin.from(table).select("*").limit(1000);
+      // Use any cast to avoid deep type instantiation issues with dynamic table names in supabase client
+      const { data } = await (supabaseAdmin.from(table as any) as any).select("*").limit(1000);
       backup[table] = data || [];
     }
 
