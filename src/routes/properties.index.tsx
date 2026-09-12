@@ -98,7 +98,7 @@ function joinCsv(s: Set<string>): string {
 
 function List() {
   const params = Route.useSearch();
-  const navigate = useNavigate({ from: "/properties" });
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { favorites } = useFavorites();
 
