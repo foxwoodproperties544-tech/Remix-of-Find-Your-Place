@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
 
 const PLACEMENTS = [
   "homepage_hero",
@@ -32,7 +33,6 @@ async function assertAdmin(supabase: any, userId: string) {
 
 function publicClient() {
   const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-  const { createClient } = require("@supabase/supabase-js") as typeof import("@supabase/supabase-js");
   return createClient(process.env.SUPABASE_URL!, key, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {

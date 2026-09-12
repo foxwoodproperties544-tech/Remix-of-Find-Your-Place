@@ -98,7 +98,7 @@ function joinCsv(s: Set<string>): string {
 
 function List() {
   const params = Route.useSearch();
-  const navigate = useNavigate({ from: "/properties" });
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { favorites } = useFavorites();
 
@@ -127,7 +127,7 @@ function List() {
   const view = params.view as "list" | "map";
 
   function updateSearch(patch: Record<string, unknown>) {
-    navigate({ search: (prev: any) => ({ ...prev, ...patch, page: patch.page ?? 1 }), replace: false });
+    navigate({ to: "/properties", search: (prev: any) => ({ ...prev, ...patch, page: patch.page ?? 1 }), replace: false });
   }
   function patch(p: Partial<FiltersState>) {
     const out: Record<string, unknown> = { ...p };
@@ -150,9 +150,9 @@ function List() {
     }
   }
   function setSortBy(v: string) { updateSearch({ sort: v }); }
-  function setPage(n: number) { navigate({ search: (prev: any) => ({ ...prev, page: n }) }); }
+  function setPage(n: number) { navigate({ to: "/properties", search: (prev: any) => ({ ...prev, page: n }) }); }
   function setFavsOnly(v: boolean) { updateSearch({ favs: v }); }
-  function setView(v: "list" | "map") { navigate({ search: (prev: any) => ({ ...prev, view: v }) }); }
+  function setView(v: "list" | "map") { navigate({ to: "/properties", search: (prev: any) => ({ ...prev, view: v }) }); }
 
   const [searchThrottled, setSearchThrottled] = useState(false);
   const [showSave, setShowSave] = useState(false);
@@ -162,7 +162,7 @@ function List() {
   const [waAlerts, setWaAlerts] = useState(false);
 
   function clearAll() {
-    navigate({ search: () => ({}) as any });
+    navigate({ to: "/properties", search: () => ({}) as any });
   }
 
   const { data: dbProps } = useQuery({ queryKey: ["properties"], queryFn: fetchPublishedProperties });
@@ -319,7 +319,7 @@ function List() {
   const sidebar = (
     <div className="space-y-2">
       <RadiusFilter
-        value={{ lat: params.lat, lng: params.lng, radius: params.radius, nearLabel: params.nearLabel }}
+        value={{ lat: String(params.lat ?? ""), lng: String(params.lng ?? ""), radius: String(params.radius ?? ""), nearLabel: String(params.nearLabel ?? "") }}
         onChange={(v) => updateSearch(v)}
         matchCount={center ? sorted.length : undefined}
       />
