@@ -319,7 +319,7 @@ function List() {
   const sidebar = (
     <div className="space-y-2">
       <RadiusFilter
-        value={{ lat: params.lat, lng: params.lng, radius: params.radius, nearLabel: params.nearLabel }}
+        value={{ lat: String(params.lat ?? ""), lng: String(params.lng ?? ""), radius: String(params.radius ?? ""), nearLabel: String(params.nearLabel ?? "") }}
         onChange={(v) => updateSearch(v)}
         matchCount={center ? sorted.length : undefined}
       />
