@@ -1,4 +1,4 @@
-import logoAsset from "@/assets/foxwood-logo.png.asset.json";
+import logoAsset from "@/assets/foxwood-logo-main.png.asset.json";
 const logo = logoAsset.url;
 
 const ALT = "Foxwood Properties — Your gateway to prime deals";
@@ -13,7 +13,7 @@ export function Logo({ className = "" }: { className?: string }) {
       <img
         src={logo}
         alt={ALT}
-        className="block h-8 sm:h-10 md:h-11 w-auto max-w-[180px] sm:max-w-[220px] md:max-w-none object-contain"
+        className="block h-9 sm:h-11 md:h-12 w-auto max-w-[210px] sm:max-w-[270px] md:max-w-[320px] object-contain"
         loading="eager"
         decoding="async"
       />
