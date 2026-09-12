@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
 
 const PLACEMENTS = [
   "homepage_hero",
