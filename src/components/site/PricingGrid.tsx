@@ -114,7 +114,7 @@ export function PricingGrid({ packages, preview = false }: Props) {
                   {Number(p.price) === 0 ? "Get started" : "Choose package"}
                 </a>
               ) : (
-                <Link to={cta} className="btn-primary btn-primary-hover mt-6 justify-center">
+                <Link to={cta as string as never} className="btn-primary btn-primary-hover mt-6 justify-center">
                   {Number(p.price) === 0 ? "Get started" : "Choose package"}
                 </Link>
               )}
