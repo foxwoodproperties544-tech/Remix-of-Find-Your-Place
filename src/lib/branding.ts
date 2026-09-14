@@ -6,7 +6,7 @@
  * Bump ICON_VERSION whenever an icon file in /public is replaced — the query
  * string busts browser/PWA caches so existing installs pick up the new artwork.
  */
-export const ICON_VERSION = "5";
+export const ICON_VERSION = "6";
 
 export const BRAND = {
   name: "Foxwood Properties",
