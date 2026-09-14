@@ -14,7 +14,7 @@ const TITLE = "Browse properties by location in Kenya — Foxwood Properties";
 const DESC =
   "Explore verified properties for sale, rent, and lease across all 47 Kenyan counties. Find prime homes, land, and commercial listings in Nairobi, Mombasa, Kiambu, Kajiado, and more.";
 const OG = absoluteUrl(heroAbout);
-const CANON = "https://find-joy-list.lovable.app/locations";
+const CANON = "https://foxwoodproperties-co-ke.lovable.app/locations";
 
 // Curated highest-demand markets in Kenya
 const FEATURED_COUNTIES = [
@@ -69,7 +69,7 @@ export const Route = createFileRoute("/locations/")({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://find-joy-list.lovable.app/" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://foxwoodproperties-co-ke.lovable.app/" },
             { "@type": "ListItem", position: 2, name: "Locations", item: CANON },
           ],
         }),

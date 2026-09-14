@@ -43,7 +43,7 @@ export const adminInviteAgent = createServerFn({ method: "POST" })
     const origin =
       (context.claims as any)?.origin ??
       process.env.SITE_URL ??
-      "https://find-joy-list.lovable.app";
+      "https://foxwoodproperties-co-ke.lovable.app";
 
     // Try to create user. If already exists, look them up.
     let userId: string | null = null;

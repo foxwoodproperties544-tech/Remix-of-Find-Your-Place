@@ -18,10 +18,10 @@ export const Route = createFileRoute("/advertising-packages")({
       { property: "og:title", content: "Advertising Packages — Foxwood Properties" },
       { property: "og:description", content: "Rotating banner ads across Foxwood with click tracking and analytics." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://find-joy-list.lovable.app/advertising-packages" },
+      { property: "og:url", content: "https://foxwoodproperties-co-ke.lovable.app/advertising-packages" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://find-joy-list.lovable.app/advertising-packages" }],
+    links: [{ rel: "canonical", href: "https://foxwoodproperties-co-ke.lovable.app/advertising-packages" }],
   }),
 });
 

@@ -18,10 +18,10 @@ export const Route = createFileRoute("/blog-submission-packages")({
       { property: "og:title", content: "Blog Submission Packages — Foxwood Properties" },
       { property: "og:description", content: "Get your real estate story in front of Kenya's property audience." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://find-joy-list.lovable.app/blog-submission-packages" },
+      { property: "og:url", content: "https://foxwoodproperties-co-ke.lovable.app/blog-submission-packages" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://find-joy-list.lovable.app/blog-submission-packages" }],
+    links: [{ rel: "canonical", href: "https://foxwoodproperties-co-ke.lovable.app/blog-submission-packages" }],
   }),
 });
 

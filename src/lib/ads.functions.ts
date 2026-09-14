@@ -154,7 +154,7 @@ export const startAdPayment = createServerFn({ method: "POST" })
       return { free: true, campaignId: campaign.id };
     }
 
-    const site = process.env.SITE_URL ?? "https://find-joy-list.lovable.app";
+    const site = process.env.SITE_URL ?? "https://foxwoodproperties-co-ke.lovable.app";
     const stk = await initiateStkPush({
       phone: data.phone,
       amount: Number(pkg.price),

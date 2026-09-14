@@ -12,7 +12,7 @@ import { getAreaGuide } from "@/lib/area-guides";
 import { toSlug } from "@/lib/location-slug";
 import { fmt } from "@/lib/location-stats";
 
-const BASE = "https://find-joy-list.lovable.app";
+const BASE = "https://foxwoodproperties-co-ke.lovable.app";
 
 export const Route = createFileRoute("/kenya/$slug")({
   head: ({ params }) => {

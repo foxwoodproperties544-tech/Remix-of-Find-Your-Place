@@ -19,18 +19,18 @@ export const Route = createFileRoute("/listing-packages")({
       { property: "og:title", content: "Listing Packages — Foxwood Properties" },
       { property: "og:description", content: "Post a property with the right visibility. Compare listing packages." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://find-joy-list.lovable.app/listing-packages" },
+      { property: "og:url", content: "https://foxwoodproperties-co-ke.lovable.app/listing-packages" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://find-joy-list.lovable.app/listing-packages" }],
+    links: [{ rel: "canonical", href: "https://foxwoodproperties-co-ke.lovable.app/listing-packages" }],
     scripts: [{
       type: "application/ld+json",
       children: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://find-joy-list.lovable.app/" },
-          { "@type": "ListItem", position: 2, name: "Listing Packages", item: "https://find-joy-list.lovable.app/listing-packages" },
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://foxwoodproperties-co-ke.lovable.app/" },
+          { "@type": "ListItem", position: 2, name: "Listing Packages", item: "https://foxwoodproperties-co-ke.lovable.app/listing-packages" },
         ],
       }),
     }],

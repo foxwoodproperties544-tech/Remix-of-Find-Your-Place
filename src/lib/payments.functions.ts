@@ -20,7 +20,7 @@ const verifySchema = z.object({
 });
 
 const callbackUrlDefault = () => {
-  const site = process.env.SITE_URL ?? "https://find-joy-list.lovable.app";
+  const site = process.env.SITE_URL ?? "https://foxwoodproperties-co-ke.lovable.app";
   return `${site}/api/public/mpesa-callback`;
 };
 

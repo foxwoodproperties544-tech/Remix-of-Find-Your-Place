@@ -82,7 +82,7 @@ export const Route = createFileRoute("/properties/$id")({
   head: ({ params, loaderData }) => {
     if (!loaderData) return { meta: [{ title: "Property not found" }, { name: "robots", content: "noindex" }] };
     const slugOrId = loaderData.p.slug ?? params.id;
-    const url = `https://find-joy-list.lovable.app/properties/${slugOrId}`;
+    const url = `https://foxwoodproperties-co-ke.lovable.app/properties/${slugOrId}`;
     const p = loaderData.p;
     const desc = p.description.slice(0, 155);
     return {
@@ -159,9 +159,9 @@ export const Route = createFileRoute("/properties/$id")({
         { type: "application/ld+json", children: JSON.stringify({
           "@context": "https://schema.org", "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://find-joy-list.lovable.app/" },
-            { "@type": "ListItem", position: 2, name: "Properties", item: "https://find-joy-list.lovable.app/properties" },
-            { "@type": "ListItem", position: 3, name: p.category, item: `https://find-joy-list.lovable.app/properties?category=${encodeURIComponent(p.category)}` },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://foxwoodproperties-co-ke.lovable.app/" },
+            { "@type": "ListItem", position: 2, name: "Properties", item: "https://foxwoodproperties-co-ke.lovable.app/properties" },
+            { "@type": "ListItem", position: 3, name: p.category, item: `https://foxwoodproperties-co-ke.lovable.app/properties?category=${encodeURIComponent(p.category)}` },
             { "@type": "ListItem", position: 4, name: p.title, item: url },
           ],
         }) },
