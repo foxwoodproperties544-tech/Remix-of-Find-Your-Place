@@ -6,7 +6,7 @@ Disallow: /auth
 Disallow: /favorites
 Disallow: /saved-searches
 
-Sitemap: https://find-joy-list.lovable.app/sitemap.xml
-Sitemap: https://find-joy-list.lovable.app/blog-sitemap.xml
-Sitemap: https://find-joy-list.lovable.app/property-sitemap.xml
+Sitemap: https://foxwoodproperties-co-ke.lovable.app/sitemap.xml
+Sitemap: https://foxwoodproperties-co-ke.lovable.app/blog-sitemap.xml
+Sitemap: https://foxwoodproperties-co-ke.lovable.app/property-sitemap.xml
 

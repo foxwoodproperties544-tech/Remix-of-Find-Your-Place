@@ -7,7 +7,7 @@ import heroAbout from "@/assets/hero-about.jpg";
 import { absoluteUrl } from "@/lib/site-url";
 import { allCombos, comboHeading, SEO_LOCATIONS } from "@/lib/programmatic-seo";
 
-const BASE = "https://find-joy-list.lovable.app";
+const BASE = "https://foxwoodproperties-co-ke.lovable.app";
 const TITLE = "Kenya property guides by type, location & category — Foxwood";
 const DESC =
   "Explore Foxwood's Kenya property guides: houses, apartments, land, and commercial space for sale, rent, or lease in Nairobi, Mombasa, Kiambu, Kajiado and more.";

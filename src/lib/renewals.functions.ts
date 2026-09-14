@@ -11,7 +11,7 @@ import { z } from "zod";
  * Downgrade → schedule on `pending_package_id`; applied at expiry by the daily sweep.
  */
 
-const site = () => process.env.SITE_URL ?? "https://find-joy-list.lovable.app";
+const site = () => process.env.SITE_URL ?? "https://foxwoodproperties-co-ke.lovable.app";
 
 async function assertOwner(supabase: any, userId: string, table: string, id: string, ownerCol: string) {
   const { data } = await supabase.from(table).select(`id, ${ownerCol}`).eq("id", id).maybeSingle();

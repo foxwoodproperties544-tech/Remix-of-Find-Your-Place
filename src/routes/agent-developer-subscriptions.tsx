@@ -14,10 +14,10 @@ export const Route = createFileRoute("/agent-developer-subscriptions")({
       { property: "og:title", content: "Agent & Developer Subscriptions — Foxwood Properties" },
       { property: "og:description", content: "Grow your agency with the right subscription plan." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://find-joy-list.lovable.app/agent-developer-subscriptions" },
+      { property: "og:url", content: "https://foxwoodproperties-co-ke.lovable.app/agent-developer-subscriptions" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://find-joy-list.lovable.app/agent-developer-subscriptions" }],
+    links: [{ rel: "canonical", href: "https://foxwoodproperties-co-ke.lovable.app/agent-developer-subscriptions" }],
   }),
 });
 

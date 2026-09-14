@@ -24,7 +24,7 @@ const TITLE = "Agents — Foxwood Properties";
 const DESC =
   "Meet verified real estate agents and developers on Foxwood Properties. Browse profiles, see subscription pricing, and join as an agent to grow your business across Kenya.";
 const OG = absoluteUrl(heroTools);
-const CANON = "https://find-joy-list.lovable.app/for-agents";
+const CANON = "https://foxwoodproperties-co-ke.lovable.app/for-agents";
 
 export const Route = createFileRoute("/for-agents")({
   head: () => ({

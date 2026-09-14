@@ -28,7 +28,7 @@ const TITLE = "Our Agents — Foxwood Properties";
 const DESC =
   "Search verified real estate agents and developers on Foxwood Properties. Filter by county, service, specialty and language.";
 const OG = absoluteUrl(heroTools);
-const CANON = "https://find-joy-list.lovable.app/agents";
+const CANON = "https://foxwoodproperties-co-ke.lovable.app/agents";
 
 const LANGUAGES = ["English", "Kiswahili", "Kikuyu", "Luo", "Luhya", "Kalenjin", "Kamba", "Meru", "Somali", "French", "Arabic"];
 

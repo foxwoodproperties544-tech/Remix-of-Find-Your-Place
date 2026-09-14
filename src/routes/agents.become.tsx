@@ -12,7 +12,7 @@ const TITLE = "Become an Agent — Foxwood Properties";
 const DESC =
   "Join Foxwood Properties as an agent or developer. Pick a subscription plan, get verified, and start reaching buyers, renters, and investors across Kenya.";
 const OG = absoluteUrl(heroTools);
-const CANON = "https://find-joy-list.lovable.app/agents/become";
+const CANON = "https://foxwoodproperties-co-ke.lovable.app/agents/become";
 
 export const Route = createFileRoute("/agents/become")({
   head: () => ({

@@ -83,7 +83,7 @@ export const startVerificationSubscription = createServerFn({ method: "POST" })
       amount: VERIFICATION_SUB_PRICE,
       accountReference: "FXVERIFY",
       description: "Agent verification - 30 days",
-      callbackUrl: `${process.env.SITE_URL ?? "https://find-joy-list.lovable.app"}/api/public/mpesa-callback`,
+      callbackUrl: `${process.env.SITE_URL ?? "https://foxwoodproperties-co-ke.lovable.app"}/api/public/mpesa-callback`,
     });
 
     const { error } = await context.supabase.from("mpesa_transactions").insert({

@@ -16,7 +16,7 @@ export const Route = createFileRoute("/locations/$county/$town")({
     const town = townFromSlug(county, params.town) ?? params.town;
     const title = `Property Prices & Homes in ${town}, ${county} — Foxwood Properties`;
     const desc = `${town}, ${county} property guide: verified homes for sale, rent, and lease with real-time median prices, neighborhood insights, and direct agent contact.`;
-    const url = `https://find-joy-list.lovable.app/locations/${params.county}/${params.town}`;
+    const url = `https://foxwoodproperties-co-ke.lovable.app/locations/${params.county}/${params.town}`;
     return {
       meta: [
         { title },
@@ -37,8 +37,8 @@ export const Route = createFileRoute("/locations/$county/$town")({
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Locations", item: "https://find-joy-list.lovable.app/locations" },
-              { "@type": "ListItem", position: 2, name: county, item: `https://find-joy-list.lovable.app/locations/${params.county}` },
+              { "@type": "ListItem", position: 1, name: "Locations", item: "https://foxwoodproperties-co-ke.lovable.app/locations" },
+              { "@type": "ListItem", position: 2, name: county, item: `https://foxwoodproperties-co-ke.lovable.app/locations/${params.county}` },
               { "@type": "ListItem", position: 3, name: town, item: url },
             ],
           }),

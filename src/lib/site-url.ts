@@ -1,5 +1,5 @@
 // Absolute URL helpers for social share metadata.
-export const SITE_URL = "https://find-joy-list.lovable.app";
+export const SITE_URL = "https://foxwoodproperties-co-ke.lovable.app";
 
 /** Convert a bundler-emitted asset path (e.g. "/assets/x.jpg") to an absolute URL. */
 export function absoluteUrl(path: string): string {

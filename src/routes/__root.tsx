@@ -56,7 +56,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-const SITE_URL = "https://find-joy-list.lovable.app";
+const SITE_URL = "https://foxwoodproperties-co-ke.lovable.app";
 const SITE_NAME = BRAND.name;
 const SITE_DESC = BRAND.description;
 const SITE_OG = "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/354431d1-41e3-4865-b0bc-ba59288bf311/id-preview-678a380e--617adacd-c42c-4316-910d-675f77d3209f.lovable.app-1784143550437.png";

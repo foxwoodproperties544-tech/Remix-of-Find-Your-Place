@@ -4,7 +4,7 @@ i want to build listing website
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://find-joy-list.lovable.app
+**Live app**: https://foxwoodproperties-co-ke.lovable.app
 
 ## Build with Lovable
 

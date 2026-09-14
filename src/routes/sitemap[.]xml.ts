@@ -5,7 +5,7 @@ import { KENYA_COUNTIES, KENYA_SUBLOCATIONS } from "@/lib/kenya-locations-data";
 import { toSlug } from "@/lib/location-slug";
 import { allCombos } from "@/lib/programmatic-seo";
 
-const BASE_URL = "https://find-joy-list.lovable.app";
+const BASE_URL = "https://foxwoodproperties-co-ke.lovable.app";
 
 interface SitemapEntry {
   path: string;

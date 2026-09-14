@@ -15,7 +15,7 @@ export const Route = createFileRoute("/locations/$county")({
     const name = countyFromSlug(params.county) ?? params.county;
     const title = `Properties in ${name} — Foxwood Properties`;
     const desc = `Browse verified properties for sale, rent, and lease in ${name}, Kenya. Explore popular areas and current listings.`;
-    const url = `https://find-joy-list.lovable.app/locations/${params.county}`;
+    const url = `https://foxwoodproperties-co-ke.lovable.app/locations/${params.county}`;
     return {
       meta: [
         { title },
