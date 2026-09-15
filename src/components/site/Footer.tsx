@@ -56,8 +56,8 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="mailto:hello@foxwood.co.ke" className="flex items-center gap-2 hover:text-secondary">
-                  <Mail className="h-4 w-4 text-secondary" /> hello@foxwood.co.ke
+                <a href="mailto:info@foxwoodproperties.co.ke" className="flex items-center gap-2 hover:text-secondary">
+                  <Mail className="h-4 w-4 text-secondary" /> info@foxwoodproperties.co.ke
                 </a>
               </li>
             </ul>

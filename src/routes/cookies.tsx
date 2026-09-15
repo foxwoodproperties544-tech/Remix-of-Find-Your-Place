@@ -45,7 +45,7 @@ You can also withdraw analytics consent at any time by clicking "Cookie settings
 We may update this Cookie Policy from time to time. Material changes will be communicated on this page.
 
 ## Contact
-Questions? Email hello@foxwoodproperties.co.ke.
+Questions? Email info@foxwoodproperties.co.ke.
 `;
 
 function Cookies() {

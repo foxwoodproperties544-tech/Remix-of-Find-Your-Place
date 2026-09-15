@@ -41,7 +41,7 @@ function RefundPolicyPage() {
 
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">4. Contact Us</h2>
-            <p>For refund inquiries, please contact our support team at billing@foxwood.co.ke with your transaction ID and a detailed explanation of your request. Requests must be submitted within 7 days of the transaction date.</p>
+            <p>For refund inquiries, please contact our support team at info@foxwoodproperties.co.ke with your transaction ID and a detailed explanation of your request. Requests must be submitted within 7 days of the transaction date.</p>
           </section>
         </div>
       </div>
