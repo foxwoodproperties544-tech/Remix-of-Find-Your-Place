@@ -65,7 +65,7 @@ We may suspend or terminate your account at any time for breach of these Terms. 
 These Terms are governed by the laws of Kenya. Disputes shall be submitted to the exclusive jurisdiction of the courts of Nairobi.
 
 ## 12. Contact
-Questions? Email hello@foxwoodproperties.co.ke or write to Foxwood Properties, Nairobi, Kenya.
+Questions? Email info@foxwoodproperties.co.ke or write to Foxwood Properties, Nairobi, Kenya.
 `;
 
 function Terms() {

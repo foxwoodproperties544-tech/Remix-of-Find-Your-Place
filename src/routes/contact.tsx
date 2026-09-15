@@ -68,7 +68,7 @@ function Contact() {
             {i: MapPin, t: "Office", v: "Westlands, Nairobi, Kenya"},
             {i: Phone, t: "Phone", v: SUPPORT_PHONE_DISPLAY, href: `tel:${SUPPORT_PHONE_TEL}`},
             {i: MessageCircle, t: "WhatsApp", v: SUPPORT_PHONE_DISPLAY, href: whatsappUrl()},
-            {i: Mail, t: "Email", v: "hello@foxwood.co.ke", href: "mailto:hello@foxwood.co.ke"},
+            {i: Mail, t: "Email", v: "info@foxwoodproperties.co.ke", href: "mailto:info@foxwoodproperties.co.ke"},
             {i: Clock, t: "Business hours", v: "Mon–Sat, 8:00 AM – 6:00 PM EAT"},
           ].map(({i:Icon,t,v,href}: any) => (
             <div key={t} className="flex items-start gap-4 rounded-2xl border border-border p-5 bg-card">

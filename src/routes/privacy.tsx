@@ -25,7 +25,7 @@ Last updated: 19 July 2026.
 This page describes how **Foxwood Properties** ("we", "us") collects, uses and protects information about you when you use our website and services. Foxwood Properties is committed to complying with Kenya's Data Protection Act, 2019 and applicable regulations issued by the Office of the Data Protection Commissioner.
 
 ## Who we are
-Foxwood Properties is a real-estate marketplace based in Nairobi, Kenya. Contact us at hello@foxwoodproperties.co.ke for any privacy-related enquiries.
+Foxwood Properties is a real-estate marketplace based in Nairobi, Kenya. Contact us at info@foxwoodproperties.co.ke for any privacy-related enquiries.
 
 ## Information we collect
 - **Account information** — name, email, phone, WhatsApp number and profile photo you provide when you register.
@@ -59,7 +59,7 @@ Under Kenya's Data Protection Act you have the right to:
 - Object to certain processing.
 - Withdraw consent for marketing communications.
 
-Email hello@foxwoodproperties.co.ke to exercise any of these rights.
+Email info@foxwoodproperties.co.ke to exercise any of these rights.
 
 ## Security
 We use industry-standard measures including encryption in transit (HTTPS), row-level access controls on our database, and regular backups. No system is 100% secure — please use a strong password and keep it confidential.
@@ -71,7 +71,7 @@ We use cookies for essential site functionality, session management and analytic
 We may update this policy from time to time. Material changes will be notified via email or in-app notification.
 
 ## Contact
-Data Protection Officer, Foxwood Properties, Nairobi, Kenya. Email: hello@foxwoodproperties.co.ke
+Data Protection Officer, Foxwood Properties, Nairobi, Kenya. Email: info@foxwoodproperties.co.ke
 `;
 
 function Privacy() {

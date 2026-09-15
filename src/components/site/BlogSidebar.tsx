@@ -156,7 +156,7 @@ export function BlogSidebar({ currentPost, categories, popularPosts, recentPosts
       <SidebarCard title="Talk to us">
         <div className="space-y-2 text-sm">
           <a href="tel:+254759556026" className="flex items-center gap-2 hover:text-primary"><Phone className="h-4 w-4" /> +254 759 556 026</a>
-          <a href="mailto:hello@foxwoodproperties.co.ke" className="flex items-center gap-2 hover:text-primary"><Mail className="h-4 w-4" /> hello@foxwoodproperties.co.ke</a>
+          <a href="mailto:info@foxwoodproperties.co.ke" className="flex items-center gap-2 hover:text-primary"><Mail className="h-4 w-4" /> info@foxwoodproperties.co.ke</a>
           <a href={foxwoodWhatsappLink("blog")} target="_blank" rel="noopener noreferrer"
             className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-3 py-2 text-sm font-semibold text-white hover:opacity-90">
             <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
